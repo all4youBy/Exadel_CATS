@@ -1,0 +1,13 @@
+{
+  "extends": "airbnb",
+  "rules": {
+    "react/jsx-one-expression-per-line": "false",
+    "react/prefer-stateless-function": "false",
+    "react/jsx-filename-extension": "false",
+    "no-unused-vars": "warn"
+  },
+  "env": {
+    "browser": true,
+    "node": true
+  }
+}
