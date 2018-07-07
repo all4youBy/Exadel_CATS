@@ -23,6 +23,6 @@ public class EmailCommandFactory {
 
     public static String getEmailText(EmailTypes emailType, String email) throws IOException{
         IEmailType command = commands.get(emailType);
-        return command.execute(email);
+        return command.getEmailText(email);
     }
 }

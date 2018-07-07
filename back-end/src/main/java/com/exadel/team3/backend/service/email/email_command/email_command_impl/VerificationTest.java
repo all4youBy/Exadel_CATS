@@ -11,7 +11,7 @@ import java.util.Properties;
 
 public class VerificationTest implements IEmailType {
     @Override
-    public String execute(String email) throws IOException{
+    public String getEmailText(String email) throws IOException{
 
         // TODO get link form BD
         String link = "link";

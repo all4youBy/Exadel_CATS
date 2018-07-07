@@ -11,7 +11,7 @@ import java.util.Properties;
 
 public class SendLoginAndPass implements IEmailType {
     @Override
-    public String execute(String email) throws IOException{
+    public String getEmailText(String email) throws IOException{
 
         // TODO get password from BD
         String password  = "password";

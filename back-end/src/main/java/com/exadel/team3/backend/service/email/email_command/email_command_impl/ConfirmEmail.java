@@ -12,7 +12,7 @@ import java.util.Properties;
 public class ConfirmEmail implements IEmailType {
 
     @Override
-    public String execute(String email) throws IOException {
+    public String getEmailText(String email) throws IOException {
 
         // TODO get checker from BD
         String checker  = java.util.UUID.randomUUID().toString();
