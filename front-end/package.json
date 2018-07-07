@@ -9,15 +9,17 @@
     "react-scripts": "1.1.4"
   },
   "scripts": {
-    "start": "react-app-rewired start",
-    "build": "npm run lint && react-app-rewired build",
+    "start": "react-app-rewired start --scripts-version react-scripts",
+    "build": "react-app-rewired build --scripts-version react-scripts",
     "test": "react-app-rewired test --env=jsdom",
     "eject": "react-app-rewired eject",
     "lint": "./node_modules/.bin/eslint src"
   },
   "devDependencies": {
+    "babel-plugin-styled-components": "^1.5.1",
     "eslint": "^4.19.1",
     "eslint-config-airbnb": "^17.0.0",
+    "eslint-loader": "^2.0.0",
     "eslint-plugin-import": "^2.13.0",
     "eslint-plugin-jsx-a11y": "^6.1.0",
     "eslint-plugin-react": "^7.10.0"

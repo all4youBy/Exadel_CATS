@@ -4,7 +4,10 @@
     "react/jsx-one-expression-per-line": "false",
     "react/prefer-stateless-function": "false",
     "react/jsx-filename-extension": "false",
-    "no-unused-vars": "warn"
+    "react/jsx-tag-spacing": 0,
+    "linebreak-style": 0,
+    "function-paren-newline": ["error", "consistent"],
+    "object-curly-newline": ["error", { "consistent": true }]
   },
   "env": {
     "browser": true,
