@@ -34,8 +34,20 @@ public class TestRestController {
         modelService.addModel(model);
     }
 
-    @RequestMapping(value = "/*",produces = "text/html",method = RequestMethod.GET)
+    @RequestMapping(value = "\\/([-\\w._]+)(\\/[-\\w._]\\?(.+)?)?$/",produces = "text/html")
     public String getHtml(){
         return "redirect:/index.html";
+    }
+
+    @RequestMapping(value = "/models/{name}", method = RequestMethod.PUT)
+    @ResponseBody
+    public void updateModel(@RequestBody Model model, @PathVariable String name){
+        modelService.updateModel(name,model);
+    }
+
+    @RequestMapping(value = "/models/{name}", method = RequestMethod.DELETE)
+    @ResponseBody
+    public void deleteModel(@PathVariable String name){
+        modelService.deleteModel(name);
     }
 }
