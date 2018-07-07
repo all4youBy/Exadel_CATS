@@ -12,8 +12,7 @@
     "start": "react-app-rewired start --scripts-version react-scripts",
     "build": "react-app-rewired build --scripts-version react-scripts",
     "test": "react-app-rewired test --env=jsdom",
-    "eject": "react-app-rewired eject",
-    "lint": "./node_modules/.bin/eslint src"
+    "eject": "react-app-rewired eject"
   },
   "devDependencies": {
     "babel-plugin-styled-components": "^1.5.1",
