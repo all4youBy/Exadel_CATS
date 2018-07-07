@@ -6,8 +6,6 @@ import com.exadel.team3.backend.services.ModelService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
 import java.util.List;
 
 @RestController
@@ -32,15 +30,6 @@ public class TestRestController {
         modelService.addModel(model);
     }
 
-    @RequestMapping(value = "/**",produces = "text/html")
-    public void getHtml(HttpServletResponse response){
-
-        try {
-            response.sendRedirect("/index.html");
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
 
     @RequestMapping(value = "/models/{name}", method = RequestMethod.PUT)
     public void updateModel(@RequestBody Model model, @PathVariable String name){
