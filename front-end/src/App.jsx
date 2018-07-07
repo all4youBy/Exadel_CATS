@@ -1,11 +1,18 @@
 import React, { Component } from 'react';
 import './App.css';
-import Switch from 'react-router-dom/es/Switch';
+import BrowserRouter from 'react-router-dom/es/BrowserRouter';
+import Home from './Home/Home';
+import Main from './Main/Containers/Main';
 
 class App extends Component {
   render() {
     return (
-      <Switch/>
+      <BrowserRouter>
+        <div>
+          <Home/>
+          <Main/>
+        </div>
+      </BrowserRouter>
     );
   }
 }
