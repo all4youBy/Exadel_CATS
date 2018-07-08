@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+
 @RestController
 @RequestMapping("/app")
 public class TestRestController {
@@ -15,28 +16,28 @@ public class TestRestController {
     @Autowired
     private ModelService modelService;
 
-    @RequestMapping("/models/{name}")
+    @GetMapping("/models/{name}")
     public Model getModel(@PathVariable String name){
         return modelService.getModelByName(name);
     }
 
-    @RequestMapping("/models")
+    @GetMapping("/models")
     public List<Model> getAllModels(){
      return modelService.getAllModels();
     }
 
-    @RequestMapping(value = "/models",method = RequestMethod.POST)
+    @PostMapping(value = "/models")
     public void addModel(@RequestBody Model model){
         modelService.addModel(model);
     }
 
 
-    @RequestMapping(value = "/models/{name}", method = RequestMethod.PUT)
+    @PutMapping(value = "/models/{name}")
     public void updateModel(@RequestBody Model model, @PathVariable String name){
         modelService.updateModel(name,model);
     }
 
-    @RequestMapping(value = "/models/{name}", method = RequestMethod.DELETE)
+    @DeleteMapping(value = "/models/{name}")
     public void deleteModel(@PathVariable String name){
         modelService.deleteModel(name);
     }
