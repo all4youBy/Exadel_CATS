@@ -10,11 +10,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.builder.SpringApplicationBuilder;
+import org.springframework.boot.web.servlet.support.SpringBootServletInitializer;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 
 @SpringBootApplication
-public class BackEndApplication {
+public class BackEndApplication extends SpringBootServletInitializer {
     @Autowired
     private UserServiceImpl userService;
 
@@ -22,27 +24,8 @@ public class BackEndApplication {
 		SpringApplication.run(BackEndApplication.class, args);
 	}
 
-    @Bean
-    CommandLineRunner getSimpleCommandLineRunner(ApplicationContext ctx) {
-        return args -> {
-            final Logger log = LoggerFactory.getLogger(this.getClass());
-
-            if (userService != null) {
-                userService.addUser("m@n.k","m", "n", UserRole.STUDENT,"112323");
-
-                userService.assignGroup("some third group",  "m@n.k");
-
-                User u = userService.getUser("m@n.k");
-                u.setEducation(new UserEducation("БГУ", 2019, "Прикладная информатика", "singing"));
-                userService.updateUser(u);
-                u = userService.getUser("m@n.k");
-                System.out.println(u);
-                log.error(u.toString());
-
-            } else {
-                System.out.println("It's null!");
-            }
-
-        };
+    @Override
+    protected SpringApplicationBuilder configure(SpringApplicationBuilder application) {
+        return application.sources(BackEndApplication.class);
     }
 }
