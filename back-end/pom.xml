@@ -68,6 +68,7 @@
 			<scope>test</scope>
 		</dependency>
 
+
 		<!-- https://mvnrepository.com/artifact/javax.mail/javax.mail-api -->
 		<dependency>
 			<groupId>javax.mail</groupId>
@@ -80,10 +81,12 @@
 			<version>1.5.5</version>
 		</dependency>
 
+
         <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
         </dependency>
+
 	</dependencies>
 
 	<build>
