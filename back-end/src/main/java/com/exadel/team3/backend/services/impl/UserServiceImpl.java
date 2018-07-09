@@ -11,28 +11,28 @@ import org.springframework.dao.DuplicateKeyException;
 import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.util.Arrays;
 import java.util.List;
 
 @Service
 public class UserServiceImpl implements UserService {
-    @Autowired
+    private final Logger logger = LoggerFactory.getLogger(this.getClass());
     private UserRepository userRepository;
 
+    public UserServiceImpl(@Autowired UserRepository userRepository) {
+        this.userRepository = userRepository;
+    }
+
     @Override
-    public User addUser(String email, String firstName, String lastName, UserRole role, String passwordHash) {
+    public User addUser(@NonNull String email, @NonNull String firstName, @NonNull String lastName, @NonNull UserRole role, @NonNull String passwordHash) {
         try {
-            User u = new User(email, firstName, lastName, UserRole.STUDENT, passwordHash);
+            User u = new User(email, firstName, lastName, role, passwordHash);
             return userRepository.insert(u);
-        } catch (NullPointerException npe) {
-            System.err.println("Incomplete information provided");
-            return null;
         } catch (DuplicateKeyException e) {
-            System.err.println("Duplicate email provided: " + email);
-            return null;
-        } catch (Exception e) {
-            e.printStackTrace();
+            logger.warn("Duplicate email provided for login " + email);
             return null;
         }
     }
@@ -42,7 +42,7 @@ public class UserServiceImpl implements UserService {
         try {
             return userRepository.save(user);
         } catch (DataAccessException dae) {
-            System.err.println("Could not update user [" + user.getEmail() + "]: " + dae.getMessage());
+            System.err.println("Could not update user with email " + user.getEmail() + ": " + dae.getMessage());
             return null;
         }
     }
@@ -52,7 +52,7 @@ public class UserServiceImpl implements UserService {
         try {
             userRepository.delete(user);
         } catch (DataAccessException dae) {
-            System.err.println("Could not delete user [" + user.getEmail() + "]: " + dae.getMessage());
+            System.err.println("Could not delete user with email " + user.getEmail() + ": " + dae.getMessage());
         }
     }
 
