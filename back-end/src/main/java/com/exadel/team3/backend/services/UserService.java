@@ -18,4 +18,7 @@ public interface UserService {
     void deleteUser(User user);
 
     String getPasswordHash(String email);
+    boolean userExists(String email);
+
+    void assignGroup(String groupId, String ... emails);
 }
