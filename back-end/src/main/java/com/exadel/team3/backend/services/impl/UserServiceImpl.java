@@ -14,7 +14,6 @@ import org.springframework.stereotype.Service;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.Arrays;
 import java.util.List;
 
 @Service
@@ -60,28 +59,22 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public List<User> getUsersByName(@NonNull String firstName, @NonNull String lastName) {
-        return userRepository.findByFirstAndLastName(firstName, lastName);
-    }
-
-    @Override
     public List<User> getUsersByGroup(@NonNull String group) {
-        return userRepository.findByGroupName(group);
+        return userRepository.findStudentsByGroupName(group);
     }
 
     @Override
-    public String getPasswordHash(@NonNull String email) {
-        User user = userRepository.findPasswordHash(email);
-        return user != null ? user.getPasswordHash() : null;
+    public User getPasswordHashAndRole(@NonNull String email) {
+        return userRepository.findPasswordHashAndRole(email);
     }
 
     @Override
     public boolean userExists(@NonNull String email) {
-        return userRepository.findPasswordHash(email) != null;
+        return userRepository.findPasswordHashAndRole(email) != null;
     }
 
     @Override
-    public void assignGroup(@NonNull String group, @NonNull List<String> emails) {
+    public void assignGroup(@NonNull List<String> emails, @NonNull String group) {
         List<User> matchedUsers = userRepository.findByEmailIn(emails);
         for (User user : matchedUsers) {
             user.getGroups().add(group);

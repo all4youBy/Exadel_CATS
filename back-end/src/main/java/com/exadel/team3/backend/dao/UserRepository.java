@@ -10,14 +10,15 @@ import java.util.List;
 @Repository
 public interface UserRepository extends MongoRepository<User, String> {
     User findByEmail(String email);
+
     List<User> findByEmailIn(List<String> emails);
 
-    @Query(value="{'email':?0}", fields="{'_id':0, 'passwordHash':1}")
-    User findPasswordHash(String email);
+    @Query(value="{'email':?0}", fields="{'_id':0, 'passwordHash':1, 'role':1}")
+    User findPasswordHashAndRole(String email);
 
-    @Query("{'firstName':?0, 'lastName':?1}")
-    List<User> findByFirstAndLastName(String firstName, String lastName);
+//    @Query("{'firstName':?0, 'lastName':?1}")
+//    List<User> findByFirstAndLastName(String firstName, String lastName);
 
-    @Query("{'groups':?0}")
-    List<User> findByGroupName(String group);
+    @Query("{'groups':?0, 'role':'STUDENT'}")
+    List<User> findStudentsByGroupName(String group);
 }
