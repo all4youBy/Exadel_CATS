@@ -21,5 +21,4 @@ public class BackEndApplication extends SpringBootServletInitializer {
         return application.sources(BackEndApplication.class);
     }
 
-
 }
