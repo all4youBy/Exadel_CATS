@@ -7,7 +7,9 @@ import lombok.Setter;
 import org.springframework.data.annotation.Id;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Data
 public class User {
@@ -29,12 +31,12 @@ public class User {
     private String passwordHash;
 
     @Setter(AccessLevel.NONE)
-    private List<String> groups = new ArrayList<>();
+    private Set<String> groups = new HashSet<>();
 
     private UserEducation education;
 
     private String emailConfirmationCode;
     public boolean isEmailConfirmed() {
-        return "confirmed".equals(emailConfirmationCode);
+        return emailConfirmationCode == null;
     }
 }
