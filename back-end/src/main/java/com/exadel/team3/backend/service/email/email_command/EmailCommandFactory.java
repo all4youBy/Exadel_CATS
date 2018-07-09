@@ -10,8 +10,6 @@ import java.util.EnumMap;
 import java.util.Map;
 
 public class EmailCommandFactory {
-    private EmailCommandFactory() {
-    }
 
     private static final Map<EmailTypes, IEmailType> commands = new EnumMap<>(EmailTypes.class);
 
@@ -24,5 +22,14 @@ public class EmailCommandFactory {
     public static String getEmailText(EmailTypes emailType, String email) throws IOException{
         IEmailType command = commands.get(emailType);
         return command.getEmailText(email);
+    }
+
+    public static String getEmailSubject(EmailTypes emailType, String email) throws IOException {
+        IEmailType command = commands.get(emailType);
+        return command.getEmailSubject(email);
+    }
+
+    public static Map<EmailTypes, IEmailType> getCommands() {
+        return commands;
     }
 }

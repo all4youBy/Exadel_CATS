@@ -4,4 +4,5 @@ import java.io.IOException;
 
 public interface IEmailType {
     String getEmailText(String email) throws IOException;
+    String getEmailSubject(String email) throws IOException;
 }
