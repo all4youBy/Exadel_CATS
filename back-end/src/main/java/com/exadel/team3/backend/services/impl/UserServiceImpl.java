@@ -20,11 +20,9 @@ import java.util.List;
 @Service
 public class UserServiceImpl implements UserService {
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
-    private UserRepository userRepository;
 
-    public UserServiceImpl(@Autowired UserRepository userRepository) {
-        this.userRepository = userRepository;
-    }
+    @Autowired
+    private UserRepository userRepository;
 
     @Override
     public User addUser(@NonNull String email, @NonNull String firstName, @NonNull String lastName, @NonNull UserRole role, @NonNull String passwordHash) {
