@@ -14,11 +14,11 @@ import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.boot.web.servlet.support.SpringBootServletInitializer;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
+import org.springframework.boot.builder.SpringApplicationBuilder;
+import org.springframework.boot.web.servlet.support.SpringBootServletInitializer;
 
 @SpringBootApplication
 public class BackEndApplication extends SpringBootServletInitializer {
-    @Autowired
-    private UserServiceImpl userService;
 
 	public static void main(String[] args) {
 		SpringApplication.run(BackEndApplication.class, args);
@@ -29,4 +29,5 @@ public class BackEndApplication extends SpringBootServletInitializer {
     protected SpringApplicationBuilder configure(SpringApplicationBuilder application) {
         return application.sources(BackEndApplication.class);
     }
+
 }
