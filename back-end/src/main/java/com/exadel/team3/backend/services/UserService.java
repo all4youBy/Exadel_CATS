@@ -22,5 +22,5 @@ public interface UserService {
     String getPasswordHash(String email);
     boolean userExists(String email);
 
-    void assignGroup(String groupId, String ... emails);
+    void assignGroup(String groupId, List<String> emails);
 }

@@ -83,8 +83,8 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void assignGroup(@NonNull String group, @NonNull String... emails) {
-        List<User> matchedUsers = userRepository.findByEmailIn(Arrays.asList(emails));
+    public void assignGroup(@NonNull String group, @NonNull List<String> emails) {
+        List<User> matchedUsers = userRepository.findByEmailIn(emails);
         for (User user : matchedUsers) {
             user.getGroups().add(group);
         }

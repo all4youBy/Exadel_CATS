@@ -5,6 +5,7 @@ import lombok.Data;
 import lombok.NonNull;
 import lombok.Setter;
 import org.springframework.data.annotation.Id;
+import org.springframework.util.StringUtils;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -37,6 +38,6 @@ public class User {
 
     private String emailConfirmationCode;
     public boolean isEmailConfirmed() {
-        return emailConfirmationCode == null;
+        return StringUtils.isEmpty(emailConfirmationCode);
     }
 }
