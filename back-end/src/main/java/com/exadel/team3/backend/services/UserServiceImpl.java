@@ -1,8 +1,8 @@
 package com.exadel.team3.backend.services;
 
 import com.exadel.team3.backend.dao.UserRepository;
-import com.exadel.team3.backend.entity.User;
-import com.exadel.team3.backend.entity.UserRole;
+import com.exadel.team3.backend.entities.User;
+import com.exadel.team3.backend.entities.UserRole;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
