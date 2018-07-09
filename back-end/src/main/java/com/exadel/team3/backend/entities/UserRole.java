@@ -1,4 +1,4 @@
-package com.exadel.team3.backend.entity;
+package com.exadel.team3.backend.entities;
 
 public enum UserRole {
     STUDENT,
