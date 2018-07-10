@@ -1,9 +1,8 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
-// import App from './App';
-import GeneralMenu from './Components/GeneralMenu';
+import GeneralMenuStudent from './Components/GeneralMenuStudent';
 
 ReactDOM.render(
-  <GeneralMenu />, document.getElementById('root'),
+  <GeneralMenuStudent />, document.getElementById('root'),
 );
