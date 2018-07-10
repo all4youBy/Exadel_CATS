@@ -1,6 +1,9 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
-import App from './App';
+// import App from './App';
+import GeneralMenu from './Components/GeneralMenu';
 
-ReactDOM.render(<App />, document.getElementById('root'));
+ReactDOM.render(
+  <GeneralMenu />, document.getElementById('root'),
+);
