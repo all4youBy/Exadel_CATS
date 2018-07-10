@@ -1,0 +1,31 @@
+.ant-layout{
+    height: 100vh;
+    background: #fcfcfc;
+}
+.ant-layout-header {
+    height: 4vw;
+    background: #04233d;
+    color: #fff;
+    display: flex;
+    align-items: center;
+}
+.ant-layout-footer {
+    height: 4vw;
+    background: #04233d;
+    color: #fff;
+    text-align: center;
+}
+.ant-layout-sider {
+    color: #fff;
+}
+.ant-layout-content {
+    color: #fff;
+    width: 23%;
+    display: flex;
+    align-items: center;
+    align-self: center;
+}
+
+.logo {
+    height: 3vw;
+}

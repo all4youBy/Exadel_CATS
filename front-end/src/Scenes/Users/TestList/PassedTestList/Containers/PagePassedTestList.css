@@ -1,0 +1,13 @@
+.container-passed-test-list {
+    display: flex;
+    flex-direction: row;
+}
+
+.general-menu {
+    width: 16%;
+}
+
+.list-passed-tests {
+    width: 84%;
+
+}
