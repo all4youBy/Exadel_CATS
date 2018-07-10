@@ -1,6 +1,6 @@
 package com.exadel.team3.backend.services.email.email_sender.impl;
 
-import com.exadel.team3.backend.services.email.email_command_type.EmailTypes;
+import com.exadel.team3.backend.services.email.email_types.EmailTypes;
 import com.exadel.team3.backend.services.email.email_sender.Sender;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.PropertySource;

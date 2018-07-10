@@ -1,6 +1,6 @@
 package com.exadel.team3.backend.services.email;
 
-import com.exadel.team3.backend.services.email.email_command_type.EmailTypes;
+import com.exadel.team3.backend.services.email.email_types.EmailTypes;
 import com.exadel.team3.backend.services.email.email_sender.Sender;
 import org.junit.Test;
 import org.springframework.context.ApplicationContext;
