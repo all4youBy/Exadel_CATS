@@ -72,6 +72,12 @@ public class QuestionServiceImpl implements QuestionService {
         return questionRepository.findById(id).orElse(null);
     }
 
+
+    @Override
+    public List<Question> getQuestions() {
+        return questionRepository.findAll();
+    }
+
     @Override
     public List<Question> getQuestions(@NonNull List<String> topicIds) {
         return questionRepository.findByTopicIdsIn(topicIds);

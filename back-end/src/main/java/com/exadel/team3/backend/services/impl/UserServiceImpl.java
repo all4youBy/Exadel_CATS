@@ -31,7 +31,15 @@ public class UserServiceImpl implements UserService {
         } catch (DuplicateKeyException e) {
             logger.warn("Duplicate email provided for login " + email);
             return null;
+        } catch (DataAccessException dae) {
+            logger.error("Could not create with email " + email + ": " + dae.getMessage());
+            return null;
         }
+    }
+
+    @Override
+    public User getUser(@NonNull String email) {
+        return userRepository.findByEmail(email);
     }
 
     @Override
@@ -39,7 +47,7 @@ public class UserServiceImpl implements UserService {
         try {
             return userRepository.save(user);
         } catch (DataAccessException dae) {
-            System.err.println("Could not update user with email " + user.getEmail() + ": " + dae.getMessage());
+            logger.error("Could not update user with email " + user.getEmail() + ": " + dae.getMessage());
             return null;
         }
     }
@@ -49,14 +57,10 @@ public class UserServiceImpl implements UserService {
         try {
             userRepository.delete(user);
         } catch (DataAccessException dae) {
-            System.err.println("Could not delete user with email " + user.getEmail() + ": " + dae.getMessage());
+            logger.error("Could not delete user with email " + user.getEmail() + ": " + dae.getMessage());
         }
     }
 
-    @Override
-    public User getUser(@NonNull String email) {
-        return userRepository.findByEmail(email);
-    }
 
     @Override
     public List<User> getUsersByGroup(@NonNull String group) {
@@ -70,7 +74,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public boolean userExists(@NonNull String email) {
-        return userRepository.findPasswordHashAndRole(email) != null;
+        return userRepository.existsById(email);
     }
 
     @Override

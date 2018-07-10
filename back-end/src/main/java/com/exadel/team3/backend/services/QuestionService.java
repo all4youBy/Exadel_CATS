@@ -31,6 +31,7 @@ public interface QuestionService {
             String author
     );
 
+    List<Question> getQuestions();
     List<Question> getQuestions(List<String> topicIds);
 
     Question updateQuestion(Question question);
