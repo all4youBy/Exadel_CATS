@@ -1,6 +1,7 @@
 package com.exadel.team3.backend.controllers;
 
 import com.exadel.team3.backend.entities.Question;
+import com.exadel.team3.backend.entities.QuestionStatus;
 import com.exadel.team3.backend.services.QuestionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -23,6 +24,11 @@ public class QuestionController {
         if(topicsIds == null)
             return questionService.getQuestions();
         return questionService.getQuestions(topicsIds);
+    }
+
+    @GetMapping("/questions/{question_status}")
+    public List<Question> getQuestions(@PathVariable(value = "question_status") QuestionStatus questionStatus){
+       return questionService.getQuestions(questionStatus);
     }
 
     @GetMapping("/questions/{id}")
