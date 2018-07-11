@@ -3,9 +3,9 @@ package com.exadel.team3.backend.services.mail.mail_types;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
+import java.nio.file.Paths;
+import java.util.stream.Collectors;
 
 public enum MailTypes {
 
@@ -27,12 +27,8 @@ public enum MailTypes {
     private String readFile(String nameFile) {
         String text = "";
 
-        InputStreamReader inputStreamReader = new InputStreamReader(this.getClass().getClassLoader().getResourceAsStream(nameFile));
-        try (BufferedReader reader = new BufferedReader(inputStreamReader)){
-            String line;
-            while ((line = reader.readLine()) != null) {
-                text += line;
-            }
+        try {
+            text = java.nio.file.Files.lines(Paths.get(nameFile)).collect(Collectors.joining());
         } catch (IOException ex) {
             logger.error("Could not read file with subject or message text. " + ex.getMessage());
         }
