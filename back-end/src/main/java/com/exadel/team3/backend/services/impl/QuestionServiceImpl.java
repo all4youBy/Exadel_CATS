@@ -1,9 +1,6 @@
 package com.exadel.team3.backend.services.impl;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.DataAccessException;
 import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Service;
 
@@ -15,8 +12,6 @@ import java.util.List;
 
 @Service
 public class QuestionServiceImpl implements QuestionService {
-    private final Logger logger = LoggerFactory.getLogger(this.getClass());
-
     @Autowired
     private QuestionRepository questionRepository;
 
@@ -27,7 +22,7 @@ public class QuestionServiceImpl implements QuestionService {
             @NonNull QuestionComplexity complexity,
             @NonNull String author
     ) {
-        return addQuestion(new Question(type, text, complexity, author));
+        return questionRepository.insert(new Question(type, text, complexity, author));
     }
 
     @Override
@@ -40,7 +35,7 @@ public class QuestionServiceImpl implements QuestionService {
     ) {
         Question question = new  Question(type, text, complexity, author);
         question.setAnswers(answers);
-        return addQuestion(question);
+        return questionRepository.insert(question);
     }
 
     @Override
@@ -55,16 +50,7 @@ public class QuestionServiceImpl implements QuestionService {
         Question question = new  Question(type, text, complexity, author);
         question.setAnswers(answers);
         question.setTopicIds(topicIds);
-        return addQuestion(question);
-    }
-
-    private Question addQuestion(Question question) {
-        try {
-            return questionRepository.insert(question);
-        } catch (DataAccessException dae) {
-            logger.error("Could not insert question \"" + question.getText() + "\": " + dae.getMessage());
-            return null;
-        }
+        return questionRepository.insert(question);
     }
 
     @Override
@@ -85,21 +71,12 @@ public class QuestionServiceImpl implements QuestionService {
 
     @Override
     public Question updateQuestion(@NonNull Question question) {
-        try {
-            return questionRepository.save(question);
-        } catch (DataAccessException dae) {
-            logger.error("Could not update question id " + question.getId() + ": " + dae.getMessage());
-            return null;
-        }
+        return questionRepository.save(question);
     }
 
     @Override
     public void deleteQuestion(Question question) {
-        try {
-            questionRepository.delete(question);
-        } catch (DataAccessException dae) {
-            logger.error("Could not delete question id " + question.getId() + ": " + dae.getMessage());
-        }
+        questionRepository.delete(question);
     }
 
 }
