@@ -10,7 +10,7 @@ import java.util.List;
 
 
 @RestController
-@RequestMapping("/app")
+@RequestMapping("/cats")
 public class TestRestController {
 
     @Autowired
