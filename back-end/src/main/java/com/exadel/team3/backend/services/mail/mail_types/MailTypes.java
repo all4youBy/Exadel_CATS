@@ -14,7 +14,7 @@ public enum MailTypes {
     VERIFICATION_TEST("Text_for_notification_verification_test.txt", "Subject_for_notification_verification_test.txt");
 
     private final static String PATH_TO_FILE_WITH_TEXT = "email_sender/text_for_email/";
-    private final static String PATH_TO_FILE_WITH_SUBJECT = "email_sender/text_for_email/";
+    private final static String PATH_TO_FILE_WITH_SUBJECT = "email_sender/subject_for_email/";
     private String templateText;
     private String templateSubject;
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
@@ -25,15 +25,16 @@ public enum MailTypes {
     }
 
     private String readFile(String nameFile) {
-        InputStreamReader inputStreamReader = new InputStreamReader(this.getClass().getClassLoader().getResourceAsStream(nameFile));
         String text = "";
+
+        InputStreamReader inputStreamReader = new InputStreamReader(this.getClass().getClassLoader().getResourceAsStream(nameFile));
         try (BufferedReader reader = new BufferedReader(inputStreamReader)){
             String line;
             while ((line = reader.readLine()) != null) {
                 text += line;
             }
         } catch (IOException ex) {
-            logger.error("Could not read file with subject or message text.");
+            logger.error("Could not read file with subject or message text. " + ex.getMessage());
         }
         return text;
     }

@@ -6,6 +6,7 @@ import com.exadel.team3.backend.services.mail.mail_sender.MailSender;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.PropertySource;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
@@ -16,6 +17,7 @@ import java.util.Map;
 import java.util.Properties;
 
 @Component
+@PropertySource("classpath:application.properties")
 public class MailSenderImpl implements MailSender {
 
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
@@ -55,7 +57,7 @@ public class MailSenderImpl implements MailSender {
     public boolean send(MailTypes emailType, String toEmail, Map<String, String> replacementMap) {
 
         try {
-            Session session = Session.getInstance(properties, new MailAuthenticator(username, password));
+            Session session = Session.getInstance(properties, MailAuthenticator.getInstance(username, password));
 
             Message message = new MimeMessage(session);
             message.setFrom(new InternetAddress(username));
@@ -65,7 +67,7 @@ public class MailSenderImpl implements MailSender {
             Transport.send(message);
             return true;
         } catch ( MessagingException ex) {
-            logger.error("Could not send message to user ");
+            logger.error("Could not send message to user. " + ex.getMessage());
             return false;
         }
     }
