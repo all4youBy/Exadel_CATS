@@ -2,7 +2,6 @@ package com.exadel.team3.backend.services.impl;
 
 import com.exadel.team3.backend.dao.UserRepository;
 import com.exadel.team3.backend.entities.User;
-import com.exadel.team3.backend.entities.UserRole;
 
 import com.exadel.team3.backend.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,11 +22,11 @@ public class UserServiceImpl implements UserService {
     private UserRepository userRepository;
 
     @Override
-    public User addUser(@NonNull String email, @NonNull String firstName, @NonNull String lastName, @NonNull UserRole role, @NonNull String passwordHash) {
+    public User addUser(@NonNull User user) {
         try {
-            return userRepository.insert(new User(email, firstName, lastName, role, passwordHash));
+            return userRepository.insert(user);
         } catch (DuplicateKeyException e) {
-            logger.warn("Tried to register new user with duplicate email " + email);
+            logger.warn("Tried to register new user with duplicate email " + user.getEmail());
             return null;
         }
     }

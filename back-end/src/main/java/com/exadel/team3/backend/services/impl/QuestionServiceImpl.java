@@ -16,40 +16,7 @@ public class QuestionServiceImpl implements QuestionService {
     private QuestionRepository questionRepository;
 
     @Override
-    public Question addQuestion(
-            @NonNull QuestionType type,
-            @NonNull String text,
-            @NonNull QuestionComplexity complexity,
-            @NonNull String author
-    ) {
-        return questionRepository.insert(new Question(type, text, complexity, author));
-    }
-
-    @Override
-    public Question addQuestion(
-            @NonNull QuestionType type,
-            @NonNull String text,
-            List<Answer> answers,
-            @NonNull QuestionComplexity complexity,
-            @NonNull String author
-    ) {
-        Question question = new  Question(type, text, complexity, author);
-        question.setAnswers(answers);
-        return questionRepository.insert(question);
-    }
-
-    @Override
-    public Question addQuestion(
-            @NonNull QuestionType type,
-            @NonNull String text,
-            List<String> topicIds,
-            List<Answer> answers,
-            @NonNull QuestionComplexity complexity,
-            @NonNull String author
-    ) {
-        Question question = new  Question(type, text, complexity, author);
-        question.setAnswers(answers);
-        question.setTopicIds(topicIds);
+    public Question addQuestion(@NonNull Question question) {
         return questionRepository.insert(question);
     }
 
