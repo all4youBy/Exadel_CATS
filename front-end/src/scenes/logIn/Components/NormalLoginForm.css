@@ -1,25 +1,25 @@
-a {
+.login-form{
+    display: block;
+    text-align: center;
+    align-self: center;
+}
+.login-form a {
     color: #04233d;
 }
-.ant-checkbox-checked .ant-checkbox-inner, .ant-checkbox-indeterminate .ant-checkbox-inner {
-    background-color: #04233d;
-    border-color: #04233d;
+.form-item {
+    margin-bottom: 10px;
 }
-.ant-form-item {
-    margin-bottom: 1vw;
-}
-.ant-btn-primary {
+.login-form-button {
     background-color: #04233d;
     border-color: #04233d;
     width: 100%;
 }
-.ant-form {
-     text-align: center;
+.logIn {
+     text-align: left;
  }
-.ant-checkbox-wrapper{
-    /*text-align: center;*/
+.check-box{
     float: left;
 }
-.login-form-forgot{
+.login-forgot{
     float: right;
 }

@@ -1,8 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import 'antd/dist/antd.css';
-import './NormalLoginForm.css';
-import { Form, Icon, Input, Button, Checkbox } from 'antd';
+import './normalLoginForm.css';
+import { Form, Icon, Input, Button } from 'antd';
 
 const FormItem = Form.Item;
 
@@ -25,14 +25,14 @@ class NormalLoginForm extends React.Component {
     const { form: { getFieldDecorator } } = this.props;
     return (
       <Form onSubmit={this.handleSubmit} className="login-form">
-        <FormItem>
+        <FormItem className="form-item">
           {getFieldDecorator('userName', {
             rules: [{ required: true, message: 'Введите имя пользователя!' }],
           })(
             <Input prefix={<Icon type="user" style={{ color: 'rgba(0,0,0,.25)' }}/>} placeholder="Имя пользователя..."/>,
           )}
         </FormItem>
-        <FormItem>
+        <FormItem className="form-item">
           {getFieldDecorator('password', {
             rules: [{ required: true, message: 'Введите пароль!' }],
           })(
@@ -43,17 +43,11 @@ class NormalLoginForm extends React.Component {
             />,
           )}
         </FormItem>
-        <FormItem>
-          {getFieldDecorator('remember', {
-            valuePropName: 'checked',
-            initialValue: true,
-          })(
-            <Checkbox>Запомнить меня</Checkbox>,
-          )}
-          <a className="login-form-forgot" href="/">Забыли пароль?</a>
-          <Button type="primary" htmlType="submit" className="login-form-button">
+        <FormItem className="logIn">
+          <Button onClick={this.onClick} type="primary" htmlType="submit" className="login-form-button">
             Войти
           </Button>
+          <a className="login-forgot" href="/">Забыли пароль?</a>
           <a href="/">Зарегистрироваться!</a>
         </FormItem>
       </Form>
