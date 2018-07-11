@@ -29,7 +29,7 @@ public class UserServiceImpl implements UserService {
             User u = new User(email, firstName, lastName, role, passwordHash);
             return userRepository.insert(u);
         } catch (DuplicateKeyException e) {
-            logger.warn("Duplicate email provided for login " + email);
+            logger.warn("Duplicate mail provided for login " + email);
             return null;
         }
     }
@@ -39,7 +39,7 @@ public class UserServiceImpl implements UserService {
         try {
             return userRepository.save(user);
         } catch (DataAccessException dae) {
-            System.err.println("Could not update user with email " + user.getEmail() + ": " + dae.getMessage());
+            System.err.println("Could not update user with mail " + user.getEmail() + ": " + dae.getMessage());
             return null;
         }
     }
@@ -49,7 +49,7 @@ public class UserServiceImpl implements UserService {
         try {
             userRepository.delete(user);
         } catch (DataAccessException dae) {
-            System.err.println("Could not delete user with email " + user.getEmail() + ": " + dae.getMessage());
+            System.err.println("Could not delete user with mail " + user.getEmail() + ": " + dae.getMessage());
         }
     }
 
