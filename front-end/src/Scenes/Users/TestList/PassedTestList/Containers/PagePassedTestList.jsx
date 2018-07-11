@@ -1,26 +1,24 @@
 import React from 'react';
-import { Layout } from 'antd/lib/index';
 import './PagePassedTestList.css';
 import TablePassedTests from '../Components/TablePassedTests';
-import logo from './kittywithoutbackground.png';
 import GeneralMenuStudent from '../../../../../Components/UserGeneralMenu';
-
-const { Header, Footer } = Layout;
+import PageHeader from '../../../../../Components/PageHeader';
+import PageFooter from '../../../../../Components/PageFooter';
 
 class PagePassedTestList extends React.PureComponent {
   render() {
     return (
       <div>
-        <Header><img src={logo} className="logo" alt="logo"/>CATS | Computer Automated Test Service</Header>
+        <PageHeader/>
         <div className="container-passed-test-list">
           <div className="general-menu">
-            <GeneralMenuStudent />
+            <GeneralMenuStudent/>
           </div>
           <div className="list-passed-tests">
-            <TablePassedTests />
+            <TablePassedTests/>
           </div>
         </div>
-        <Footer>Exadel</Footer>
+        <PageFooter/>
       </div>
     );
   }

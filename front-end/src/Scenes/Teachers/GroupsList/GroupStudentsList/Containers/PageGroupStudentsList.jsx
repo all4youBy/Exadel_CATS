@@ -1,21 +1,21 @@
 import React from 'react';
-import './PageAssignedTestList.css';
-import TableAssignedTests from '../Components/TableAssignedTests';
-import UserGeneralMenu from '../../../../../Components/UserGeneralMenu';
 import PageHeader from '../../../../../Components/PageHeader';
+import TableGroupStudents from '../Components/TableGroupStudents';
 import PageFooter from '../../../../../Components/PageFooter';
+import TeacherGeneralMenu from '../../../../../Components/TeacherGeneralMenu';
+import './PageGroupStudentsList.css';
 
-class PageAssignedTestList extends React.PureComponent {
+class PageGroupStudentsList extends React.PureComponent {
   render() {
     return (
-      <div>
+      <div className="main-container">
         <PageHeader/>
         <div className="container-assigned-test-list">
           <div className="general-menu">
-            <UserGeneralMenu />
+            <TeacherGeneralMenu/>
           </div>
           <div className="list-assigned-tests">
-            <TableAssignedTests />
+            <TableGroupStudents/>
           </div>
         </div>
         <PageFooter/>
@@ -24,4 +24,4 @@ class PageAssignedTestList extends React.PureComponent {
   }
 }
 
-export default PageAssignedTestList;
+export default PageGroupStudentsList;

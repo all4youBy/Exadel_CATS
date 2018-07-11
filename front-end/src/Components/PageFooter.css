@@ -1,0 +1,12 @@
+@import url(https://fonts.googleapis.com/css?family=LuganskyV);
+
+.page-footer {
+    background-color: #000f1d !important;
+    height: 70px;
+}
+
+.text-footer {
+    text-align:  center;
+    color: #ffffff;
+    font-family: 'LuganskyV';
+}

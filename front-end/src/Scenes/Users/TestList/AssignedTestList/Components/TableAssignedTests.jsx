@@ -1,6 +1,6 @@
 import React from 'react';
 import 'antd/dist/antd.css';
-import './TableAssignedTests.css';
+import './TableAssignedTests.scss';
 import { Table, Button } from 'antd';
 
 const columns = [{
@@ -15,8 +15,8 @@ const columns = [{
   width: 500,
 }, {
   title: 'Кол. вопросов',
-  dataIndex: 'countOfQuestions',
-  key: 'countOfQuestions',
+  dataIndex: 'countQuestions',
+  key: 'countQuestions',
   width: 150,
 }, {
   title: 'Время выполнения',
@@ -38,7 +38,7 @@ for (let i = 1; i <= 20; i += 1) {
     key: `${i}`,
     name: `Тест ${i}`,
     theme: `Тема ${i}`,
-    countOfQuestions: `${i}`,
+    countQuestions: `${i}`,
     time: `${i} мин`,
   });
 }
@@ -69,6 +69,7 @@ class TableAssignedTests extends React.PureComponent {
           }}
           columns={columns}
           dataSource={data}
+          rowClassName={() => 'abc'}
         />
       </div>
     );
