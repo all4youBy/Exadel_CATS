@@ -7,7 +7,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 @RestController
-@RequestMapping("/app")
+@RequestMapping("/cats")
 public class UIController {
 
     @RequestMapping(value = "/**")
