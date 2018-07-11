@@ -10,6 +10,4 @@ import java.util.List;
 
 @Repository
 public interface TopicRepository extends MongoRepository<Topic, String>, TopicRepositoryAggregation {
-    @Query("{'parentHierarchy._id':?0}")
-    List<Topic> findByParentHierarchyContainsId(String topicId);
 }

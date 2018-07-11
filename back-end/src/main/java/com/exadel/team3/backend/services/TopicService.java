@@ -12,7 +12,8 @@ public interface TopicService {
     Topic updateTopic(Topic topic);
 
     Topic getTopic(String id);
-    List<Topic> getTopics(String parentId);
+    List<Topic> getTopics(String rootId);
+    List<Topic> getTopics();
 
     void deleteTopic(Topic topic);
 }

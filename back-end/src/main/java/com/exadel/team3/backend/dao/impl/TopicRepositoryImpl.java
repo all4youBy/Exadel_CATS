@@ -23,7 +23,7 @@ public class TopicRepositoryImpl implements TopicRepositoryAggregation {
     }
 
     @Override
-    public List<Topic> getTopicTree(String parentId) {
+    public List<Topic> getTopicTree(String rootId) {
         GraphLookupOperation graphLookupOperation = GraphLookupOperation.builder()
                 .from("topics")
                 .startWith("parentId")
@@ -32,11 +32,11 @@ public class TopicRepositoryImpl implements TopicRepositoryAggregation {
                 .as("parentHierarchy");
 
         MatchOperation match = null;
-        if (!StringUtils.isEmpty(parentId)) {
+        if (!StringUtils.isEmpty(rootId)) {
             match = new MatchOperation(
                     new Criteria().orOperator(
-                            Criteria.where("id").is(parentId),
-                            Criteria.where("parentHierarchy.id").is(parentId)
+                            Criteria.where("id").is(rootId),
+                            Criteria.where("parentHierarchy.id").is(rootId)
                     )
             );
         }

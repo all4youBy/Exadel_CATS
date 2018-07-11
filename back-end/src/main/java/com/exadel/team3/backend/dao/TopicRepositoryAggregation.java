@@ -6,5 +6,5 @@ import java.util.List;
 
 public interface TopicRepositoryAggregation {
     List<Topic> getTopicTree();
-    List<Topic> getTopicTree(String parentId);
+    List<Topic> getTopicTree(String rootId);
 }

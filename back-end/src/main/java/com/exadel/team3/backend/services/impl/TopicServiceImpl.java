@@ -26,7 +26,12 @@ public class TopicServiceImpl implements TopicService {
     }
 
     @Override
-    public List<Topic> getTopics(@NonNull String parentId) {
+    public List<Topic> getTopics(@NonNull String rootId) {
+        return topicRepository.getTopicTree(rootId);
+    }
+
+    @Override
+    public List<Topic> getTopics() {
         return topicRepository.getTopicTree();
     }
 
