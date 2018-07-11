@@ -13,7 +13,7 @@ public interface UserRepository extends MongoRepository<User, String> {
 
     List<User> findByEmailIn(List<String> emails);
 
-    @Query(value="{'mail':?0}", fields="{'_id':0, 'passwordHash':1, 'role':1}")
+    @Query(value="{'email':?0}", fields="{'_id':0, 'passwordHash':1, 'role':1}")
     User findPasswordHashAndRole(String email);
 
 //    @Query("{'firstName':?0, 'lastName':?1}")
