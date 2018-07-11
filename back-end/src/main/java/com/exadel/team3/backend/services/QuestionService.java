@@ -7,29 +7,32 @@ import java.util.List;
 
 @Service
 public interface QuestionService {
-    Question addQuestion(
-            QuestionType type,
-            String text,
-            QuestionComplexity complexity,
-            String author
-    );
+//    Question addQuestion(
+//            QuestionType type,
+//            String text,
+//            QuestionComplexity complexity,
+//            String author
+//    );
+//
+//    Question addQuestion(
+//            QuestionType type,
+//            String text,
+//            List<Answer> answers,
+//            QuestionComplexity complexity,
+//            String author
+//    );
+//
+//    Question addQuestion(
+//            QuestionType type,
+//            String text,
+//            List<String> topicIds,
+//            List<Answer> answers,
+//            QuestionComplexity complexity,
+//            String author
+//    );
+//
 
-    Question addQuestion(
-            QuestionType type,
-            String text,
-            List<Answer> answers,
-            QuestionComplexity complexity,
-            String author
-    );
-
-    Question addQuestion(
-            QuestionType type,
-            String text,
-            List<String> topicIds,
-            List<Answer> answers,
-            QuestionComplexity complexity,
-            String author
-    );
+    public Question addQuestion(Question question);
 
     List<Question> getQuestions();
     List<Question> getQuestions(List<String> topicIds);

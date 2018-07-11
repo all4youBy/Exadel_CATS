@@ -20,45 +20,9 @@ public class QuestionServiceImpl implements QuestionService {
     @Autowired
     private QuestionRepository questionRepository;
 
-    @Override
-    public Question addQuestion(
-            @NonNull QuestionType type,
-            @NonNull String text,
-            @NonNull QuestionComplexity complexity,
-            @NonNull String author
-    ) {
-        return addQuestion(new Question(type, text, complexity, author));
-    }
 
-    @Override
-    public Question addQuestion(
-            @NonNull QuestionType type,
-            @NonNull String text,
-            List<Answer> answers,
-            @NonNull QuestionComplexity complexity,
-            @NonNull String author
-    ) {
-        Question question = new  Question(type, text, complexity, author);
-        question.setAnswers(answers);
-        return addQuestion(question);
-    }
 
-    @Override
-    public Question addQuestion(
-            @NonNull QuestionType type,
-            @NonNull String text,
-            List<String> topicIds,
-            List<Answer> answers,
-            @NonNull QuestionComplexity complexity,
-            @NonNull String author
-    ) {
-        Question question = new  Question(type, text, complexity, author);
-        question.setAnswers(answers);
-        question.setTopicIds(topicIds);
-        return addQuestion(question);
-    }
-
-    private Question addQuestion(Question question) {
+    public Question addQuestion(Question question) {
         try {
             return questionRepository.insert(question);
         } catch (DataAccessException dae) {
