@@ -36,11 +36,11 @@ public interface QuestionService {
 
     List<Question> getQuestions();
     List<Question> getQuestions(List<String> topicIds);
+    List<Question> getQuestions(QuestionStatus status);
 
     Question updateQuestion(Question question);
 
     Question getQuestion(String id);
 
     void deleteQuestion(Question question);
-
 }

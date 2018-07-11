@@ -48,11 +48,16 @@ public class QuestionServiceImpl implements QuestionService {
     }
 
     @Override
+    public List<Question> getQuestions(QuestionStatus status) {
+        return questionRepository.findByStatus(status);
+    }
+
+    @Override
     public Question updateQuestion(@NonNull Question question) {
         try {
             return questionRepository.save(question);
         } catch (DataAccessException dae) {
-            logger.error("Could not update question id " + question.getId() + ": " + dae.getMessage());
+            logger.error("Could not update question id " + question.getId() + ":" + dae.getMessage());
             return null;
         }
     }
