@@ -57,7 +57,7 @@ public class MailSenderImpl implements MailSender {
     public boolean send(MailTypes emailType, String toEmail, Map<String, String> replacementMap) {
 
         try {
-            Session session = Session.getInstance(properties, MailAuthenticator.getInstance(username, password));
+            Session session = Session.getInstance(properties, MailAuthenticator.mailAuthenticatorInit(username, password));
 
             Message message = new MimeMessage(session);
             message.setFrom(new InternetAddress(username));

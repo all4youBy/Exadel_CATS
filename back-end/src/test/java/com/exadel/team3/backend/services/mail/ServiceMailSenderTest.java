@@ -20,7 +20,7 @@ public class ServiceMailSenderTest {
 
         Map<String, String> map = new HashMap<String, String>();
         String email = "Skoriy.97@gmail.com";
-        map.put("&login", email);
+        map.put("&email", email);
         map.put("&checker", "checker");
 
         boolean check = mailSender.send(MailTypes.CONFIRM_EMAIL, email, map);
