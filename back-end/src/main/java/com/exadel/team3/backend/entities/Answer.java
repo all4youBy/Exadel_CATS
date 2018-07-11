@@ -7,9 +7,9 @@ import lombok.*;
 public class Answer {
 
     @NonNull
-    public String text;
+    private String text;
 
     @NonNull
-    public boolean isRight;
+    private boolean isRight;
 
 }
