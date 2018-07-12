@@ -3,6 +3,7 @@ package com.exadel.team3.backend.services.impl;
 import com.exadel.team3.backend.dao.UserRepository;
 import com.exadel.team3.backend.entities.User;
 
+import com.exadel.team3.backend.entities.UserAuth;
 import com.exadel.team3.backend.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DuplicateKeyException;
@@ -53,7 +54,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public User getPasswordHashAndRole(@NonNull String email) {
+    public UserAuth getPasswordHashAndRole(@NonNull String email) {
         return userRepository.findPasswordHashAndRole(email);
     }
 
