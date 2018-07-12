@@ -1,5 +1,6 @@
 package com.exadel.team3.backend.entities;
 
+import org.bson.types.ObjectId;
 import org.springframework.data.mongodb.core.mapping.Document;
 import lombok.AccessLevel;
 import lombok.Data;
@@ -12,7 +13,7 @@ import java.util.List;
 @Document(collection="questions")
 public class Question {
     @Setter(AccessLevel.NONE)
-    private String id;
+    private ObjectId id;
 
     @NonNull
     private QuestionType type;
@@ -26,9 +27,9 @@ public class Question {
     @NonNull
     private String author;
 
-    private List<Answer> answers;
+    private List<QuestionVariant> variants;
 
-    private List<String> topicIds;
+    private List<ObjectId> topicIds;
 
     private boolean isTraining;
 

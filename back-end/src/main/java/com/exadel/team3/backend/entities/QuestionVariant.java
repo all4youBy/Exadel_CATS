@@ -4,7 +4,7 @@ import lombok.*;
 
 @Data
 @RequiredArgsConstructor
-public class Answer {
+public class QuestionVariant {
 
     @NonNull
     private String text;
