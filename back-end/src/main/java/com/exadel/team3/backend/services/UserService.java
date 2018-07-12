@@ -1,7 +1,7 @@
 package com.exadel.team3.backend.services;
 
 import com.exadel.team3.backend.entities.User;
-import com.exadel.team3.backend.entities.UserRole;
+import com.exadel.team3.backend.entities.UserAuth;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -11,7 +11,7 @@ public interface UserService {
     User addUser(User user);
 
     User getUser(String email);
-    User getPasswordHashAndRole(String email);
+    UserAuth getPasswordHashAndRole(String email);
 
 //  List<User> getUsersByName(String firstName, String lastName);
     List<User> getUsersByGroup(String group);
