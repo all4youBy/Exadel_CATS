@@ -2,16 +2,18 @@ package com.exadel.team3.backend.entities;
 
 import lombok.Data;
 import lombok.NonNull;
+import org.springframework.beans.factory.annotation.Value;
 
 @Data
 public class QuestionStatistics {
-    private static final int USAGE_THRESHOLD = 50;
+    @Value("${cats.test.question.complexityRedefineThreshold}")
+    private static int complexityRedefineThreshold;
 
     private int useCount;
     private int rightAnswersCount;
 
     public QuestionComplexity getRatedComplexity(@NonNull QuestionComplexity defaultComplexity) {
-        if (useCount <= USAGE_THRESHOLD) return defaultComplexity;
+        if (useCount <= complexityRedefineThreshold) return defaultComplexity;
         double rightAnswersRatio = rightAnswersCount / useCount;
 
         if (rightAnswersRatio > 0.75)  return QuestionComplexity.LEVEL_1;
