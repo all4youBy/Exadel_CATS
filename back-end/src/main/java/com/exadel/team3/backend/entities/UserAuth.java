@@ -1,12 +1,12 @@
 package com.exadel.team3.backend.entities;
 
 import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NonNull;
-import lombok.Setter;
-import org.springframework.data.annotation.Id;
 
 @Data
+@AllArgsConstructor(access = AccessLevel.PRIVATE)
 public class UserAuth {
     @NonNull
     private UserRole role;
