@@ -1,0 +1,11 @@
+.ant-layout {
+    height: 100vh;
+    background: #fcfcfc;
+}
+
+.parent-login-form {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: #fff;
+}

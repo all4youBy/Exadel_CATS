@@ -1,0 +1,25 @@
+a {
+    color: #04233d;
+}
+.ant-checkbox-checked .ant-checkbox-inner, .ant-checkbox-indeterminate .ant-checkbox-inner {
+    background-color: #04233d;
+    border-color: #04233d;
+}
+.ant-form-item {
+    margin-bottom: 1vw;
+}
+.ant-btn-primary {
+    background-color: #04233d;
+    border-color: #04233d;
+    width: 100%;
+}
+.ant-form {
+    text-align: center;
+}
+.ant-checkbox-wrapper{
+    /*text-align: center;*/
+    float: left;
+}
+.login-form-forgot{
+    float: right;
+}
