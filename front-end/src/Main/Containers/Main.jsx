@@ -10,8 +10,8 @@ import PageGroupStudentsList from '../../Scenes/Teachers/GroupsList/GroupStudent
 import Test from '../../Scenes/Users/Tests/Containers/Test';
 import UserTaskPage from '../../Scenes/Users/Task/Containers/UserTaskPage';
 import UserGeneralMenu from '../../Components/UserGeneralMenu';
-import PageHeader from '../../Components/PageHeader';
-import PageFooter from '../../Components/PageFooter';
+import PageHeader from '../../Components/GlobalHeader';
+import PageFooter from '../../Components/GlobalFooter';
 
 
 class Main extends React.Component {

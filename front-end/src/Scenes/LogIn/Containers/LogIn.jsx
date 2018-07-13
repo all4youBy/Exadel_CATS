@@ -9,10 +9,10 @@ const { Content } = Layout;
 class LogIn extends React.Component {
   render() {
     return (
-      <div>
-        <Layout>
-          <Content>
-            <div className="parent-login-form"><WrappedNormalLoginForm/></div>
+      <div >
+        <Layout className="container-main" >
+          <Content className="login-page content">
+            <div className="login-page login-form"><WrappedNormalLoginForm/></div>
           </Content>
         </Layout>
       </div>

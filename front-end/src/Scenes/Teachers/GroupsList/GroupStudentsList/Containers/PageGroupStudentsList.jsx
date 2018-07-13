@@ -15,7 +15,6 @@ class PageGroupStudentsList extends React.PureComponent {
             <TableGroupStudents/>
           </div>
         </div>
-        <GlobalFooter/>
       </div>
     );
   }
