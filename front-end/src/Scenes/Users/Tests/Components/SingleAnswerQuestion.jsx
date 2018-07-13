@@ -26,10 +26,10 @@ export default class SingleAnswerQuestion extends React.PureComponent {
     const { value } = this.state;
 
     return (
-      <Card className="SAQCard">
-        <div>
+      <Card className="single-a-q-card">
+        <p>
           Вопрос с одним вариантом ответа
-        </div>
+        </p>
         <Group onChange={this.onChange} value={value}>
           <Radio style={radioStyle} value={1}>
             Ответ 1

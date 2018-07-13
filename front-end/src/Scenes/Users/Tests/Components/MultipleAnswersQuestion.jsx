@@ -10,10 +10,10 @@ const plainOptions = ['Ответ 1', 'Ответ 2', 'Ответ 3', 'Отве�
 export default class MultipleAnswersQuestion extends React.PureComponent {
   render() {
     return (
-      <Card className="MAQCard">
-        <div>
+      <Card className="multiple-a-q-card">
+        <p>
           Вопрос с несколькими вариантами ответа
-        </div>
+        </p>
         <Group
           className="check-box-group"
           options={plainOptions}

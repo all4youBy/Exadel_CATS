@@ -8,8 +8,8 @@ const { TextArea } = Input;
 export default class OpenAnswersQuestion extends React.PureComponent {
   render() {
     return (
-      <Card className="open-aq-card">
-        <div>Вопрос с открытым ответом</div>
+      <Card className="open-a-q-card">
+        <p>Вопрос с открытым ответом</p>
         <TextArea className="text-area-answer" placeholder="Введите ответ" />
         <Button>Отправить</Button>
       </Card>

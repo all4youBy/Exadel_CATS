@@ -6,8 +6,8 @@ import { Input, Card, Button } from 'antd';
 export default class SymbolAnswersQuestion extends React.PureComponent {
   render() {
     return (
-      <Card className="symbol-aq-card">
-        <div>Вопрос ответом в виде символов</div>
+      <Card className="symbol-a-q-card">
+        <p>Вопрос ответом в виде символов</p>
         <Input className="input-answer" placeholder="Введите ответ" />
         <Button>Отправить</Button>
       </Card>

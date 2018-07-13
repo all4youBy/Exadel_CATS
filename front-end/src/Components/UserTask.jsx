@@ -41,7 +41,7 @@ export default class UserTask extends React.PureComponent {
     const { fileList } = this.state;
     return (
       <div className="task-container">
-        <b>Название задачи</b>
+        <h1>Название задачи</h1>
         <p>Постановка задачи. Включает формат входных/выходных данных и разбиение по оценкам.
         </p>
         <div className="upload-task-buttons">
