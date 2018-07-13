@@ -1,6 +1,6 @@
 import React from 'react';
 import 'antd/dist/antd.css';
-import './TablePassedTests.css';
+import './TablePassedTests.scss';
 import { Table, Badge } from 'antd';
 
 function TablePassedTests() {
