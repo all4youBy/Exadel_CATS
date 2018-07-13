@@ -1,25 +1,26 @@
-.login-form{
+.login-form {
     display: block;
-    text-align: center;
     align-self: center;
 }
+
 .login-form a {
-    color: #04233d;
+    color: #04233d !important;
 }
+
 .form-item {
     margin-bottom: 10px;
 }
+
 .login-form-button {
-    background-color: #04233d;
-    border-color: #04233d;
+    background-color: #04233d !important;
+    border-color: #04233d !important;
     width: 100%;
 }
-.logIn {
-     text-align: left;
- }
-.check-box{
+
+.login {
     float: left;
 }
-.login-forgot{
+
+.login-forgot {
     float: right;
 }
