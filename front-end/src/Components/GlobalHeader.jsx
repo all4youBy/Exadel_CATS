@@ -1,11 +1,11 @@
 import React from 'react';
 import { Layout } from 'antd/lib/index';
 import logo from './kittywithoutbackground.png';
-import './PageHeader.css';
+import './GlobalHeader.scss';
 
 const { Header } = Layout;
 
-class PageHeader extends React.PureComponent {
+class GlobalHeader extends React.PureComponent {
   render() {
     return (
       <Header className="page-header">
@@ -20,4 +20,4 @@ class PageHeader extends React.PureComponent {
   }
 }
 
-export default PageHeader;
+export default GlobalHeader;

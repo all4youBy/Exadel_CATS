@@ -1,10 +1,10 @@
 import React from 'react';
 import { Layout } from 'antd/lib/index';
-import './PageFooter.css';
+import './GlobalFooter.scss';
 
 const { Footer } = Layout;
 
-class PageFooter extends React.PureComponent {
+class GlobalFooter extends React.PureComponent {
   render() {
     return (
       <Footer className="page-footer">
@@ -14,4 +14,4 @@ class PageFooter extends React.PureComponent {
   }
 }
 
-export default PageFooter;
+export default GlobalFooter;

@@ -1,5 +1,5 @@
 import React from 'react';
-import './PagePassedTestList.css';
+import './PagePassedTestList.scss';
 import TablePassedTests from '../Components/TablePassedTests';
 
 class PagePassedTestList extends React.PureComponent {

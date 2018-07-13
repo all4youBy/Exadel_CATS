@@ -17,7 +17,7 @@ const columns = [{
   title: 'Кол. вопросов',
   dataIndex: 'countQuestions',
   key: 'countQuestions',
-  width: 150,
+  width: 250,
 }, {
   title: 'Время выполнения',
   dataIndex: 'time',

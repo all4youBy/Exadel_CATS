@@ -1,7 +1,7 @@
 import React from 'react';
 import TableGroupStudents from '../Components/TableGroupStudents';
 import TeacherGeneralMenu from '../../../../../Components/TeacherGeneralMenu';
-import './PageGroupStudentsList.css';
+import './PageGroupStudentsList.scss';
 
 class PageGroupStudentsList extends React.PureComponent {
   render() {
@@ -15,6 +15,7 @@ class PageGroupStudentsList extends React.PureComponent {
             <TableGroupStudents/>
           </div>
         </div>
+        <GlobalFooter/>
       </div>
     );
   }

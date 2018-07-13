@@ -1,4 +1,6 @@
 import React from 'react';
+// import PropTypes from 'prop-types';
+import { connect } from 'react-redux';
 import './Main.scss';
 import { Switch, Route, Redirect } from 'react-router-dom';
 import LogIn from '../../Scenes/LogIn/Containers/LogIn';
@@ -38,5 +40,4 @@ class Main extends React.Component {
     );
   }
 }
-
-export default Main;
+export default connect()(Main);

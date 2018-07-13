@@ -1,5 +1,5 @@
 import React from 'react';
-import './PageAssignedTestList.css';
+import './PageAssignedTestList.scss';
 import TableAssignedTests from '../Components/TableAssignedTests';
 
 class PageAssignedTestList extends React.PureComponent {

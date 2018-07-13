@@ -1,7 +1,7 @@
 import React from 'react';
 import { Layout } from 'antd';
 import 'antd/dist/antd.css';
-import './LogIn.css';
+import './LogIn.scss';
 import WrappedNormalLoginForm from '../Components/NormalLoginForm';
 
 const { Content } = Layout;
