@@ -1,0 +1,21 @@
+.MAQCard {
+  border: none;
+  border-color: #D0CCCC;
+  border-radius: 12px;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  div {
+    display: flex;
+    flex-direction: column;
+    word-wrap: break-word;
+    .check-box-group {
+      display: flex;
+      flex-direction: column;
+    }
+    button {
+      width: 100px;
+      margin-top: 10px;
+    }
+  }
+}
