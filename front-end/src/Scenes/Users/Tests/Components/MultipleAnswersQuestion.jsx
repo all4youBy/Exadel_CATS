@@ -18,7 +18,7 @@ export default class MultipleAnswersQuestion extends React.PureComponent {
           className="check-box-group"
           options={plainOptions}
         />
-        <Button>Отправить</Button>
+        <Button className="submit-button">Отправить</Button>
       </Card>
     );
   }
