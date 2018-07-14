@@ -2,7 +2,7 @@ import React from 'react';
 import { Layout } from 'antd';
 import 'antd/dist/antd.css';
 import './LogIn.scss';
-import WrappedNormalLoginForm from '../Components/NormalLoginForm';
+import WrappedNormalLoginForm from '../Components/LoginForm';
 import GlobalHeader from '../../../Components/GlobalHeader';
 import GlobalFooter from '../../../Components/GlobalFooter';
 
