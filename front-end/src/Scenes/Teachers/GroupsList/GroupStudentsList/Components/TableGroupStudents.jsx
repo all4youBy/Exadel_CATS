@@ -11,6 +11,7 @@ const data = [];
 for (let i = 1; i <= 20; i += 1) {
   data.push({
     key: `${i}`,
+    number: `${i}.`,
     name: 'Пупкин Василий Иванович',
     test: `Тест ${i}`,
     countTasks: `${i}`,
@@ -19,6 +20,12 @@ for (let i = 1; i <= 20; i += 1) {
 }
 
 const columns = [{
+  title: '№',
+  dataIndex: 'number',
+  key: 'number',
+  width: 50,
+  fixed: 'left',
+}, {
   title: 'Студент',
   dataIndex: 'name',
   key: 'name',
@@ -28,7 +35,7 @@ const columns = [{
   title: 'Тест1',
   dataIndex: 'test',
   key: 'test',
-  width: 250,
+  width: 150,
 }, {
   title: 'Тест2',
   dataIndex: 'test',
