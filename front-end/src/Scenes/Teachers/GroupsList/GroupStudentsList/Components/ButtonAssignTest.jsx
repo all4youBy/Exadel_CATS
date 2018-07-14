@@ -1,6 +1,6 @@
 import React from 'react';
 import 'antd/dist/antd.css';
-import './ButtonAssignTest.css';
+import './ButtonAssignTest.scss';
 import { Button } from 'antd';
 
 class ButtonAssignTest extends React.Component {

@@ -1,0 +1,17 @@
+.login-page {
+  .login-form {
+    flex-direction: column ;
+    justify-content: center;
+  }
+  .content {
+  }
+  display: flex;
+  color: #fff;
+  align-self: center;
+}
+
+.container-main {
+  display: flex;
+  background: #fcfcfc;
+  height: 100vh;
+}

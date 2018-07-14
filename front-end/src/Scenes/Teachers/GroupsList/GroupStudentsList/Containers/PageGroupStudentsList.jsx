@@ -1,15 +1,15 @@
 import React from 'react';
-import PageHeader from '../../../../../Components/PageHeader';
+import GlobalHeader from '../../../../../Components/GlobalHeader';
 import TableGroupStudents from '../Components/TableGroupStudents';
-import PageFooter from '../../../../../Components/PageFooter';
+import GlobalFooter from '../../../../../Components/GlobalFooter';
 import TeacherGeneralMenu from '../../../../../Components/TeacherGeneralMenu';
-import './PageGroupStudentsList.css';
+import './PageGroupStudentsList.scss';
 
 class PageGroupStudentsList extends React.PureComponent {
   render() {
     return (
       <div className="main-container">
-        <PageHeader/>
+        <GlobalHeader/>
         <div className="container-assigned-test-list">
           <div className="general-menu">
             <TeacherGeneralMenu/>
@@ -18,7 +18,7 @@ class PageGroupStudentsList extends React.PureComponent {
             <TableGroupStudents/>
           </div>
         </div>
-        <PageFooter/>
+        <GlobalFooter/>
       </div>
     );
   }

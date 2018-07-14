@@ -1,15 +1,15 @@
 import React from 'react';
-import './PageAssignedTestList.css';
+import './PageAssignedTestList.scss';
 import TableAssignedTests from '../Components/TableAssignedTests';
 import UserGeneralMenu from '../../../../../Components/UserGeneralMenu';
-import PageHeader from '../../../../../Components/PageHeader';
-import PageFooter from '../../../../../Components/PageFooter';
+import GlobalHeader from '../../../../../Components/GlobalHeader';
+import GlobalFooter from '../../../../../Components/GlobalFooter';
 
 class PageAssignedTestList extends React.PureComponent {
   render() {
     return (
       <div>
-        <PageHeader/>
+        <GlobalHeader/>
         <div className="container-assigned-test-list">
           <div className="general-menu">
             <UserGeneralMenu />
@@ -18,7 +18,7 @@ class PageAssignedTestList extends React.PureComponent {
             <TableAssignedTests />
           </div>
         </div>
-        <PageFooter/>
+        <GlobalFooter/>
       </div>
     );
   }

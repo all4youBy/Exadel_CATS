@@ -1,6 +1,6 @@
 import React from 'react';
 import 'antd/dist/antd.css';
-import './TableGroupStudents.css';
+import './TableGroupStudents.scss';
 import { Table } from 'antd';
 import ButtonAssignTest from './ButtonAssignTest';
 import ButtonAssignTask from './ButtonAssignTask';

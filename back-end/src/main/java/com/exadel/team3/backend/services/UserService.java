@@ -8,7 +8,7 @@ import java.util.List;
 
 @Service
 public interface UserService {
-    User addUser(String email, String firstName, String lastName, UserRole role, String passwordHash);
+    User addUser(User user);
 
     User getUser(String email);
     User getPasswordHashAndRole(String email);
