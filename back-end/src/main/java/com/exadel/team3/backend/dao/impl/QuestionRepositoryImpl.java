@@ -12,9 +12,9 @@ import org.springframework.data.mongodb.core.aggregation.MatchOperation;
 import org.springframework.data.mongodb.core.aggregation.SampleOperation;
 import org.springframework.data.mongodb.core.aggregation.TypedAggregation;
 import org.springframework.data.mongodb.core.query.Criteria;
-import org.springframework.data.mongodb.core.query.CriteriaDefinition;
 import org.springframework.lang.NonNull;
 
+import java.util.Collection;
 import java.util.List;
 
 public class QuestionRepositoryImpl implements QuestionRepositoryAggregation {
@@ -22,42 +22,32 @@ public class QuestionRepositoryImpl implements QuestionRepositoryAggregation {
     private MongoTemplate mongoTemplate;
 
     @Override
-    public List<Question> random(int count, @NonNull QuestionType type, boolean trainingOnly) {
-        return random(count, null, type, trainingOnly);
+    public List<Question> random(int count, @NonNull Collection<QuestionType> allowedTypes, boolean trainingOnly) {
+        return random(count, null, allowedTypes, trainingOnly);
     }
 
     @Override
-    public List<Question> random(int count, @NonNull QuestionComplexity complexity, boolean trainingOnly) {
-        return random(count, complexity, null, trainingOnly);
-    }
-
-    private List<Question> random(int count, QuestionComplexity complexity, QuestionType type, boolean trainingOnly) {
+    public List<Question> random(int count, QuestionComplexity complexity, @NonNull Collection<QuestionType> allowedTypes, boolean trainingOnly) {
         SampleOperation sampleOperation = Aggregation.sample(count);
-        MatchOperation matchOperation = null;
-        Criteria complexityOrTypeCriteria = null;
+        MatchOperation matchOperation;
         if (complexity != null) {
-            complexityOrTypeCriteria = Criteria.where("complexity").is(complexity);
-        } else if (type != null) {
-            complexityOrTypeCriteria = Criteria.where("type").is(type);
-        }
-        if (complexityOrTypeCriteria != null && trainingOnly) {
             matchOperation = new MatchOperation(
                     new Criteria().andOperator(
-                            complexityOrTypeCriteria,
+                            Criteria.where("type").in(allowedTypes),
+                            Criteria.where("training").is(true),
+                            Criteria.where("complexity").is(complexity)
+                    )
+            );
+        } else {
+            matchOperation = new MatchOperation(
+                    new Criteria().andOperator(
+                            Criteria.where("type").in(allowedTypes),
                             Criteria.where("training").is(true)
                     )
             );
-        } else if (complexityOrTypeCriteria != null) {
-            matchOperation = new MatchOperation(complexityOrTypeCriteria);
-        } else if (trainingOnly) {
-            matchOperation = new MatchOperation(Criteria.where("training").is(true));
         }
-        TypedAggregation<Question> aggregation;
-        if (matchOperation != null) {
-            aggregation = TypedAggregation.newAggregation(Question.class,matchOperation, sampleOperation);
-        } else {
-            aggregation = TypedAggregation.newAggregation(Question.class, sampleOperation);
-        }
+
+        TypedAggregation<Question> aggregation = TypedAggregation.newAggregation(Question.class,matchOperation, sampleOperation);
         return mongoTemplate.aggregate(aggregation,"questions", Question.class).getMappedResults();
     }
 

@@ -11,9 +11,7 @@ import com.exadel.team3.backend.services.TestItemPicker;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -37,7 +35,7 @@ public class TestItemPickerImpl implements TestItemPicker {
         int complexLevel2Count = count >= 2 ? count / 2 : 1;
         int complexLevel1Count = count - complexLevel2Count;
 
-        // add random-generated collection of level_1, 2, 3 and 4 questions
+        // add random-generated collection of level_1, 2, 3 and 4 questions that are not manual-check
         List<TestItem> generated = Stream.of(
                 pickRandomQuestions(complexLevel1Count, QuestionComplexity.LEVEL_1, trainingOnly),
                 pickRandomQuestions(complexLevel2Count, QuestionComplexity.LEVEL_2, trainingOnly),
@@ -48,7 +46,7 @@ public class TestItemPickerImpl implements TestItemPicker {
         // add single manual-check question if needed
         if (!trainingOnly) {
             generated.addAll(
-                    questionRepository.random(1, QuestionType.MANUAL_CHECK_TEXT, false)
+                    questionRepository.random(1, Collections.singletonList(QuestionType.MANUAL_CHECK_TEXT), false)
                             .stream()
                             .map(Question::getId)
                             .map(TestItem::new)
@@ -60,10 +58,12 @@ public class TestItemPickerImpl implements TestItemPicker {
     }
 
     private Stream<TestItem> pickRandomQuestions(int count, QuestionComplexity complexity, boolean trainingOnly) {
-        return questionRepository.random(count, complexity, trainingOnly)
-                .stream()
-                .map(Question::getId)
-                .map(TestItem::new);
+        return questionRepository.random(
+                count,
+                complexity,
+                Arrays.asList(QuestionType.SINGLE_VARIANT, QuestionType.MULTI_VARIANT, QuestionType.AUTOCHECK_TEXT),
+                trainingOnly
+        ).stream().map(Question::getId).map(TestItem::new);
     }
 
 }
