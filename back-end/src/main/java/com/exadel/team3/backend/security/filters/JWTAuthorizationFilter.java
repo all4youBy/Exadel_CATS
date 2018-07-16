@@ -47,13 +47,4 @@ public class JWTAuthorizationFilter extends OncePerRequestFilter{
 
        chain.doFilter(request,response);
     }
-
-//    private UsernamePasswordAuthenticationToken getAuthentication(HttpServletRequest request){
-//        String token = request.getHeader(HEADER);
-//
-//        if(token == null)
-//            return null;
-//      return securityUtils.getAuthentication(token);
-//    }
-
 }

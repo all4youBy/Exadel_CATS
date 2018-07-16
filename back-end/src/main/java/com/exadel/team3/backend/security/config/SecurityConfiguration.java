@@ -64,16 +64,11 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter{
                 .csrf().disable().exceptionHandling().authenticationEntryPoint(authenticationEntryPoint)
                 .and()
                     .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-//                .loginPage("/login").permitAll()
                 .and()
                 .authorizeRequests()
                     .antMatchers("/auth/**").permitAll()
                     .anyRequest().authenticated();
-
-//                    .addFilter(new JWTAuthenticationFilter(authenticationManager(),securityUtils))
                 http.addFilterBefore(new JWTAuthorizationFilter(securityUtils,userDetailsService), UsernamePasswordAuthenticationFilter.class);
-
-
     }
 
     @Override
@@ -95,5 +90,4 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter{
                         "**/*.js"
                 );
     }
-
 }

@@ -32,18 +32,6 @@ public class SecurityUtils {
                 .compact();
     }
 
-//    public UsernamePasswordAuthenticationToken getAuthentication(String token){
-//        if (token == null)
-//            return null;
-//
-//        String user =   getUserFromToken(token);
-//
-//        if(user == null)
-//            return null;
-//
-//        return new UsernamePasswordAuthenticationToken(user,null, Collections.emptyList());
-//    }
-
     public String getUserFromToken(String token){
         return Jwts.parser()
                 .setSigningKey(secret)
