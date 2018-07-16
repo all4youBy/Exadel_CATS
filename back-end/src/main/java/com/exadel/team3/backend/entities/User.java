@@ -1,5 +1,6 @@
 package com.exadel.team3.backend.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.AccessLevel;
 import lombok.Data;
 import lombok.NonNull;
@@ -13,6 +14,7 @@ import java.util.Set;
 
 @Data
 @Document(collection = "users")
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class User {
     @Id
     @NonNull

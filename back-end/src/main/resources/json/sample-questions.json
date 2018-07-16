@@ -1,0 +1,213 @@
+[
+  {
+    "type":"SINGLE_VARIANT",
+    "text":"Инкапсуляция &ldash; это:",
+    "complexity":"LEVEL_1",
+    "author":"vasya@mail.ru",
+    "variants":[
+      {
+        "text":"Возможность создания методов с одинаковым названием, но разным набором параметров",
+        "correct":false
+      },
+      {
+        "text":"Компоновка данных и методов их обработки в общий компонент",
+        "correct":true
+      },
+      {
+        "text":"Хранение программных данных в специальных коллекциях - капсулах",
+        "correct":false
+      }
+    ],
+    "topicIds":[
+      "5b4898d987ae4314d278f38e",
+      "5b4898d987ae4314d278f391",
+      "5b4898d987ae4314d278f395"
+    ],
+    "training":false,
+    "status":"ACTIVE"
+  },
+
+  {
+    "type":"MULTI_VARIANT",
+    "text":"Что из перечисленного является валидным модификатором доступа в Java?",
+    "complexity":"LEVEL_1",
+    "author":"vasya@mail.ru",
+    "variants":[
+      {
+        "text":"private",
+        "correct":true
+      },
+      {
+        "text":"friend",
+        "correct":false
+      },
+      {
+        "text":"public",
+        "correct":true
+      },
+      {
+        "text":"implements",
+        "correct":false
+      }
+    ],
+    "topicIds":["5b4898d987ae4314d278f38d"],
+    "training":false,
+    "status":"ACTIVE"
+  },
+
+  {
+    "type":"AUTOCHECK_TEXT",
+    "text":"Каким зарезервированным словом обозначается класс, унаследованный от другого класса?",
+    "complexity":"LEVEL_1",
+    "author":"vasya@mail.ru",
+    "variants":[
+      {
+        "text":"/extends/",
+        "correct":true
+      }
+    ],
+    "topicIds":[
+      "5b4898d987ae4314d278f38e",
+      "5b4898d987ae4314d278f391"
+    ],
+    "training":true,
+    "status":"ACTIVE"
+  },
+
+  {
+    "type":"MANUAL_CHECK_TEXT",
+    "text":"Дать определение маркерного интерфейса",
+    "complexity":"LEVEL_2",
+    "author":"vasya@mail.ru",
+    "topicIds":[
+      "5b4898d987ae4314d278f38d",
+      "5b4898d987ae4314d278f38f"
+    ],
+    "training":false,
+    "status":"ACTIVE"
+  },
+
+  {
+    "type":"MANUAL_CHECK_TEXT",
+    "text":"Описать стандартный алгоритм работы Garbage Collector",
+    "complexity":"LEVEL_4",
+    "author":"vasya@mail.ru",
+    "topicIds":["5b4898d987ae4314d278f38d"],
+    "training":false,
+    "status":"ACTIVE"
+  },
+
+  {
+    "type":"SINGLE_VARIANT",
+    "text":"Все классы коллекций в Java реализуют базовый интерфейс:",
+    "complexity":"LEVEL_2",
+    "author":"vasya@mail.ru",
+    "variants":[
+      {
+        "text":"Loadable",
+        "correct":false
+      },
+      {
+        "text":"Iterable",
+        "correct":true
+      },
+      {
+        "text":"Modifiable",
+        "correct":false
+      },
+      {
+        "text":"Collection",
+        "correct":false
+      }
+    ],
+    "topicIds":["5b4898d987ae4314d278f38f"],
+    "training":false,
+    "status":"ACTIVE"
+  },
+
+  {
+    "type":"MULTI_VARIANT",
+    "text":"Отметить валидные методы класса ArrayList",
+    "complexity":"LEVEL_2",
+    "author":"vasya@mail.ru",
+    "variants":[
+      {
+        "text":"indexOf()",
+        "correct":true
+      },
+      {
+        "text":"toArray()",
+        "correct":true
+      },
+      {
+        "text":"append()",
+        "correct":false
+      },
+      {
+        "text":"add()",
+        "correct":true
+      }
+    ],
+    "topicIds":[
+      "5b4898d987ae4314d278f38f",
+      "5b4898d987ae4314d278f392"
+    ],
+    "training":false,
+    "status":"ACTIVE"
+  },
+
+  {
+    "type":"MULTI_VARIANT",
+    "text":"Что из перечисленного является валидным модификатором доступа в языке С#?",
+    "complexity":"LEVEL_1",
+    "author":"vasya@mail.ru",
+    "variants":[
+      {
+        "text":"private",
+        "correct":true
+      },
+      {
+        "text":"friend",
+        "correct":true
+      },
+      {
+        "text":"public",
+        "correct":true
+      },
+      {
+        "text":"protected",
+        "correct":true
+      }
+    ],
+    "topicIds":["5b4898d987ae4314d278f390"],
+    "training":true,
+    "status":"ACTIVE"
+  },
+
+  {
+    "type":"AUTOCHECK_TEXT",
+    "text":"C помощью какого метода можно получить объект, оисывающий указанное свойство объекта определенного класса, и позволяющий установить значение этого свойства на данном экземпляре класса?",
+    "complexity":"LEVEL_3",
+    "author":"leoplu@inbox.com",
+    "variants":[
+      {
+        "text":"/getproperty(?:\\(\\))?/",
+        "correct":true
+      }
+    ],
+    "topicIds":["5b4898d987ae4314d278f38d"],
+    "training":false,
+    "status":"ACTIVE"
+  },
+
+  {
+    "type":"MANUAL_CHECK_TEXT",
+    "text":"В чем различие lazy loading и eager loading в C# LINQ?",
+    "complexity":"LEVEL_4",
+    "author":"leoplu@inbox.com",
+    "topicIds":["5b4898d987ae4314d278f390"],
+    "training":false,
+    "status":"ACTIVE"
+  }
+
+]

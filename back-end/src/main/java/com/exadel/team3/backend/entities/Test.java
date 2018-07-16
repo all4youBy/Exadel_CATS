@@ -26,6 +26,8 @@ public class Test {
     @NonNull
     private LocalDateTime startingDate = LocalDateTime.now();
 
+    private String assignedBy;
+
     @EqualsAndHashCode.Exclude
     private int mark;
 
