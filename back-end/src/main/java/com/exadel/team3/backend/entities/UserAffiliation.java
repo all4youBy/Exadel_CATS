@@ -8,7 +8,7 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
-public class UserEducation {
+public class UserAffiliation {
     private String institution;
     private int graduationYear;
     private String specialization;

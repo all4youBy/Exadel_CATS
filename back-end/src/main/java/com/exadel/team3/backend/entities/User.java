@@ -36,7 +36,7 @@ public class User {
     @Setter(AccessLevel.NONE)
     private Set<String> groups = new HashSet<>();
 
-    private UserEducation education;
+    private UserAffiliation education;
 
     private String emailConfirmationCode;
     public boolean isEmailConfirmed() {
