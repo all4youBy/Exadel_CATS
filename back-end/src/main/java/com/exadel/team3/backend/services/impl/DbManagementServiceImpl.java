@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.List;
 
+import com.exadel.team3.backend.services.ServiceException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.stereotype.Service;
@@ -20,15 +21,12 @@ import com.exadel.team3.backend.dao.TestRepository;
 import com.exadel.team3.backend.dao.TopicRepository;
 import com.exadel.team3.backend.dao.UserRepository;
 import com.exadel.team3.backend.entities.Question;
-import com.exadel.team3.backend.entities.Test;
 import com.exadel.team3.backend.entities.Topic;
 import com.exadel.team3.backend.entities.User;
 import com.exadel.team3.backend.services.DbManagementService;
 
 @Service
 public class DbManagementServiceImpl implements DbManagementService {
-    private final Logger logger = LoggerFactory.getLogger(this.getClass());
-
     @Autowired
     UserRepository userRepository;
     @Autowired
@@ -48,18 +46,17 @@ public class DbManagementServiceImpl implements DbManagementService {
     }
 
     @Override
-    public boolean resetAndFillWithSampleData() {
+    public void resetAndFillWithSampleData() {
         reset();
         ObjectMapper mapper = new ObjectMapper();
-        return  fillCollectionWithSampleData(mapper, userRepository, User.class)
-            &&  fillCollectionWithSampleData(mapper, topicRepository, Topic.class)
-//            &&  fillCollectionWithSampleData(mapper, testRepository, Test.class)
-            &&  fillCollectionWithSampleData(mapper, questionRepository, Question.class);
+        fillCollectionWithSampleData(mapper, userRepository, User.class);
+        fillCollectionWithSampleData(mapper, topicRepository, Topic.class);
+        fillCollectionWithSampleData(mapper, questionRepository, Question.class);
     }
 
-    private <T,ID> boolean fillCollectionWithSampleData(ObjectMapper mapper,
-                                                        MongoRepository<T,ID> repository,
-                                                        Class<T> entityClass) {
+    private <T,ID> void fillCollectionWithSampleData(ObjectMapper mapper,
+                                                     MongoRepository<T,ID> repository,
+                                                     Class<T> entityClass) {
         CollectionType collectionType = mapper.getTypeFactory()
                 .constructCollectionType(List.class, entityClass);
         try (
@@ -71,12 +68,10 @@ public class DbManagementServiceImpl implements DbManagementService {
         ) {
             List<T> entities = mapper.readValue(inputStream, collectionType);
             repository.saveAll(entities);
-            return true;
         } catch (IOException e) {
-            logger.warn("Could not load sample values to collection of " +
-                    entityClass.getSimpleName() + ": " +
-                    e.getMessage());
-            return false;
+            throw new ServiceException(
+                    "Could not load sample values to collection of " +
+                    entityClass.getSimpleName(), e);
         }
     }
 }
