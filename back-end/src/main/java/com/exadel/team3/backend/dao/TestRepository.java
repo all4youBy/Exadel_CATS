@@ -11,6 +11,7 @@ import java.util.List;
 
 @Repository
 public interface TestRepository extends MongoRepository<Test, ObjectId> {
-    List<Test> findByAssignedToOrderByStartingDate(String assignedId);
-    List<Test> findByAssignedToInOrderByStartingDate(Collection<String> assignedIds);
+    List<Test> findByAssignedToOrderByStart(String assignedId);
+    List<Test> findByAssignedToInOrderByStart(List<String> assignedIds);
+    List<Test> findByAssignedToAndAssignedBy(String assignedId, String assignedById);
 }
