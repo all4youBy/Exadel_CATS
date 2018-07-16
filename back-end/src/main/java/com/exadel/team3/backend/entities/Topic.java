@@ -1,24 +1,23 @@
 package com.exadel.team3.backend.entities;
 
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.NonNull;
+import lombok.*;
 import org.bson.types.ObjectId;
-import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
-import java.util.Set;
+import java.util.List;
 
 @Data
 @Document(collection = "topics")
 public class Topic {
-    @Id
-    @EqualsAndHashCode.Exclude
-    private String id = new ObjectId().toString();
+    @Setter(AccessLevel.NONE)
+    private ObjectId id;
 
     @NonNull
     private String text;
 
-    @EqualsAndHashCode.Exclude
-    private Set<Topic> topics;
+    private ObjectId parentId;
+
+    @Getter(AccessLevel.NONE)
+    @Setter(AccessLevel.NONE)
+    private List<Topic> parentHierarchy;
 }
