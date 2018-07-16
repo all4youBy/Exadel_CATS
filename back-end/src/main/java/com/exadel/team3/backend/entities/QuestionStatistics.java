@@ -6,12 +6,9 @@ import org.springframework.beans.factory.annotation.Value;
 
 @Data
 public class QuestionStatistics {
-    @Value("${cats.test.question.complexityRedefineThreshold}")
-    private static int complexityRedefineThreshold;
-
     private int useCount;
     private int rightAnswersCount;
-
+/*
     public QuestionComplexity getRatedComplexity(@NonNull QuestionComplexity defaultComplexity) {
         if (useCount <= complexityRedefineThreshold) return defaultComplexity;
         double rightAnswersRatio = rightAnswersCount / useCount;
@@ -20,5 +17,5 @@ public class QuestionStatistics {
         if (rightAnswersRatio > 0.5) return QuestionComplexity.LEVEL_2;
         if (rightAnswersRatio > 0.25) return QuestionComplexity.LEVEL_3;
         return QuestionComplexity.LEVEL_4;
-    }
+    }*/
 }

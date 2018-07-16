@@ -7,17 +7,17 @@ import org.bson.types.ObjectId;
 import org.springframework.util.StringUtils;
 
 @Data
-public class TestAnswer {
+public class TestItem {
     @NonNull
     private ObjectId questionId;
 
     private String answerData;
 
-    private TestAnswerStatus status;
+    private TestItemStatus status;
 
-    public TestAnswerStatus getStatus() {
-        if (StringUtils.isEmpty(answerData)) return TestAnswerStatus.UNANSWERED;
-        if (status == null) return TestAnswerStatus.UNCHECKED;
+    public TestItemStatus getStatus() {
+        if (StringUtils.isEmpty(answerData)) return TestItemStatus.UNANSWERED;
+        if (status == null) return TestItemStatus.UNCHECKED;
         return status;
     }
 }
