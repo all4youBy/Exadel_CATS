@@ -33,9 +33,6 @@ public class AuthenticationController {
     @Autowired
     private SecurityUtils securityUtils;
 
-    @Autowired
-    private PasswordEncoder bCryptPasswordEncoder;
-
     @PostMapping("/auth")
     public ResponseEntity<?> authenticateUser(@RequestBody AuthenticationRequest request){
 
