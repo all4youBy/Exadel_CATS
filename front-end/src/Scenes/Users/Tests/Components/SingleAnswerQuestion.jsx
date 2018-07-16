@@ -44,7 +44,7 @@ export default class SingleAnswerQuestion extends React.PureComponent {
             Ответ 4
           </Radio>
         </Group>
-        <Button>Отправить</Button>
+        <Button className="submit-button">Отправить</Button>
       </Card>
     );
   }

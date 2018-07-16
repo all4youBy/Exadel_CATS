@@ -2,7 +2,7 @@ import React from 'react';
 // import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import './Main.scss';
-import { Switch, Route, Redirect } from 'react-router-dom';
+import { Switch, Route, Redirect, withRouter } from 'react-router-dom';
 import LogIn from '../../Scenes/LogIn/Containers/LogIn';
 import PageAssignedTestList from '../../Scenes/Users/TestList/AssignedTestList';
 import PagePassedTestList from '../../Scenes/Users/TestList/PassedTestList';
@@ -40,4 +40,4 @@ class Main extends React.Component {
     );
   }
 }
-export default connect()(Main);
+export default withRouter(connect()(Main));
