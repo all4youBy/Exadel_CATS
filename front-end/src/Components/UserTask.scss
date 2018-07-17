@@ -1,0 +1,14 @@
+.task-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.upload-task-buttons {
+  display: flex;
+  flex-direction: row;
+}
+
+.submit-button {
+  width: auto;
+}
