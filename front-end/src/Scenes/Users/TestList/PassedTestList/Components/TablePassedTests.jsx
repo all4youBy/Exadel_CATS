@@ -43,7 +43,7 @@ function TablePassedTests() {
     title: 'Название',
     dataIndex: 'name',
     key: 'name',
-    width: 15,
+    width: 350,
   }, {
     title: 'Тема',
     dataIndex: 'theme',
