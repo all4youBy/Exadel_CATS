@@ -6,6 +6,7 @@ import java.util.List;
 
 import com.exadel.team3.backend.services.ServiceException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Primary;
 import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.stereotype.Service;
 
@@ -26,6 +27,7 @@ import com.exadel.team3.backend.entities.User;
 import com.exadel.team3.backend.services.DbManagementService;
 
 @Service
+@Primary
 public class DbManagementServiceImpl implements DbManagementService {
     @Autowired
     UserRepository userRepository;
