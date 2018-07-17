@@ -1,7 +1,7 @@
 import React from 'react';
 import 'antd/dist/antd.css';
-import './TableAssignedTests.scss';
-import { Table, Button } from 'antd';
+import { Table } from 'antd';
+import ButtonPassTest from './ButtonPassTest';
 
 const columns = [{
   title: 'Название',
@@ -28,7 +28,7 @@ const columns = [{
   key: 'start',
   width: 100,
   render: (/* text, record */) => (
-    <Button className="button-start-test" type="primary">Начать</Button>
+    <ButtonPassTest/>
   ),
 }];
 

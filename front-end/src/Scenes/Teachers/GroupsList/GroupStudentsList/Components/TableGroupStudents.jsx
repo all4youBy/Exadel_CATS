@@ -8,6 +8,7 @@ import ButtonAssignTest from './ButtonAssignTest';
 import ButtonAssignTask from './ButtonAssignTask';
 import ButtonDeleteStudent from './ButtonDeleteStudent';
 import { addStudent, deleteStudent } from '../Services/Actions/actions';
+import ButtonAddStudent from './ButtonAddStudent';
 
 //
 // for (let i = 1; i <= 20; i += 1) {
@@ -112,7 +113,7 @@ class TableGroupStudents extends React.Component {
           dataSource={students.groupStudentsList}
           scroll={{ x: 1500 }}
         />
-        <div className="parent-button-assign-test"><ButtonAssignTest onStudentAdd={handleStudentAdd}/></div>
+        <ButtonAddStudent onStudentAdd={handleStudentAdd}/>
       </div>
     );
   }
