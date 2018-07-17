@@ -33,7 +33,7 @@ public class TopicServiceImpl implements TopicService {
 
     @Override
     public List<Topic> getTopics(@NonNull String rootId) {
-        return null;
+        return getTopics(new ObjectId(rootId));
     }
 
     @Override

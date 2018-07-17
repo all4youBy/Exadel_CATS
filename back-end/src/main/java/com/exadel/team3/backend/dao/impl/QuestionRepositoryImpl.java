@@ -1,55 +1,45 @@
 package com.exadel.team3.backend.dao.impl;
 
-import com.exadel.team3.backend.dao.QuestionRepositoryAggregation;
-import com.exadel.team3.backend.entities.Question;
-import com.exadel.team3.backend.entities.QuestionComplexity;
-import com.exadel.team3.backend.entities.QuestionType;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.mongodb.core.MongoTemplate;
+import java.util.Collection;
+import java.util.List;
 
+import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.aggregation.Aggregation;
 import org.springframework.data.mongodb.core.aggregation.MatchOperation;
 import org.springframework.data.mongodb.core.aggregation.SampleOperation;
 import org.springframework.data.mongodb.core.aggregation.TypedAggregation;
 import org.springframework.data.mongodb.core.query.Criteria;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.lang.NonNull;
+import org.bson.types.ObjectId;
 
-import java.util.Collection;
-import java.util.List;
+import com.exadel.team3.backend.dao.QuestionRepositoryAggregation;
+import com.exadel.team3.backend.entities.Question;
+import com.exadel.team3.backend.entities.QuestionComplexity;
+import com.exadel.team3.backend.entities.QuestionType;
 
 public class QuestionRepositoryImpl implements QuestionRepositoryAggregation {
     @Autowired
     private MongoTemplate mongoTemplate;
 
     @Override
-    public List<Question> random(int count, @NonNull Collection<QuestionType> allowedTypes, boolean trainingOnly) {
-        return random(count, null, allowedTypes, trainingOnly);
+    public List<Question> random(int count, @NonNull Collection<ObjectId> allowedTopics, @NonNull Collection<QuestionType> allowedTypes, boolean trainingOnly) {
+        return random(count, allowedTopics, allowedTypes, null, trainingOnly);
     }
 
     @Override
-    public List<Question> random(int count, QuestionComplexity complexity, @NonNull Collection<QuestionType> allowedTypes, boolean trainingOnly) {
-        SampleOperation sampleOperation = Aggregation.sample(count);
-        MatchOperation matchOperation;
-        if (complexity != null) {
-            matchOperation = new MatchOperation(
-                    new Criteria().andOperator(
-                            Criteria.where("type").in(allowedTypes),
-                            Criteria.where("training").is(true),
-                            Criteria.where("complexity").is(complexity)
-                    )
-            );
-        } else {
-            matchOperation = new MatchOperation(
-                    new Criteria().andOperator(
-                            Criteria.where("type").in(allowedTypes),
-                            Criteria.where("training").is(true)
-                    )
-            );
-        }
+    public List<Question> random(int count, @NonNull Collection<ObjectId> allowedTopics,  @NonNull Collection<QuestionType> allowedTypes, QuestionComplexity complexity, boolean trainingOnly) {
+        Criteria matchCriteria = Criteria.where("topicIds").in(allowedTopics).and("type").in(allowedTypes);
+        if (complexity != null) matchCriteria = matchCriteria.and("complexity").is(complexity);
+        if (trainingOnly) matchCriteria = matchCriteria.and("training").is(true);
+        MatchOperation matchOperation = new MatchOperation(matchCriteria);
 
-        TypedAggregation<Question> aggregation = TypedAggregation.newAggregation(Question.class,matchOperation, sampleOperation);
+        SampleOperation sampleOperation = Aggregation.sample(count);
+
+        TypedAggregation<Question> aggregation = TypedAggregation.newAggregation(Question.class, matchOperation, sampleOperation);
         return mongoTemplate.aggregate(aggregation,"questions", Question.class).getMappedResults();
     }
+
 
 
 }

@@ -50,7 +50,7 @@
         "correct":false
       }
     ],
-    "topicIds":["5b4898d987ae4314d278f38d"],
+    "topicIds":["5b4898d987ae4314d278f38f"],
     "training":false,
     "status":"ACTIVE"
   },
@@ -80,7 +80,6 @@
     "complexity":"LEVEL_2",
     "author":"vasya@mail.ru",
     "topicIds":[
-      "5b4898d987ae4314d278f38d",
       "5b4898d987ae4314d278f38f"
     ],
     "training":false,

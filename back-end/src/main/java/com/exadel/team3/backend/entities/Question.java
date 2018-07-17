@@ -31,7 +31,7 @@ public class Question {
 
     private List<ObjectId> topicIds;
 
-    private boolean isTraining;
+    private boolean training;
 
     private QuestionStatus status = QuestionStatus.ACTIVE;
 

@@ -37,16 +37,16 @@ public class TestItemPickerImpl implements TestItemPicker {
 
         // add random-generated collection of level_1, 2, 3 and 4 questions that are not manual-check
         List<TestItem> generated = Stream.of(
-                pickRandomQuestions(complexLevel1Count, QuestionComplexity.LEVEL_1, trainingOnly),
-                pickRandomQuestions(complexLevel2Count, QuestionComplexity.LEVEL_2, trainingOnly),
-                pickRandomQuestions(complexLevel3Count, QuestionComplexity.LEVEL_3, trainingOnly),
-                pickRandomQuestions(complexLevel4Count, QuestionComplexity.LEVEL_3, trainingOnly)
+                pickRandomQuestions(complexLevel1Count, topicIds, QuestionComplexity.LEVEL_1, trainingOnly),
+                pickRandomQuestions(complexLevel2Count, topicIds, QuestionComplexity.LEVEL_2, trainingOnly),
+                pickRandomQuestions(complexLevel3Count, topicIds, QuestionComplexity.LEVEL_3, trainingOnly),
+                pickRandomQuestions(complexLevel4Count, topicIds, QuestionComplexity.LEVEL_4, trainingOnly)
         ).flatMap(stream -> stream).collect(Collectors.toList());
 
         // add single manual-check question if needed
         if (!trainingOnly) {
             generated.addAll(
-                    questionRepository.random(1, Collections.singletonList(QuestionType.MANUAL_CHECK_TEXT), false)
+                    questionRepository.random(1, topicIds, Collections.singletonList(QuestionType.MANUAL_CHECK_TEXT), false)
                             .stream()
                             .map(Question::getId)
                             .map(TestItem::new)
@@ -57,11 +57,12 @@ public class TestItemPickerImpl implements TestItemPicker {
         return generated;
     }
 
-    private Stream<TestItem> pickRandomQuestions(int count, QuestionComplexity complexity, boolean trainingOnly) {
+    private Stream<TestItem> pickRandomQuestions(int count, Collection<ObjectId> topicIds, QuestionComplexity complexity, boolean trainingOnly) {
         return questionRepository.random(
                 count,
-                complexity,
+                topicIds,
                 Arrays.asList(QuestionType.SINGLE_VARIANT, QuestionType.MULTI_VARIANT, QuestionType.AUTOCHECK_TEXT),
+                complexity,
                 trainingOnly
         ).stream().map(Question::getId).map(TestItem::new);
     }
