@@ -35,11 +35,14 @@ public interface TestService {
     List<Test> getTestsAssignedToUser(String userId);
     List<Test> getTestsAssignedToGroup(String group);
 
-    Test updateTest(Test test);
+//    Test updateTest(Test test);
+
 
     Test getTest(String id);
     Test getTest(ObjectId id);
 
-    void deleteTest(Test test);
+    Test submitAnswer(String testId, String questionId, String answerData, boolean complaint);
+    Test submitAnswer(ObjectId testId, ObjectId questionId, String answerData, boolean complaint);
 
+    void deleteTest(Test test);
 }
