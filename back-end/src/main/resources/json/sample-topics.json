@@ -1,0 +1,51 @@
+[
+  {
+    "id":"5b4898d987ae4314d278f38d",
+    "text":"Программирование"
+  },
+  {
+    "id":"5b4898d987ae4314d278f38e",
+    "text":"ООП общие вопросы",
+    "parentId":"5b4898d987ae4314d278f38d"
+  },
+  {
+    "id":"5b4898d987ae4314d278f38f",
+    "text":"Java",
+    "parentId":"5b4898d987ae4314d278f38d"
+  },
+  {
+    "id":"5b4898d987ae4314d278f390",
+    "text":"C#",
+    "parentId":"5b4898d987ae4314d278f38d"
+  },
+  {
+    "id":"5b4898d987ae4314d278f391",
+    "text":"ООП в Java",
+    "parentId":"5b4898d987ae4314d278f38f"
+  },
+  {
+    "id":"5b4898d987ae4314d278f392",
+    "text":"Коллекции в Java",
+    "parentId":"5b4898d987ae4314d278f38f"
+  },
+  {
+    "id":"5b4898d987ae4314d278f393",
+    "text":"ArrayList",
+    "parentId":"5b4898d987ae4314d278f392"
+  },
+  {
+    "id":"5b4898d987ae4314d278f394",
+    "text":"Многопоточность в Java",
+    "parentId":"5b4898d987ae4314d278f38f"
+  },
+  {
+    "id":"5b4898d987ae4314d278f395",
+    "text":"ООП в С#",
+    "parentId":"5b4898d987ae4314d278f390"
+  },
+  {
+    "id":"5b4898d987ae4314d278f396",
+    "text":"LINQ в C#",
+    "parentId":"5b4898d987ae4314d278f390"
+  }
+]
