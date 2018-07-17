@@ -56,7 +56,16 @@ public class TestServiceImpl implements TestService {
         Collection<ObjectId> actualTopicIds =
                 topicIds != null && topicIds.size() > 0
                 ? topicIds
-                : topicRepository.getTopicTree().stream().map(Topic::getId).collect(Collectors.toList());
+                        .stream()
+                        .map(ti -> topicRepository.getTopicTree(ti))
+                        .flatMap(Collection::stream)
+                        .distinct()
+                        .map(Topic::getId)
+                        .collect(Collectors.toList())
+                : topicRepository.getTopicTree()
+                        .stream()
+                        .map(Topic::getId)
+                        .collect(Collectors.toList());
 
         if (isTraining) {
             // collect question ids  associated with training tests of this particular user
@@ -68,6 +77,7 @@ public class TestServiceImpl implements TestService {
                     .map(TestItem::getQuestionId)
                     .distinct()
                     .collect(Collectors.toList());
+
             // collect topicIds that exist in questions answered by this user in his training tests
             List<ObjectId> trainingQuestionTopicIds = questionRepository.findByIdIn(trainingQuestionIds)
                     .stream()
