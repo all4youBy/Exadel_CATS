@@ -5,13 +5,14 @@ import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.data.mongodb.repository.Query;
 import org.springframework.stereotype.Repository;
 
+import java.util.Collection;
 import java.util.List;
 
 @Repository
 public interface UserRepository extends MongoRepository<User, String> {
     User findByEmail(String email);
 
-    List<User> findByEmailIn(List<String> emails);
+    List<User> findByEmailIn(Collection<String> emails);
 
     @Query(value="{'email':?0}", fields="{'_id':0, 'passwordHash':1, 'role':1}")
     User findPasswordHashAndRole(String email);

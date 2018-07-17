@@ -1,9 +1,9 @@
 import React from 'react';
 import 'antd/dist/antd.css';
-import './AssignTask.scss';
+import './AllTask.scss';
 import TaskCard from '../Components/TaskCard';
 
-class AssignTask extends React.Component {
+class AllTask extends React.Component {
   render() {
     return (
       <TaskCard/>
@@ -11,4 +11,4 @@ class AssignTask extends React.Component {
   }
 }
 
-export default AssignTask;
+export default AllTask;

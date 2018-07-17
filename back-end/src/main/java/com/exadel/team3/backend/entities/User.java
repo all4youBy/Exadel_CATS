@@ -1,5 +1,6 @@
 package com.exadel.team3.backend.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.AccessLevel;
 import lombok.Data;
 import lombok.NonNull;
@@ -12,7 +13,8 @@ import java.util.HashSet;
 import java.util.Set;
 
 @Data
-@Document
+@Document(collection = "users")
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class User {
     @Id
     @NonNull
@@ -34,7 +36,7 @@ public class User {
     @Setter(AccessLevel.NONE)
     private Set<String> groups = new HashSet<>();
 
-    private UserEducation education;
+    private UserAffiliation education;
 
     private String emailConfirmationCode;
     public boolean isEmailConfirmed() {

@@ -1,5 +1,6 @@
 package com.exadel.team3.backend.services.impl;
 
+import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Service;
@@ -26,8 +27,13 @@ public class TopicServiceImpl implements TopicService {
     }
 
     @Override
-    public List<Topic> getTopics(@NonNull String rootId) {
+    public List<Topic> getTopics(@NonNull ObjectId rootId) {
         return topicRepository.getTopicTree(rootId);
+    }
+
+    @Override
+    public List<Topic> getTopics(@NonNull String rootId) {
+        return getTopics(new ObjectId(rootId));
     }
 
     @Override
@@ -36,8 +42,13 @@ public class TopicServiceImpl implements TopicService {
     }
 
     @Override
-    public Topic getTopic(String id) {
+    public Topic getTopic(ObjectId id) {
         return topicRepository.findById(id).orElse(null);
+    }
+
+    @Override
+    public Topic getTopic(String id) {
+        return getTopic(new ObjectId(id));
     }
 
     @Override
