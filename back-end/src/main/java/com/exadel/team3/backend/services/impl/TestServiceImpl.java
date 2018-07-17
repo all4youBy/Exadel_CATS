@@ -16,6 +16,7 @@ import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import com.exadel.team3.backend.dao.QuestionRepository;
@@ -155,10 +156,43 @@ public class TestServiceImpl implements TestService {
         );
     }
 
+/*
     @Override
     public Test updateTest(Test test) {
         return testRepository.save(test);
     }
+*/
+
+    @Override
+    public Test submitAnswer(@NonNull String testId, @NonNull String questionId, String answerData, boolean complaint) {
+        return submitAnswer(new ObjectId(testId), new ObjectId(questionId), answerData, complaint);
+    }
+
+    @Override
+    public Test submitAnswer(@NonNull ObjectId testId, @NonNull ObjectId questionId, String answerData, boolean complaint) {
+        Optional<Test> updatedTest = testRepository.findById(testId);
+        if (updatedTest.isPresent()) {
+            Optional<TestItem> updatedItem =
+                    updatedTest.get().getItems()
+                    .stream()
+                    .filter(item -> item.getQuestionId().equals(questionId))
+                    .findFirst();
+            Optional<Question> questionToUpdatedItem =
+                    updatedItem.flatMap(item -> questionRepository.findById(item.getQuestionId()));
+
+            if (updatedItem.isPresent() && questionToUpdatedItem.isPresent()) {
+                updatedItem.get().setAnswerData(answerData);
+                updatedItem.get().setStatus(AnswerChecker.check(questionToUpdatedItem.get(), answerData));
+                return testRepository.save(updatedTest.get());
+
+            } else {
+                throw new ServiceException("There's no question with id " + testId);
+            }
+        } else {
+            throw new ServiceException("There's no test with id " + testId);
+        }
+    }
+
 
     @Override
     public Test getTest(String id) {
@@ -169,6 +203,7 @@ public class TestServiceImpl implements TestService {
     public Test getTest(ObjectId id) {
         return testRepository.findById(id).orElse(null);
     }
+
 
     @Override
     public void deleteTest(Test test) {
