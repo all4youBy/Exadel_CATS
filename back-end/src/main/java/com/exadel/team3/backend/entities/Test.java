@@ -3,6 +3,7 @@ package com.exadel.team3.backend.entities;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NonNull;
+import org.apache.tomcat.jni.Local;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.time.Duration;
@@ -22,11 +23,7 @@ public class Test {
     private LocalDateTime start;
 
     @NonNull
-    private Duration duration;
-
-    public LocalDateTime getDeadline() {
-        return  start.plus(duration);
-    }
+    private LocalDateTime deadline;
 
     private String assignedBy;
     /*
