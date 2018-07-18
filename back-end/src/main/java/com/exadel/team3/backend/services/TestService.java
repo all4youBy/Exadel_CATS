@@ -1,5 +1,6 @@
 package com.exadel.team3.backend.services;
 
+import com.exadel.team3.backend.entities.DetachedTestItem;
 import com.exadel.team3.backend.entities.TestItem;
 import com.exadel.team3.backend.entities.TestItemStatus;
 import org.bson.types.ObjectId;
@@ -47,9 +48,9 @@ public interface TestService {
     Test submitTest(ObjectId id);
     Test submitAnswer(String testId, String questionId, List<String> answers, boolean complaint);
     Test submitAnswer(ObjectId testId, ObjectId questionId, List<String> answers, boolean complaint);
-    Test submitAnswerChecking(ObjectId testId, ObjectId questionId, TestItemStatus status);
+    Test submitManualAnswerCheck(DetachedTestItem checked);
 
-    Map<ObjectId, TestItem> getAnswersForManualCheck(String userId);
+    List<DetachedTestItem> getAnswersForManualCheck(String assignedBy);
 
     void deleteTest(Test test);
 }
