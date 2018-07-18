@@ -13,10 +13,7 @@ import org.springframework.util.StringUtils;
 
 import java.time.Duration;
 import java.time.LocalDateTime;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 
 import com.exadel.team3.backend.dao.QuestionRepository;
@@ -163,6 +160,16 @@ public class TestServiceImpl implements TestService {
         return testRepository.save(test);
     }
 */
+@Override
+public Test submitTest(ObjectId testId) {
+    Optional<Test> updatedTest = testRepository.findById(testId);
+    if (updatedTest.isPresent() && updatedTest.get().getDeadline().isAfter(LocalDateTime.now())) {
+        updatedTest.get().setDeadline(LocalDateTime.now());
+        return testRepository.save(updatedTest.get());
+    } else {
+        throw new ServiceException("There's no test with id " + testId);
+    }
+}
 
     @Override
     public Test submitAnswer(@NonNull String testId, @NonNull String questionId, List<String> answers, boolean complaint) {
@@ -175,36 +182,69 @@ public class TestServiceImpl implements TestService {
                              List<String> answers,
                              boolean complaint) {
         Optional<Test> updatedTest = testRepository.findById(testId);
-        if (updatedTest.isPresent()) {
-            Optional<TestItem> updatedItem =
-                    updatedTest.get().getItems()
+        if (!updatedTest.isPresent()) {
+            throw new ServiceException("There's no test with id " + testId);
+        }
+        Optional<TestItem> updatedItem =
+                updatedTest.get().getItems()
                     .stream()
                     .filter(item -> item.getQuestionId().equals(questionId))
                     .findFirst();
-            Optional<Question> questionToUpdatedItem =
-                    updatedItem.flatMap(item -> questionRepository.findById(item.getQuestionId()));
+        Optional<Question> questionToUpdatedItem =
+                updatedItem.flatMap(item -> questionRepository.findById(item.getQuestionId()));
 
-            if (updatedItem.isPresent() && questionToUpdatedItem.isPresent()) {
-                updatedItem.get().setQuestionText(questionToUpdatedItem.get().getText());
-                updatedItem.get().setAnswers(answers);
-                updatedItem.get().setStatus(TestChecker.check(questionToUpdatedItem.get(), answers));
+        if (questionToUpdatedItem.isPresent()) {
+            updatedItem.get().setQuestionText(questionToUpdatedItem.get().getText());
+            updatedItem.get().setAnswers(answers);
+            updatedItem.get().setStatus(TestChecker.check(questionToUpdatedItem.get(), answers));
+            if (complaint) submitComplaint(questionToUpdatedItem.get());
+            return testRepository.save(updatedTest.get());
+        } else {
+            throw new ServiceException("There's no question with id " + testId);
+        }
+    }
+
+    private void submitComplaint(Question q) {
+        if (q.getStatus() == QuestionStatus.ACTIVE) {
+            q.setStatus(QuestionStatus.DISPUTED);
+            questionRepository.save(q);
+        }
+    }
+
+    @Override
+    public Test submitAnswerChecking(ObjectId testId, ObjectId questionId, TestItemStatus status) {
+        Optional<Test> updatedTest = testRepository.findById(testId);
+        if (updatedTest.isPresent()) {
+            Optional<TestItem> updatedItem = updatedTest.get().getItems()
+                    .stream()
+                    .filter(item -> item.getQuestionId().equals(questionId))
+                    .findFirst();
+
+            if (updatedItem.isPresent()) {
+                updatedItem.get().setStatus(status);
                 return testRepository.save(updatedTest.get());
             } else {
-                throw new ServiceException("There's no question with id " + testId);
+                throw new ServiceException("There's no answer in test with id " +
+                        testId + " that would correspond to question with id " + questionId);
             }
         } else {
             throw new ServiceException("There's no test with id " + testId);
         }
     }
 
+
     @Override
-    public Test submitTest(ObjectId testId) {
-        Optional<Test> updatedTest = testRepository.findById(testId);
-        if (updatedTest.isPresent() && updatedTest.get().getDeadline().isAfter(LocalDateTime.now())) {
-            updatedTest.get().setDeadline(LocalDateTime.now());
-            return testRepository.save(updatedTest.get());
-        }
-        return updatedTest.orElse(null);
+    public Map<ObjectId, TestItem> getAnswersForManualCheck(@NonNull String userId) {
+        return testRepository.findNeedingManualCheck(userId,LocalDateTime.now())
+                .stream()
+                .collect(
+                        Collectors.toMap(Test::getId,
+                                         test -> test.getItems()
+                                                 .stream()
+                                                 .filter(item -> item.getStatus() == TestItemStatus.UNCHECKED)
+                                                 .findFirst().orElse(null)
+                        )
+                );
     }
 
 
@@ -217,7 +257,6 @@ public class TestServiceImpl implements TestService {
     public Test getTest(ObjectId id) {
         return testRepository.findById(id).orElse(null);
     }
-
 
     @Override
     public void deleteTest(Test test) {

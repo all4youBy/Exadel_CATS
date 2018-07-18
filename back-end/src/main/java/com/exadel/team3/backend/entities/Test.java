@@ -1,9 +1,9 @@
 package com.exadel.team3.backend.entities;
 
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.NonNull;
+import lombok.*;
 import org.apache.tomcat.jni.Local;
+import org.bson.types.ObjectId;
+import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.time.Duration;
@@ -13,6 +13,10 @@ import java.util.List;
 @Data
 @Document(collection = "tests")
 public class Test {
+    @Id
+    @Setter(AccessLevel.NONE)
+    private ObjectId id;
+
     @NonNull
     private String assignedTo;
 
