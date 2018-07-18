@@ -31,15 +31,19 @@ public class QuestionServiceImpl implements QuestionService {
         return getQuestion(new ObjectId(id));
     }
 
-
     @Override
     public List<Question> getQuestions() {
         return questionRepository.findAll();
     }
 
     @Override
-    public List<Question> getQuestions(@NonNull List<ObjectId> topicIds) {
+    public List<Question> getQuestionsByTopicIds(@NonNull List<ObjectId> topicIds) {
         return questionRepository.findByTopicIdsIn(topicIds);
+    }
+
+    @Override
+    public List<Question> getQuestionsByQuestionIds(@NonNull List<ObjectId> questionIds) {
+        return questionRepository.findByIdIn(questionIds);
     }
 
     @Override
