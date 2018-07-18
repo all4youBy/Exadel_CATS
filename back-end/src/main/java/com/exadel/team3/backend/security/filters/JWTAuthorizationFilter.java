@@ -14,13 +14,14 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.Collections;
 
-import static com.exadel.team3.backend.security.SecurityConstants.HEADER;
+
 
 
 public class JWTAuthorizationFilter extends OncePerRequestFilter{
 
     private SecurityUtils securityUtils;
     private UserDetailsService userDetailsService;
+    private static final String HEADER = "Authorization";
 
     public JWTAuthorizationFilter(SecurityUtils securityUtils,UserDetailsService userDetailsService){
         this.securityUtils = securityUtils;
