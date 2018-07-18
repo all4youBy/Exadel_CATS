@@ -39,12 +39,6 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter{
     @Autowired
     private AuthenticationEntryPointImpl authenticationEntryPoint;
 
-    @Value("${cats.auth.path}")
-    private String authenticationPath;
-
-    @Value("${cats.reg.path}")
-    private String registrationPath;
-
     @Bean
     protected PasswordEncoder bCryptPasswordEncoder(){
         return new BCryptPasswordEncoder();
@@ -69,7 +63,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter{
                     .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
                 .authorizeRequests()
-                    .antMatchers(authenticationPath+"/**",registrationPath+"/**").permitAll()
+                    .antMatchers("/cats/login/**","/cats/registration/**").permitAll()
                     .anyRequest().authenticated();
                 http.addFilterBefore(new JWTAuthorizationFilter(securityUtils,userDetailsService), UsernamePasswordAuthenticationFilter.class);
     }
@@ -80,7 +74,8 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter{
                 .ignoring()
                 .antMatchers(
                         HttpMethod.POST,
-                        authenticationPath
+                        "/cats/login/**",
+                        "/cats/registration/**"
                 )
                 .and()
                 .ignoring()

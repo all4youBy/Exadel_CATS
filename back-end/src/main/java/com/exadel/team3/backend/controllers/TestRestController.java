@@ -1,6 +1,5 @@
 package com.exadel.team3.backend.controllers;
 
-
 import com.exadel.team3.backend.entities.Model;
 import com.exadel.team3.backend.services.ModelService;
 import org.springframework.beans.factory.annotation.Autowired;
