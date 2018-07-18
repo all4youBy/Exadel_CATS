@@ -19,13 +19,13 @@ public class AuthenticatedUser implements UserDetails{
     public AuthenticatedUser(String userName, String password,String role){
         this.userName = userName;
         this.password = password;
-        this.role = role;
+        this.role = ROLE_PREFIX+role;
     }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         List<GrantedAuthority> authorities = new ArrayList<>();
-        authorities.add(new SimpleGrantedAuthority(ROLE_PREFIX + role));
+        authorities.add(new SimpleGrantedAuthority(role));
         return authorities;
     }
 
