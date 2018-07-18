@@ -14,7 +14,7 @@ class LogIn extends React.Component {
       <div >
         <Layout className="container-main" >
           <GlobalHeader />
-          <Content className="login-page content">
+          <Content className="login-page content" >
             <div className="login-page login-form"><WrappedNormalLoginForm/></div>
           </Content>
           <GlobalFooter/>

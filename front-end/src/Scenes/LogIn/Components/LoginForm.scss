@@ -1,5 +1,5 @@
 .login-form {
-    display: block;
+    display: flex;
     align-self: center;
 }
 
@@ -8,6 +8,7 @@
 }
 
 .form-item {
+    width: auto;
     margin-bottom: 10px;
 }
 

@@ -461,7 +461,7 @@ class App extends Component {
   render() {
     return (
       <div>
-        <button onClick={this.handleClick}>Load</button>
+        <button onClick={this.handleClick}>LoadMainProject</button>
       </div>
     );
   }
@@ -470,7 +470,7 @@ class App extends Component {
 export default App;
 ```
 
-This will make `moduleA.js` and all its unique dependencies as a separate chunk that only loads after the user clicks the 'Load' button.
+This will make `moduleA.js` and all its unique dependencies as a separate chunk that only loads after the user clicks the 'LoadMainProject' button.
 
 You can also use it with `async` / `await` syntax if you prefer it.
 

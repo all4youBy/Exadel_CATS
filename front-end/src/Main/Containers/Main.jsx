@@ -1,11 +1,11 @@
 import React from 'react';
-// import PropTypes from 'prop-types';
-import { connect } from 'react-redux';
+// import { connect } from 'react-redux';
 import { Switch, Route, Redirect } from 'react-router-dom';
 import LogIn from '../../Scenes/LogIn/Containers/LogIn';
 import PageAssignedTestList from '../../Scenes/Users/TestList/AssignedTestList';
 import PagePassedTestList from '../../Scenes/Users/TestList/PassedTestList';
 import PageGroupStudentsList from '../../Scenes/Teachers/GroupsList/GroupStudentsList';
+// import { logIn } from '../../Scenes/LogInIn/Services/Actions/actions';
 
 class Main extends React.Component {
   render() {
@@ -20,4 +20,5 @@ class Main extends React.Component {
     );
   }
 }
-export default connect()(Main);
+
+export default Main;
