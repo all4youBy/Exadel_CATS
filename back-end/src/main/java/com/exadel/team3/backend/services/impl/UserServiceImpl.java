@@ -16,19 +16,12 @@ import java.util.List;
 
 @Service
 public class UserServiceImpl implements UserService {
-    private final Logger logger = LoggerFactory.getLogger(this.getClass());
-
     @Autowired
     private UserRepository userRepository;
 
     @Override
     public User addUser(@NonNull User user) {
-        try {
-            return userRepository.insert(user);
-        } catch (DuplicateKeyException e) {
-            logger.warn("Tried to register new user with duplicate email " + user.getEmail());
-            return null;
-        }
+        return userRepository.insert(user);
     }
 
     @Override
