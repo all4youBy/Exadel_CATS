@@ -1,5 +1,6 @@
 package com.exadel.team3.backend.services.impl;
 
+import com.sun.xml.internal.ws.policy.privateutil.PolicyUtils;
 import org.bson.types.ObjectId;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -116,7 +117,15 @@ public class TestServiceImpl implements TestService {
 
     @Override
     public Test generateTestForUser(String userId, ObjectId topicId) {
-        return generateTestForUser(userId, null, null, null, Arrays.asList(topicId), 0, null);
+        return generateTestForUser(
+                userId,
+                null,
+                null,
+                null,
+                Collections.singletonList(topicId),
+                0,
+                null
+        );
     }
 
     @Override
@@ -212,39 +221,39 @@ public Test submitTest(ObjectId testId) {
     }
 
     @Override
-    public Test submitAnswerChecking(ObjectId testId, ObjectId questionId, TestItemStatus status) {
-        Optional<Test> updatedTest = testRepository.findById(testId);
+    public Test submitManualAnswerCheck(@NonNull DetachedTestItem checked) {
+        Optional<Test> updatedTest = testRepository.findById(checked.getTestId());
         if (updatedTest.isPresent()) {
             Optional<TestItem> updatedItem = updatedTest.get().getItems()
                     .stream()
-                    .filter(item -> item.getQuestionId().equals(questionId))
+                    .filter(item -> item.getQuestionId().equals(checked.getTestItem().getQuestionId()))
                     .findFirst();
 
             if (updatedItem.isPresent()) {
-                updatedItem.get().setStatus(status);
+                updatedItem.get().setStatus(checked.getTestItem().getStatus());
                 return testRepository.save(updatedTest.get());
             } else {
                 throw new ServiceException("There's no answer in test with id " +
-                        testId + " that would correspond to question with id " + questionId);
+                        checked.getTestId() +
+                        " that would correspond to question with id " +
+                        checked.getTestItem().getQuestionId());
             }
         } else {
-            throw new ServiceException("There's no test with id " + testId);
+            throw new ServiceException("There's no test with id " + checked.getTestId());
         }
     }
 
 
     @Override
-    public Map<ObjectId, TestItem> getAnswersForManualCheck(@NonNull String userId) {
-        return testRepository.findNeedingManualCheck(userId,LocalDateTime.now())
-                .stream()
-                .collect(
-                        Collectors.toMap(Test::getId,
-                                         test -> test.getItems()
-                                                 .stream()
-                                                 .filter(item -> item.getStatus() == TestItemStatus.UNCHECKED)
-                                                 .findFirst().orElse(null)
-                        )
-                );
+    public List<DetachedTestItem> getAnswersForManualCheck(@NonNull String assignedBy) {
+        return testRepository.findNeedingManualCheck(assignedBy,LocalDateTime.now())
+                .stream().flatMap(
+                    test -> test.getItems()
+                            .stream()
+                            .filter(item -> item.getStatus() == TestItemStatus.UNCHECKED)
+                            .map(item -> new DetachedTestItem(test.getId(), item))
+                )
+                .collect(Collectors.toList());
     }
 
 
