@@ -1,10 +1,8 @@
 package com.exadel.team3.backend.controllers;
 
-import com.exadel.team3.backend.entities.User;
 import com.exadel.team3.backend.security.AuthenticatedUser;
 import com.exadel.team3.backend.security.AuthenticationRequest;
 import com.exadel.team3.backend.security.SecurityUtils;
-import com.exadel.team3.backend.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpStatus;
@@ -35,11 +33,7 @@ public class AuthenticationController {
     @Autowired
     private SecurityUtils securityUtils;
 
-    @Autowired
-    private UserService userService;
-
-
-    @PostMapping("/auth")
+    @PostMapping("/cats/login")
     public ResponseEntity<?> authenticateUser(@RequestBody AuthenticationRequest request){
 
         authenticate(request.getUsername(),request.getPassword());
@@ -50,15 +44,8 @@ public class AuthenticationController {
         return ResponseEntity.ok(token);
     }
 
-    @PostMapping("/registration")
-    public ResponseEntity<?> signUpUser(@RequestBody User user){
-        securityUtils.hashUserPassword(user);
-        userService.addUser(user);
-        return ResponseEntity.status(HttpStatus.OK).body("User created.");
-    }
-
     @ExceptionHandler(AuthenticationException.class)
-    public ResponseEntity<String> handleAuthenticationException(AuthenticationException e){
+    public ResponseEntity<?> handleAuthenticationException(AuthenticationException e){
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(e.getMessage());
     }
 
