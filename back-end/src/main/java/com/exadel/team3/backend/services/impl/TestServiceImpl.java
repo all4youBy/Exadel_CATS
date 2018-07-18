@@ -182,7 +182,7 @@ public class TestServiceImpl implements TestService {
 
             if (updatedItem.isPresent() && questionToUpdatedItem.isPresent()) {
                 updatedItem.get().setAnswerData(answerData);
-                updatedItem.get().setStatus(AnswerChecker.check(questionToUpdatedItem.get(), answerData));
+                updatedItem.get().setStatus(TestChecker.check(questionToUpdatedItem.get(), answerData));
                 return testRepository.save(updatedTest.get());
 
             } else {
