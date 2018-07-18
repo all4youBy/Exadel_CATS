@@ -4,19 +4,24 @@ import lombok.Data;
 import lombok.NonNull;
 
 import org.bson.types.ObjectId;
+import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
+
+import java.util.List;
 
 @Data
 public class TestItem {
     @NonNull
     private ObjectId questionId;
 
-    private String answerData;
+    private String questionText;
 
     private TestItemStatus status;
 
+    private List<String> answers;
+
     public TestItemStatus getStatus() {
-        if (StringUtils.isEmpty(answerData)) return TestItemStatus.UNANSWERED;
+        if (CollectionUtils.isEmpty(answers)) return TestItemStatus.UNANSWERED;
         if (status == null) return TestItemStatus.UNCHECKED;
         return status;
     }

@@ -164,12 +164,12 @@ public class TestServiceImpl implements TestService {
 */
 
     @Override
-    public Test submitAnswer(@NonNull String testId, @NonNull String questionId, String answerData, boolean complaint) {
-        return submitAnswer(new ObjectId(testId), new ObjectId(questionId), answerData, complaint);
+    public Test submitAnswer(@NonNull String testId, @NonNull String questionId, List<String> answers, boolean complaint) {
+        return submitAnswer(new ObjectId(testId), new ObjectId(questionId), answers, complaint);
     }
 
     @Override
-    public Test submitAnswer(@NonNull ObjectId testId, @NonNull ObjectId questionId, String answerData, boolean complaint) {
+    public Test submitAnswer(@NonNull ObjectId testId, @NonNull ObjectId questionId, List<String> answers, boolean complaint) {
         Optional<Test> updatedTest = testRepository.findById(testId);
         if (updatedTest.isPresent()) {
             Optional<TestItem> updatedItem =
@@ -181,8 +181,7 @@ public class TestServiceImpl implements TestService {
                     updatedItem.flatMap(item -> questionRepository.findById(item.getQuestionId()));
 
             if (updatedItem.isPresent() && questionToUpdatedItem.isPresent()) {
-                updatedItem.get().setAnswerData(answerData);
-                updatedItem.get().setStatus(TestChecker.check(questionToUpdatedItem.get(), answerData));
+                updatedItem.get().setStatus(TestChecker.check(questionToUpdatedItem.get(), answers));
                 return testRepository.save(updatedTest.get());
 
             } else {

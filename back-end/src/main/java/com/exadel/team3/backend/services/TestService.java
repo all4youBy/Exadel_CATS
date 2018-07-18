@@ -41,8 +41,8 @@ public interface TestService {
     Test getTest(String id);
     Test getTest(ObjectId id);
 
-    Test submitAnswer(String testId, String questionId, String answerData, boolean complaint);
-    Test submitAnswer(ObjectId testId, ObjectId questionId, String answerData, boolean complaint);
+    Test submitAnswer(String testId, String questionId, List<String> answers, boolean complaint);
+    Test submitAnswer(ObjectId testId, ObjectId questionId, List<String> answers, boolean complaint);
 
     void deleteTest(Test test);
 }
