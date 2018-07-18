@@ -16,7 +16,7 @@ public interface TestService {
     Test generateTestForUser(String userId,
                              String title,
                              LocalDateTime start,
-                             Duration duration,
+                             LocalDateTime deadline,
                              Collection<ObjectId> topicIds,
                              int questionsCount,
                              String assignedBy);
@@ -27,7 +27,7 @@ public interface TestService {
     List<Test> generateTestsForGroup(String group,
                                String title,
                                LocalDateTime start,
-                               Duration duration,
+                               LocalDateTime deadline,
                                Collection<ObjectId> topicIds,
                                int questionsCount,
                                String assignedBy);
@@ -43,6 +43,8 @@ public interface TestService {
 
     Test submitAnswer(String testId, String questionId, List<String> answers, boolean complaint);
     Test submitAnswer(ObjectId testId, ObjectId questionId, List<String> answers, boolean complaint);
+
+    Test submitTest(ObjectId id);
 
     void deleteTest(Test test);
 }

@@ -48,7 +48,7 @@ public class TestServiceImpl implements TestService {
     public Test generateTestForUser(@NonNull String userId,
                                     String title,
                                     LocalDateTime start,
-                                    Duration duration,
+                                    LocalDateTime deadline,
                                     Collection<ObjectId> topicIds,
                                     int questionsCount,
                                     String assignedBy) {
@@ -91,21 +91,20 @@ public class TestServiceImpl implements TestService {
             }
         }
 
-        Test newTest = new Test(
-                userId,
-                !StringUtils.isEmpty(title)
-                        ? title
-                        : topicRepository.findByIdIn(actualTopicIds)
-                                .stream()
-                                .map(Topic::getText)
-                                .collect(Collectors.joining(", ")),
-                start != null
-                    ? start
-                    : LocalDateTime.now(),
-                duration != null
-                    ? duration
-                    : Duration.ofMinutes(Long.parseLong(env.getProperty("cats.test.defaultDuration", "60")))
-        );
+        start = start != null ? start :LocalDateTime.now();
+        deadline = deadline != null && deadline.isAfter(start)
+                ? deadline
+                : start.plus(Duration.ofMinutes(
+                                Long.parseLong(env.getProperty("cats.test.defaultDuration", "60"))
+                  ));
+        title = !StringUtils.isEmpty(title)
+                ? title
+                : topicRepository.findByIdIn(actualTopicIds)
+                .stream()
+                .map(Topic::getText)
+                .collect(Collectors.joining(", "));
+
+        Test newTest = new Test(userId, title, start, deadline);
         newTest.setItems(testItemGenerator.generate(
                 questionsCount > 0
                     ? questionsCount
@@ -127,13 +126,15 @@ public class TestServiceImpl implements TestService {
     public List<Test> generateTestsForGroup(@NonNull String group,
                                       @NonNull String title,
                                       LocalDateTime start,
-                                      Duration duration,
+                                      LocalDateTime deadline,
                                       Collection<ObjectId> topicIds,
                                       int questionsCount,
                                       @NonNull String assignedBy) {
         return userRepository.findStudentsByGroupName(group).stream()
                 .map(User::getEmail)
-                .map(id -> generateTestForUser(id, title, start, duration, topicIds, questionsCount, assignedBy))
+                .map(id ->
+                        generateTestForUser(id, title, start, deadline, topicIds, questionsCount, assignedBy)
+                )
                 .collect(Collectors.toList());
     }
 
@@ -169,7 +170,10 @@ public class TestServiceImpl implements TestService {
     }
 
     @Override
-    public Test submitAnswer(@NonNull ObjectId testId, @NonNull ObjectId questionId, List<String> answers, boolean complaint) {
+    public Test submitAnswer(@NonNull ObjectId testId,
+                             @NonNull ObjectId questionId,
+                             List<String> answers,
+                             boolean complaint) {
         Optional<Test> updatedTest = testRepository.findById(testId);
         if (updatedTest.isPresent()) {
             Optional<TestItem> updatedItem =
@@ -181,15 +185,26 @@ public class TestServiceImpl implements TestService {
                     updatedItem.flatMap(item -> questionRepository.findById(item.getQuestionId()));
 
             if (updatedItem.isPresent() && questionToUpdatedItem.isPresent()) {
+                updatedItem.get().setQuestionText(questionToUpdatedItem.get().getText());
+                updatedItem.get().setAnswers(answers);
                 updatedItem.get().setStatus(TestChecker.check(questionToUpdatedItem.get(), answers));
                 return testRepository.save(updatedTest.get());
-
             } else {
                 throw new ServiceException("There's no question with id " + testId);
             }
         } else {
             throw new ServiceException("There's no test with id " + testId);
         }
+    }
+
+    @Override
+    public Test submitTest(ObjectId testId) {
+        Optional<Test> updatedTest = testRepository.findById(testId);
+        if (updatedTest.isPresent() && updatedTest.get().getDeadline().isAfter(LocalDateTime.now())) {
+            updatedTest.get().setDeadline(LocalDateTime.now());
+            return testRepository.save(updatedTest.get());
+        }
+        return updatedTest.orElse(null);
     }
 
 
