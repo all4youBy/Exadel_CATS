@@ -10,6 +10,4 @@ public class AuthenticationRequest {
     private String username;
     @NonNull
     private String password;
-
-
 }

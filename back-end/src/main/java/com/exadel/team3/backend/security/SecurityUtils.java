@@ -9,6 +9,8 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
+import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.*;
 
 @Component
@@ -25,8 +27,8 @@ public class SecurityUtils {
 
     public String generateToken(AuthenticatedUser user){
 
-        final Date createdDate = new Date();
-        final Date expirationDate = calculateExpirationDate(createdDate);
+        final LocalDateTime createdDate = LocalDateTime.now();
+        final LocalDateTime expirationDate = calculateExpirationDate(createdDate);
         Map<String, Object> claims = new HashMap<>();
 
         claims.put("role",user.getRole());
@@ -34,8 +36,8 @@ public class SecurityUtils {
         return Jwts.builder()
                 .setClaims(claims)
                 .setSubject(user.getUsername())
-                .setIssuedAt(createdDate)
-                .setExpiration(expirationDate)
+                .setIssuedAt(parseTimeToDate(createdDate))
+                .setExpiration(parseTimeToDate(expirationDate))
                 .signWith(SignatureAlgorithm.HS256,secret)
                 .compact();
     }
@@ -55,13 +57,15 @@ public class SecurityUtils {
        return getAllClaims(token).get("role",String.class);
     }
 
-    private Date calculateExpirationDate(Date createdDate){
-        return new Date(createdDate.getTime() + expiration * 1000);
+    private LocalDateTime calculateExpirationDate(LocalDateTime createdDate){
+        return createdDate.plusMinutes(expiration);
     }
 
+    private Date parseTimeToDate(LocalDateTime time){
+        return Date.from(time.atZone(ZoneId.systemDefault()).toInstant());
+    }
     public void hashUserPassword(User user){
         String hashPass = encoder.encode(user.getPasswordHash());
         user.setPasswordHash(hashPass);
     }
-
 }
