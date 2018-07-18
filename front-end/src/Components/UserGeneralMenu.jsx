@@ -1,10 +1,11 @@
 import React from 'react';
 import 'antd/dist/antd.css';
 import { Menu, Icon } from 'antd';
+import { Link } from 'react-router-dom';
 
 const { SubMenu } = Menu;
 
-class GeneralMenuStudent extends React.PureComponent {
+class UserGeneralMenu extends React.PureComponent {
   render() {
     return (
       <Menu
@@ -20,11 +21,11 @@ class GeneralMenuStudent extends React.PureComponent {
           <Menu.Item key="4">Все задачи</Menu.Item>
         </SubMenu>
         <SubMenu key="sub2" title={<span><Icon type="profile" /><span>Тесты</span></span>}>
-          <Menu.Item key="5">Назначенные тесты</Menu.Item>
-          <Menu.Item key="6">Пройденные тесты</Menu.Item>
+          <Menu.Item key="5"><Link to="/assignedtestlist">Назначенные тесты</Link></Menu.Item>
+          <Menu.Item key="6"><Link to="/passedtestlist">Пройденные тесты</Link></Menu.Item>
           <Menu.Item key="7">Пробные тесты</Menu.Item>
         </SubMenu>
-        <Menu.Item key="7">
+        <Menu.Item key="8">
           <Icon type="folder" />
           <span>Все материалы</span>
         </Menu.Item>
@@ -33,4 +34,4 @@ class GeneralMenuStudent extends React.PureComponent {
   }
 }
 
-export default GeneralMenuStudent;
+export default UserGeneralMenu;

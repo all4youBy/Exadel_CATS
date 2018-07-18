@@ -1,0 +1,134 @@
+[
+  {
+    "email":"dormi@mail.ru",
+    "firstName":"Дормидонт",
+    "lastName":"Конь",
+    "role":"STUDENT",
+    "passwordHash":"$2a$10$GqE6IY43930ceftcqRrFdOwz/y8mT7L/H7UxRgu9ntsEtNccsimLO",
+    "groups":["Первая группа"],
+    "education":{
+      "institution":"БГУ",
+      "graduationYear":"2019",
+      "specialization":"Прикладная информатика",
+      "primarySkill":"Java"
+    }
+  },
+
+  {
+    "email":"fiska@mail.ru",
+    "firstName":"Анфиса",
+    "lastName":"Анемподистова",
+    "role":"STUDENT",
+    "passwordHash":"$2a$10$GqE6IY43930ceftcqRrFdOwz/y8mT7L/H7UxRgu9ntsEtNccsimLO",
+    "groups":["Первая группа"],
+    "education":{
+      "institution":"БГУ",
+      "graduationYear":"2019",
+      "specialization":"Прикладная информатика",
+      "primarySkill":"Java"
+    }
+  },
+
+  {
+    "email":"admin@exadel.com",
+    "firstName":"Макар",
+    "lastName":"Свирепый",
+    "role":"ADMIN",
+    "passwordHash":"$2a$10$GqE6IY43930ceftcqRrFdOwz/y8mT7L/H7UxRgu9ntsEtNccsimLO",
+    "groups":[]
+  },
+
+  {
+    "email":"leoplu@inbox.com",
+    "firstName":"Леокадия",
+    "lastName":"Плюшкина",
+    "role":"TEACHER",
+    "passwordHash":"$2a$10$GqE6IY43930ceftcqRrFdOwz/y8mT7L/H7UxRgu9ntsEtNccsimLO",
+    "groups":["Первая группа"]
+  },
+
+  {
+    "email":"vasya@mail.ru",
+    "firstName":"Василий",
+    "lastName":"Кот",
+    "role":"TEACHER",
+    "passwordHash":"$2a$10$GqE6IY43930ceftcqRrFdOwz/y8mT7L/H7UxRgu9ntsEtNccsimLO",
+    "groups":["Первая группа","Вторая группа"]
+  },
+
+  {
+    "email":"ariadna@yandex.ru",
+    "firstName":"Ариадна",
+    "lastName":"Непричастная",
+    "role":"STUDENT",
+    "passwordHash":"$2a$10$GqE6IY43930ceftcqRrFdOwz/y8mT7L/H7UxRgu9ntsEtNccsimLO",
+    "groups":["Первая группа"],
+    "education":{
+      "institution":"БГУ",
+      "graduationYear":"2020",
+      "specialization":"Актуарная математика",
+      "primarySkill":"C#"
+    }
+  },
+
+  {
+    "email":"varamir@westeros.org",
+    "firstName":"Варамир",
+    "lastName":"Шестишкурый",
+    "role":"STUDENT",
+    "passwordHash":"$2a$10$GqE6IY43930ceftcqRrFdOwz/y8mT7L/H7UxRgu9ntsEtNccsimLO",
+    "groups":["Вторая группа"],
+    "education":{
+      "institution":"БГУ",
+      "graduationYear":"2020",
+      "specialization":"Актуарная математика",
+      "primarySkill":"Assembler"
+    }
+  },
+
+  {
+    "email":"ama@sharkey.com",
+    "firstName":"Анна-Мария",
+    "lastName":"Акулич",
+    "role":"STUDENT",
+    "passwordHash":"$2a$10$GqE6IY43930ceftcqRrFdOwz/y8mT7L/H7UxRgu9ntsEtNccsimLO",
+    "groups":["Вторая группа"],
+    "education":{
+      "institution":"БГУ",
+      "graduationYear":"2021",
+      "specialization":"Романская филология",
+      "primarySkill":"Java"
+    }
+  },
+
+  {
+    "email":"larik@outlook.com",
+    "firstName":"Ларион",
+    "lastName":"Кутько",
+    "role":"STUDENT",
+    "passwordHash":"$2a$10$GqE6IY43930ceftcqRrFdOwz/y8mT7L/H7UxRgu9ntsEtNccsimLO",
+    "groups":["Первая группа"],
+    "education":{
+      "institution":"БГУ",
+      "graduationYear":"2020",
+      "specialization":"Компьютерная безопасность",
+      "primarySkill":"Python"
+    }
+  },
+
+  {
+    "email":"margo@mail.ru",
+    "firstName":"Маргарита",
+    "lastName":"Мариенгоф",
+    "role":"STUDENT",
+    "passwordHash":"$2a$10$GqE6IY43930ceftcqRrFdOwz/y8mT7L/H7UxRgu9ntsEtNccsimLO",
+    "groups":["Вторая группа"],
+    "education":{
+      "institution":"БГУ",
+      "graduationYear":"2020",
+      "specialization":"Компьютерная безопасность",
+      "primarySkill":"С++"
+    }
+  }
+
+]

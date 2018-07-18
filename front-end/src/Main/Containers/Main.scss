@@ -1,0 +1,25 @@
+.main-body-container {
+  display: flex;
+  flex-direction: row;
+  flex-grow: 1;
+  height: 100%;
+}
+
+.general-menu {
+  width: 16%;
+}
+
+.switch-div {
+  width: 84%;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.main-content {
+  display: flex;
+  flex-direction: column;
+  justify-content: stretch;
+  min-height: 100vh;
+}
+

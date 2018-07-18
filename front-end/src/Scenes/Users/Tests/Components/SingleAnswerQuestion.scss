@@ -1,0 +1,21 @@
+.single-a-q-card {
+  border: none;
+  border-radius: 12px;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  div {
+    display: flex;
+    flex-direction: column;
+    word-wrap: break-word;
+    .submit-button {
+      width: 100px;
+      margin-top: 10px;
+    }
+  }
+}
+.RadioAnswer {
+  display: block;
+  height: 22px;
+  line-height: 30px;
+}
