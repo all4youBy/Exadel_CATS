@@ -4,55 +4,35 @@ import com.exadel.team3.backend.entities.Question;
 import com.exadel.team3.backend.entities.QuestionType;
 import com.exadel.team3.backend.entities.QuestionVariant;
 import com.exadel.team3.backend.entities.TestItemStatus;
-import org.springframework.util.NumberUtils;
+import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
 
+import java.util.List;
 import java.util.Optional;
-import java.util.regex.Pattern;
-import java.util.stream.IntStream;
 
 class TestChecker {
 
-    static TestItemStatus check(Question question, String answerData) {
+    static TestItemStatus check(Question question, List<String> answers) {
         if (question.getType() == QuestionType.MANUAL_CHECK_TEXT || question.getVariants() == null)
             return TestItemStatus.UNCHECKED;
-        if (StringUtils.isEmpty(answerData)) return TestItemStatus.UNANSWERED;
+        if (CollectionUtils.isEmpty(answers)) return TestItemStatus.UNANSWERED;
 
         switch (question.getType()) {
             case SINGLE_VARIANT:
-                int answer;
-                try {
-                    answer = Integer.parseInt(answerData);
-                } catch (NumberFormatException nex) {
-                    answer =-1;
-                }
-
                 return (
-                        answer >= 0
-                                && answer < question.getVariants().size()
-                                && question.getVariants().get(answer).isCorrect()
+                        question.getVariants()
+                                .stream()
+                                .anyMatch(v -> v.getText().equals(answers.get(0)) && v.isCorrect())
                 )
                         ? TestItemStatus.RIGHT
                         : TestItemStatus.WRONG;
 
             case MULTI_VARIANT:
-                IntStream answerVariants =
-                        Pattern.compile("[,;]")
-                                .splitAsStream(answerData)
-                                .mapToInt(i -> {try {
-                                    return NumberUtils.parseNumber(i, Integer.class);
-                                } catch (NumberFormatException ex) {
-                                    return -1;
-                                }
-                                })
-                                .filter(i -> i>=0);
                 return (
-                        answerVariants.count() ==
-                                question.getVariants().stream().filter(QuestionVariant::isCorrect).count()
-                                && answerVariants.allMatch(
-                                variant -> variant < question.getVariants().size()
-                                        && question.getVariants().get(variant).isCorrect()
-                        )
+                        question.getVariants()
+                                .stream()
+                                .filter(variant -> answers.contains(variant.getText()) && variant.isCorrect())
+                                .count() == answers.size()
                 )
                         ? TestItemStatus.RIGHT
                         : TestItemStatus.WRONG;
@@ -65,19 +45,19 @@ class TestChecker {
                         .map(String::trim)
                         .findFirst();
                 if (!correctAnswer.isPresent()) return TestItemStatus.UNCHECKED;
+                String answer = answers.get(0);
+                if (StringUtils.isEmpty(answer)) return TestItemStatus.WRONG;
                 if (correctAnswer.get().startsWith("/") && correctAnswer.get().endsWith("/")) {
-                    return answerData.matches(
+                    return answer.matches(
                             correctAnswer.get().substring(1, correctAnswer.get().length() - 2)
                     )
                             ? TestItemStatus.RIGHT
                             : TestItemStatus.WRONG;
                 } else {
-                    return answerData.equalsIgnoreCase(correctAnswer.get())
+                    return answer.equalsIgnoreCase(correctAnswer.get())
                             ? TestItemStatus.RIGHT
                             : TestItemStatus.WRONG;
                 }
-
-
         }
         return TestItemStatus.UNCHECKED;
     }
