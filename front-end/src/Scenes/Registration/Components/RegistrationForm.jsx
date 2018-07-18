@@ -1,5 +1,4 @@
 import React from 'react';
-import 'antd/dist/antd.css';
 import { Form, Input, Switch, Select, Button } from 'antd';
 import { connect } from 'react-redux';
 import './RegistrationForm.scss';
@@ -76,76 +75,28 @@ class RegistrationForm extends React.Component {
     yearTermination: 0,
   };
 
-  setInstitution = v => this.setState(p => ({
-    idInstitution: p.idInstitution - p.idInstitution + v,
-  }));
-
-  setEmail = (v) => {
-    const targetValue = v.target.value;
-    this.setState(p => ({
-      email: p.email.replace(
-        p.email,
+  setTextField = (event) => {
+    const field = event.target.name;
+    const targetValue = event.target.value;
+    this.setState(prevState => ({
+      [field]: prevState[field].replace(
+        prevState[field],
         targetValue || '',
       ),
     }));
   };
 
-  setPrimarySkill = (v) => {
-    this.setState(p => ({
-      primarySkill: p.primarySkill.replace(
-        p.primarySkill,
-        v || '',
-      ),
+  setYearTermination = (event) => {
+    const { value } = event.target;
+    this.setState(prevState => ({
+      yearTermination: prevState.yearTermination - prevState.yearTermination + value,
     }));
   };
 
-  setFaculty = (v) => {
-    this.setState(p => ({
-      faculty: p.faculty.replace(
-        p.faculty,
-        v || '',
-      ),
-    }));
-  };
-
-  setFirstName = (v) => {
-    const targetValue = v.target.value;
-    this.setState(p => ({
-      firstName: p.firstName.replace(
-        p.firstName,
-        targetValue || '',
-      ),
-    }));
-  };
-
-  setSecondName = (v) => {
-    const targetValue = v.target.value;
-    this.setState(p => ({
-      secondName: p.secondName.replace(
-        p.secondName,
-        targetValue || '',
-      ),
-    }));
-  };
-
-  setInstitutionTeacher = v => this.setState(p => ({
-    selectedInstitutionTeacher: p.selectedInstitutionTeacher - p.selectedInstitutionTeacher + v,
-  }));
-
-  setJob = (v) => {
-    const targetValue = v.target.value;
-    this.setState(p => ({
-      inputtedJob: p.inputtedJob.replace(
-        p.inputtedJob,
-        targetValue || '',
-      ),
-    }));
-  };
-
-  setYearTermination = (v) => {
-    const targetValue = Number(v.target.value) || 0;
-    this.setState(p => ({
-      yearTermination: p.yearTermination - p.yearTermination + targetValue,
+  setSelectField = (event, name) => {
+    const field = name;
+    this.setState(prevState => ({
+      [field]: prevState[field] - prevState[field] + event,
     }));
   };
 
@@ -164,32 +115,28 @@ class RegistrationForm extends React.Component {
       primarySkill,
       yearTermination,
     } = this.state;
-    const { form } = this.props;
+    const { form, registrationTeacher, registrationStudent } = this.props;
     const { getFieldDecorator } = form;
-    const { registrationTeacher, registrationStudent } = this.props;
 
 
-    const getUser = () => {
-      console.log(selectedInstitutionTeacher);
-      return teacher
-        ? {
-          email,
-          firstName,
-          secondName,
-          institution: selectedInstitutionTeacher !== -1 ? institutions[selectedInstitutionTeacher].name : '',
-          job: inputtedJob,
-          primarySkill,
-        }
-        : {
-          email,
-          firstName,
-          secondName,
-          institution: idInstitution !== -1 ? institutions[idInstitution].name : '',
-          faculty,
-          yearTermination,
-          primarySkill,
-        };
-    };
+    const getUser = () => (teacher
+      ? {
+        email,
+        firstName,
+        secondName,
+        institution: selectedInstitutionTeacher !== -1 ? institutions[selectedInstitutionTeacher].name : '',
+        job: inputtedJob,
+        primarySkill,
+      }
+      : {
+        email,
+        firstName,
+        secondName,
+        institution: idInstitution !== -1 ? institutions[idInstitution].name : '',
+        faculty,
+        yearTermination,
+        primarySkill,
+      });
 
     const switchRegistration = () => (teacher
       ? registrationTeacher(getUser())
@@ -237,7 +184,8 @@ class RegistrationForm extends React.Component {
             ],
           })(
             <Input
-              onBlur={this.setJob}
+              name="inputtedJob"
+              onBlur={this.setTextField}
               placeholder="Введите место работы и/или учебное заведение"
             />,
           )}
@@ -254,7 +202,7 @@ class RegistrationForm extends React.Component {
           })(
             <Select
               placeholder="Выберите учебное заведение"
-              onChange={this.setInstitutionTeacher}
+              onChange={value => this.setSelectField(value, 'selectedInstitutionTeacher')}
             >
               {institutionOptions}
             </Select>,
@@ -271,7 +219,7 @@ class RegistrationForm extends React.Component {
             ],
           })(
             <Select
-              onChange={this.setPrimarySkill}
+              onChange={value => this.setSelectField(value, 'primarySkill')}
               placeholder="Выберите ваш primary skill"
             >
               {primarySkillsOptions}
@@ -294,7 +242,7 @@ class RegistrationForm extends React.Component {
           })(
             <Select
               placeholder="Выберите учебное заведение"
-              onChange={this.setInstitution}
+              onChange={value => this.setSelectField(value, 'idInstitution')}
             >
               {institutionOptions}
             </Select>,
@@ -311,7 +259,7 @@ class RegistrationForm extends React.Component {
           })(
             <Select
               placeholder="Выберите ваш факультет"
-              onChange={this.setFaculty}
+              onChange={value => this.setSelectField(value, 'faculty')}
             >
               {facultiesOptions}
             </Select>,
@@ -334,7 +282,13 @@ class RegistrationForm extends React.Component {
               },
 
             ],
-          })(<Input onBlur={this.setYearTermination}/>)}
+          })(
+            <Input
+              name="yearTermination"
+              onBlur={this.setYearTermination}
+            />,
+          )
+          }
         </FormItem>
         <FormItem {...formItemLayout} label="Primary skill">
           {getFieldDecorator('primarySkillStudent', {
@@ -346,7 +300,7 @@ class RegistrationForm extends React.Component {
             ],
           })(
             <Select
-              onChange={this.setPrimarySkill}
+              onChange={value => this.setSelectField(value, 'primarySkill')}
               placeholder="Выберите ваш primary skill"
             >
               {primarySkillsOptions}
@@ -371,7 +325,13 @@ class RegistrationForm extends React.Component {
                 message: 'Пожалуйста, введите E-mail!',
               },
             ],
-          })(<Input onBlur={this.setEmail}/>)}
+          })(
+            <Input
+              name="email"
+              onBlur={this.setTextField}
+            />,
+          )
+          }
         </FormItem>
         <FormItem {...formItemLayout} label="Имя">
           {getFieldDecorator('name', {
@@ -389,7 +349,10 @@ class RegistrationForm extends React.Component {
                 message: 'Вы можете ввести не более 40 символов',
               },
             ],
-          })(<Input onBlur={this.setFirstName}/>)}
+          })(<Input
+            name="firstName"
+            onBlur={this.setTextField}
+          />)}
         </FormItem>
         <FormItem {...formItemLayout} label="Фамилия">
           {getFieldDecorator('secondName', {
@@ -407,7 +370,10 @@ class RegistrationForm extends React.Component {
                 message: 'Вы можете ввести не более 40 символов',
               },
             ],
-          })(<Input onBlur={this.setSecondName}/>)}
+          })(<Input
+            name="secondName"
+            onBlur={this.setTextField}
+          />)}
         </FormItem>
         <FormItem>
           <FormItem {...formItemLayout} label="Вы учитель?">
