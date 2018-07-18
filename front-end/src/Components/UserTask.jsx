@@ -1,12 +1,14 @@
+/* eslint-disable react/prop-types,react/destructuring-assignment,no-unused-vars,react/jsx-no-bind */
 import React from 'react';
+import { connect } from 'react-redux';
 import 'antd/dist/antd.css';
 import './UserTask.scss';
 import { Upload, Button, Icon, Select } from 'antd';
 
 const { Option } = Select;
 
-export default class UserTask extends React.PureComponent {
-  state = {}
+class UserTask extends React.PureComponent {
+  state = {};
 
   handleChange = (info) => {
     let { fileList } = info;
@@ -32,6 +34,10 @@ export default class UserTask extends React.PureComponent {
     this.setState({ fileList });
   };
 
+  uploadTask() {
+    this.props.onAddTask();
+  }
+
   render() {
     const props = {
       action: '//jsonplaceholder.typicode.com/posts/',
@@ -54,9 +60,18 @@ export default class UserTask extends React.PureComponent {
               <Icon type="upload"/> Загрузить
             </Button>
           </Upload>
-          <Button type="primary" className="submit-button">Отправить</Button>
+          <Button type="primary" className="submit-button" onClick={() => this.uploadTask()}>Отправить</Button>
         </div>
       </div>
     );
   }
 }
+
+export default connect(
+  state => ({}),
+  dispatch => ({
+    onAddTask: () => {
+      dispatch({ type: 'UPLOAD_TASK' });
+    },
+  }),
+)(UserTask);
