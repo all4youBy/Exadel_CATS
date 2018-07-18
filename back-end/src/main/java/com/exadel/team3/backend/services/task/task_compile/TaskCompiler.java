@@ -4,5 +4,6 @@ import java.io.File;
 import java.util.List;
 
 public interface TaskCompiler {
-    boolean compileTask(List<File> fileList);
+    List<Class<?>> compileTask(List<File> fileList);
+    boolean deleteClasses();
 }
