@@ -2,6 +2,7 @@ package com.exadel.team3.backend.services.impl;
 
 import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Primary;
 import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Service;
 
@@ -12,6 +13,7 @@ import com.exadel.team3.backend.services.QuestionService;
 import java.util.List;
 
 @Service
+@Primary
 public class QuestionServiceImpl implements QuestionService {
     @Autowired
     private QuestionRepository questionRepository;

@@ -9,13 +9,14 @@ import org.springframework.stereotype.Repository;
 import com.exadel.team3.backend.entities.Test;
 
 import java.time.LocalDateTime;
+
 import java.util.Collection;
 import java.util.List;
 
 @Repository
 public interface TestRepository extends MongoRepository<Test, ObjectId> {
-    List<Test> findByAssignedToOrderByStart(String assignedId);
-    List<Test> findByAssignedToInOrderByStart(Collection<String> assignedIds);
+    List<Test> findByAssignedToOrderByStartDesc(String assignedId);
+    List<Test> findByAssignedToInOrderByStartDesc(Collection<String> assignedIds);
     List<Test> findByAssignedToAndAssignedBy(String assignedId, String assignedById);
 
     @Query("{'assignedBy':?0, 'deadline':{$lte:?1}}")
