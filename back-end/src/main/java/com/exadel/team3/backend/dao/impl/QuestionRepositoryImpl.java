@@ -3,6 +3,7 @@ package com.exadel.team3.backend.dao.impl;
 import java.util.Collection;
 import java.util.List;
 
+import com.exadel.team3.backend.entities.QuestionStatus;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.aggregation.Aggregation;
 import org.springframework.data.mongodb.core.aggregation.MatchOperation;
@@ -29,7 +30,10 @@ public class QuestionRepositoryImpl implements QuestionRepositoryAggregation {
 
     @Override
     public List<Question> random(int count, @NonNull Collection<ObjectId> allowedTopics,  @NonNull Collection<QuestionType> allowedTypes, QuestionComplexity complexity, boolean trainingOnly) {
-        Criteria matchCriteria = Criteria.where("topicIds").in(allowedTopics).and("type").in(allowedTypes);
+        Criteria matchCriteria = Criteria
+                .where("topicIds").in(allowedTopics)
+                .and("type").in(allowedTypes)
+                .and("status").in(QuestionStatus.ACTIVE, QuestionStatus.CONFIRMED);
         if (complexity != null) matchCriteria = matchCriteria.and("complexity").is(complexity);
         if (trainingOnly) matchCriteria = matchCriteria.and("training").is(true);
         MatchOperation matchOperation = new MatchOperation(matchCriteria);

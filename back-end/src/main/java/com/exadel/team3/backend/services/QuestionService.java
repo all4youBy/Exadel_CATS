@@ -11,9 +11,11 @@ public interface QuestionService {
     Question addQuestion(Question question);
 
     List<Question> getQuestions();
-    List<Question> getQuestions(List<ObjectId> topicIds);
+    List<Question> getQuestionsByTopicIds(List<ObjectId> topicIds);
+    List<Question> getQuestionsByQuestionIds(List<ObjectId> questionIds);
 
     Question updateQuestion(Question question);
+    Question complainQuestion(Question question);
 
     Question getQuestion(ObjectId id);
     Question getQuestion(String id);
