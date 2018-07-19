@@ -4,39 +4,58 @@ import com.exadel.team3.backend.entities.Question;
 import com.exadel.team3.backend.entities.QuestionType;
 import com.exadel.team3.backend.entities.QuestionVariant;
 import com.exadel.team3.backend.entities.TestItemStatus;
-import org.springframework.util.CollectionUtils;
+import org.springframework.util.NumberUtils;
 import org.springframework.util.StringUtils;
 
-import java.util.List;
 import java.util.Optional;
+import java.util.regex.Pattern;
+import java.util.stream.IntStream;
 
 class TestChecker {
 
-    static TestItemStatus check(Question question, List<String> answers) {
+    static TestItemStatus checkAnswer(Question question, String answer) {
         if (question.getType() == QuestionType.MANUAL_CHECK_TEXT || question.getVariants() == null)
             return TestItemStatus.UNCHECKED;
-        if (CollectionUtils.isEmpty(answers)) return TestItemStatus.UNANSWERED;
+        if (StringUtils.isEmpty(answer)) return TestItemStatus.UNANSWERED;
 
         switch (question.getType()) {
             case SINGLE_VARIANT:
+                Integer answerOrdinal;
+                try {
+                    answerOrdinal = NumberUtils.parseNumber(answer, Integer.class);
+                } catch (NumberFormatException nfe) {
+                    answerOrdinal = null;
+                }
                 return (
-                        question.getVariants()
-                                .stream()
-                                .anyMatch(v -> v.getText().equals(answers.get(0)) && v.isCorrect())
+                        answerOrdinal != null
+                                && answerOrdinal < question.getVariants().size()
+                                && question.getVariants().get(answerOrdinal).isCorrect()
                 )
                         ? TestItemStatus.RIGHT
                         : TestItemStatus.WRONG;
 
             case MULTI_VARIANT:
+                IntStream answerVariants =
+                        Pattern.compile("[,;]")
+                                .splitAsStream(answer)
+                                .mapToInt(i -> {
+                                    try {
+                                        return NumberUtils.parseNumber(i, Integer.class);
+                                    } catch (NumberFormatException ex) {
+                                        return -1;
+                                    }
+                                })
+                                .filter(i -> i>=0);
                 return (
-                        question.getVariants()
-                                .stream()
-                                .filter(variant -> answers.contains(variant.getText()) && variant.isCorrect())
-                                .count() == answers.size()
+                        answerVariants.count() ==
+                                question.getVariants().stream().filter(QuestionVariant::isCorrect).count()
+                        && answerVariants.allMatch(
+                                variant -> variant < question.getVariants().size()
+                                        && question.getVariants().get(variant).isCorrect()
+                        )
                 )
                         ? TestItemStatus.RIGHT
                         : TestItemStatus.WRONG;
-
             case AUTOCHECK_TEXT:
                 Optional<String> correctAnswer = question.getVariants()
                         .stream()
@@ -45,7 +64,6 @@ class TestChecker {
                         .map(String::trim)
                         .findFirst();
                 if (!correctAnswer.isPresent()) return TestItemStatus.UNCHECKED;
-                String answer = answers.get(0);
                 if (StringUtils.isEmpty(answer)) return TestItemStatus.WRONG;
                 if (correctAnswer.get().startsWith("/") && correctAnswer.get().endsWith("/")) {
                     return answer.matches(
@@ -61,5 +79,6 @@ class TestChecker {
         }
         return TestItemStatus.UNCHECKED;
     }
+
 
 }

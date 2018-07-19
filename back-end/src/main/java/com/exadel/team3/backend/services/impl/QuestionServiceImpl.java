@@ -52,6 +52,14 @@ public class QuestionServiceImpl implements QuestionService {
     public Question updateQuestion(@NonNull Question question) {
         return questionRepository.save(question);
     }
+    @Override
+    public Question complainQuestion(@NonNull Question question) {
+        if (question.getStatus() == QuestionStatus.ACTIVE) {
+            question.setStatus(QuestionStatus.DISPUTED);
+            return questionRepository.save(question);
+        }
+        return question;
+    }
 
     @Override
     public void deleteQuestion(Question question) {
