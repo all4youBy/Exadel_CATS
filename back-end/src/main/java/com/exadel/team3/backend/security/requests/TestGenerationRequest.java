@@ -15,7 +15,7 @@ public class TestGenerationRequest {
     private String userId;
     private String title;
     private LocalDateTime start;
-    private Duration duration;
+    private LocalDateTime deadline;
     private Collection<ObjectId> topicsId;
     private int questionsCount;
     private String assignedBy;

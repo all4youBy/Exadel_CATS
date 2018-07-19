@@ -32,7 +32,7 @@ public class QuestionController {
     public List<Question> getQuestions(@RequestParam(required = false)List<ObjectId> topicsIds){
         if(topicsIds == null)
             return questionService.getQuestions();
-        return questionService.getQuestions(topicsIds);
+        return questionService.getQuestionsByTopicIds(topicsIds);
     }
 
     @GetMapping("/questions/{id}")
