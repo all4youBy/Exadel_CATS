@@ -155,7 +155,14 @@ public class TestServiceImpl implements TestService {
     }
     @Override
     public List<Test> getTestsAssignedToUser(@NonNull String userId, TestCompletionStatus completion) {
-        return testRepository.findByAssignedToOrderByStartDesc(userId);
+        switch(completion) {
+            case UNFINISHED:
+                return testRepository.findByAssignedToAndDeadlineAfterOrderByStartDesc(userId, LocalDateTime.now());
+            case FINISHED:
+                return testRepository.findByAssignedToAndDeadlineBeforeOrderByStartDesc(userId, LocalDateTime.now());
+            default:
+                return testRepository.findByAssignedToOrderByStartDesc(userId);
+        }
     }
 
     @Override
@@ -164,11 +171,19 @@ public class TestServiceImpl implements TestService {
     }
     @Override
     public List<Test> getTestsAssignedToGroup(@NonNull String group, TestCompletionStatus completion) {
-        return testRepository.findByAssignedToInOrderByStartDesc(
-                userRepository.findStudentsByGroupName(group).stream()
-                        .map(User::getEmail)
-                        .collect(Collectors.toList())
-        );
+        List<String> userIds = userRepository.findStudentsByGroupName(group)
+                .stream()
+                .map(User::getEmail)
+                .collect(Collectors.toList());
+
+        switch(completion) {
+            case UNFINISHED:
+                return testRepository.findByAssignedToInAndDeadlineAfterOrderByStartDesc(userIds, LocalDateTime.now());
+            case FINISHED:
+                return testRepository.findByAssignedToInAndDeadlineBeforeOrderByStartDesc(userIds, LocalDateTime.now());
+            default:
+                return testRepository.findByAssignedToInOrderByStartDesc(userIds);
+        }
     }
 
 /*
