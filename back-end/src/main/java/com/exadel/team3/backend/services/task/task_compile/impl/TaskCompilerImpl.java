@@ -13,6 +13,7 @@ import java.util.List;
 public class TaskCompilerImpl implements TaskCompiler {
 
     private List<Class<?>> classList = new ArrayList<>();
+
     @Override
     public List<Class<?>> compileTask(List<File> fileList) {
         JavaCompiler compiler = ToolProvider.getSystemJavaCompiler();

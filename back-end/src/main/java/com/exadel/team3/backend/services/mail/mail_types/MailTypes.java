@@ -37,6 +37,7 @@ public enum MailTypes {
         try {
             text = java.nio.file.Files.lines(Paths.get((new File(getClass().getClassLoader().getResource(nameFile).getFile()).getPath()))).collect(Collectors.joining());
         } catch (IOException ex) {
+
             logger.error("Could not read file with subject or message text. " + ex.getMessage());
         }
         return text;
