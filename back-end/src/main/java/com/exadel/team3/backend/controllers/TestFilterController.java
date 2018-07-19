@@ -12,5 +12,4 @@ public class TestFilterController {
     public String getString(){
         return "Successes!";
     }
-
 }
