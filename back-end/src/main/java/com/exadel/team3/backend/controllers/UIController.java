@@ -16,5 +16,4 @@ public class UIController {
     public String getHtml(){
        return "redirect:/index.html";
     }
-
 }
