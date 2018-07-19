@@ -1,5 +1,4 @@
 .form-registration {
-    margin-top: 5vh;
     margin-left: 20%;
     width: 60%;
     max-width: 510px;
@@ -11,20 +10,26 @@
 .registration-label-class {
     color: #04233d;
     font-size: 20px;
-    font-family: "Monospaced Number", "Chinese Quote", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "Helvetica Neue", Helvetica, Arial, sans-serif;
+    font-family: "Monospaced Number", "Chinese Quote";
     margin-left: 52%;
     margin-top: 15px;
 }
 
 @media screen and (min-width: 1125px) {
     .registration-label-class {
-        margin-left: 45%;
+        margin-left: 50%;
     }
 }
 
 @media screen and (min-width: 1000px) {
     .form-registration {
        margin-left: 25%;
+    }
+}
+
+@media screen and (min-width: 1000px) and (max-width: 1124px) {
+    .registration-label-class {
+        margin-left: 55%;
     }
 }
 

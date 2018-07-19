@@ -9,33 +9,11 @@ import { registrateStudent, registrateTeacher } from '../Services/Actions/action
 const { Item: FormItem } = Form;
 const { Option } = Select;
 
-const institutions = [
-  {
-    name: 'БГУ',
-    id: 0,
-  },
-  {
-    name: 'БГУИР',
-    id: 1,
-  },
-  {
-    name: 'БНТУ',
-    id: 2,
-  },
-];
+const institutions = [];
 
-const primarySkills = ['Java', 'C++', 'JavaScript'];
+const primarySkills = [];
 
-const faculties = {
-  0: [
-    'Факультет прикладной математики и информатики',
-    'Физический факультет',
-    'Филологический факультет',
-    'Механико-математический факультет',
-  ],
-  1: ['Информатика', 'КСиС'],
-  2: ['Архитектор'],
-};
+const faculties = {};
 
 const formItemLayout = {
   labelCol: {
@@ -127,6 +105,7 @@ class RegistrationForm extends React.Component {
         institution: selectedInstitutionTeacher !== -1 ? institutions[selectedInstitutionTeacher].name : '',
         job: inputtedJob,
         primarySkill,
+        password: '',
       }
       : {
         email,
@@ -136,6 +115,7 @@ class RegistrationForm extends React.Component {
         faculty,
         yearTermination,
         primarySkill,
+        password: '',
       });
 
     const switchRegistration = () => (teacher

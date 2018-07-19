@@ -7,7 +7,7 @@ class RegistrationPage extends React.PureComponent {
   render() {
     return (
       <div>
-        <p className="registration-label-class"> Регистрация </p>
+        <h2 className="registration-label-class"> Регистрация </h2>
         <div className="form-registration">
           <RegistrationForm/>
         </div>
