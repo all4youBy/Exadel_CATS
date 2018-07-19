@@ -1,10 +1,14 @@
 package com.exadel.team3.backend.entities;
 
+import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
-@Data @AllArgsConstructor
-public class UserEducation {
+@Data
+@AllArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
+public class UserAffiliation {
     private String institution;
     private int graduationYear;
     private String specialization;
