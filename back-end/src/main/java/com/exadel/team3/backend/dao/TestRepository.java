@@ -1,6 +1,5 @@
 package com.exadel.team3.backend.dao;
 
-import com.exadel.team3.backend.entities.TestItem;
 import org.bson.types.ObjectId;
 import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.data.mongodb.repository.Query;

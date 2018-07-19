@@ -4,7 +4,6 @@ import com.exadel.team3.backend.entities.Question;
 import com.exadel.team3.backend.entities.QuestionComplexity;
 import org.bson.types.ObjectId;
 import org.springframework.data.mongodb.repository.MongoRepository;
-import org.springframework.data.mongodb.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import java.util.Collection;

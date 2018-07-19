@@ -1,11 +1,12 @@
 package com.exadel.team3.backend.dto;
 
 
-import com.exadel.team3.backend.entities.TestItem;
-import com.exadel.team3.backend.entities.TestItemStatus;
 import lombok.*;
 import org.bson.types.ObjectId;
 import org.springframework.util.StringUtils;
+
+import com.exadel.team3.backend.entities.TestItem;
+import com.exadel.team3.backend.entities.TestItemStatus;
 
 public class TestItemDTO extends TestItem {
     @NonNull

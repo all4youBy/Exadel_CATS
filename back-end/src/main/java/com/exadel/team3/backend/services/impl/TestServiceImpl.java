@@ -1,30 +1,28 @@
 package com.exadel.team3.backend.services.impl;
 
-import com.exadel.team3.backend.dto.TestItemDTO;
-import com.exadel.team3.backend.services.TestChecker;
-import org.bson.types.ObjectId;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Primary;
-import org.springframework.core.env.Environment;
-import org.springframework.lang.NonNull;
-
-import com.exadel.team3.backend.dao.TestRepository;
-import com.exadel.team3.backend.services.TestService;
-import org.springframework.stereotype.Service;
-import org.springframework.util.StringUtils;
-
 import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.*;
 import java.util.stream.Collectors;
 
+import org.bson.types.ObjectId;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Primary;
+import org.springframework.core.env.Environment;
+import org.springframework.lang.NonNull;
+import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
+
 import com.exadel.team3.backend.dao.QuestionRepository;
 import com.exadel.team3.backend.dao.TopicRepository;
 import com.exadel.team3.backend.dao.UserRepository;
+import com.exadel.team3.backend.dao.TestRepository;
+import com.exadel.team3.backend.dto.TestItemDTO;
 import com.exadel.team3.backend.entities.*;
 import com.exadel.team3.backend.services.ServiceException;
 import com.exadel.team3.backend.services.TestItemPicker;
+import com.exadel.team3.backend.services.TestService;
+import com.exadel.team3.backend.services.TestChecker;
 
 @Service
 @Primary
