@@ -45,8 +45,7 @@ public interface TestService {
     Test getTest(ObjectId id);
 
     Test submitTest(ObjectId id);
-    Test submitAnswer(String testId, String questionId, List<String> answers, boolean complaint);
-    Test submitAnswer(ObjectId testId, ObjectId questionId, List<String> answers, boolean complaint);
+    Test submitAnswer(DetachedTestItem answeredItem);
     Test submitManualAnswerCheck(DetachedTestItem checked);
 
     List<DetachedTestItem> getAnswersForManualCheck(String assignedBy);

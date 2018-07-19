@@ -189,44 +189,29 @@ public class TestServiceImpl implements TestService {
     }
 
     @Override
-    public Test submitAnswer(@NonNull String testId, @NonNull String questionId, List<String> answers, boolean complaint) {
-        return submitAnswer(new ObjectId(testId), new ObjectId(questionId), answers, complaint);
-    }
-
-    @Override
-    public Test submitAnswer(@NonNull ObjectId testId,
-                             @NonNull ObjectId questionId,
-                             List<String> answers,
-                             boolean complaint) {
-        Optional<Test> updatedTest = testRepository.findById(testId);
+    public Test submitAnswer(@NonNull DetachedTestItem answeredItem) {
+        Optional<Test> updatedTest = testRepository.findById(answeredItem.getTestId());
         if (!updatedTest.isPresent()) {
-            throw new ServiceException("There's no test with id " + testId);
+            throw new ServiceException("There's no test with id " + answeredItem.getTestId());
         } else if (updatedTest.get().getDeadline().isBefore(LocalDateTime.now())) {
-            throw new ServiceException("The test with id " + testId + " is already closed");
+            throw new ServiceException("The test with id " + answeredItem.getTestId() + " is already closed");
         }
         Optional<TestItem> updatedItem =
                 updatedTest.get().getItems()
                     .stream()
-                    .filter(item -> item.getQuestionId().equals(questionId))
+                    .filter(item -> item.getQuestionId().equals(answeredItem.getTestItem().getQuestionId()))
                     .findFirst();
         Optional<Question> questionToUpdatedItem =
                 updatedItem.flatMap(item -> questionRepository.findById(item.getQuestionId()));
 
         if (questionToUpdatedItem.isPresent()) {
-            updatedItem.get().setQuestionText(questionToUpdatedItem.get().getText());
-            updatedItem.get().setAnswers(answers);
-            updatedItem.get().setStatus(TestChecker.checkAnswer(questionToUpdatedItem.get(), answers));
-            if (complaint) submitComplaint(questionToUpdatedItem.get());
+            updatedItem.get().setAnswer(answeredItem.getTestItem().getAnswer());
+            updatedItem.get().setStatus(
+                    TestChecker.checkAnswer(questionToUpdatedItem.get(), answeredItem.getTestItem().getAnswer())
+            );
             return testRepository.save(updatedTest.get());
         } else {
-            throw new ServiceException("There's no question with id " + testId);
-        }
-    }
-
-    private void submitComplaint(Question q) {
-        if (q.getStatus() == QuestionStatus.ACTIVE) {
-            q.setStatus(QuestionStatus.DISPUTED);
-            questionRepository.save(q);
+            throw new ServiceException("There's no question with id " + answeredItem.getTestId());
         }
     }
 

@@ -15,6 +15,7 @@ public interface QuestionService {
     List<Question> getQuestionsByQuestionIds(List<ObjectId> questionIds);
 
     Question updateQuestion(Question question);
+    Question complainQuestion(Question question);
 
     Question getQuestion(ObjectId id);
     Question getQuestion(String id);

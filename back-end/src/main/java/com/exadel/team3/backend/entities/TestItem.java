@@ -1,23 +1,18 @@
 package com.exadel.team3.backend.entities;
 
-import lombok.Data;
-import lombok.NonNull;
+import lombok.*;
 
 import org.bson.types.ObjectId;
-import org.springframework.util.CollectionUtils;
-
-import java.util.List;
 
 @Data
 public class TestItem {
     @NonNull
+    @Setter(AccessLevel.PRIVATE)
     private ObjectId questionId;
-
-    private String questionText;
 
     private TestItemStatus status = TestItemStatus.UNANSWERED;
 
-    private List<String> answers;
+    private String answer;
 
    /* public TestItemStatus getStatus() {
         if (CollectionUtils.isEmpty(answers)) return TestItemStatus.UNANSWERED;
