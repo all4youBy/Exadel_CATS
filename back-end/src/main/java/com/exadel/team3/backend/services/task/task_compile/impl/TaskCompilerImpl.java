@@ -39,7 +39,6 @@ public class TaskCompilerImpl implements TaskCompiler {
             }
         } catch (ClassNotFoundException ex) {
             //TODO Exception
-            ex.printStackTrace();
         }
         return classList;
     }
