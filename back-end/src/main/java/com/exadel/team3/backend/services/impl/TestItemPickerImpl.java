@@ -1,19 +1,20 @@
 package com.exadel.team3.backend.services.impl;
 
-import com.exadel.team3.backend.dao.QuestionRepository;
-import com.exadel.team3.backend.entities.Question;
-import com.exadel.team3.backend.entities.QuestionComplexity;
-import com.exadel.team3.backend.entities.QuestionType;
 import org.bson.types.ObjectId;
 
-import com.exadel.team3.backend.entities.TestItem;
-import com.exadel.team3.backend.services.TestItemPicker;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
+
+import com.exadel.team3.backend.dao.QuestionRepository;
+import com.exadel.team3.backend.entities.Question;
+import com.exadel.team3.backend.entities.QuestionComplexity;
+import com.exadel.team3.backend.entities.QuestionType;
+import com.exadel.team3.backend.entities.TestItem;
+import com.exadel.team3.backend.services.TestItemPicker;
 
 @Component
 class TestItemPickerImpl implements TestItemPicker {

@@ -1,9 +1,10 @@
 package com.exadel.team3.backend.dao;
 
-import com.exadel.team3.backend.entities.Topic;
 import org.bson.types.ObjectId;
 
 import java.util.List;
+
+import com.exadel.team3.backend.entities.Topic;
 
 public interface TopicRepositoryAggregation {
     List<Topic> getTopicTree();
