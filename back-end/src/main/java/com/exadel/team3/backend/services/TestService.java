@@ -1,16 +1,13 @@
 package com.exadel.team3.backend.services;
 
 import com.exadel.team3.backend.entities.DetachedTestItem;
-import com.exadel.team3.backend.entities.TestItem;
-import com.exadel.team3.backend.entities.TestItemStatus;
+import com.exadel.team3.backend.entities.TestCompletionStatus;
 import org.bson.types.ObjectId;
 import org.springframework.stereotype.Service;
 
-import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.Collection;
 import java.util.List;
-import java.util.Map;
 
 import com.exadel.team3.backend.entities.Test;
 
@@ -37,7 +34,9 @@ public interface TestService {
                                String assignedBy);
 
     List<Test> getTestsAssignedToUser(String userId);
+    List<Test> getTestsAssignedToUser(String userId, TestCompletionStatus completion);
     List<Test> getTestsAssignedToGroup(String group);
+    List<Test> getTestsAssignedToGroup(String group, TestCompletionStatus completion);
 
 //    Test updateTest(Test test);
 

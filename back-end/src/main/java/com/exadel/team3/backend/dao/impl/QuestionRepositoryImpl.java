@@ -1,7 +1,6 @@
 package com.exadel.team3.backend.dao.impl;
 
 import java.util.Collection;
-import java.util.Collections;
 import java.util.List;
 
 import com.exadel.team3.backend.entities.QuestionStatus;

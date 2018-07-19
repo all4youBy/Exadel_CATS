@@ -15,13 +15,13 @@ public class TestItem {
 
     private String questionText;
 
-    private TestItemStatus status;
+    private TestItemStatus status = TestItemStatus.UNANSWERED;
 
     private List<String> answers;
 
-    public TestItemStatus getStatus() {
+   /* public TestItemStatus getStatus() {
         if (CollectionUtils.isEmpty(answers)) return TestItemStatus.UNANSWERED;
         if (status == null) return TestItemStatus.UNCHECKED;
         return status;
-    }
+    }*/
 }

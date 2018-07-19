@@ -1,9 +1,9 @@
 package com.exadel.team3.backend.services.impl;
 
-import com.sun.xml.internal.ws.policy.privateutil.PolicyUtils;
 import org.bson.types.ObjectId;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Primary;
 import org.springframework.core.env.Environment;
 import org.springframework.lang.NonNull;
 
@@ -25,6 +25,7 @@ import com.exadel.team3.backend.services.ServiceException;
 import com.exadel.team3.backend.services.TestItemPicker;
 
 @Service
+@Primary
 public class TestServiceImpl implements TestService {
     @Autowired
     private Environment env;
@@ -37,7 +38,6 @@ public class TestServiceImpl implements TestService {
     private TopicRepository topicRepository;
     @Autowired
     private UserRepository userRepository;
-
 
     @Autowired
     private TestItemPicker testItemGenerator;
@@ -151,12 +151,20 @@ public class TestServiceImpl implements TestService {
 
     @Override
     public List<Test> getTestsAssignedToUser(@NonNull String userId) {
-        return testRepository.findByAssignedToOrderByStart(userId);
+        return getTestsAssignedToUser(userId, TestCompletionStatus.ALL);
+    }
+    @Override
+    public List<Test> getTestsAssignedToUser(@NonNull String userId, TestCompletionStatus completion) {
+        return testRepository.findByAssignedToOrderByStartDesc(userId);
     }
 
     @Override
     public List<Test> getTestsAssignedToGroup(@NonNull String group) {
-        return testRepository.findByAssignedToInOrderByStart(
+        return getTestsAssignedToGroup(group, TestCompletionStatus.ALL);
+    }
+    @Override
+    public List<Test> getTestsAssignedToGroup(@NonNull String group, TestCompletionStatus completion) {
+        return testRepository.findByAssignedToInOrderByStartDesc(
                 userRepository.findStudentsByGroupName(group).stream()
                         .map(User::getEmail)
                         .collect(Collectors.toList())
@@ -169,16 +177,16 @@ public class TestServiceImpl implements TestService {
         return testRepository.save(test);
     }
 */
-@Override
-public Test submitTest(ObjectId testId) {
-    Optional<Test> updatedTest = testRepository.findById(testId);
-    if (updatedTest.isPresent() && updatedTest.get().getDeadline().isAfter(LocalDateTime.now())) {
-        updatedTest.get().setDeadline(LocalDateTime.now());
-        return testRepository.save(updatedTest.get());
-    } else {
-        throw new ServiceException("There's no test with id " + testId);
+    @Override
+    public Test submitTest(ObjectId testId) {
+        Optional<Test> updatedTest = testRepository.findById(testId);
+        if (updatedTest.isPresent() && updatedTest.get().getDeadline().isAfter(LocalDateTime.now())) {
+            updatedTest.get().setDeadline(LocalDateTime.now());
+            return testRepository.save(updatedTest.get());
+        } else {
+            throw new ServiceException("There's no test with id " + testId);
+        }
     }
-}
 
     @Override
     public Test submitAnswer(@NonNull String testId, @NonNull String questionId, List<String> answers, boolean complaint) {
@@ -193,6 +201,8 @@ public Test submitTest(ObjectId testId) {
         Optional<Test> updatedTest = testRepository.findById(testId);
         if (!updatedTest.isPresent()) {
             throw new ServiceException("There's no test with id " + testId);
+        } else if (updatedTest.get().getDeadline().isBefore(LocalDateTime.now())) {
+            throw new ServiceException("The test with id " + testId + " is already closed");
         }
         Optional<TestItem> updatedItem =
                 updatedTest.get().getItems()
@@ -205,7 +215,7 @@ public Test submitTest(ObjectId testId) {
         if (questionToUpdatedItem.isPresent()) {
             updatedItem.get().setQuestionText(questionToUpdatedItem.get().getText());
             updatedItem.get().setAnswers(answers);
-            updatedItem.get().setStatus(TestChecker.check(questionToUpdatedItem.get(), answers));
+            updatedItem.get().setStatus(TestChecker.checkAnswer(questionToUpdatedItem.get(), answers));
             if (complaint) submitComplaint(questionToUpdatedItem.get());
             return testRepository.save(updatedTest.get());
         } else {
