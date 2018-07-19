@@ -1,5 +1,6 @@
 package com.exadel.team3.backend.services.impl;
 
+import com.exadel.team3.backend.dto.TestItemDTO;
 import org.bson.types.ObjectId;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -204,7 +205,7 @@ public class TestServiceImpl implements TestService {
     }
 
     @Override
-    public Test submitAnswer(@NonNull DetachedTestItem answeredItem) {
+    public Test submitAnswer(@NonNull TestItemDTO answeredItem) {
         Optional<Test> updatedTest = testRepository.findById(answeredItem.getTestId());
         if (!updatedTest.isPresent()) {
             throw new ServiceException("There's no test with id " + answeredItem.getTestId());
@@ -214,15 +215,15 @@ public class TestServiceImpl implements TestService {
         Optional<TestItem> updatedItem =
                 updatedTest.get().getItems()
                     .stream()
-                    .filter(item -> item.getQuestionId().equals(answeredItem.getTestItem().getQuestionId()))
+                    .filter(item -> item.getQuestionId().equals(answeredItem.getQuestionId()))
                     .findFirst();
         Optional<Question> questionToUpdatedItem =
                 updatedItem.flatMap(item -> questionRepository.findById(item.getQuestionId()));
 
         if (questionToUpdatedItem.isPresent()) {
-            updatedItem.get().setAnswer(answeredItem.getTestItem().getAnswer());
+            updatedItem.get().setAnswer(answeredItem.getAnswer());
             updatedItem.get().setStatus(
-                    TestChecker.checkAnswer(questionToUpdatedItem.get(), answeredItem.getTestItem().getAnswer())
+                    TestChecker.checkAnswer(questionToUpdatedItem.get(), answeredItem.getAnswer())
             );
             return testRepository.save(updatedTest.get());
         } else {
@@ -231,37 +232,37 @@ public class TestServiceImpl implements TestService {
     }
 
     @Override
-    public Test submitManualAnswerCheck(@NonNull DetachedTestItem checked) {
-        Optional<Test> updatedTest = testRepository.findById(checked.getTestId());
+    public Test submitManualAnswerCheck(@NonNull TestItemDTO checkedItem) {
+        Optional<Test> updatedTest = testRepository.findById(checkedItem.getTestId());
         if (updatedTest.isPresent()) {
             Optional<TestItem> updatedItem = updatedTest.get().getItems()
                     .stream()
-                    .filter(item -> item.getQuestionId().equals(checked.getTestItem().getQuestionId()))
+                    .filter(item -> item.getQuestionId().equals(checkedItem.getQuestionId()))
                     .findFirst();
 
             if (updatedItem.isPresent()) {
-                updatedItem.get().setStatus(checked.getTestItem().getStatus());
+                updatedItem.get().setStatus(checkedItem.getStatus());
                 return testRepository.save(updatedTest.get());
             } else {
                 throw new ServiceException("There's no answer in test with id " +
-                        checked.getTestId() +
+                        checkedItem.getTestId() +
                         " that would correspond to question with id " +
-                        checked.getTestItem().getQuestionId());
+                        checkedItem.getQuestionId());
             }
         } else {
-            throw new ServiceException("There's no test with id " + checked.getTestId());
+            throw new ServiceException("There's no test with id " + checkedItem.getTestId());
         }
     }
 
 
     @Override
-    public List<DetachedTestItem> getAnswersForManualCheck(@NonNull String assignedBy) {
+    public List<TestItemDTO> getAnswersForManualCheck(@NonNull String assignedBy) {
         return testRepository.findNeedingManualCheck(assignedBy,LocalDateTime.now())
                 .stream().flatMap(
                     test -> test.getItems()
                             .stream()
                             .filter(item -> item.getStatus() == TestItemStatus.UNCHECKED)
-                            .map(item -> new DetachedTestItem(test.getId(), item))
+                            .map(item -> new TestItemDTO(test.getId(), item.getQuestionId(), item.getAnswer()))
                 )
                 .collect(Collectors.toList());
     }
