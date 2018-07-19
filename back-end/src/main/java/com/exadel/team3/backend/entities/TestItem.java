@@ -5,6 +5,7 @@ import lombok.*;
 import org.bson.types.ObjectId;
 
 @Data
+@RequiredArgsConstructor
 public class TestItem {
     @NonNull
     @Setter(AccessLevel.PRIVATE)

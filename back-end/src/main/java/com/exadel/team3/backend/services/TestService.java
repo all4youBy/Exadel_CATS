@@ -1,6 +1,6 @@
 package com.exadel.team3.backend.services;
 
-import com.exadel.team3.backend.entities.DetachedTestItem;
+import com.exadel.team3.backend.dto.TestItemDTO;
 import com.exadel.team3.backend.entities.TestCompletionStatus;
 import org.bson.types.ObjectId;
 import org.springframework.stereotype.Service;
@@ -45,10 +45,10 @@ public interface TestService {
     Test getTest(ObjectId id);
 
     Test submitTest(ObjectId id);
-    Test submitAnswer(DetachedTestItem answeredItem);
-    Test submitManualAnswerCheck(DetachedTestItem checked);
+    Test submitAnswer(TestItemDTO answeredItem);
+    Test submitManualAnswerCheck(TestItemDTO checked);
 
-    List<DetachedTestItem> getAnswersForManualCheck(String assignedBy);
+    List<TestItemDTO> getAnswersForManualCheck(String assignedBy);
 
     void deleteTest(Test test);
 }

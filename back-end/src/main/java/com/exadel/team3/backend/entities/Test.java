@@ -39,5 +39,5 @@ public class Test {
     private List<TestItem> items;
 
     @EqualsAndHashCode.Exclude
-    private int mark;
+    private Integer mark;
 }

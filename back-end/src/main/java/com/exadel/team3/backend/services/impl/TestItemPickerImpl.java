@@ -16,7 +16,7 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 @Component
-public class TestItemPickerImpl implements TestItemPicker {
+class TestItemPickerImpl implements TestItemPicker {
     @Autowired
     private QuestionRepository questionRepository;
 
