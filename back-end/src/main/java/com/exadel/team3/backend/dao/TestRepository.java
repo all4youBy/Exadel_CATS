@@ -15,8 +15,14 @@ import java.util.List;
 
 @Repository
 public interface TestRepository extends MongoRepository<Test, ObjectId> {
-    List<Test> findByAssignedToOrderByStartDesc(String assignedId);
+    List<Test> findByAssignedToOrderByStartDesc(String assignedTo);
+    List<Test> findByAssignedToAndDeadlineBeforeOrderByStartDesc(String assignedTo, LocalDateTime deadline);
+    List<Test> findByAssignedToAndDeadlineAfterOrderByStartDesc(String assignedTo, LocalDateTime deadline);
+
     List<Test> findByAssignedToInOrderByStartDesc(Collection<String> assignedIds);
+    List<Test> findByAssignedToInAndDeadlineBeforeOrderByStartDesc(Collection<String> assignedIds, LocalDateTime deadline);
+    List<Test> findByAssignedToInAndDeadlineAfterOrderByStartDesc(Collection<String> assignedIds, LocalDateTime deadline);
+
     List<Test> findByAssignedToAndAssignedBy(String assignedId, String assignedById);
 
     @Query("{'assignedBy':?0, 'deadline':{$lte:?1}}")
