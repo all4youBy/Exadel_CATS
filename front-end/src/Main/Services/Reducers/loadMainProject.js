@@ -1,7 +1,9 @@
 function LoadMainProject(state = {}, action) {
   switch (action.type) {
     case 'ERROR':
-      return action.error;
+      return Object.assign({}, state, {
+        error: action.error,
+      });
     default:
       return state;
   }

@@ -15,6 +15,6 @@ export function isLoading(bool) {
 export function getData(actionName, items) {
   return {
     type: `RECEIVE_${actionName.toUpperCase()}`,
-    data: items,
+    users: items,
   };
 }
