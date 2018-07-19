@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import './App.css';
 import { Provider } from 'react-redux';
+import 'antd/dist/antd.css';
 import BrowserRouter from 'react-router-dom/es/BrowserRouter';
 import configureStore from './Store/configureStore';
 import Main from './Main/Containers/Main';

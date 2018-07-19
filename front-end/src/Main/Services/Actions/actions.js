@@ -11,3 +11,10 @@ export function isLoading(bool) {
     loading: bool,
   };
 }
+
+export function getData(items) {
+  return {
+    type: 'GET_REQUESTS',
+    data: items,
+  };
+}
