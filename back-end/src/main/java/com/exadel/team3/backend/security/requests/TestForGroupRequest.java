@@ -16,7 +16,7 @@ public class TestForGroupRequest {
     @NonNull
     private String title;
     private LocalDateTime start;
-    private Duration duration;
+    private LocalDateTime deadline;
     private Collection<ObjectId> topicsId;
     private int questionsCount;
     @NonNull

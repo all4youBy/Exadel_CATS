@@ -1,12 +1,12 @@
 package com.exadel.team3.backend.dao;
-
-import com.exadel.team3.backend.entities.User;
 import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.data.mongodb.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import java.util.Collection;
 import java.util.List;
+
+import com.exadel.team3.backend.entities.User;
 
 @Repository
 public interface UserRepository extends MongoRepository<User, String> {
