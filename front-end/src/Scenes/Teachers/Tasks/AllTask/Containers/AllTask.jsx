@@ -1,12 +1,12 @@
 import React from 'react';
 import 'antd/dist/antd.css';
 import './AllTask.scss';
-import TaskCard from '../Components/TaskCard';
+import TableAllTasks from '../Components/TableAllTasks';
 
 class AllTask extends React.Component {
   render() {
     return (
-      <TaskCard/>
+      <TableAllTasks/>
     );
   }
 }

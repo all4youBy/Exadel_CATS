@@ -6,8 +6,8 @@ export function addStudent(student) {
   };
 }
 
-export function deleteStudent(number) {
+export function deleteStudent(student) {
   return {
-    type: types.DELETE_STUDENT, payload: number,
+    type: types.DELETE_STUDENT, payload: student,
   };
 }

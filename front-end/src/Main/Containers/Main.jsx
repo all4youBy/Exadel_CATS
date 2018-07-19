@@ -12,7 +12,7 @@ import UserTaskPage from '../../Scenes/Users/Task/Containers/UserTaskPage';
 import UserGeneralMenu from '../../Components/UserGeneralMenu';
 import PageHeader from '../../Components/GlobalHeader';
 import PageFooter from '../../Components/GlobalFooter';
-
+import AllTask from '../../Scenes/Teachers/Tasks/AllTask';
 
 class Main extends React.Component {
   render() {
@@ -29,6 +29,7 @@ class Main extends React.Component {
               <Route exact path="/assignedtestlist" component={PageAssignedTestList}/>
               <Route exact path="/passedtestlist" component={PagePassedTestList}/>
               <Route exact path="/groupstudentslist" component={PageGroupStudentsList}/>
+              <Route exact path="/alltasks" component={AllTask}/>
               <Route exact path="/Test" component={Test}/>
               <Route exact path="/Task" component={UserTaskPage}/>
               <Redirect to="/"/>

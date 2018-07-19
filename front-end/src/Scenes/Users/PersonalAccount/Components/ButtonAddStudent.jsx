@@ -6,6 +6,7 @@ import PropTypes from 'prop-types';
 
 class ButtonAddStudent extends React.Component {
   static propTypes = {
+    // student: PropTypes.objectOf.isRequired,
     onStudentAdd: PropTypes.func.isRequired,
   };
 
@@ -16,6 +17,7 @@ class ButtonAddStudent extends React.Component {
 
   handleStudentAdd(e) {
     const { onStudentAdd } = this.props;
+    console.log(this.props);
     e.preventDefault();
     onStudentAdd({
       key: '4',

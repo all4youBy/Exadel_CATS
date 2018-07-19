@@ -5,6 +5,7 @@ import { Button } from 'antd';
 
 class ButtonAssignTest extends React.Component {
   render() {
+    // console.log(this.handleStudentAdd);
     return (
       <Button
         shape="circle"

@@ -28,26 +28,19 @@ const initialState = [{
 ];
 
 const studentsReducer = (state = initialState, action) => {
+  console.log(action);
   switch (action.type) {
     case types.ADD_STUDENT: {
-      const lastId = state.length ? +state[state.length - 1].number + 1 : 1;
-      action.payload.number = String(lastId);
-      action.payload.name += lastId;
-      action.payload.key = String(lastId);
-      const newStudent = { ...action.payload };
+      const lastId = state.length ? state[state.length - 1].key + 1 : 1;
+      const newStudent = { ...action.payload, ...{ key: lastId } };
       const newState = [...state];
       newState.push(newStudent);
       return newState;
     }
 
     case types.DELETE_STUDENT: {
-      let newState = [...state];
-      const idRemove = action.payload;
-      newState = newState.filter(e => e.number !== idRemove);
-      newState.forEach((element, index) => {
-        element.number = String(index + 1);
-      });
-      return newState;
+      const idRemove = action.payload.key;
+      return state.filter(e => e.key !== idRemove);
     }
     default:
       return state;
