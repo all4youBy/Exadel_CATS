@@ -227,8 +227,9 @@ public class TestServiceImpl implements TestService {
         } else if (updatedTest.get().getDeadline().isBefore(LocalDateTime.now())) {
             throw new ServiceException("The test with id " + answeredItem.getTestId() + " is already closed");
         }
+        Test updatedTestObj = updatedTest.get();
         Optional<TestItem> updatedItem =
-                updatedTest.get().getItems()
+                updatedTestObj.getItems()
                     .stream()
                     .filter(item -> item.getQuestionId().equals(answeredItem.getQuestionId()))
                     .findFirst();
@@ -236,11 +237,13 @@ public class TestServiceImpl implements TestService {
                 updatedItem.flatMap(item -> questionRepository.findById(item.getQuestionId()));
 
         if (questionToUpdatedItem.isPresent()) {
-            updatedItem.get().setAnswer(answeredItem.getAnswer());
-            updatedItem.get().setStatus(
+            TestItem updatedItemObj = updatedItem.get();
+            updatedItemObj.setAnswer(answeredItem.getAnswer());
+            updatedItemObj.setStatus(
                     testChecker.checkAnswer(questionToUpdatedItem.get(), answeredItem.getAnswer())
             );
-            return testRepository.save(updatedTest.get());
+            updatedTestObj.setMark(testChecker.checkTest(updatedTestObj));
+            return testRepository.save(updatedTestObj);
         } else {
             throw new ServiceException("There's no question with id " + answeredItem.getTestId());
         }
@@ -250,14 +253,16 @@ public class TestServiceImpl implements TestService {
     public Test submitManualAnswerCheck(@NonNull TestItemDTO checkedItem) {
         Optional<Test> updatedTest = testRepository.findById(checkedItem.getTestId());
         if (updatedTest.isPresent()) {
-            Optional<TestItem> updatedItem = updatedTest.get().getItems()
+            Test updatedTestObj = updatedTest.get();
+            Optional<TestItem> updatedItem = updatedTestObj.getItems()
                     .stream()
                     .filter(item -> item.getQuestionId().equals(checkedItem.getQuestionId()))
                     .findFirst();
 
             if (updatedItem.isPresent()) {
                 updatedItem.get().setStatus(checkedItem.getStatus());
-                return testRepository.save(updatedTest.get());
+                updatedTestObj.setMark(testChecker.checkTest(updatedTestObj));
+                return testRepository.save(updatedTestObj);
             } else {
                 throw new ServiceException("There's no answer in test with id " +
                         checkedItem.getTestId() +
@@ -277,7 +282,10 @@ public class TestServiceImpl implements TestService {
                     test -> test.getItems()
                             .stream()
                             .filter(item -> item.getStatus() == TestItemStatus.UNCHECKED)
-                            .map(item -> new TestItemDTO(test.getId(), item.getQuestionId(), item.getAnswer()))
+                            .map(
+                                    item ->
+                                    new TestItemDTO(test.getId(), item.getQuestionId(), item.getAnswer())
+                            )
                 )
                 .collect(Collectors.toList());
     }
