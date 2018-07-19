@@ -1,5 +1,6 @@
 package com.exadel.team3.backend.dao.impl;
 
+import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.aggregation.GraphLookupOperation;
@@ -23,7 +24,7 @@ public class TopicRepositoryImpl implements TopicRepositoryAggregation {
     }
 
     @Override
-    public List<Topic> getTopicTree(String rootId) {
+    public List<Topic> getTopicTree(ObjectId rootId) {
         GraphLookupOperation graphLookupOperation = GraphLookupOperation.builder()
                 .from("topics")
                 .startWith("parentId")
@@ -31,9 +32,9 @@ public class TopicRepositoryImpl implements TopicRepositoryAggregation {
                 .connectTo("_id")
                 .as("parentHierarchy");
 
-        MatchOperation match = null;
+        MatchOperation matchOperation = null;
         if (!StringUtils.isEmpty(rootId)) {
-            match = new MatchOperation(
+            matchOperation = new MatchOperation(
                     new Criteria().orOperator(
                             Criteria.where("id").is(rootId),
                             Criteria.where("parentHierarchy.id").is(rootId)
@@ -42,11 +43,12 @@ public class TopicRepositoryImpl implements TopicRepositoryAggregation {
         }
 
         TypedAggregation<Topic> aggregation =
-                match != null
-                  ? TypedAggregation.newAggregation(Topic.class, graphLookupOperation, match)
+                matchOperation != null
+                  ? TypedAggregation.newAggregation(Topic.class, graphLookupOperation, matchOperation)
                   : TypedAggregation.newAggregation(Topic.class, graphLookupOperation);
 
-        return mongoTemplate.aggregate(aggregation, "topics", Topic.class).getMappedResults();
+        return mongoTemplate.aggregate(aggregation, "topics", Topic.class)
+                .getMappedResults();
     }
 
 }

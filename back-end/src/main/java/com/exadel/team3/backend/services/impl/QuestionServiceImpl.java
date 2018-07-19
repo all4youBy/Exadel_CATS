@@ -1,5 +1,6 @@
 package com.exadel.team3.backend.services.impl;
 
+import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Service;
@@ -21,8 +22,13 @@ public class QuestionServiceImpl implements QuestionService {
     }
 
     @Override
-    public Question getQuestion(@NonNull String id) {
+    public Question getQuestion(@NonNull ObjectId id) {
         return questionRepository.findById(id).orElse(null);
+    }
+
+    @Override
+    public Question getQuestion(@NonNull String id) {
+        return getQuestion(new ObjectId(id));
     }
 
 
@@ -32,7 +38,7 @@ public class QuestionServiceImpl implements QuestionService {
     }
 
     @Override
-    public List<Question> getQuestions(@NonNull List<String> topicIds) {
+    public List<Question> getQuestions(@NonNull List<ObjectId> topicIds) {
         return questionRepository.findByTopicIdsIn(topicIds);
     }
 
