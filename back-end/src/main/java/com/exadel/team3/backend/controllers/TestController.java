@@ -31,7 +31,7 @@ public class TestController {
        Test test =  testService.generateTestForUser(testRequest.getUserId(),
                                         testRequest.getTitle(),
                                         testRequest.getStart(),
-                                        testRequest.getDuration(),
+                                        testRequest.getDeadline(),
                                         testRequest.getTopicsId(),
                                         testRequest.getQuestionsCount(),
                                         testRequest.getAssignedBy());
@@ -56,7 +56,7 @@ public class TestController {
         List<Test> testsForGroup = testService.generateTestsForGroup(testRequest.getGroup(),
                                                       testRequest.getTitle(),
                                                       testRequest.getStart(),
-                                                      testRequest.getDuration(),
+                                                      testRequest.getDeadline(),
                                                       testRequest.getTopicsId(),
                                                       testRequest.getQuestionsCount(),
                                                       testRequest.getAssignedBy());

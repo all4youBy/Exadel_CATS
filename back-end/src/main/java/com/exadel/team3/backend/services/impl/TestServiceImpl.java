@@ -200,12 +200,10 @@ public class TestServiceImpl implements TestService {
         }
     }
 
-/*
     @Override
     public Test updateTest(Test test) {
         return testRepository.save(test);
     }
-*/
     @Override
     public Test submitTest(ObjectId testId) {
         Optional<Test> updatedTest = testRepository.findById(testId);

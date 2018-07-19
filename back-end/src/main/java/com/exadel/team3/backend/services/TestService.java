@@ -38,7 +38,7 @@ public interface TestService {
     List<Test> getTestsAssignedToGroup(String group);
     List<Test> getTestsAssignedToGroup(String group, TestCompletionStatus completion);
 
-//    Test updateTest(Test test);
+    Test updateTest(Test test);
 
 
     Test getTest(String id);
