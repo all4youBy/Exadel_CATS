@@ -1,9 +1,5 @@
 package com.exadel.team3.backend.services.impl;
 
-import com.exadel.team3.backend.dao.QuestionRepository;
-import com.exadel.team3.backend.entities.*;
-import com.exadel.team3.backend.services.ServiceException;
-import com.exadel.team3.backend.services.TestChecker;
 import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.lang.NonNull;
@@ -11,11 +7,17 @@ import org.springframework.stereotype.Component;
 import org.springframework.util.NumberUtils;
 import org.springframework.util.StringUtils;
 
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
+import java.util.function.Supplier;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
+
+import com.exadel.team3.backend.dao.ObjectIdProjection;
+import com.exadel.team3.backend.dao.QuestionRepository;
+import com.exadel.team3.backend.entities.*;
+import com.exadel.team3.backend.services.ServiceException;
+import com.exadel.team3.backend.services.TestChecker;
 
 @Component
 class TestCheckerImpl implements TestChecker {
@@ -23,38 +25,50 @@ class TestCheckerImpl implements TestChecker {
     private QuestionRepository questionRepository;
 
     public Integer checkTest(@NonNull Test test) {
-        if (test.getItems().stream().anyMatch(item -> item.getStatus() == TestItemStatus.UNCHECKED)) {
+       EnumMap<TestItemStatus, Long> testItemStatistics =
+                test.getItems()
+                        .stream()
+                        .collect(Collectors.groupingBy(
+                                TestItem::getStatus,
+                                () -> new EnumMap<>(TestItemStatus.class),
+                                Collectors.counting())
+                        );
+       EnumSet.allOf(TestItemStatus.class).forEach(enumIntem -> testItemStatistics.putIfAbsent(enumIntem, 0L));
+       if (testItemStatistics.get(TestItemStatus.UNCHECKED)>0) {
             return null;
         }
 
         // get the mark as a ratio of right answered question to the whole amount of questions
         // floored, so that 9 right questions of 10 = 9.5d -> produce mark 9
         int mark = (int) Math.floor(
-                test.getItems()
-                        .stream()
-                        .filter(item -> item.getStatus() == TestItemStatus.ANSWERED_RIGHT)
-                        .count()
+                (double)testItemStatistics.get(TestItemStatus.ANSWERED_RIGHT)
                 / test.getItems().size()
-                * 10);
+                * 10
+        );
         // if the calculated mark is below 4, check if all the LEVEL_1 questions are answered right
         // and if true, set mark to 4
-        // to do this, we need to query QuestionRepository for the complexity of each question
-        if (mark < 4) {
+        // to do this, we need to query QuestionRepository for the complexity of each question in or test
+        // but to reduce the database load we will do this only if at least half the questions have been answered
+        if (
+                mark < 4
+                && testItemStatistics.get(TestItemStatus.UNANSWERED) >= test.getItems().size() / 2
+           ) {
             List<ObjectId> easyQuestionIds =
-                    questionRepository.findByIdIn(
+                    questionRepository.findByIdInAndComplexity(
                             test.getItems()
                                 .stream()
-                                .map(TestItem::getQuestionId).collect(Collectors.toList())
+                                .map(TestItem::getQuestionId).collect(Collectors.toList()),
+                            QuestionComplexity.LEVEL_1
                     ).stream()
-                     .filter(question -> question.getComplexity() == QuestionComplexity.LEVEL_1)
-                     .map(Question::getId)
+                     .map(ObjectIdProjection::getId)
                      .collect(Collectors.toList());
-            if (test.getItems()
+            if (
+                 test.getItems()
                     .stream()
                     .filter(item -> easyQuestionIds.contains(item.getQuestionId()))
                     .allMatch(item -> item.getStatus() == TestItemStatus.ANSWERED_RIGHT)
                ) {
-                mark = 4;
+                  mark = 4;
             }
         }
         return mark;
@@ -92,9 +106,9 @@ class TestCheckerImpl implements TestChecker {
                         : TestItemStatus.ANSWERED_WRONG;
 
             case MULTI_VARIANT:
-                IntStream answerVariants =
-                        Pattern.compile("[,;]")
-                                .splitAsStream(answer)
+                Pattern splittingPattern = Pattern.compile("[,;]");
+                Supplier<IntStream> answerVariants = () ->
+                        splittingPattern.splitAsStream(answer)
                                 .mapToInt(i -> {
                                     try {
                                         return NumberUtils.parseNumber(i, Integer.class);
@@ -104,11 +118,11 @@ class TestCheckerImpl implements TestChecker {
                                 })
                                 .filter(i -> i>=0);
                 return (
-                        answerVariants.count() ==
+                        answerVariants.get().count() ==
                                 question.getVariants().stream().filter(QuestionVariant::isCorrect).count()
-                        && answerVariants.allMatch(
-                                variant -> variant < question.getVariants().size()
-                                        && question.getVariants().get(variant).isCorrect()
+                        && answerVariants.get().allMatch(
+                                variantId -> variantId < question.getVariants().size()
+                                        && question.getVariants().get(variantId).isCorrect()
                         )
                 )
                         ? TestItemStatus.ANSWERED_RIGHT
