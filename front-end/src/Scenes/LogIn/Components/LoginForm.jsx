@@ -96,7 +96,7 @@ function mapDispatch(dispatch) {
     onLogIn: (username, password) => {
       dispatch(logIn(username, password));
     },
-    getFetchData: url => dispatch(API.get(url)),
+    getFetchData: url => dispatch(API.get(url, 'logInData')),
   };
 }
 

@@ -14,7 +14,7 @@ const API = {
       .catch(error => console.error('Fetch Error =\n', error));
   },
 
-  get(path) {
+  get(path, receiveAction) {
     const url = `localhost:3000/${path}`;
     console.log(url);
     return (dispatch) => {
@@ -29,7 +29,7 @@ const API = {
           return response;
         })
         .then(response => response.json())
-        .then(items => dispatch(getData(items)))
+        .then(items => dispatch(getData(receiveAction, items)))
         .catch(() => dispatch(errorProject(true)));
     };
   },

@@ -12,9 +12,9 @@ export function isLoading(bool) {
   };
 }
 
-export function getData(items) {
+export function getData(actionName, items) {
   return {
-    type: 'GET_REQUESTS',
+    type: `RECEIVE_${actionName.toUpperCase()}`,
     data: items,
   };
 }
