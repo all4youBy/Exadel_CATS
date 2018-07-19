@@ -1,6 +1,7 @@
 package com.exadel.team3.backend.services.impl;
 
 import com.exadel.team3.backend.dto.TestItemDTO;
+import com.exadel.team3.backend.services.TestChecker;
 import org.bson.types.ObjectId;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -42,6 +43,8 @@ public class TestServiceImpl implements TestService {
 
     @Autowired
     private TestItemPicker testItemGenerator;
+    @Autowired
+    private TestChecker testChecker;
 
     @Override
     public Test generateTestForUser(@NonNull String userId,
@@ -158,9 +161,15 @@ public class TestServiceImpl implements TestService {
     public List<Test> getTestsAssignedToUser(@NonNull String userId, TestCompletionStatus completion) {
         switch(completion) {
             case UNFINISHED:
-                return testRepository.findByAssignedToAndDeadlineAfterOrderByStartDesc(userId, LocalDateTime.now());
+                return testRepository.findByAssignedToAndDeadlineAfterOrderByStartDesc(
+                        userId,
+                        LocalDateTime.now()
+                );
             case FINISHED:
-                return testRepository.findByAssignedToAndDeadlineBeforeOrderByStartDesc(userId, LocalDateTime.now());
+                return testRepository.findByAssignedToAndDeadlineBeforeOrderByStartDesc(
+                        userId,
+                        LocalDateTime.now()
+                );
             default:
                 return testRepository.findByAssignedToOrderByStartDesc(userId);
         }
@@ -179,9 +188,15 @@ public class TestServiceImpl implements TestService {
 
         switch(completion) {
             case UNFINISHED:
-                return testRepository.findByAssignedToInAndDeadlineAfterOrderByStartDesc(userIds, LocalDateTime.now());
+                return testRepository.findByAssignedToInAndDeadlineAfterOrderByStartDesc(
+                        userIds,
+                        LocalDateTime.now()
+                );
             case FINISHED:
-                return testRepository.findByAssignedToInAndDeadlineBeforeOrderByStartDesc(userIds, LocalDateTime.now());
+                return testRepository.findByAssignedToInAndDeadlineBeforeOrderByStartDesc(
+                        userIds,
+                        LocalDateTime.now()
+                );
             default:
                 return testRepository.findByAssignedToInOrderByStartDesc(userIds);
         }
@@ -223,7 +238,7 @@ public class TestServiceImpl implements TestService {
         if (questionToUpdatedItem.isPresent()) {
             updatedItem.get().setAnswer(answeredItem.getAnswer());
             updatedItem.get().setStatus(
-                    TestChecker.checkAnswer(questionToUpdatedItem.get(), answeredItem.getAnswer())
+                    testChecker.checkAnswer(questionToUpdatedItem.get(), answeredItem.getAnswer())
             );
             return testRepository.save(updatedTest.get());
         } else {

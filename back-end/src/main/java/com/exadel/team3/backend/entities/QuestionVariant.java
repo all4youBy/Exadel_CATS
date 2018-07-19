@@ -8,7 +8,6 @@ public class QuestionVariant {
     @NonNull
     private String text;
 
-    @NonNull
     private boolean correct;
 
 }
