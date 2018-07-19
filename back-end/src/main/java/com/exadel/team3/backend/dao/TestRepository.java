@@ -25,6 +25,6 @@ public interface TestRepository extends MongoRepository<Test, ObjectId> {
 
     List<Test> findByAssignedToAndAssignedBy(String assignedId, String assignedById);
 
-    @Query("{'assignedBy':?0, 'deadline':{$lte:?1}}")
+    @Query("{'assignedBy':?0, 'deadline':{$lte:?1}, 'items.status':'UNCHECKED'}")
     List<Test> findNeedingManualCheck(String assignedById, LocalDateTime deadline);
 }
