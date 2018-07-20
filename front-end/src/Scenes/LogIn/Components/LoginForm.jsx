@@ -14,6 +14,7 @@ class LoginForm extends React.Component {
     form: PropTypes.shape().isRequired,
     onLogIn: PropTypes.func.isRequired,
     getFetchData: PropTypes.func.isRequired,
+    sendLogInData: PropTypes.func.isRequired,
     // data: PropTypes.shape().isRequired,
   };
 
@@ -30,8 +31,9 @@ class LoginForm extends React.Component {
   }
 
   onClickLogIn = (e) => {
-    const { onLogIn } = this.props;
+    const { onLogIn, sendLogInData } = this.props;
     onLogIn(this.username.props.value, this.password.props.value);
+    sendLogInData('login', this.username.props.value, this.password.props.value);
     e.preventDefault();
   };
 
@@ -91,11 +93,9 @@ function mapDispatch(dispatch) {
   return {
     onLogIn: (username, password) => {
       dispatch(logIn(username, password));
-      // const user = {
-      //   username,
-      //   password,
-      // };
-      // dispatch(API.post(url, user));
+    },
+    sendLogInData: (url, username, password) => {
+      dispatch(API.post(url, { username, password }));
     },
     getFetchData: url => dispatch(API.get(url, 'logInData')),
   };
