@@ -4,5 +4,4 @@ import java.util.List;
 
 public interface TaskRunner {
     boolean runTask(List<Class<?>> classList, String... args);
-
 }

@@ -11,11 +11,10 @@ import java.util.List;
 
 @Component
 public class TaskCompilerImpl implements TaskCompiler {
-
     private List<Class<?>> classList = new ArrayList<>();
 
     @Override
-    public List<Class<?>> compileTask(List<File> fileList) {
+    public List<Class<?>> compileTask(List<File> fileList) throws IOException, ClassNotFoundException {
         JavaCompiler compiler = ToolProvider.getSystemJavaCompiler();
         DiagnosticCollector< JavaFileObject > diagnostics = new DiagnosticCollector<>();
 
@@ -25,23 +24,20 @@ public class TaskCompilerImpl implements TaskCompiler {
 
             JavaCompiler.CompilationTask task = compiler.getTask( null, manager, diagnostics, null, null, sources );
             task.call();
-        } catch (IOException ex) {
-            //TODO Exception
-            ex.printStackTrace();
         }
 
-        try {
-            for (File file : fileList) {
+        loadClasses(fileList);
 
-                Class<?> targetClass = Class.forName(file.getName().replace(".java", ""));
-                classList.add(targetClass);
-
-            }
-        } catch (ClassNotFoundException ex) {
-            //TODO Exception
-            ex.printStackTrace();
-        }
         return classList;
+    }
+
+    private void loadClasses(List<File> fileList) throws ClassNotFoundException {
+        for (File file : fileList) {
+
+            Class<?> targetClass = Class.forName(file.getName().replace(".java", ""));
+            classList.add(targetClass);
+
+        }
     }
 
     @Override
@@ -49,7 +45,8 @@ public class TaskCompilerImpl implements TaskCompiler {
         boolean flag = true;
         for(Class<?> classik : classList) {
             if (flag) {
-                flag = new File(classik.getSimpleName()).delete();
+                String name = classik.getName();
+                flag = new File(getClass().getClassLoader().getResource(name + ".class").getFile()).delete();
             }
         }
         return flag;

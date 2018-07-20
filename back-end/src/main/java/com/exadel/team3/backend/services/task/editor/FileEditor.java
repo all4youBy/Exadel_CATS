@@ -9,51 +9,41 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class FileEditor {
+
+    private static final String FIND_PACKAGE = "^(package ).*(;)";
+    private static final String FIND_SYSTEM = "(System\\.).*(\".*\")*(;)";
+    private static final String FIND_RUNTIME = "(Runtime\\.).*(;)";
+    private static final String NAME_OF_OUTPUT_FILE = "out.txt";
+
+
+
     public static List<File> editFiles(List<File> fileList) throws IOException {
         for (File file : fileList) {
+            Path path = file.toPath();
+            String fileContent = new String(Files.readAllBytes(path));
 
-            deletePackage(file);
-            deleteRuntime(file);
-            deleteSystem(file);
+            fileContent = deleteFirst(fileContent, FIND_PACKAGE, "");
+            fileContent = deleteAll(fileContent, FIND_SYSTEM, "");
+            fileContent = deleteAll(fileContent, FIND_RUNTIME, "");
 
-            changePathOutputFile(file);
+            String pathToFile = file.getParent().replaceAll("\\\\", "/") + "/" + NAME_OF_OUTPUT_FILE;
+            fileContent = deleteAll(fileContent, NAME_OF_OUTPUT_FILE, pathToFile);
+
+            Files.write(path, fileContent.getBytes());
         }
 
         return fileList;
     }
 
-    private static void deletePackage(File file) throws IOException {
-        Path path = file.toPath();
-        String fileContent = new String(Files.readAllBytes(path));
-        Pattern pattern = Pattern.compile("^(package ).*(;)");
+    private static String deleteFirst(String fileContent, String regex, String replacement) throws IOException {
+        Pattern pattern = Pattern.compile(regex);
         Matcher matcher = pattern.matcher(fileContent);
-        fileContent = matcher.replaceFirst("");
-        Files.write(path, fileContent.getBytes());
+        return matcher.replaceFirst(replacement);
     }
 
-    private static void deleteSystem(File file) throws IOException {
-        Path path = file.toPath();
-        String fileContent = new String(Files.readAllBytes(path));
-        Pattern pattern = Pattern.compile("(System\\.).*(\".*\")*(;)");
+    private static String deleteAll(String fileContent, String regex, String replacement) throws IOException {
+        Pattern pattern = Pattern.compile(regex);
         Matcher matcher = pattern.matcher(fileContent);
-        fileContent = matcher.replaceAll("");
-        Files.write(path, fileContent.getBytes());
-    }
-
-    private static void deleteRuntime(File file) throws IOException {
-        Path path = file.toPath();
-        String fileContent = new String(Files.readAllBytes(path));
-        Pattern pattern = Pattern.compile("(Runtime\\.).*(;)");
-        Matcher matcher = pattern.matcher(fileContent);
-        fileContent = matcher.replaceAll("");
-        Files.write(path, fileContent.getBytes());
-    }
-
-    private static void changePathOutputFile(File file) throws IOException {
-        Path path = file.toPath();
-        String fileContent = new String(Files.readAllBytes(path));
-        String pathOfFile = file.getParent().replaceAll("\\\\", "/") + "/";
-        fileContent = fileContent.replaceAll("out.txt",pathOfFile + "out.txt");
-        Files.write(path, fileContent.getBytes());
+        return matcher.replaceAll(replacement);
     }
 }

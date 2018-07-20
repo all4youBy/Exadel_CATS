@@ -11,17 +11,17 @@ import org.springframework.context.annotation.AnnotationConfigApplicationContext
 import static org.junit.Assert.assertEquals;
 
 public class ServiceTaskTest {
-    @Test
-    public void test_task() {
-        ApplicationContext context = new AnnotationConfigApplicationContext(TaskCompilerImpl.class);
-        TaskCompiler taskCompiler = context.getBean(TaskCompilerImpl.class);
-        taskCompiler.compileTask(null);
-
-
-        ApplicationContext context2 = new AnnotationConfigApplicationContext(TaskRunnerImpl.class);
-        TaskRunner taskRunner = context2.getBean(TaskRunnerImpl.class);
-
-//        Runnable taskThread = new TaskThread(taskRunner);
-//        new Thread(taskThread).start();
-    }
+//    @Test
+//    public void test_task() {
+//        ApplicationContext context = new AnnotationConfigApplicationContext(TaskCompilerImpl.class);
+//        TaskCompiler taskCompiler = context.getBean(TaskCompilerImpl.class);
+//        taskCompiler.compileTask(null);
+//
+//
+//        ApplicationContext context2 = new AnnotationConfigApplicationContext(TaskRunnerImpl.class);
+//        TaskRunner taskRunner = context2.getBean(TaskRunnerImpl.class);
+//
+////        Runnable taskThread = new TaskThread(taskRunner);
+////        new Thread(taskThread).start();
+//    }
 }
