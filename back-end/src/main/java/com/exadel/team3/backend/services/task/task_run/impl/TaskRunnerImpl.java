@@ -3,6 +3,9 @@ package com.exadel.team3.backend.services.task.task_run.impl;
 import com.exadel.team3.backend.services.task.task_run.CustomClassLoader;
 import com.exadel.team3.backend.services.task.task_run.TaskRunner;
 import com.sun.org.apache.xml.internal.security.c14n.InvalidCanonicalizerException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import java.io.File;
@@ -12,6 +15,10 @@ import java.util.List;
 
 @Component
 public class TaskRunnerImpl implements TaskRunner {
+
+    private final Logger logger = LoggerFactory.getLogger(this.getClass());
+
+    private static String nameOfOutputFile = "out";
 
     @Override
     public boolean runTask(List<Class<?>> classList, String... args) {
@@ -29,24 +36,27 @@ public class TaskRunnerImpl implements TaskRunner {
 
                     // get the main method
                     main = clazz.getMethod("main", args.getClass());
-                } catch (ClassNotFoundException e) {
-                    e.printStackTrace();
+                } catch (ClassNotFoundException ex) {
+                    logger.error("Could not load class. " + ex.getMessage());
                     return;
-                } catch (NoSuchMethodException e) {
-                    e.printStackTrace();
+                } catch (NoSuchMethodException ex) {
+                    logger.info("did not find the \"main\" method in this class. " + ex.getMessage());
                 }
             }
 
             try {
                 main.invoke(null, (Object) args);
-            } catch (IllegalAccessException e) {
-                e.printStackTrace();
-            } catch (InvocationTargetException e) {
-                e.printStackTrace();
+            } catch (IllegalAccessException | InvocationTargetException ex) {
+                logger.error("Could not load class. " + ex.getMessage());
             }
+
+            //TODO It is necessary to write this file into the database
+            new File(getClass().getClassLoader().getResource(nameOfOutputFile).getFile());
 
         }).start();
 
+        //TODO Ask the database if there is such a file
+        // return new File(getClass().getClassLoader().getResource(nameOfOutputFile).getFile()).exists();
         return true;
     }
 }
