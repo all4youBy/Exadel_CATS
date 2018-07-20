@@ -1,4 +1,4 @@
-package com.exadel.team3.backend.security.servicies;
+package com.exadel.team3.backend.security.services;
 
 import com.exadel.team3.backend.dao.UserRepository;
 import com.exadel.team3.backend.entities.User;
