@@ -3,14 +3,14 @@ import { LOG_IN, LOG_OUT } from './types';
 export function logIn(name, key) {
   return {
     type: LOG_IN,
-    user: { username: name, password: key },
+    payload: { username: name, password: key },
   };
 }
 
 export function logOut(name, key) {
   return {
     type: LOG_OUT,
-    user: { username: name, password: key },
+    payload: { username: name, password: key },
   };
 }
 //

@@ -91,6 +91,11 @@ function mapDispatch(dispatch) {
   return {
     onLogIn: (username, password) => {
       dispatch(logIn(username, password));
+      // const user = {
+      //   username,
+      //   password,
+      // };
+      // dispatch(API.post(url, user));
     },
     getFetchData: url => dispatch(API.get(url, 'logInData')),
   };

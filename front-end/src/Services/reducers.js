@@ -1,13 +1,10 @@
 import { combineReducers } from 'redux';
-import loadMainProject from '../Main/Services/Reducers/load';
-import students from '../Scenes/Registration/Services/Reducers/students';
-import teachers from '../Scenes/Registration/Services/Reducers/teachers';
-
+import loadMainProject from '../Main/Services/Reducers/loadMainProject';
+import logInReducer from '../Scenes/LogIn/Services/Reducers/logInReducer';
 
 const reducers = combineReducers({
   loadMainProject,
-  students,
-  teachers,
+  logInReducer,
 });
 
 export default reducers;

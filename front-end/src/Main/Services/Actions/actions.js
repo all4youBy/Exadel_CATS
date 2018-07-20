@@ -1,13 +1,15 @@
+import { ERROR, LOADING } from './types';
+
 export function errorProject(bool) {
   return {
-    type: 'ERROR',
+    type: ERROR,
     error: bool,
   };
 }
 
 export function isLoading(bool) {
   return {
-    type: 'LOADING',
+    type: LOADING,
     loading: bool,
   };
 }
@@ -15,6 +17,6 @@ export function isLoading(bool) {
 export function getData(actionName, items) {
   return {
     type: `RECEIVE_${actionName.toUpperCase()}`,
-    users: items,
+    payload: items,
   };
 }

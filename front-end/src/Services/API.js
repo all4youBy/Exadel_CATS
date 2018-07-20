@@ -2,7 +2,7 @@ import { errorProject, isLoading, getData } from '../Main/Services/Actions/actio
 
 const API = {
   post(path, data) {
-    const url = `localhost:3000/${path}`;
+    const url = 'localhost:3000/cats/login';
     return fetch(url, {
       method: 'POST',
       headers: {
