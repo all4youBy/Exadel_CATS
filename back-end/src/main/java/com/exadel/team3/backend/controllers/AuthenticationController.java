@@ -18,7 +18,6 @@ import org.springframework.web.bind.annotation.*;
 import java.util.Objects;
 
 @RestController
-@RequestMapping("/cats")
 public class AuthenticationController {
 
     @Autowired
