@@ -13,6 +13,7 @@ import UserGeneralMenu from '../../Components/UserGeneralMenu';
 import PageHeader from '../../Components/GlobalHeader';
 import PageFooter from '../../Components/GlobalFooter';
 import RegistrationPage from '../../Scenes/Registration';
+import AccessRequestList from '../../Scenes/Admin/AccessRequestList';
 
 
 class Main extends React.Component {
@@ -33,6 +34,7 @@ class Main extends React.Component {
               <Route exact path="/Test" component={Test}/>
               <Route exact path="/Task" component={UserTaskPage}/>
               <Route exact path="/registration" component={RegistrationPage}/>
+              <Route exact path="/accessrequestlist" component={AccessRequestList}/>
               <Redirect to="/"/>
             </Switch>
           </div>
