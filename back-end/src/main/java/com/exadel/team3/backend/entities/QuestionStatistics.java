@@ -1,8 +1,6 @@
 package com.exadel.team3.backend.entities;
 
 import lombok.Data;
-import lombok.NonNull;
-import org.springframework.beans.factory.annotation.Value;
 
 @Data
 public class QuestionStatistics {

@@ -1,9 +1,10 @@
 package com.exadel.team3.backend.services;
 
+import com.exadel.team3.backend.dto.TestItemDTO;
+import com.exadel.team3.backend.entities.TestCompletionStatus;
 import org.bson.types.ObjectId;
 import org.springframework.stereotype.Service;
 
-import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.Collection;
 import java.util.List;
@@ -16,7 +17,7 @@ public interface TestService {
     Test generateTestForUser(String userId,
                              String title,
                              LocalDateTime start,
-                             Duration duration,
+                             LocalDateTime deadline,
                              Collection<ObjectId> topicIds,
                              int questionsCount,
                              String assignedBy);
@@ -27,19 +28,27 @@ public interface TestService {
     List<Test> generateTestsForGroup(String group,
                                String title,
                                LocalDateTime start,
-                               Duration duration,
+                               LocalDateTime deadline,
                                Collection<ObjectId> topicIds,
                                int questionsCount,
                                String assignedBy);
 
     List<Test> getTestsAssignedToUser(String userId);
+    List<Test> getTestsAssignedToUser(String userId, TestCompletionStatus completion);
     List<Test> getTestsAssignedToGroup(String group);
+    List<Test> getTestsAssignedToGroup(String group, TestCompletionStatus completion);
 
     Test updateTest(Test test);
+
 
     Test getTest(String id);
     Test getTest(ObjectId id);
 
-    void deleteTest(Test test);
+    Test submitTest(ObjectId id);
+    Test submitAnswer(TestItemDTO answeredItem);
+    Test submitManualAnswerCheck(TestItemDTO checked);
 
+    List<TestItemDTO> getAnswersForManualCheck(String assignedBy);
+
+    void deleteTest(Test test);
 }
