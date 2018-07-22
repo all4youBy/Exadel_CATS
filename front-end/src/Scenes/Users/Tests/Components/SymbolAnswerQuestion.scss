@@ -1,8 +1,9 @@
-.symbol-a-q-card {
-  border: none;
+.symbol-answer-question-card {
+  border: 1px solid #d9d9d9;
   border-radius: 12px;
-  width: 100%;
+  width: 95%;
   display: flex;
+  margin-bottom: 20px;
   flex-direction: column;
   div {
     display: flex;

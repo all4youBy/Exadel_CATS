@@ -1,18 +1,19 @@
 import React from 'react';
 import 'antd/dist/antd.css';
 import { connect } from 'react-redux';
+import { Link } from 'react-router-dom';
 import './TableGroupStudents.scss';
 import { Table } from 'antd';
 import PropTypes from 'prop-types';
-import ButtonAssignTest from './ButtonAssignTest';
-import ButtonAssignTask from './ButtonAssignTask';
+import ButtonAssignTest from '../../../../../Components/ButtonAssignTest';
+import ButtonAssignTask from '../../../../../Components/ButtonAssignTask';
 import ButtonDeleteStudent from './ButtonDeleteStudent';
 import { addStudent, deleteStudent } from '../Services/Actions/actions';
 import ButtonAddStudent from './ButtonAddStudent';
 
 class TableGroupStudents extends React.Component {
   static propTypes = {
-    students: PropTypes.func.isRequired,
+    students: PropTypes.objectOf.isRequired,
     handleStudentAdd: PropTypes.func.isRequired,
     handleStudentDelete: PropTypes.func.isRequired,
   };
@@ -47,7 +48,6 @@ class TableGroupStudents extends React.Component {
       dataIndex: 'test',
       key: 'test1',
       width: 150,
-      // render: () => { <Link path to=""/> },
     }, {
       title: 'Тест2',
       dataIndex: 'test',
@@ -59,12 +59,22 @@ class TableGroupStudents extends React.Component {
       key: 'countTasks',
       width: 100,
       fixed: 'right',
+      render(text, record) {
+        return (
+          <Link to={`/groupstudentslist/personaltasks/${record.key}`}>{text}</Link>
+        );
+      },
     }, {
       title: 'Кол. личных тестов',
       dataIndex: 'countTests',
       key: 'countTests',
       width: 100,
       fixed: 'right',
+      render(text, record) {
+        return (
+          <Link to={`/groupstudentslist/personaltests/${record.key}`}>{text}</Link>
+        );
+      },
     }, {
       title: '',
       key: 'buttons',
@@ -81,6 +91,15 @@ class TableGroupStudents extends React.Component {
         );
       },
     }];
+    if (students.length === 0) {
+      return (
+        <div className="parent-button-add-students-blank-page">
+          <div className="block-button-add-students-blank-page">
+            <ButtonAddStudent onStudentAdd={handleStudentAdd}/>
+          </div>
+        </div>
+      );
+    }
     return (
       <div>
         <Table
@@ -94,7 +113,7 @@ class TableGroupStudents extends React.Component {
             showHeader,
           }}
           columns={columns}
-          dataSource={students.groupStudentsList}
+          dataSource={students}
           scroll={{ x: 1500 }}
         />
         <ButtonAddStudent onStudentAdd={handleStudentAdd}/>
@@ -104,7 +123,7 @@ class TableGroupStudents extends React.Component {
 }
 
 function mapStateToProps(state) {
-  return { students: state };
+  return { students: state.groupStudentsList.group };
 }
 
 const mapDispatchToProps = dispatch => ({

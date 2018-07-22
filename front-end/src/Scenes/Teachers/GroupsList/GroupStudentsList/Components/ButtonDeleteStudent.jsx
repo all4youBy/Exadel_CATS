@@ -27,7 +27,7 @@ class ButtonDeleteStudent extends React.PureComponent {
         onClick={this.handleStudentDelete}
         shape="circle"
         icon="close"
-        className="button-assign-test"
+        className="button-table"
         size="small"
       />
     );

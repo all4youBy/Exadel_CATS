@@ -9,7 +9,7 @@ class ButtonAssignTest extends React.Component {
       <Button
         shape="circle"
         icon="profile"
-        className="button-assign-test"
+        className="button-table"
         size="small"
       />
     );

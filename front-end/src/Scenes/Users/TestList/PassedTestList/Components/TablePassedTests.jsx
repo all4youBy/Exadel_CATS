@@ -4,40 +4,38 @@ import './TablePassedTests.scss';
 import { Table, Badge } from 'antd';
 
 function TablePassedTests() {
-  const expandedRowRender = () => {
-    const columns = [
-      {
-        title: false,
-        dataIndex: 'status',
-        key: 'status',
-        width: 50,
-        render: () => <span><Badge status="success"/></span>,
-      }, {
-        title: false,
-        dataIndex: 'nameQuestion',
-        key: 'nameQuestion',
-        width: 900,
-      },
-    ];
-
-    const data = [];
-    for (let i = 1; i <= 5; i += 1) {
-      data.push(
-        {
-          key: i,
-          status: 'success',
-          nameQuestion: `Вопрос ${i}`,
-        },
-      );
-    }
-    return (
-      <Table
-        columns={columns}
-        dataSource={data}
-        pagination={false}
-      />
-    );
-  };
+  // const expandedRowRender = () => {
+  //   const columns = [
+  //     {
+  //       dataIndex: 'status',
+  //       key: 'status',
+  //       width: 50,
+  //       render: () => <span><Badge status="success"/></span>,
+  //     }, {
+  //       dataIndex: 'nameQuestion',
+  //       key: 'nameQuestion',
+  //       width: 900,
+  //     },
+  //   ];
+  //
+  //   const data = [];
+  //   for (let i = 1; i <= 5; i += 1) {
+  //     data.push(
+  //       {
+  //         key: i,
+  //         status: 'success',
+  //         nameQuestion: `Вопрос ${i}`,
+  //       },
+  //     );
+  //   }
+  //   return (
+  //     <Table
+  //       columns={columns}
+  //       dataSource={data}
+  //       pagination={false}
+  //     />
+  //   );
+  // };
 
   const columns = [{
     title: 'Название',
@@ -71,14 +69,19 @@ function TablePassedTests() {
       author: `Автор ${i}`,
       date: `${i}.${i}.1999`,
       result: `${i}`,
+      description: 'success',
     });
   }
 
   return (
     <Table
-      className="components-table-demo-nested"
       columns={columns}
-      expandedRowRender={expandedRowRender}
+      expandedRowRender={record => (
+        <span className="questions-result">
+          <Badge status={record.description}/><p className="badge-question-result">1 Вопрос</p>
+          <Badge status={record.description}/><p className="badge-question-result">2 Вопрос</p>
+        </span>
+      )}
       dataSource={data}
     />
   );

@@ -3,7 +3,7 @@ import 'antd/dist/antd.css';
 import './TableAllTasks.scss';
 import { Table } from 'antd';
 import ButtonEditTask from './ButtonEditTask';
-import ButtonAssignTask from '../../../GroupsList/GroupStudentsList/Components/ButtonAssignTask';
+import ButtonAssignTask from '../../../../../Components/ButtonAssignTask';
 import ButtonDeleteStudent from '../../../GroupsList/GroupStudentsList/Components/ButtonDeleteStudent';
 
 const columns = [{
@@ -71,7 +71,6 @@ class TableAllTasks extends React.PureComponent {
 
   render() {
     const { bordered, loading, pagination, size, title, showHeader } = this.state;
-    console.log(columns);
     return (
       <div>
         <Table

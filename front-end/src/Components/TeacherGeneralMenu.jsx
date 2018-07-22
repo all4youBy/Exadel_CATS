@@ -17,7 +17,7 @@ class TeacherGeneralMenu extends React.PureComponent {
         </SubMenu>
         <SubMenu key="sub2" title={<span><Icon type="file" /><span>Задачи</span></span>}>
           <Menu.Item key="3">Все задачи</Menu.Item>
-          <Menu.Item key="4">Ваши задачи</Menu.Item>
+          <Menu.Item key="4">Мои задачи</Menu.Item>
           <Menu.Item key="5">Добавить задачу</Menu.Item>
         </SubMenu>
         <SubMenu key="sub3" title={<span><Icon type="profile" /><span>Тесты</span></span>}>

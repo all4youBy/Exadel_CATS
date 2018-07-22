@@ -7,12 +7,12 @@ const columns = [{
   title: 'Название',
   dataIndex: 'name',
   key: 'name',
-  width: 350,
+  width: 400,
 }, {
   title: 'Тема',
   dataIndex: 'theme',
   key: 'theme',
-  width: 500,
+  width: 600,
 }, {
   title: 'Кол. вопросов',
   dataIndex: 'countQuestions',
@@ -22,7 +22,7 @@ const columns = [{
   title: 'Время выполнения',
   dataIndex: 'time',
   key: 'time',
-  width: 800,
+  width: 500,
 }, {
   title: '',
   key: 'start',
