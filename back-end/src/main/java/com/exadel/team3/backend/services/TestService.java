@@ -12,7 +12,7 @@ import java.util.List;
 import com.exadel.team3.backend.entities.Test;
 
 @Service
-public interface TestService {
+public interface TestService  extends CrudService<Test, ObjectId> {
 
     Test generateTestForUser(String userId,
                              String title,
@@ -38,17 +38,10 @@ public interface TestService {
     List<Test> getTestsAssignedToGroup(String group);
     List<Test> getTestsAssignedToGroup(String group, TestCompletionStatus completion);
 
-    Test updateTest(Test test);
-
-
-    Test getTest(String id);
-    Test getTest(ObjectId id);
 
     Test submitTest(ObjectId id);
     Test submitAnswer(TestItemDTO answeredItem);
     Test submitManualAnswerCheck(TestItemDTO checked);
 
     List<TestItemDTO> getAnswersForManualCheck(String assignedBy);
-
-    void deleteTest(Test test);
 }
