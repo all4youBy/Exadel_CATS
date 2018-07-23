@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class TestFilterController {
 
-    @GetMapping("/cats/secure")
+    @GetMapping("/secure")
     @PreAuthorize("hasRole('ADMIN')")
     public String getString(){
         return "Successes!";

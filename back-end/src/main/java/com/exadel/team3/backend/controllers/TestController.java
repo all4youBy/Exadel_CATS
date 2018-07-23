@@ -7,6 +7,7 @@ import com.exadel.team3.backend.security.requests.TestGenerationRequest;
 import com.exadel.team3.backend.security.requests.TrainingTestGenerationRequest;
 import com.exadel.team3.backend.services.TestService;
 
+import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -15,18 +16,18 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/cats")
+@RequestMapping("/tests")
 public class TestController {
 
     @Autowired
     private TestService testService;
 
-    @GetMapping("/tests/test/{testId}")
+    @GetMapping("/test/{testId}")
     public Test getTest(@PathVariable(value = "testId") String testId){
-        return testService.getTest(testId);
+        return testService.getItem(new ObjectId(testId));
     }
 
-    @PostMapping("/tests/test")
+    @PostMapping("/test")
     public ResponseEntity<?> getTestForUser(@RequestBody TestGenerationRequest testRequest){
        Test test =  testService.generateTestForUser(testRequest.getUserId(),
                                         testRequest.getTitle(),
@@ -42,7 +43,7 @@ public class TestController {
        return ResponseEntity.ok().body(test);
     }
 
-    @PostMapping("/tests/test/training")
+    @PostMapping("/test/training")
     public ResponseEntity<?> getTrainingTestForUser(@RequestBody TrainingTestGenerationRequest testRequest){
         Test test = testService.generateTestForUser(testRequest.getUserId(),testRequest.getTopicId());
         if(test == null)
@@ -51,7 +52,7 @@ public class TestController {
         return new ResponseEntity<>(test, HttpStatus.OK);
     }
 
-    @PostMapping("/tests/group")
+    @PostMapping("/group")
     public ResponseEntity<?> getTestForGroup(@RequestBody TestForGroupRequest testRequest){
         List<Test> testsForGroup = testService.generateTestsForGroup(testRequest.getGroup(),
                                                       testRequest.getTitle(),
@@ -67,9 +68,9 @@ public class TestController {
         return new ResponseEntity<>(testsForGroup,HttpStatus.OK);
     }
 
-    @GetMapping("/tests")
+    @GetMapping
     public ResponseEntity<?> getTestsAssignedToUser(@RequestParam(value = "user_id") String userId){
-        List<Test> userTests = testService.getTestsAssignedToUser(userId);
+        List<Test> userTests = testService.getAssignedItems(userId);
 
         if(userTests == null)
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Can't get list of tests, user:" + userId);
@@ -77,9 +78,9 @@ public class TestController {
         return new ResponseEntity<>(userTests,HttpStatus.OK);
     }
 
-    @GetMapping("/tests/groups/{group}")
+    @GetMapping("/groups/{group}")
     public ResponseEntity<?> getTestsAssignedToGroup(@PathVariable(value = "group") String group){
-        List<Test> groupTests = testService.getTestsAssignedToGroup(group);
+        List<Test> groupTests = testService.getAssignedItemsToGroup(group);
 
         if(groupTests == null)
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Can't get list of tests, group:" + group);
@@ -87,14 +88,14 @@ public class TestController {
         return new ResponseEntity<>(groupTests,HttpStatus.OK);
     }
 
-    @PutMapping("/tests")
+    @PutMapping
     public ResponseEntity<?> updateTest(@RequestBody Test test){
-        return ResponseEntity.ok(testService.updateTest(test));
+        return ResponseEntity.ok(testService.updateItem(test));
     }
 
-    @DeleteMapping("/tests")
+    @DeleteMapping
     public void deleteTest(@RequestBody Test test){
-        testService.deleteTest(test);
+        testService.deleteItem(test);
     }
 }
 

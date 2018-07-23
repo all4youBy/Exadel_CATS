@@ -5,11 +5,9 @@ import lombok.*;
 import org.bson.types.ObjectId;
 
 @Data
-@RequiredArgsConstructor
 public class TestItem {
     @NonNull
-    @Setter(AccessLevel.PRIVATE)
-    private ObjectId questionId;
+    private final ObjectId questionId;
 
     private TestItemStatus status = TestItemStatus.UNANSWERED;
 
