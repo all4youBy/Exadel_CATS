@@ -7,6 +7,7 @@ import com.exadel.team3.backend.security.requests.TestGenerationRequest;
 import com.exadel.team3.backend.security.requests.TrainingTestGenerationRequest;
 import com.exadel.team3.backend.services.TestService;
 
+import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -23,7 +24,7 @@ public class TestController {
 
     @GetMapping("/tests/test/{testId}")
     public Test getTest(@PathVariable(value = "testId") String testId){
-        return testService.getTest(testId);
+        return testService.getItem(new ObjectId(testId));
     }
 
     @PostMapping("/tests/test")
@@ -89,12 +90,12 @@ public class TestController {
 
     @PutMapping("/tests")
     public ResponseEntity<?> updateTest(@RequestBody Test test){
-        return ResponseEntity.ok(testService.updateTest(test));
+        return ResponseEntity.ok(testService.updateItem(test));
     }
 
     @DeleteMapping("/tests")
     public void deleteTest(@RequestBody Test test){
-        testService.deleteTest(test);
+        testService.deleteItem(test);
     }
 }
 
