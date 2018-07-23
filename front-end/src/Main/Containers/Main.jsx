@@ -1,5 +1,4 @@
 import React from 'react';
-// import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import './Main.scss';
 import { Switch, Route, Redirect, withRouter } from 'react-router-dom';
@@ -13,7 +12,6 @@ import UserGeneralMenu from '../../Components/UserGeneralMenu';
 import PageHeader from '../../Components/GlobalHeader';
 import PageFooter from '../../Components/GlobalFooter';
 import RegistrationPage from '../../Scenes/Registration';
-
 
 class Main extends React.Component {
   render() {

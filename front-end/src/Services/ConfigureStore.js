@@ -6,9 +6,12 @@ import reducers from './reducers';
 
 const loggerMiddleware = createLogger();
 
-export default function configureStore() {
+export function configureStore() {
   return createStore(
     reducers,
     composeWithDevTools(applyMiddleware(thunk, loggerMiddleware)),
   );
 }
+
+export const store = configureStore();
+export default store;

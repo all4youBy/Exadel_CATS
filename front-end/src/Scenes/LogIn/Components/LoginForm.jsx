@@ -13,9 +13,8 @@ class LoginForm extends React.Component {
   static propTypes = {
     form: PropTypes.shape().isRequired,
     onLogIn: PropTypes.func.isRequired,
-    getFetchData: PropTypes.func.isRequired,
+    getData: PropTypes.func.isRequired,
     sendLogInData: PropTypes.func.isRequired,
-    // data: PropTypes.shape().isRequired,
   };
 
   constructor(props) {
@@ -24,10 +23,8 @@ class LoginForm extends React.Component {
   }
 
   componentDidMount() {
-    const { getFetchData } = this.props;
-    getFetchData('login');
-    // const { data } = this.props;
-    // console.log(data.loadMainProject);
+    const { getData } = this.props;
+    getData('topics');
   }
 
   onClickLogIn = (e) => {
@@ -95,9 +92,11 @@ function mapDispatch(dispatch) {
       dispatch(logIn(username, password));
     },
     sendLogInData: (url, username, password) => {
-      dispatch(API.post(url, { username, password }));
+      dispatch(API.login(url, { username, password }, { json: false }));
     },
-    getFetchData: url => dispatch(API.get(url, 'logInData')),
+    getData: (url) => {
+      dispatch(API.get(url, 'logInData'));
+    },
   };
 }
 
