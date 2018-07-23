@@ -3,46 +3,35 @@ import React from 'react';
 import 'antd/dist/antd.css';
 import './AddTask.scss';
 import PropTypes from 'prop-types';
-import { Input, Button } from 'antd';
-import { connect } from 'react-redux';
-import addInOutSet from '../Services/Actions/actions';
+import { Input, Button, Icon } from 'antd';
 
 const { TextArea } = Input;
 
 class InputOutputSet extends React.PureComponent {
   static propTypes = {
-    testSet: PropTypes.arrayOf.isRequired,
+    testSet: PropTypes.arrayOf(PropTypes.object).isRequired,
     addElem: PropTypes.func.isRequired,
   };
 
   render() {
     const { testSet, addElem } = this.props;
-    const elem = (testSet || []).map((data, i) => (
-      <div className="in-out-container" key={i}>
-        <TextArea placeholder="Входные данные" className="input-task-desc" autosize value={data.in}/>
-        <TextArea placeholder="Выходные данные" className="input-task-desc" autosize value={data.out}/>
+    const elem = (testSet || []).map((item, i) => (
+      <div className="set-container" key={i}>
+        <span className="set-num">Сет {i + 1}</span>
+        <TextArea placeholder="Входные данные" className="input-set" autosize/>
+        <TextArea placeholder="Выходные данные" className="input-set" autosize/>
       </div>
     ));
 
     return (
       <div className="in-out-container">
-        <Button onClick={addElem}>Добавить сет</Button>
         {elem}
+        <Button type="dashed" onClick={addElem} className="add-set-button">
+          <Icon type="plus" />Добавить проверочный сет
+        </Button>
       </div>
     );
   }
 }
 
-function mapStateToProps(state) {
-  return {
-    testSet: state.inOutSet.testSet,
-  };
-}
-
-const mapDispatchToProps = dispatch => ({
-  addElem: () => {
-    dispatch(addInOutSet());
-  },
-});
-
-export default connect(mapStateToProps, mapDispatchToProps)(InputOutputSet);
+export default InputOutputSet;

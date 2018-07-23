@@ -2,9 +2,10 @@ import * as types from '../Actions/types';
 
 const initialState = {
   testSet: [],
+  tags: [],
 };
 
-const inOutSet = (state = initialState, action) => {
+const addTask = (state = initialState, action) => {
   switch (action.type) {
     case types.ADD_IN_OUT_SET: {
       return {
@@ -18,11 +19,27 @@ const inOutSet = (state = initialState, action) => {
         ],
       };
     }
+    case types.ADD_TASK_TAG: {
+      if (state.tags.includes(action.payload)) {
+        return state;
+      }
+      return {
+        ...state,
+        tags: [
+          ...state.tags,
+          action.payload,
+        ],
+      };
+    }
+    case types.DELETE_TASK_TAG: {
+      return {
+        ...state,
+        tags: state.tags.filter(tag => tag !== action.payload),
+      };
+    }
     default:
       return state;
   }
 };
 
-
-
-export default inOutSet;
+export default addTask;

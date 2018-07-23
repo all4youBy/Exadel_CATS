@@ -11,3 +11,6 @@ const Load = (state = [], action) => {
       return state;
   }
 };
+
+
+export default Load;
