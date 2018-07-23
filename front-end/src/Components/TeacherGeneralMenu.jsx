@@ -9,11 +9,11 @@ const { SubMenu } = Menu;
 class TeacherGeneralMenu extends React.PureComponent {
   render() {
     const menu = types.TEACHER_GENERAL_MENU_DATA.map((element) => {
-      const subsections = element.subsections.map((item) => {
-        const link = <Link to={item.link}>{item.text}</Link>;
-        const content = <Menu.Item key={item.id}>{link}</Menu.Item>;
-        return content;
-      });
+      const subsections = element.subsections.map(item => (
+        <Menu.Item key={item.id}>
+          <Link to={item.link}>{item.text}</Link>
+        </Menu.Item>
+      ));
       const title = <span><Icon type={element.type}/><span>{element.text}</span></span>;
       return (
         <SubMenu key={element.key} title={title}>
@@ -21,14 +21,7 @@ class TeacherGeneralMenu extends React.PureComponent {
         </SubMenu>
       );
     });
-    return (
-      <Menu
-        style={{ width: 256 }}
-        mode="inline"
-      >
-        {menu}
-      </Menu>
-    );
+    return <Menu mode="inline">{menu}</Menu>;
   }
 }
 

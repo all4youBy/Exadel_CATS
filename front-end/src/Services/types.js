@@ -10,12 +10,12 @@ export const USER_GENERAL_MENU_DATA = [{
   text: 'Задачи',
   subsections: [{
     id: '2',
-    text: 'Пройденные задачи',
-    link: '/passedtasks',
-  }, {
-    id: '3',
     text: 'Назначенные задачи',
     link: '/assignedtasks',
+  }, {
+    id: '3',
+    text: 'Пройденные задачи',
+    link: '/passedtasks',
   }],
 }, {
   key: 'sub2',
