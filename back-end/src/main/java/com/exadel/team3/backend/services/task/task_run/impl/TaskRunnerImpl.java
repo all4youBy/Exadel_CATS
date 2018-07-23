@@ -2,10 +2,8 @@ package com.exadel.team3.backend.services.task.task_run.impl;
 
 import com.exadel.team3.backend.services.task.task_run.CustomClassLoader;
 import com.exadel.team3.backend.services.task.task_run.TaskRunner;
-import com.sun.org.apache.xml.internal.security.c14n.InvalidCanonicalizerException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import java.io.File;
