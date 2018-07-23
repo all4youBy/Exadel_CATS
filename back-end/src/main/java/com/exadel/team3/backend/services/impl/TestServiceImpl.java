@@ -207,9 +207,15 @@ public class TestServiceImpl implements TestService {
     @Override
     public Test submitTest(ObjectId testId) {
         Optional<Test> updatedTest = testRepository.findById(testId);
-        if (updatedTest.isPresent() && updatedTest.get().getDeadline().isAfter(LocalDateTime.now())) {
-            updatedTest.get().setDeadline(LocalDateTime.now());
-            return testRepository.save(updatedTest.get());
+        if (updatedTest.isPresent()) {
+            Test updatedTestObj = updatedTest.get();
+            if (updatedTestObj.getDeadline().isAfter(LocalDateTime.now())) {
+                updatedTestObj.setDeadline(LocalDateTime.now());
+                updatedTestObj.setMark(testChecker.checkTest(updatedTestObj));
+                return testRepository.save(updatedTestObj);
+            } else {
+                return updatedTestObj;
+            }
         } else {
             throw new ServiceException("There's no test with id " + testId);
         }
