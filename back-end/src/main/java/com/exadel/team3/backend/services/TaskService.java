@@ -7,7 +7,5 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDateTime;
 import java.util.List;
 
-@Service
 public interface TaskService extends TaggableService<Task> {
-
 }

@@ -74,7 +74,7 @@ public class TestServiceImpl
         if (isTraining) {
             // collect question ids  associated with training tests of this particular user
             // (training tests are those where assignedBy == null)
-            List<ObjectId> trainingQuestionIds = getAssignedItems(userId)
+            List<ObjectId> trainingQuestionIds = getAssignedItems(userId, "")
                     .stream()
                     .filter(test -> test.getItems() != null)
                     .flatMap(test -> test.getItems().stream())
