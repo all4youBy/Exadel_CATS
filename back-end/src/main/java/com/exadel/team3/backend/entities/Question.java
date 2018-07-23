@@ -11,7 +11,7 @@ import java.util.List;
 
 @Data
 @Document(collection="questions")
-public class Question {
+public class Question implements Taggable {
     @Setter(AccessLevel.NONE)
     private ObjectId id;
 
