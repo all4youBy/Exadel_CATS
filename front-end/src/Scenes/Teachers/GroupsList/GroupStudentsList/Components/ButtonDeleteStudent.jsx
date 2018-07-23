@@ -10,11 +10,6 @@ class ButtonDeleteStudent extends React.PureComponent {
     data: PropTypes.string.isRequired,
   };
 
-  constructor(props) {
-    super(props);
-    this.handleStudentDelete = this.handleStudentDelete.bind(this);
-  }
-
   handleStudentDelete(e) {
     const { onStudentDelete, data } = this.props;
     e.preventDefault();
@@ -24,7 +19,7 @@ class ButtonDeleteStudent extends React.PureComponent {
   render() {
     return (
       <Button
-        onClick={this.handleStudentDelete}
+        onClick={e => this.handleStudentDelete(e)}
         shape="circle"
         icon="close"
         className="button-table"

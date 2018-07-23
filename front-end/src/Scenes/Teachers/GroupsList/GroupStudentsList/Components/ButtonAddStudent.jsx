@@ -9,11 +9,6 @@ class ButtonAddStudent extends React.Component {
     onStudentAdd: PropTypes.func.isRequired,
   };
 
-  constructor(props) {
-    super(props);
-    this.handleStudentAdd = this.handleStudentAdd.bind(this);
-  }
-
   handleStudentAdd(e) {
     const { onStudentAdd } = this.props;
     e.preventDefault();
@@ -30,7 +25,7 @@ class ButtonAddStudent extends React.Component {
 
   render() {
     return (
-      <Button onClick={this.handleStudentAdd} size="small" className="button-add-student" >Добавить студента</Button>);
+      <Button onClick={e => this.handleStudentAdd(e)} size="small" className="button-add-student">Добавить студента</Button>);
   }
 }
 
