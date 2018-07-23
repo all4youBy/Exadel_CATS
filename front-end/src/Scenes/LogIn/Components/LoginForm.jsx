@@ -6,7 +6,7 @@ import { Form, Icon, Input, Button } from 'antd';
 
 const FormItem = Form.Item;
 
-class NormalLoginForm extends React.Component {
+class LoginForm extends React.Component {
   static propTypes = {
     form: PropTypes.shape().isRequired,
   };
@@ -51,5 +51,5 @@ class NormalLoginForm extends React.Component {
   }
 }
 
-const WrappedNormalLoginForm = Form.create()(NormalLoginForm);
+const WrappedNormalLoginForm = Form.create()(LoginForm);
 export default WrappedNormalLoginForm;

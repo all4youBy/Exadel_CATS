@@ -12,6 +12,10 @@ import UserTaskPage from '../../Scenes/Users/Task/Containers/UserTaskPage';
 import UserGeneralMenu from '../../Components/UserGeneralMenu';
 import PageHeader from '../../Components/GlobalHeader';
 import PageFooter from '../../Components/GlobalFooter';
+import AllTask from '../../Scenes/Teachers/Tasks/AllTask';
+import PagePassedTasks from '../../Scenes/Users/Tasks/PassedTasks';
+import AllGroups from '../../Scenes/Teachers/GroupsList/Groups/index';
+import Materials from '../../Scenes/Teachers/Materials/Containers/Materials';
 import RegistrationPage from '../../Scenes/Registration';
 
 
@@ -30,9 +34,15 @@ class Main extends React.Component {
               <Route exact path="/assignedtestlist" component={PageAssignedTestList}/>
               <Route exact path="/passedtestlist" component={PagePassedTestList}/>
               <Route exact path="/groupstudentslist" component={PageGroupStudentsList}/>
+              <Route exact path="/passedtasks" component={PagePassedTasks}/>
+              <Route exact path="/allgroups" component={AllGroups}/>
+              <Route exact path="/alltasks" component={AllTask}/>
               <Route exact path="/Test" component={Test}/>
               <Route exact path="/Task" component={UserTaskPage}/>
               <Route exact path="/registration" component={RegistrationPage}/>
+              <Route exact path="/teachersmaterials" component={Materials}/>
+              <Route exact path="/usersmaterials" component={Materials}/>
+              <Route exact path="/materials" component={Materials}/>
               <Redirect to="/"/>
             </Switch>
           </div>
@@ -42,4 +52,5 @@ class Main extends React.Component {
     );
   }
 }
+
 export default withRouter(connect()(Main));
