@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Service;
 
+
 @Service
 @Primary
 public class TaskServiceImpl
@@ -20,5 +21,4 @@ public class TaskServiceImpl
     protected TaggableRepository<Task> getRepository() {
         return taskRepository;
     }
-
 }

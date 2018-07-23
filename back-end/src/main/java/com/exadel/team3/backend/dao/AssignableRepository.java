@@ -17,4 +17,5 @@ public interface AssignableRepository<T extends Assignable> extends MongoReposit
     List<T> findByAssignedToInOrderByStartDesc(Collection<String> assignedIds);
 
     List<T> findByAssignedToAndAssignedByOrderByStartDesc(String assignedId, String assignedById);
+    List<T> findByAssignedToOrderByStartDesc(String assignedId);
 }

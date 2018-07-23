@@ -70,7 +70,7 @@ public class TestController {
 
     @GetMapping("/tests")
     public ResponseEntity<?> getTestsAssignedToUser(@RequestParam(value = "user_id") String userId){
-        List<Test> userTests = testService.getTestsAssignedToUser(userId);
+        List<Test> userTests = testService.getAssignedItems(userId);
 
         if(userTests == null)
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Can't get list of tests, user:" + userId);
@@ -80,7 +80,7 @@ public class TestController {
 
     @GetMapping("/tests/groups/{group}")
     public ResponseEntity<?> getTestsAssignedToGroup(@PathVariable(value = "group") String group){
-        List<Test> groupTests = testService.getTestsAssignedToGroup(group);
+        List<Test> groupTests = testService.getAssignedItemsToGroup(group);
 
         if(groupTests == null)
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Can't get list of tests, group:" + group);

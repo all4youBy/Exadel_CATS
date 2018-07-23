@@ -9,7 +9,7 @@ import java.time.LocalDateTime;
 
 @Data
 @Document(collection = "solutions")
-public class TaskSolution implements Assignable {
+public class Solution implements Assignable {
     @Id
     @Setter(AccessLevel.NONE)
     private ObjectId id;

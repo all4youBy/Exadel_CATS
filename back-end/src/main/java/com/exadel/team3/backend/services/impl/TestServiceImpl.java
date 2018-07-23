@@ -33,8 +33,6 @@ public class TestServiceImpl
     private QuestionRepository questionRepository;
     @Autowired
     private TopicRepository topicRepository;
-    @Autowired
-    private UserRepository userRepository;
 
     @Autowired
     private Environment env;
@@ -143,21 +141,18 @@ public class TestServiceImpl
                                       Collection<ObjectId> topicIds,
                                       int questionsCount,
                                       @NonNull String assignedBy) {
-        return userRepository.findStudentsByGroupName(group).stream()
+        return getAssigneeRepository().findStudentsByGroupName(group).stream()
                 .map(User::getEmail)
                 .map(id ->
-                        generateTestForUser(id, title, start, deadline, topicIds, questionsCount, assignedBy)
+                        generateTestForUser(
+                                id, title, start, deadline, topicIds, questionsCount, assignedBy
+                        )
                 )
                 .collect(Collectors.toList());
     }
 
 
-    @Override
-    public List<Test> getTestsAssignedToUser(@NonNull String userId) {
-        return getTestsAssignedToUser(userId, TestCompletionStatus.ALL);
-    }
-    @Override
-    public List<Test> getTestsAssignedToUser(@NonNull String userId, TestCompletionStatus completion) {
+    public List<Test> getAssignedItems(@NonNull String userId, TestCompletionStatus completion) {
         switch(completion) {
             case UNFINISHED:
                 return getAssignedItems(userId, LocalDateTime.now(),false);
@@ -168,24 +163,14 @@ public class TestServiceImpl
         }
     }
 
-    @Override
-    public List<Test> getTestsAssignedToGroup(@NonNull String group) {
-        return getTestsAssignedToGroup(group, TestCompletionStatus.ALL);
-    }
-    @Override
-    public List<Test> getTestsAssignedToGroup(@NonNull String group, TestCompletionStatus completion) {
-        List<String> userIds = userRepository.findStudentsByGroupName(group)
-                .stream()
-                .map(User::getEmail)
-                .collect(Collectors.toList());
-
+    public List<Test> getAssignedItemsToGroup(@NonNull String group, @NonNull TestCompletionStatus completion) {
         switch(completion) {
             case UNFINISHED:
-                return getAssignedItemsToGroup(userIds, LocalDateTime.now(),false);
+                return getAssignedItemsToGroup(group, LocalDateTime.now(),false);
             case FINISHED:
-                return getAssignedItemsToGroup(userIds, LocalDateTime.now(),true);
+                return getAssignedItemsToGroup(group, LocalDateTime.now(),true);
             default:
-                return getAssignedItemsToGroup(userIds);
+                return getAssignedItemsToGroup(group);
         }
     }
 

@@ -18,6 +18,9 @@ public class Task implements Taggable {
     private ObjectId id;
 
     @NonNull
+    private String title;
+
+    @NonNull
     private String text;
 
     @NonNull
