@@ -35,11 +35,13 @@ class Main extends React.Component {
               <Route exact path="/passedtestlist" component={PagePassedTestList}/>
               <Route exact path="/groupstudentslist" component={PageGroupStudentsList}/>
               <Route exact path="/passedtasks" component={PagePassedTasks}/>
-              <Route exact path="/personalgroupslist" component={AllGroups}/>
+              <Route exact path="/allgroups" component={AllGroups}/>
               <Route exact path="/alltasks" component={AllTask}/>
               <Route exact path="/Test" component={Test}/>
               <Route exact path="/Task" component={UserTaskPage}/>
               <Route exact path="/registration" component={RegistrationPage}/>
+              <Route exact path="/teachersmaterials" component={Materials}/>
+              <Route exact path="/usersmaterials" component={Materials}/>
               <Route exact path="/materials" component={Materials}/>
               <Redirect to="/"/>
             </Switch>

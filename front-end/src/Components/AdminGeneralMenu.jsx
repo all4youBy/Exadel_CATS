@@ -5,18 +5,24 @@ import { Link } from 'react-router-dom';
 
 const { SubMenu } = Menu;
 
-class TeacherGeneralMenu extends React.PureComponent {
+class AdminGeneralMenu extends React.PureComponent {
   render() {
     const data = [{
+      key: '1',
+      type: 'user-add',
+      text: 'Список запросов',
+      subsections: [],
+      link: '/',
+    }, {
       key: 'sub1',
       type: 'team',
       text: 'Группы',
       subsections: [{
-        id: '1',
+        id: '2',
         text: 'Все группы',
         link: '/allgroups',
       }, {
-        id: '2',
+        id: '3',
         text: 'Создать группу',
         link: '/',
       }],
@@ -25,15 +31,19 @@ class TeacherGeneralMenu extends React.PureComponent {
       type: 'file',
       text: 'Задачи',
       subsections: [{
-        id: '3',
+        id: '4',
         text: 'Все задачи',
         link: '/alltasks',
       }, {
-        id: '4',
+        id: '5',
         text: 'Мои задачи',
         link: '/',
       }, {
-        id: '5',
+        id: '6',
+        text: 'Назначить задачу',
+        link: '/',
+      }, {
+        id: '7',
         text: 'Добавить задачу',
         link: '/',
       }],
@@ -42,41 +52,57 @@ class TeacherGeneralMenu extends React.PureComponent {
       type: 'profile',
       text: 'Тесты',
       subsections: [{
-        id: '6',
+        id: '8',
         text: 'Все тесты',
-        link: '/alltests',
-      }, {
-        id: '7',
-        text: 'Назначить тест',
         link: '/assignedtestlist',
       }, {
-        id: '8',
-        text: 'Проверить тест',
+        id: '9',
+        text: 'Мои тесты',
+        link: '/passedtestlist',
+      }, {
+        id: '10',
+        text: 'Назначить тесты',
+        link: '/passedtasks',
+      }, {
+        id: '11',
+        text: 'Добавить тесты',
+        link: '/assignedtestlist',
+      }],
+    }, {
+      key: '12',
+      type: 'folder',
+      text: 'Материалы',
+      subsections: [],
+      link: '/materials',
+    }, {
+      key: 'sub4',
+      type: 'area-chart',
+      text: 'Статистика',
+      subsections: [{
+        id: '13',
+        text: 'Задачи',
         link: '/',
       }, {
-        id: '9',
-        text: 'Добавить вопрос',
+        id: '14',
+        text: 'Тесты',
         link: '/',
       }],
     }, {
-      key: 'sub4',
-      type: 'folder',
-      text: 'Материалы',
-      subsections: [{
-        id: '10',
-        text: 'Все материалы',
-        link: '/materials',
-      }, {
-        id: '11',
-        text: 'Мои материалы',
-        link: '/materials',
-      }, {
-        id: '12',
-        text: 'Добавить материал',
-        link: '/',
-      }],
+      key: '15',
+      type: 'clock-circle-o',
+      text: 'История',
+      subsections: [],
+      link: '/',
     }];
     const menu = data.map((element) => {
+      if (element.subsections.length === 0) {
+        return (
+          <Menu.Item key={element.key}>
+            <Icon type={element.type}/>
+            <span><Link className="menu-link" to={element.link}>{element.text}</Link></span>
+          </Menu.Item>
+        );
+      }
       const subsections = element.subsections.map((item) => {
         const link = <Link to={item.link}>{item.text}</Link>;
         const content = <Menu.Item key={item.id}>{link}</Menu.Item>;
@@ -91,7 +117,6 @@ class TeacherGeneralMenu extends React.PureComponent {
     });
     return (
       <Menu
-        style={{ width: 256 }}
         mode="inline"
       >
         {menu}
@@ -100,4 +125,4 @@ class TeacherGeneralMenu extends React.PureComponent {
   }
 }
 
-export default TeacherGeneralMenu;
+export default AdminGeneralMenu;

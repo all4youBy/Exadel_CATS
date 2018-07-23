@@ -3,7 +3,7 @@
   border-radius: 12px;
   width: 95%;
   display: flex;
-  margin-bottom: 20px;
+  margin-bottom: 30px;
   flex-direction: column;
   div {
     display: flex;
@@ -14,4 +14,8 @@
       margin-top: 10px;
     }
   }
+}
+
+.input-answer {
+  margin-bottom: 15px;
 }
