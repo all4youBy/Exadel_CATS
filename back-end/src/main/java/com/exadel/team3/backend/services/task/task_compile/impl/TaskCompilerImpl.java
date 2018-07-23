@@ -1,6 +1,8 @@
 package com.exadel.team3.backend.services.task.task_compile.impl;
 
 import com.exadel.team3.backend.services.task.task_compile.TaskCompiler;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
 import javax.tools.*;
@@ -13,6 +15,8 @@ import java.util.List;
 public class TaskCompilerImpl implements TaskCompiler {
     private List<Class<?>> classList = new ArrayList<>();
 
+    private final Logger logger = LoggerFactory.getLogger(this.getClass());
+
     @Override
     public List<Class<?>> compileTask(List<File> fileList) throws IOException, ClassNotFoundException {
         JavaCompiler compiler = ToolProvider.getSystemJavaCompiler();
@@ -24,6 +28,8 @@ public class TaskCompilerImpl implements TaskCompiler {
 
             JavaCompiler.CompilationTask task = compiler.getTask( null, manager, diagnostics, null, null, sources );
             task.call();
+        } catch (IOException ex) {
+            logger.error(ex.getMessage());
         }
 
         loadClasses(fileList);
