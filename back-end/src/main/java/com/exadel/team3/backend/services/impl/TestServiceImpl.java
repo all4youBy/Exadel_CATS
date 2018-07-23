@@ -5,6 +5,7 @@ import java.time.LocalDateTime;
 import java.util.*;
 import java.util.stream.Collectors;
 
+import com.exadel.team3.backend.dao.*;
 import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Primary;
@@ -13,10 +14,6 @@ import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
-import com.exadel.team3.backend.dao.QuestionRepository;
-import com.exadel.team3.backend.dao.TopicRepository;
-import com.exadel.team3.backend.dao.UserRepository;
-import com.exadel.team3.backend.dao.TestRepository;
 import com.exadel.team3.backend.dto.TestItemDTO;
 import com.exadel.team3.backend.entities.*;
 import com.exadel.team3.backend.services.ServiceException;
@@ -26,9 +23,9 @@ import com.exadel.team3.backend.services.TestChecker;
 
 @Service
 @Primary
-public class TestServiceImpl implements TestService {
-    @Autowired
-    private Environment env;
+public class TestServiceImpl
+        extends AssignableServiceImpl<Test>
+        implements TestService {
 
     @Autowired
     private TestRepository testRepository;
@@ -36,13 +33,19 @@ public class TestServiceImpl implements TestService {
     private QuestionRepository questionRepository;
     @Autowired
     private TopicRepository topicRepository;
-    @Autowired
-    private UserRepository userRepository;
 
+    @Autowired
+    private Environment env;
     @Autowired
     private TestItemPicker testItemGenerator;
     @Autowired
     private TestChecker testChecker;
+
+
+    @Override
+    protected AssignableRepository<Test> getRepository() {
+        return testRepository;
+    }
 
     @Override
     public Test generateTestForUser(@NonNull String userId,
@@ -71,7 +74,7 @@ public class TestServiceImpl implements TestService {
         if (isTraining) {
             // collect question ids  associated with training tests of this particular user
             // (training tests are those where assignedBy == null)
-            List<ObjectId> trainingQuestionIds = testRepository.findByAssignedToAndAssignedBy(userId, null)
+            List<ObjectId> trainingQuestionIds = getAssignedItems(userId, "")
                     .stream()
                     .filter(test -> test.getItems() != null)
                     .flatMap(test -> test.getItems().stream())
@@ -114,7 +117,7 @@ public class TestServiceImpl implements TestService {
         ));
         newTest.setAssignedBy(assignedBy);
 
-        return addTest(newTest);
+        return addItem(newTest);
     }
 
     @Override
@@ -138,72 +141,38 @@ public class TestServiceImpl implements TestService {
                                       Collection<ObjectId> topicIds,
                                       int questionsCount,
                                       @NonNull String assignedBy) {
-        return userRepository.findStudentsByGroupName(group).stream()
-                .map(User::getEmail)
-                .map(id ->
-                        generateTestForUser(id, title, start, deadline, topicIds, questionsCount, assignedBy)
+        return getUserIdsByGroupNameStream(group)
+                .map(
+                    userId -> generateTestForUser(
+                        userId, title, start, deadline, topicIds, questionsCount, assignedBy
+                    )
                 )
                 .collect(Collectors.toList());
     }
 
 
-    private Test addTest(@NonNull Test test) {
-        return testRepository.insert(test);
-    }
-
-    @Override
-    public List<Test> getTestsAssignedToUser(@NonNull String userId) {
-        return getTestsAssignedToUser(userId, TestCompletionStatus.ALL);
-    }
-    @Override
-    public List<Test> getTestsAssignedToUser(@NonNull String userId, TestCompletionStatus completion) {
+    public List<Test> getAssignedItems(@NonNull String userId, TestCompletionStatus completion) {
         switch(completion) {
             case UNFINISHED:
-                return testRepository.findByAssignedToAndDeadlineAfterOrderByStartDesc(
-                        userId,
-                        LocalDateTime.now()
-                );
+                return getAssignedItems(userId, LocalDateTime.now(),false);
             case FINISHED:
-                return testRepository.findByAssignedToAndDeadlineBeforeOrderByStartDesc(
-                        userId,
-                        LocalDateTime.now()
-                );
+                return getAssignedItems(userId, LocalDateTime.now(),true);
             default:
-                return testRepository.findByAssignedToOrderByStartDesc(userId);
+                return getAssignedItems(userId);
         }
     }
 
-    @Override
-    public List<Test> getTestsAssignedToGroup(@NonNull String group) {
-        return getTestsAssignedToGroup(group, TestCompletionStatus.ALL);
-    }
-    @Override
-    public List<Test> getTestsAssignedToGroup(@NonNull String group, TestCompletionStatus completion) {
-        List<String> userIds = userRepository.findStudentsByGroupName(group)
-                .stream()
-                .map(User::getEmail)
-                .collect(Collectors.toList());
-
+    public List<Test> getAssignedItemsToGroup(@NonNull String group, @NonNull TestCompletionStatus completion) {
         switch(completion) {
             case UNFINISHED:
-                return testRepository.findByAssignedToInAndDeadlineAfterOrderByStartDesc(
-                        userIds,
-                        LocalDateTime.now()
-                );
+                return getAssignedItemsToGroup(group, LocalDateTime.now(),false);
             case FINISHED:
-                return testRepository.findByAssignedToInAndDeadlineBeforeOrderByStartDesc(
-                        userIds,
-                        LocalDateTime.now()
-                );
+                return getAssignedItemsToGroup(group, LocalDateTime.now(),true);
             default:
-                return testRepository.findByAssignedToInOrderByStartDesc(userIds);
+                return getAssignedItemsToGroup(group);
         }
     }
 
-    @Override
-    public Test updateTest(Test test) {
-        return testRepository.save(test);
-    }
     @Override
     public Test submitTest(ObjectId testId) {
         Optional<Test> updatedTest = testRepository.findById(testId);
@@ -290,21 +259,5 @@ public class TestServiceImpl implements TestService {
                             )
                 )
                 .collect(Collectors.toList());
-    }
-
-
-    @Override
-    public Test getTest(String id) {
-        return getTest(new ObjectId(id));
-    }
-
-    @Override
-    public Test getTest(ObjectId id) {
-        return testRepository.findById(id).orElse(null);
-    }
-
-    @Override
-    public void deleteTest(Test test) {
-        testRepository.delete(test);
     }
 }

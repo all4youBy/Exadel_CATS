@@ -20,7 +20,7 @@ public class QuestionController {
     @PostMapping("/add")
     public ResponseEntity<?> addQuestion(@RequestBody Question question){
 
-       Question q = questionService.addQuestion(question);
+       Question q = questionService.addItem(question);
 
        if(q==null)
            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Can't add question");
@@ -31,23 +31,23 @@ public class QuestionController {
     @GetMapping
     public List<Question> getQuestions(@RequestParam(required = false)List<ObjectId> topicsIds){
         if(topicsIds == null)
-            return questionService.getQuestions();
-        return questionService.getQuestionsByTopicIds(topicsIds);
+            return questionService.getItems();
+        return questionService.getItemsByTopicIds(topicsIds);
     }
 
     @GetMapping("/{id}")
     public Question getQuestion(@PathVariable String id){
-        return questionService.getQuestion(id);
+        return questionService.getItem(new ObjectId(id));
     }
 
 
     @PutMapping
     public Question updateQuestion(@RequestBody Question question){
-        return  questionService.updateQuestion(question);
+        return  questionService.updateItem(question);
     }
 
     @DeleteMapping
     public void deleteQuestion(@RequestBody Question question){
-        questionService.deleteQuestion(question);
+        questionService.deleteItem(question);
     }
 }

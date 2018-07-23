@@ -1,18 +1,16 @@
 package com.exadel.team3.backend.entities;
 
 import lombok.*;
-import org.apache.tomcat.jni.Local;
 import org.bson.types.ObjectId;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
-import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.List;
 
 @Data
 @Document(collection = "tests")
-public class Test {
+public class Test implements Assignable {
     @Id
     @Setter(AccessLevel.NONE)
     private ObjectId id;
@@ -30,11 +28,6 @@ public class Test {
     private LocalDateTime deadline;
 
     private String assignedBy;
-    /*
-    public boolean isTraining() {
-        return StringUtils.isEmpty(assignedBy);
-    }
-    */
 
     private List<TestItem> items;
 

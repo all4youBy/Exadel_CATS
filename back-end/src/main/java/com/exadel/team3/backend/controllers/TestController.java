@@ -7,6 +7,7 @@ import com.exadel.team3.backend.security.requests.TestGenerationRequest;
 import com.exadel.team3.backend.security.requests.TrainingTestGenerationRequest;
 import com.exadel.team3.backend.services.TestService;
 
+import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -23,7 +24,7 @@ public class TestController {
 
     @GetMapping("/test/{testId}")
     public Test getTest(@PathVariable(value = "testId") String testId){
-        return testService.getTest(testId);
+        return testService.getItem(new ObjectId(testId));
     }
 
     @PostMapping("/test")
@@ -69,7 +70,7 @@ public class TestController {
 
     @GetMapping
     public ResponseEntity<?> getTestsAssignedToUser(@RequestParam(value = "user_id") String userId){
-        List<Test> userTests = testService.getTestsAssignedToUser(userId);
+        List<Test> userTests = testService.getAssignedItems(userId);
 
         if(userTests == null)
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Can't get list of tests, user:" + userId);
@@ -79,7 +80,7 @@ public class TestController {
 
     @GetMapping("/groups/{group}")
     public ResponseEntity<?> getTestsAssignedToGroup(@PathVariable(value = "group") String group){
-        List<Test> groupTests = testService.getTestsAssignedToGroup(group);
+        List<Test> groupTests = testService.getAssignedItemsToGroup(group);
 
         if(groupTests == null)
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Can't get list of tests, group:" + group);
@@ -89,12 +90,12 @@ public class TestController {
 
     @PutMapping
     public ResponseEntity<?> updateTest(@RequestBody Test test){
-        return ResponseEntity.ok(testService.updateTest(test));
+        return ResponseEntity.ok(testService.updateItem(test));
     }
 
     @DeleteMapping
     public void deleteTest(@RequestBody Test test){
-        testService.deleteTest(test);
+        testService.deleteItem(test);
     }
 }
 
