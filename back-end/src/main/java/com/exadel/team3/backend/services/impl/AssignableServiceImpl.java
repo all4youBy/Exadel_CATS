@@ -8,12 +8,12 @@ import com.exadel.team3.backend.services.AssignableService;
 import lombok.NonNull;
 import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.mongodb.repository.MongoRepository;
 
 import java.time.LocalDateTime;
 import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public abstract class AssignableServiceImpl<T extends Assignable>
         extends CrudServiceImpl<T, ObjectId>
@@ -47,34 +47,44 @@ public abstract class AssignableServiceImpl<T extends Assignable>
     }
     @Override
     public List<T> getAssignedItemsToGroup(@NonNull String assignedToGroup) {
-        return getRepository().findByAssignedToInOrderByStartDesc(getUserIdsByGroupName(assignedToGroup));
+        return getRepository().findByAssignedToInOrderByStartDesc(
+                getUserIdsByGroupName(assignedToGroup)
+        );
     }
 
 
     @Override
     public List<T> getAssignedItemsToGroup(Collection<String> assignedToIds, @NonNull LocalDateTime deadline, boolean finished) {
         if (finished) {
-            return getRepository().findByAssignedToInAndDeadlineBeforeOrderByStartDesc(assignedToIds, deadline);
+            return getRepository()
+                    .findByAssignedToInAndDeadlineBeforeOrderByStartDesc(assignedToIds, deadline);
         } else {
-            return getRepository().findByAssignedToInAndDeadlineAfterOrderByStartDesc(assignedToIds, deadline);
+            return getRepository()
+                    .findByAssignedToInAndDeadlineAfterOrderByStartDesc(assignedToIds, deadline);
         }
     }
     @Override
-    public List<T> getAssignedItemsToGroup(@NonNull String assignedToGroup, @NonNull LocalDateTime deadline, boolean finished) {
-        return getAssignedItemsToGroup(getUserIdsByGroupName(assignedToGroup), deadline, finished);
+    public List<T> getAssignedItemsToGroup(
+            @NonNull String assignedToGroup,
+            @NonNull LocalDateTime deadline,
+            boolean finished
+    ) {
+        return getAssignedItemsToGroup(
+                getUserIdsByGroupName(assignedToGroup),
+                deadline,
+                finished
+        );
     }
 
     @Override
     protected abstract AssignableRepository<T> getRepository();
 
-    protected UserRepository getAssigneeRepository() {
-        return userRepository;
-    }
-
-    private List<String> getUserIdsByGroupName(String group) {
+    protected Stream<String> getUserIdsByGroupNameStream (String group){
         return userRepository.findStudentsByGroupName(group)
                 .stream()
-                .map(User::getEmail)
-                .collect(Collectors.toList());
+                .map(User::getEmail);
+    }
+    private List<String> getUserIdsByGroupName (String group) {
+        return getUserIdsByGroupNameStream(group).collect(Collectors.toList());
     }
 }

@@ -141,12 +141,11 @@ public class TestServiceImpl
                                       Collection<ObjectId> topicIds,
                                       int questionsCount,
                                       @NonNull String assignedBy) {
-        return getAssigneeRepository().findStudentsByGroupName(group).stream()
-                .map(User::getEmail)
-                .map(id ->
-                        generateTestForUser(
-                                id, title, start, deadline, topicIds, questionsCount, assignedBy
-                        )
+        return getUserIdsByGroupNameStream(group)
+                .map(
+                    userId -> generateTestForUser(
+                        userId, title, start, deadline, topicIds, questionsCount, assignedBy
+                    )
                 )
                 .collect(Collectors.toList());
     }
