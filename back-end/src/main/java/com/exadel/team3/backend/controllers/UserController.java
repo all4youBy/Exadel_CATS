@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/cats")
+@RequestMapping("/users")
 public class UserController {
 
     @Autowired
@@ -27,25 +27,25 @@ public class UserController {
         userService.addUser(user);
         return ResponseEntity.status(HttpStatus.OK).body("User created.");
     }
-    @GetMapping("/users/{group}")
+    @GetMapping("/{group}")
     @PreAuthorize("hasAnyRole('ADMIN','TEACHER')")
     public List<User> getUsers(@PathVariable String group){
         return userService.getUsersByGroup(group);
     }
 
-    @GetMapping("/users/{email}")
+    @GetMapping("/{email}")
     public User getUser(@PathVariable(value = "email") String email){
         return userService.getUser(email);
 
     }
 
-    @PutMapping("/users")
+    @PutMapping
     public ResponseEntity<?> updateUser(@RequestBody User user){
         userService.updateUser(user);
         return new ResponseEntity<String>(HttpStatus.OK);
     }
 
-    @DeleteMapping("/users")
+    @DeleteMapping
     public void deleteUser(@RequestBody User user){
         userService.deleteUser(user);
     }
