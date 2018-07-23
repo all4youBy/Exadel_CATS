@@ -25,7 +25,8 @@ class TestCheckerImpl implements TestChecker {
     private QuestionRepository questionRepository;
 
     public Integer checkTest(@NonNull Test test) {
-       EnumMap<TestItemStatus, Long> testItemStatistics =
+        // gather the statistics on statuses of all TestItems in the test
+        EnumMap<TestItemStatus, Long> testItemStatistics =
                 test.getItems()
                         .stream()
                         .collect(Collectors.groupingBy(
@@ -34,12 +35,13 @@ class TestCheckerImpl implements TestChecker {
                                 Collectors.counting())
                         );
        EnumSet.allOf(TestItemStatus.class).forEach(enumIntem -> testItemStatistics.putIfAbsent(enumIntem, 0L));
+       // skip mark if the test still possesses unchecked questions
        if (testItemStatistics.get(TestItemStatus.UNCHECKED)>0) {
             return null;
         }
 
-        // get the mark as a ratio of right answered question to the whole amount of questions
-        // floored, so that 9 right questions of 10 = 9.5d -> produce mark 9
+        // get the floored mark as a ratio of right answered question to the whole amount of questions,
+        // so that 9 right questions of 10 = 9.5d -> produce mark 9
         int mark = (int) Math.floor(
                 (double)testItemStatistics.get(TestItemStatus.ANSWERED_RIGHT)
                 / test.getItems().size()
