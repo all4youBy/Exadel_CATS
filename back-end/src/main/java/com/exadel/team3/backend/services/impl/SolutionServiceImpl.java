@@ -27,7 +27,7 @@ public class SolutionServiceImpl
 
     @Override
     protected AssignableRepository<Solution> getRepository() {
-        return null;
+        return solutionRepository;
     }
 
     @Override

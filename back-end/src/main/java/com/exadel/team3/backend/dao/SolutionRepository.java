@@ -7,5 +7,5 @@ import com.exadel.team3.backend.entities.Solution;
 
 
 @Repository
-public interface SolutionRepository extends MongoRepository<Solution, ObjectId> {
+public interface SolutionRepository extends AssignableRepository<Solution> {
 }
