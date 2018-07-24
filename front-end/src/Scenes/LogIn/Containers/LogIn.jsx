@@ -1,6 +1,5 @@
 import React from 'react';
 import { Layout } from 'antd';
-import 'antd/dist/antd.css';
 import './LogIn.scss';
 import WrappedNormalLoginForm from '../Components/LoginForm';
 
@@ -20,4 +19,4 @@ class LogIn extends React.Component {
   }
 }
 
-export default LogIn;
+export default (LogIn);

@@ -1,5 +1,4 @@
 import React from 'react';
-// import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import './Main.scss';
 import { Switch, Route, Redirect, withRouter } from 'react-router-dom';
@@ -17,7 +16,6 @@ import PagePassedTasks from '../../Scenes/Users/Tasks/PassedTasks';
 import AllGroups from '../../Scenes/Teachers/GroupsList/Groups/index';
 import Materials from '../../Scenes/Teachers/Materials/Containers/Materials';
 import RegistrationPage from '../../Scenes/Registration';
-
 
 class Main extends React.Component {
   render() {
