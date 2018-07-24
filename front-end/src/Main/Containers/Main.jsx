@@ -1,4 +1,4 @@
-/* eslint-disable react/destructuring-assignment */
+/* eslint-disable react/destructuring-assignment,no-unused-vars,react/prop-types */
 import React from 'react';
 import { connect } from 'react-redux';
 import './Main.scss';
@@ -83,12 +83,12 @@ function mapStateToProps(state) {
     userType: state.userType,
   };
 }
-/*const mapDispatchToProps = dispatch => ({
+/* const mapDispatchToProps = dispatch => ({
   handleStudentAdd: () => {
     dispatch(addStudent(book));
   },
   handleStudentDelete: (book) => {
     dispatch(deleteStudent(book));
   },
-});*/
+}); */
 export default withRouter(connect(mapStateToProps)(Main));

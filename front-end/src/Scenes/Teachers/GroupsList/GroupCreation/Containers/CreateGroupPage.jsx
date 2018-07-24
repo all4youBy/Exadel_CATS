@@ -33,7 +33,9 @@ class CreateGroupPage extends React.PureComponent {
           />
           <EditableTagGroup tags={tags} deleteTag={deleteTag} addTag={addTag}/>
         </div>
-        <StudentList addStudent={addStudent} students={students}/>
+        <div className="student-list-container">
+          <StudentList addStudent={addStudent} students={students}/>
+        </div>
       </div>
     );
   }

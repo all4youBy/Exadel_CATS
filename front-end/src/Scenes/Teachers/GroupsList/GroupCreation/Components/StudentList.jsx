@@ -1,3 +1,4 @@
+/* eslint-disable react/no-unused-prop-types */
 import React from 'react';
 import 'antd/dist/antd.css';
 import './GroupCreation.scss';
@@ -11,7 +12,6 @@ import PropTypes from 'prop-types';
 const fakeDataUrl = 'https://randomuser.me/api/?results=5&inc=name,gender,email,nat&noinfo';
 
 export default class StudentList extends React.PureComponent {
-
   loadedRowsMap = {};
 
   static propTypes = {
