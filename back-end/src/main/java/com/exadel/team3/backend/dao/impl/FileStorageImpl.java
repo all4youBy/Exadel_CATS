@@ -1,12 +1,8 @@
 package com.exadel.team3.backend.dao.impl;
 
-import com.exadel.team3.backend.dao.FileStorage;
-import com.mongodb.MongoClient;
-import com.mongodb.client.gridfs.GridFSBucket;
-import com.mongodb.client.gridfs.GridFSBuckets;
-import com.mongodb.client.gridfs.model.GridFSFile;
-import com.mongodb.client.gridfs.model.GridFSUploadOptions;
-import com.mongodb.client.model.Filters;
+import java.io.FileNotFoundException;
+import java.io.InputStream;
+
 import org.bson.BsonObjectId;
 import org.bson.Document;
 import org.bson.types.ObjectId;
@@ -15,27 +11,23 @@ import org.springframework.core.env.Environment;
 import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Component;
 
-import javax.annotation.PostConstruct;
-import javax.annotation.PreDestroy;
-import java.io.FileNotFoundException;
-import java.io.InputStream;
+import com.mongodb.MongoClient;
+import com.mongodb.client.gridfs.GridFSBucket;
+import com.mongodb.client.gridfs.GridFSBuckets;
+import com.mongodb.client.gridfs.model.GridFSFile;
+import com.mongodb.client.gridfs.model.GridFSUploadOptions;
+import com.mongodb.client.model.Filters;
+
+import com.exadel.team3.backend.dao.FileStorage;
 
 @Component
 public class FileStorageImpl implements FileStorage {
+    @Autowired
     private MongoClient mongoClient;
-    private GridFSBucket bucket;
-
     @Autowired
     private Environment env;
 
-    @PostConstruct
-    private void init() {
-        mongoClient = new MongoClient(env.getProperty("spring.data.mongodb.host", "localhost"));
-    }
-    @PreDestroy
-    private void cleanUp() {
-        mongoClient.close();
-    }
+    private GridFSBucket bucket;
 
     @Override
     public ObjectId save(@NonNull InputStream stream, @NonNull String filename) {
@@ -52,12 +44,13 @@ public class FileStorageImpl implements FileStorage {
 
     @Override
     public InputStream read(@NonNull ObjectId fileId) {
-        return bucket.openDownloadStream(fileId);
+        return getGridFsBucket().openDownloadStream(fileId);
     }
 
     @Override
-    public InputStream read(@NonNull String filename, @NonNull ObjectId associatedId) throws FileNotFoundException {
-        GridFSFile result = bucket.find(Filters.and(
+    public InputStream read(@NonNull String filename,
+                            @NonNull ObjectId associatedId) throws FileNotFoundException {
+        GridFSFile result = getGridFsBucket().find(Filters.and(
                 Filters.eq("filename", filename),
                 Filters.eq("metadata.assocId", associatedId.toString())
         )).first();
@@ -67,7 +60,7 @@ public class FileStorageImpl implements FileStorage {
 
     @Override
     public InputStream read(@NonNull String filename) throws FileNotFoundException {
-        GridFSFile result = bucket.find(Filters.eq("filename", filename)).first();
+        GridFSFile result = getGridFsBucket().find(Filters.eq("filename", filename)).first();
         if (result == null) throw new FileNotFoundException("File \"" + filename + "\" not found");
         return read(result.getObjectId());
     }
