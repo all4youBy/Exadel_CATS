@@ -7,16 +7,18 @@ import LogIn from '../../Scenes/LogIn/Containers/LogIn';
 import PageAssignedTestList from '../../Scenes/Users/TestList/AssignedTestList';
 import PagePassedTestList from '../../Scenes/Users/TestList/PassedTestList';
 import PageGroupStudentsList from '../../Scenes/Teachers/GroupsList/GroupStudentsList';
-import Test from '../../Scenes/Users/Tests/Containers/Test';
+import Test from '../../Scenes/Users/Tests';
 import UserTaskPage from '../../Scenes/Users/Task/Containers/UserTaskPage';
-import UserGeneralMenu from '../../Components/UserGeneralMenu';
 import PageHeader from '../../Components/GlobalHeader';
 import PageFooter from '../../Components/GlobalFooter';
 import AllTask from '../../Scenes/Teachers/Tasks/AllTask';
 import PagePassedTasks from '../../Scenes/Users/Tasks/PassedTasks';
-import AllGroups from '../../Scenes/Teachers/GroupsList/Groups/index';
-import Materials from '../../Scenes/Teachers/Materials/Containers/Materials';
+import AllGroups from '../../Scenes/Teachers/GroupsList/Groups';
+import Materials from '../../Scenes/Teachers/Materials';
 import RegistrationPage from '../../Scenes/Registration';
+import GeneralMenu from '../../Components/GeneralMenu';
+import PageAssignedTasks from '../../Scenes/Users/Tasks/AssignedTasks';
+import AllTests from '../../Scenes/Teachers/Tests/AllTests/Containers/AllTests';
 
 
 class Main extends React.Component {
@@ -26,7 +28,7 @@ class Main extends React.Component {
         <PageHeader/>
         <div className="main-body-container">
           <div className="general-menu">
-            <UserGeneralMenu/>
+            <GeneralMenu/>
           </div>
           <div className="switch-div">
             <Switch>
@@ -37,12 +39,15 @@ class Main extends React.Component {
               <Route exact path="/passedtasks" component={PagePassedTasks}/>
               <Route exact path="/allgroups" component={AllGroups}/>
               <Route exact path="/alltasks" component={AllTask}/>
-              <Route exact path="/Test" component={Test}/>
-              <Route exact path="/Task" component={UserTaskPage}/>
+              <Route exact path="/test" component={Test}/>
+              <Route exact path="/task" component={UserTaskPage}/>
               <Route exact path="/registration" component={RegistrationPage}/>
               <Route exact path="/teachersmaterials" component={Materials}/>
               <Route exact path="/usersmaterials" component={Materials}/>
               <Route exact path="/materials" component={Materials}/>
+              <Route exact path="/assignedtasks" component={PageAssignedTasks}/>
+              <Route exact path="/alltests" component={AllTests}/>
+              <Route exact path="/" component={PageAssignedTasks}/>
               <Redirect to="/"/>
             </Switch>
           </div>

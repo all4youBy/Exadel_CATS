@@ -32,7 +32,7 @@ export const USER_GENERAL_MENU_DATA = [{
   }, {
     id: '6',
     text: 'Пробные тесты',
-    link: '/passedtasks',
+    link: '/assignedtestlist',
   }],
 }, {
   key: '7',
@@ -63,10 +63,6 @@ export const TEACHER_GENERAL_MENU_DATA = [{
     id: '3',
     text: 'Все задачи',
     link: '/alltasks',
-  }, {
-    id: '4',
-    text: 'Мои задачи',
-    link: '/',
   }, {
     id: '5',
     text: 'Добавить задачу',
