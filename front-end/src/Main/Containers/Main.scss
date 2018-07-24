@@ -21,6 +21,14 @@
   width: 5%;
 }
 
+.main-body-container-unlogged {
+  display: flex;
+  flex-grow: 1;
+  height: 100%;
+  width: 100%;
+  flex-direction: column;
+}
+
 .general-menu {
   width: 25%;
 }

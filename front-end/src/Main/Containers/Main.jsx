@@ -1,3 +1,4 @@
+/* eslint-disable react/destructuring-assignment */
 import React from 'react';
 import { connect } from 'react-redux';
 import './Main.scss';
@@ -17,38 +18,77 @@ import AllGroups from '../../Scenes/Teachers/GroupsList/Groups/index';
 import Materials from '../../Scenes/Teachers/Materials/Containers/Materials';
 import RegistrationPage from '../../Scenes/Registration';
 
+import AddTaskPage from '../../Scenes/Teachers/Tasks/AddTask/Containers/AddTaskPage';
+import CreateGroupPage from '../../Scenes/Teachers/GroupsList/GroupCreation/Containers/CreateGroupPage';
+
 class Main extends React.Component {
+  renderSwitch() {
+    const { userType } = this.props;
+    switch ('student') {
+      case 'student':
+        return (
+          <div className="main-body-container">
+            <div className="general-menu">
+              <UserGeneralMenu/>
+            </div>
+            <div className="switch-div">
+              <Switch>
+                <Route exact path="/assignedtestlist" component={PageAssignedTestList}/>
+                <Route exact path="/passedtestlist" component={PagePassedTestList}/>
+                <Route exact path="/groupstudentslist" component={PageGroupStudentsList}/>
+                <Route exact path="/passedtasks" component={PagePassedTasks}/>
+                <Route exact path="/allgroups" component={AllGroups}/>
+                <Route exact path="/alltasks" component={AllTask}/>
+                <Route exact path="/Test" component={Test}/>
+                <Route exact path="/Task" component={UserTaskPage}/>
+                <Route exact path="/addtask" component={AddTaskPage}/>
+                <Route exact path="/registration" component={RegistrationPage}/>
+                <Route exact path="/teachersmaterials" component={Materials}/>
+                <Route exact path="/usersmaterials" component={Materials}/>
+                <Route exact path="/materials" component={Materials}/>
+                <Route exact path="/creategroup" component={CreateGroupPage}/>
+                <Redirect to="/"/>
+              </Switch>
+            </div>
+          </div>
+        );
+      case 'guest':
+        return (
+          <div className="main-body-container-unlogged">
+            <Route exact path="/" component={LogIn}/>
+            <Redirect to="/"/>
+          </div>
+        );
+      default:
+        return 'foo';
+    }
+  }
+
   render() {
     return (
       <div className="main-content">
         <PageHeader/>
-        <div className="main-body-container">
-          <div className="general-menu">
-            <UserGeneralMenu/>
-          </div>
-          <div className="switch-div">
-            <Switch>
-              <Route exact path="/" component={LogIn}/>
-              <Route exact path="/assignedtestlist" component={PageAssignedTestList}/>
-              <Route exact path="/passedtestlist" component={PagePassedTestList}/>
-              <Route exact path="/groupstudentslist" component={PageGroupStudentsList}/>
-              <Route exact path="/passedtasks" component={PagePassedTasks}/>
-              <Route exact path="/allgroups" component={AllGroups}/>
-              <Route exact path="/alltasks" component={AllTask}/>
-              <Route exact path="/Test" component={Test}/>
-              <Route exact path="/Task" component={UserTaskPage}/>
-              <Route exact path="/registration" component={RegistrationPage}/>
-              <Route exact path="/teachersmaterials" component={Materials}/>
-              <Route exact path="/usersmaterials" component={Materials}/>
-              <Route exact path="/materials" component={Materials}/>
-              <Redirect to="/"/>
-            </Switch>
-          </div>
-        </div>
+
+        {this.renderSwitch(this.props.userType)}
         <PageFooter/>
       </div>
     );
   }
 }
 
-export default withRouter(connect()(Main));
+function mapStateToProps(state) {
+  return {
+    isReady: state.isReady,
+    isAuth: state.isAuth,
+    userType: state.userType,
+  };
+}
+/*const mapDispatchToProps = dispatch => ({
+  handleStudentAdd: () => {
+    dispatch(addStudent(book));
+  },
+  handleStudentDelete: (book) => {
+    dispatch(deleteStudent(book));
+  },
+});*/
+export default withRouter(connect(mapStateToProps)(Main));
