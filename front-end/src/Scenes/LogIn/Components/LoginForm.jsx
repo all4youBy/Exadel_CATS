@@ -20,6 +20,12 @@ class LoginForm extends React.Component {
   constructor(props) {
     super(props);
     this.onClickLogIn = this.onClickLogIn.bind(this);
+    this.getUsername = (elem) => {
+      this.username = elem;
+    };
+    this.getPassword = (elem) => {
+      this.password = elem;
+    };
   }
 
   componentDidMount() {
@@ -50,7 +56,8 @@ class LoginForm extends React.Component {
             rules: [{ required: true, message: 'Введите имя пользователя!' }],
           })(
             <Input
-              ref={(c) => { this.username = c; }}
+              ref={this.getUsername}
+              type="text"
               prefix={<Icon type="user" style={{ color: 'rgba(0,0,0,.25)' }}/>}
               placeholder="Имя пользователя..."
             />,
@@ -61,7 +68,7 @@ class LoginForm extends React.Component {
             rules: [{ required: true, message: 'Введите пароль!' }],
           })(
             <Input
-              ref={(c) => { this.password = c; }}
+              ref={this.getPassword}
               prefix={<Icon type="lock" style={{ color: 'rgba(0,0,0,.25)' }}/>}
               type="password"
               placeholder="Пароль..."

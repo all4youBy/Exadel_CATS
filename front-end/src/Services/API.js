@@ -4,8 +4,10 @@ import store from './ConfigureStore';
 
 const API = {
   getTokenFromStore() {
-    console.log(store.getState());
-    return store.getState().logInInformation.user.token;
+    const token = store.getState().logInInformation.user;
+    if (token) {
+      return token.token;
+    } return null;
   },
   sendRequest(url, reqInit) {
     const headers = reqInit.headers ? reqInit.headers : new Headers();
@@ -29,7 +31,7 @@ const API = {
         .then(response => response.text())
         .then((response) => {
           localStorage.setItem('user', response);
-          dispatch(getUserData(response));
+          dispatch(getUserData(JSON.parse(response)));
         })
         .catch(error => console.error('Fetch Error =\n', error));
     };

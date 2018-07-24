@@ -1,5 +1,5 @@
 import requestLoginInformation from '../../../../Services/loginService';
-import { USER_DATA, LOG_IN, RECEIVE_LOGINDATA } from '../Actions/types';
+import { GET_USER_DATA, LOG_IN, RECEIVE_LOGINDATA } from '../Actions/types';
 
 const initialState = {
   user: requestLoginInformation(),
@@ -13,7 +13,7 @@ function logIn(state = initialState, action) {
         password: action.payload.password };
     case RECEIVE_LOGINDATA:
       return { ...state, data: action.payload };
-    case USER_DATA:
+    case GET_USER_DATA:
       return { ...state, user: action.payload };
     default:
       return state;

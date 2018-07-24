@@ -1,4 +1,4 @@
-import { LOG_IN, USER_DATA } from './types';
+import { LOG_IN, GET_USER_DATA } from './types';
 
 export function logIn(name, key) {
   return {
@@ -9,7 +9,7 @@ export function logIn(name, key) {
 
 export function getUserData(data) {
   return {
-    type: USER_DATA,
+    type: GET_USER_DATA,
     payload: data,
   };
 }
