@@ -4,10 +4,9 @@ import './AddTask.scss';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { Button, Input } from 'antd';
-import SectionTree from '../../../../../Components/SectionTree';
 import InputOutputSet from './InputOutputSet';
 import { addInOutSet, addTaskTag, deleteTaskTag } from '../Services/Actions/actions';
-import EditableTagGroup from '../../../../../Components/AddTaskTags';
+import TreeWithTags from '../../../../../Components/TreeWithTags';
 
 
 const { TextArea } = Input;
@@ -27,10 +26,7 @@ class AddTask extends React.PureComponent {
       <div className="add-task-container">
         <TextArea className="input-task-name" placeholder="Название задачи" autosize />
         <TextArea className="input-task-desc" placeholder="Описание задачи" autosize={{ minRows: 7 }} />
-        <div className="tags-container">
-          <SectionTree addTag={addTag}/>
-          <EditableTagGroup tags={tags} deleteTag={deleteTag} addTag={addTag}/>
-        </div>
+        <TreeWithTags tags={tags} deleteTag={deleteTag} addTag={addTag}/>
         <InputOutputSet addElem={addElem} testSet={testSet}/>
         <Button type="primary" className="task-upload-button">Отправить</Button>
       </div>

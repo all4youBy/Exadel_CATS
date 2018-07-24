@@ -42,7 +42,6 @@ class Main extends React.Component {
                 <Route exact path="/Test" component={Test}/>
                 <Route exact path="/Task" component={UserTaskPage}/>
                 <Route exact path="/addtask" component={AddTaskPage}/>
-                <Route exact path="/registration" component={RegistrationPage}/>
                 <Route exact path="/teachersmaterials" component={Materials}/>
                 <Route exact path="/usersmaterials" component={Materials}/>
                 <Route exact path="/materials" component={Materials}/>
@@ -55,8 +54,11 @@ class Main extends React.Component {
       case 'guest':
         return (
           <div className="main-body-container-unlogged">
-            <Route exact path="/" component={LogIn}/>
-            <Redirect to="/"/>
+            <Switch>
+              <Route exact path="/" component={LogIn}/>
+              <Route exact path="/registration" component={RegistrationPage}/>
+              <Redirect to="/"/>
+            </Switch>
           </div>
         );
       default:
@@ -83,6 +85,7 @@ function mapStateToProps(state) {
     userType: state.userType,
   };
 }
+
 /* const mapDispatchToProps = dispatch => ({
   handleStudentAdd: () => {
     dispatch(addStudent(book));
