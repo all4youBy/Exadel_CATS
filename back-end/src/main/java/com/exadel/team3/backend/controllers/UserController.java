@@ -24,30 +24,30 @@ public class UserController {
     @PostMapping("/registration")
     public ResponseEntity<?> signUpUser(@RequestBody User user){
         securityUtils.hashUserPassword(user);
-        userService.addUser(user);
+        userService.addItem(user);
         return ResponseEntity.status(HttpStatus.OK).body("User created.");
     }
     @GetMapping("/{group}")
     @PreAuthorize("hasAnyRole('ADMIN','TEACHER')")
     public List<User> getUsers(@PathVariable String group){
-        return userService.getUsersByGroup(group);
+        return userService.getByGroup(group);
     }
 
     @GetMapping("/{email}")
     public User getUser(@PathVariable(value = "email") String email){
-        return userService.getUser(email);
+        return userService.getItem(email);
 
     }
 
     @PutMapping
     public ResponseEntity<?> updateUser(@RequestBody User user){
-        userService.updateUser(user);
+        userService.updateItem(user);
         return new ResponseEntity<String>(HttpStatus.OK);
     }
 
     @DeleteMapping
     public void deleteUser(@RequestBody User user){
-        userService.deleteUser(user);
+        userService.deleteItem(user);
     }
 
     @PostMapping
