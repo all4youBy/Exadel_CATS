@@ -33,7 +33,7 @@ public interface TestService  extends AssignableService<Test> {
 
     Test submitTest(ObjectId id);
     Test submitAnswer(TestItemDTO answeredItem);
-    Test submitManualAnswerCheck(TestItemDTO checked);
+    Test submitManualAnswerCheck(TestItemDTO checkedItem);
 
     List<TestItemDTO> getAnswersForManualCheck(String assignedBy);
 }

@@ -1,9 +1,11 @@
 package com.exadel.team3.backend.entities;
 
-import lombok.Data;
-import lombok.NonNull;
+import lombok.*;
 
 @Data
+@RequiredArgsConstructor
+@AllArgsConstructor
+@NoArgsConstructor
 public class TaskTestingSet {
     private static int MIN_DIFFICULTY_LEVEL = 1;
     private static int MAX_DIFFICULTY_LEVEL = 10;
@@ -17,10 +19,12 @@ public class TaskTestingSet {
 
     private int difficultyLevel = DEFAULT_DIFFICULTY_LEVEL;
     public void setDifficultyLevel(int value) {
-        difficultyLevel = value < MIN_DIFFICULTY_LEVEL
-                            ? MIN_DIFFICULTY_LEVEL
-                            : value > MAX_DIFFICULTY_LEVEL
-                                ? MAX_DIFFICULTY_LEVEL
-                                : value;
+        if (value < MIN_DIFFICULTY_LEVEL) {
+            difficultyLevel = MIN_DIFFICULTY_LEVEL;
+        } else if (value > MAX_DIFFICULTY_LEVEL) {
+            difficultyLevel = MAX_DIFFICULTY_LEVEL;
+        } else {
+            difficultyLevel = value;
+        }
     }
 }
