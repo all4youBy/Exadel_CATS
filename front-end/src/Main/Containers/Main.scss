@@ -3,10 +3,26 @@
   flex-direction: row;
   flex-grow: 1;
   height: 100%;
+  width: 85%;
+}
+
+.parent-main-body {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  width: 100%;
+}
+
+.left-main-body {
+  width: 10%;
+}
+
+.right-main-body {
+  width: 5%;
 }
 
 .general-menu {
-  width: 16%;
+  width: 25%;
 }
 
 .switch-div {
@@ -21,5 +37,6 @@
   flex-direction: column;
   justify-content: stretch;
   min-height: 100vh;
+  align-items: center;
 }
 

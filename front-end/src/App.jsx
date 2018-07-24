@@ -1,18 +1,17 @@
 import React, { Component } from 'react';
 import './App.css';
 import { Provider } from 'react-redux';
-import 'antd/dist/antd.css';
-import BrowserRouter from 'react-router-dom/es/BrowserRouter';
-import store from './Services/ConfigureStore';
+import { ConnectedRouter as Router } from 'react-router-redux';
+import { configureStore, history } from './Services/ConfigureStore';
 import Main from './Main/Containers/Main';
 
 class App extends Component {
   render() {
     return (
       <Provider store={store}>
-        <BrowserRouter>
+        <Router history={history}>
           <Main/>
-        </BrowserRouter>
+        </Router>
       </Provider>
     );
   }

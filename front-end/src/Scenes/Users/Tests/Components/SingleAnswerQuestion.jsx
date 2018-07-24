@@ -1,7 +1,7 @@
 import React from 'react';
 import 'antd/dist/antd.css';
 import './SingleAnswerQuestion.scss';
-import { Radio, Card, Button } from 'antd';
+import { Radio, Card } from 'antd';
 
 const { Group } = Radio;
 
@@ -25,8 +25,8 @@ export default class SingleAnswerQuestion extends React.PureComponent {
     const { value } = this.state;
 
     return (
-      <Card className="single-a-q-card">
-        <p>
+      <Card className="single-answer-question-card">
+        <p className="question-text">
           Вопрос с одним вариантом ответа
         </p>
         <Group onChange={this.onChange} value={value}>
@@ -43,7 +43,6 @@ export default class SingleAnswerQuestion extends React.PureComponent {
             Ответ 4
           </Radio>
         </Group>
-        <Button className="submit-button">Отправить</Button>
       </Card>
     );
   }
