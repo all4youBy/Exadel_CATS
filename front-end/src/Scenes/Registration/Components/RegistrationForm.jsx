@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import './RegistrationForm.scss';
 import PropTypes from 'prop-types';
 import { registrateStudent, registrateTeacher } from '../Services/Actions/actions';
-
+import Top from '../../../Components/Top/index';
 
 const { Item: FormItem } = Form;
 const { Option } = Select;
@@ -376,6 +376,7 @@ class RegistrationForm extends React.Component {
           >Зарегистрироваться
           </Button>
         </FormItem>
+        <Top/>
       </Form>
     );
   }
