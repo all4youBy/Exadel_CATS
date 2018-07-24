@@ -29,7 +29,7 @@ public class TaskCompilerImpl implements TaskCompiler {
             JavaCompiler.CompilationTask task = compiler.getTask( null, manager, diagnostics, null, null, sources );
             task.call();
         } catch (IOException ex) {
-            logger.error(ex.getMessage());
+            logger.error("Can not compile file" + ex.getMessage());
         }
 
         loadClasses(fileList);
