@@ -8,7 +8,7 @@ class TestNameAndThemes extends React.PureComponent {
       <div className="test-title-border">
         <div className="test-title">
           <div className="text-test-title">Название теста</div>
-          <div>Количество вопросов: 10</div>
+          <div>Количество вопросов: 4</div>
           <div>Оставшееся время: {time}</div>
         </div>
       </div>

@@ -17,7 +17,7 @@ import Materials from '../../Scenes/Teachers/Materials';
 import RegistrationPage from '../../Scenes/Registration';
 import GeneralMenu from '../../Components/GeneralMenu';
 import PageAssignedTasks from '../../Scenes/Users/Tasks/AssignedTasks';
-import AllTests from '../../Scenes/Teachers/Tests/AllTests/Containers/AllTests';
+import PageAssignTest from '../../Scenes/Teachers/Tests/AssignTest/Containers/PageAssignTest';
 
 class Main extends React.Component {
   render() {
@@ -44,8 +44,7 @@ class Main extends React.Component {
               <Route exact path="/usersmaterials" component={Materials}/>
               <Route exact path="/materials" component={Materials}/>
               <Route exact path="/assignedtasks" component={PageAssignedTasks}/>
-              <Route exact path="/alltests" component={AllTests}/>
-              <Route exact path="/" component={PageAssignedTasks}/>
+              <Route exact path="/assigntest" component={PageAssignTest}/>
               <Redirect to="/"/>
             </Switch>
           </div>

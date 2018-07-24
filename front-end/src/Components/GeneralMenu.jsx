@@ -7,7 +7,7 @@ import './GeneralMenu.scss';
 const { SubMenu } = Menu;
 
 const user = {
-  status: 'user',
+  status: 'teacher',
 };
 
 class GeneralMenu extends React.PureComponent {
