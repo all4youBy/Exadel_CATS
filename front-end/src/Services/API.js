@@ -1,17 +1,16 @@
 import { errorProject, isLoading, getData } from '../Main/Services/Actions/actions';
 import { getUserData } from '../Scenes/LogIn/Services/Actions/actions';
-import store from './ConfigureStore';
 
 const API = {
-  getTokenFromStore() {
-    const token = store.getState().logInInformation.user;
+  getTokenFromStore(state) {
+    const token = state.logInInformation.user;
     if (token) {
       return token.token;
     } return null;
   },
-  sendRequest(url, reqInit) {
+  sendRequest(token, url, reqInit) {
     const headers = reqInit.headers ? reqInit.headers : new Headers();
-    headers.append('Authorization', `Bearer ${API.getTokenFromStore()}`);
+    headers.append('Authorization', `Bearer ${token}`);
     headers.append('Content-Type', 'application/json');
     reqInit.headers = headers;
     reqInit.mode = 'cors';
@@ -38,9 +37,10 @@ const API = {
   },
   post(path, data, receiveAction) {
     const url = `https://exadelcats.herokuapp.com/${path}`;
-    return (dispatch) => {
+    return (dispatch, getState) => {
       dispatch(isLoading(true));
-      API.sendRequest(url, {
+      const token = API.getTokenFromStore(getState());
+      API.sendRequest(token, url, {
         method: 'POST',
         body: JSON.stringify(data),
       })
@@ -51,9 +51,10 @@ const API = {
   },
   get(path, receiveAction) {
     const url = `https://exadelcats.herokuapp.com/${path}`;
-    return (dispatch) => {
+    return (dispatch, getState) => {
       dispatch(isLoading(true));
-      API.sendRequest(url, {
+      const token = API.getTokenFromStore(getState());
+      API.sendRequest(token, url, {
         method: 'GET',
       })
         .then((response) => {
