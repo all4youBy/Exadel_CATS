@@ -45,7 +45,7 @@ public class TaskRunnerImpl implements TaskRunner {
             try {
                 main.invoke(null, (Object) args);
             } catch (IllegalAccessException | InvocationTargetException ex) {
-                logger.error("Could not load class. " + ex.getMessage());
+                logger.error("Can not compile file" + ex.getMessage());
             }
 
             //TODO It is necessary to write this file into the database
