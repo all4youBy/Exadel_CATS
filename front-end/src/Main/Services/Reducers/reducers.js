@@ -8,14 +8,14 @@ const initialState = {
 
 const app = (state = initialState, action) => {
   switch (action.type) {
-    case types.IS_LOGGED_IN: {
+    /*case types.IS_LOGGED_IN: {
       return {
         ...state,
         userType: 'student',
         isAuth: true,
         isReady: true,
       };
-    }
+    }*/
     default:
       return state;
   }

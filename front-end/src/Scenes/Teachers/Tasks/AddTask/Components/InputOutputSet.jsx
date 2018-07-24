@@ -1,4 +1,3 @@
-/* eslint-disable prefer-const */
 import React from 'react';
 import 'antd/dist/antd.css';
 import './AddTask.scss';

@@ -1,6 +1,6 @@
 import React from 'react';
 import 'antd/dist/antd.css';
-import './AddTask.scss';
+import '../Scenes/Teachers/Tasks/AddTask/Components/AddTask.scss';
 import { Cascader } from 'antd';
 import PropTypes from 'prop-types';
 

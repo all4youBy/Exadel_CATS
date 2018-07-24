@@ -4,10 +4,10 @@ import './AddTask.scss';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { Button, Input } from 'antd';
-import SectionTree from './SectionTree';
+import SectionTree from '../../../../../Components/SectionTree';
 import InputOutputSet from './InputOutputSet';
 import { addInOutSet, addTaskTag, deleteTaskTag } from '../Services/Actions/actions';
-import EditableTagGroup from './AddTaskTags';
+import EditableTagGroup from '../../../../../Components/AddTaskTags';
 
 
 const { TextArea } = Input;
@@ -57,4 +57,4 @@ const mapDispatchToProps = dispatch => ({
   },
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(AddTask)
+export default connect(mapStateToProps, mapDispatchToProps)(AddTask);
