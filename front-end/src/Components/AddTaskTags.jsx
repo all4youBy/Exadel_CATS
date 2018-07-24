@@ -31,7 +31,7 @@ export default class EditableTagGroup extends React.Component {
     const { state } = this;
     const { inputValue } = state;
     const { addTag } = this.props;
-    const input = [inputValue]
+    const input = [inputValue];
     addTag(input);
     this.setState({
       inputVisible: false,

@@ -1,3 +1,4 @@
+/* eslint-disable react/no-array-index-key */
 import React from 'react';
 import 'antd/dist/antd.css';
 import './AddTask.scss';

@@ -84,12 +84,12 @@ function mapStateToProps(state) {
     userType: state.userType,
   };
 }
-/*const mapDispatchToProps = dispatch => ({
+/* const mapDispatchToProps = dispatch => ({
   handleStudentAdd: () => {
     dispatch(addStudent(book));
   },
   handleStudentDelete: (book) => {
     dispatch(deleteStudent(book));
   },
-});*/
+}); */
 export default withRouter(connect(mapStateToProps)(Main));
