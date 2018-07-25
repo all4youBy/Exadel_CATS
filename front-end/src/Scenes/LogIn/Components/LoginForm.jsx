@@ -4,6 +4,7 @@ import { connect } from 'react-redux';
 import 'antd/dist/antd.css';
 import './LoginForm.scss';
 import { Form, Icon, Input, Button } from 'antd';
+import { Link } from 'react-router-dom';
 import { logIn } from '../Services/Actions/actions';
 import API from '../../../Services/API';
 
@@ -80,7 +81,7 @@ class LoginForm extends React.Component {
             Войти
           </Button>
           <a className="login-forgot" href="/">Забыли пароль?</a>
-          <a href="/">Зарегистрироваться!</a>
+          <Link to="/registration">Зарегистрироваться!</Link>
         </FormItem>
       </Form>
     );

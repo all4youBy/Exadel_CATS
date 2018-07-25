@@ -42,6 +42,7 @@ class Main extends React.Component {
                 <Route exact path="/alltasks" component={AllTask}/>
                 <Route exact path="/Test" component={Test}/>
                 <Route exact path="/Task" component={UserTaskPage}/>
+                <Route exact path="/addtask" component={AddTaskPage}/>
                 <Route exact path="/addtaskpage" component={AddTaskPage}/>
                 <Route exact path="/registration" component={RegistrationPage}/>
                 <Route exact path="/teachersmaterials" component={Materials}/>
@@ -58,8 +59,11 @@ class Main extends React.Component {
       case 'guest':
         return (
           <div className="main-body-container-unlogged">
-            <Route exact path="/" component={LogIn}/>
-            <Redirect to="/"/>
+            <Switch>
+              <Route exact path="/" component={LogIn}/>
+              <Route exact path="/registration" component={RegistrationPage}/>
+              <Redirect to="/"/>
+            </Switch>
           </div>
         );
       default:
