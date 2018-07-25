@@ -16,42 +16,32 @@ public class TaskRunnerImpl implements TaskRunner {
 
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
-    private static String nameOfOutputFile = "out";
-
     @Override
     public boolean runTask(List<Class<?>> classList, String... args) {
 
-        new Thread( () -> {
+        // create the custom class loader
+        ClassLoader classLoader = new CustomClassLoader();
+        Method main = null;
 
-            // create the custom class loader
-            ClassLoader classLoader = new CustomClassLoader();
-            Method main = null;
-
-            for (Class<?> clazz : classList) {
-                try {
-                    // load the class
-                    clazz = classLoader.loadClass(classList.get(0).getSimpleName());
-
-                    // get the main method
-                    main = clazz.getMethod("main", args.getClass());
-                } catch (ClassNotFoundException ex) {
-                    logger.error("Could not load class. " + ex.getMessage());
-                    return;
-                } catch (NoSuchMethodException ex) {
-                    logger.info("did not find the \"main\" method in this class. " + ex.getMessage());
-                }
-            }
-
+        for (Class<?> clazz : classList) {
             try {
-                main.invoke(null, (Object) args);
-            } catch (IllegalAccessException | InvocationTargetException ex) {
-                logger.error("Could not load class. " + ex.getMessage());
+
+                // get the main method
+                main = clazz.getMethod("main", args.getClass());
+            } catch (NoSuchMethodException ex) {
+                logger.info("did not find the \"main\" method in this class. " + ex.getMessage());
             }
+        }
 
-            //TODO It is necessary to write this file into the database
-            new File(getClass().getClassLoader().getResource(nameOfOutputFile).getFile());
+        try {
+            main.invoke(null, (Object) args);
+        } catch (IllegalAccessException | InvocationTargetException ex) {
+            logger.error("Can not run file" + ex.getMessage());
+        }
 
-        }).start();
+        //TODO It is necessary to write this file into the database
+        //new File(getClass().getClassLoader().getResource(nameOfOutputFile).getFile());
+
 
         //TODO Ask the database if there is such a file
         // return new File(getClass().getClassLoader().getResource(nameOfOutputFile).getFile()).exists();
