@@ -1,17 +1,37 @@
-.parent-input-assign-test {
-  display: flex;
-  flex-direction: row;
-  margin: auto;
-}
 
-.count-questions-input {
-  width: 20%;
-}
-
-.assign-test-title {
+.test-properties-content {
   display: flex;
   flex-direction: column;
-  text-align: center;
-  margin-top: 25px;
-  margin-bottom: 35px;
+  align-items: center;
+  width: 100%;
+  .input-task-name {
+    display: flex;
+    flex-direction: column;
+    text-align: center;
+    width: 90%;
+    border: none;
+    font-size: 20px;
+    margin-bottom: 20px;
+    margin-top: 15px;
+  }
+  .input-count-questions {
+    width: 15%;
+  }
+  .parent-form {
+    display: flex;
+    flex-direction: column;
+    margin-top: 35px;
+    width: 50%;
+    text-align: left;
+  }
+  .form-item {
+    margin-bottom: 10px;
+  }
+
+  .count-questions-input {
+    width: 20%;
+  }
+  .submit-assign-test {
+    width: 70%;
+  }
 }

@@ -53,7 +53,7 @@ export const TEACHER_GENERAL_MENU_DATA = [{
   }, {
     id: '2',
     text: 'Создать группу',
-    link: '/',
+    link: '/creategroup',
   }],
 }, {
   key: 'sub2',
@@ -66,7 +66,7 @@ export const TEACHER_GENERAL_MENU_DATA = [{
   }, {
     id: '4',
     text: 'Добавить задачу',
-    link: '/',
+    link: '/addtask',
   }],
 }, {
   key: 'sub3',

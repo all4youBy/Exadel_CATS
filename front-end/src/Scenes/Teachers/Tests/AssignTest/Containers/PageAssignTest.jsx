@@ -1,11 +1,11 @@
 import React from 'react';
-import TestNameAndProperties from '../Components/TestProperties';
+import TestProperties from '../Components/TestProperties';
 
 class PageAssignTest extends React.PureComponent {
   render() {
     return (
-      <div className="test">
-        <TestNameAndProperties/>
+      <div>
+        <TestProperties/>
       </div>
     );
   }

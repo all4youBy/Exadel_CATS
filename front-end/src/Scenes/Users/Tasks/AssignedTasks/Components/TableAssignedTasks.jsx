@@ -9,6 +9,7 @@ const columns = [{
   dataIndex: 'name',
   key: 'name',
   width: 450,
+  className: 'column-break-point',
   render(text, record) {
     return (
       <Link to={`/groupstudentslist/${record.key}`}>{text}</Link>
@@ -19,20 +20,24 @@ const columns = [{
   dataIndex: 'theme',
   key: 'theme',
   width: 500,
+  className: 'column-break-point',
 }, {
   title: 'Автор',
   dataIndex: 'author',
   key: 'author',
   width: 500,
+  className: 'column-break-point',
 }, {
   title: 'Дата сдачи',
   dataIndex: 'deadline',
   key: 'deadline',
   width: 500,
+  className: 'column-break-point',
 }, {
   title: '',
   key: 'start',
   width: 100,
+  className: 'column-break-point',
   render: (/* text, record */) => (
     <ButtonPassTask/>
   ),
