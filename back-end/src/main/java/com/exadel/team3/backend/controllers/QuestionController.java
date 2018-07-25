@@ -17,7 +17,7 @@ public class QuestionController {
     @Autowired
     private QuestionService questionService;
 
-    @PostMapping("/add")
+    @PostMapping
     public ResponseEntity<?> addQuestion(@RequestBody Question question){
 
        Question q = questionService.addItem(question);

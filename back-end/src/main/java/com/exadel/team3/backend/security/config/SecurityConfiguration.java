@@ -62,7 +62,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter{
                     .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
                 .authorizeRequests()
-                    .antMatchers("/cats/login/**","/cats/registration/**").permitAll()
+                    .antMatchers("/login/**","/registration/**").permitAll()
                     .anyRequest().authenticated();
                 http.addFilterBefore(new JWTAuthorizationFilter(securityUtils,userDetailsService), UsernamePasswordAuthenticationFilter.class);
     }
@@ -74,7 +74,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter{
                 .antMatchers(
                         HttpMethod.POST,
                         "/login/**",
-                        "/users/registration/**"
+                        "/registration/**"
                 )
                 .and()
                 .ignoring()

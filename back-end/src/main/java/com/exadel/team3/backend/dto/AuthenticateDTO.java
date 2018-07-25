@@ -29,24 +29,30 @@ public class AuthenticateDTO{
     @Getter
     private String role;
 
+    @Getter
+    private String tokenExpiration;
+
     public AuthenticateDTO (String token,User user,SecurityUtils securityUtils){
         this(token,
                 user.getFirstName(),
                 user.getLastName(),
                 user.getRole().toString(),
-                TimeService.parseDateToLocalDateTime(securityUtils.getTokenCreateTime(token)).toString());
+                TimeService.parseDateToLocalDateTime(securityUtils.getTokenCreateTime(token)).toString(),
+                securityUtils.getExpiration().toString());
     }
 
     private AuthenticateDTO(String token,
                             String firstName,
                             String lastName,
                             String role,
-                            String tokenCreatedTime){
+                            String tokenCreatedTime,
+                            String tokenExpiration){
 
         this.token = token;
         this.firstName = firstName;
         this.lastName = lastName;
         this.tokenCreatedTime = tokenCreatedTime;
         this.role = role;
+        this.tokenExpiration = tokenExpiration;
     }
 }

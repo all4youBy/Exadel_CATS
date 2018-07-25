@@ -30,8 +30,6 @@ public class SecurityUtils {
     @Autowired
     private PasswordEncoder encoder;
 
-
-
     public String generateToken(AuthenticatedUser user){
 
         final LocalDateTime createdDate = LocalDateTime.now();
@@ -73,7 +71,6 @@ public class SecurityUtils {
         return claimResolver.apply(claims);
     }
 
-
     public String getUserAuthority(String token){
        return getAllClaims(token).get("role",String.class);
     }
@@ -81,14 +78,6 @@ public class SecurityUtils {
     private LocalDateTime calculateExpirationDate(LocalDateTime createdDate){
         return createdDate.plusMinutes(expiration);
     }
-
-//    private Date parseLocalDateTimeToDate(LocalDateTime time){
-//        return Date.from(time.atZone(ZoneId.systemDefault()).toInstant());
-//    }
-//
-//    public static LocalDateTime parseDateToLocalDateTime(Date date){
-//        return LocalDateTime.ofInstant(date.toInstant(), ZoneId.systemDefault());
-//    }
 
     public void hashUserPassword(User user){
         String hashPass = encoder.encode(user.getPasswordHash());

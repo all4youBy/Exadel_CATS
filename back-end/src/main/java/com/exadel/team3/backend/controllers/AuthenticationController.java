@@ -1,12 +1,14 @@
 package com.exadel.team3.backend.controllers;
 
 import com.exadel.team3.backend.dto.AuthenticateDTO;
+import com.exadel.team3.backend.entities.User;
 import com.exadel.team3.backend.security.AuthenticatedUser;
 import com.exadel.team3.backend.controllers.requests.AuthenticationRequest;
 import com.exadel.team3.backend.security.SecurityUtils;
 import com.exadel.team3.backend.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -42,6 +44,13 @@ public class AuthenticationController {
         final String token = securityUtils.generateToken((AuthenticatedUser)user);
 
         return ResponseEntity.ok(new AuthenticateDTO(token,userService.getItem(user.getUsername()),securityUtils));
+    }
+
+    @PostMapping("/registration")
+    public ResponseEntity<?> signUpUser(@RequestBody User user){
+        securityUtils.hashUserPassword(user);
+        userService.addItem(user);
+        return ResponseEntity.status(HttpStatus.OK).body("User created.");
     }
 
     private void authenticate(String email, String password){

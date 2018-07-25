@@ -22,12 +22,12 @@ public class TestController {
     @Autowired
     private TestService testService;
 
-    @GetMapping("/test/{testId}")
+    @GetMapping("/{testId}")
     public Test getTest(@PathVariable(value = "testId") String testId){
         return testService.getItem(new ObjectId(testId));
     }
 
-    @PostMapping("/test")
+    @PostMapping
     public ResponseEntity<?> getTestForUser(@RequestBody TestGenerationRequest testRequest){
        Test test =  testService.generateTestForUser(testRequest.getUserId(),
                                         testRequest.getTitle(),
@@ -43,7 +43,7 @@ public class TestController {
        return ResponseEntity.ok().body(test);
     }
 
-    @PostMapping("/test/training")
+    @PostMapping("/training")
     public ResponseEntity<?> getTrainingTestForUser(@RequestBody TrainingTestGenerationRequest testRequest){
         Test test = testService.generateTestForUser(testRequest.getUserId(),testRequest.getTopicId());
         if(test == null)
@@ -52,7 +52,7 @@ public class TestController {
         return new ResponseEntity<>(test, HttpStatus.OK);
     }
 
-    @PostMapping("/group")
+    @PostMapping("/test-for-group")
     public ResponseEntity<?> getTestForGroup(@RequestBody TestForGroupRequest testRequest){
         List<Test> testsForGroup = testService.generateTestsForGroup(testRequest.getGroup(),
                                                       testRequest.getTitle(),
@@ -68,8 +68,8 @@ public class TestController {
         return new ResponseEntity<>(testsForGroup,HttpStatus.OK);
     }
 
-    @GetMapping
-    public ResponseEntity<?> getTestsAssignedToUser(@RequestParam(value = "user_id") String userId){
+    @GetMapping("/user-tests/{userId}")
+    public ResponseEntity<?> getTestsAssignedToUser(@PathVariable(value = "userId") String userId){
         List<Test> userTests = testService.getAssignedItems(userId);
 
         if(userTests == null)
@@ -78,7 +78,7 @@ public class TestController {
         return new ResponseEntity<>(userTests,HttpStatus.OK);
     }
 
-    @GetMapping("/groups/{group}")
+    @GetMapping("/group-tests/{group}")
     public ResponseEntity<?> getTestsAssignedToGroup(@PathVariable(value = "group") String group){
         List<Test> groupTests = testService.getAssignedItemsToGroup(group);
 
