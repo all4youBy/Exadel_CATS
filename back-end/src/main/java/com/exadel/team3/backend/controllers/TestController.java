@@ -2,9 +2,9 @@ package com.exadel.team3.backend.controllers;
 
 
 import com.exadel.team3.backend.entities.Test;
-import com.exadel.team3.backend.security.requests.TestForGroupRequest;
-import com.exadel.team3.backend.security.requests.TestGenerationRequest;
-import com.exadel.team3.backend.security.requests.TrainingTestGenerationRequest;
+import com.exadel.team3.backend.controllers.requests.TestForGroupRequest;
+import com.exadel.team3.backend.controllers.requests.TestGenerationRequest;
+import com.exadel.team3.backend.controllers.requests.TrainingTestGenerationRequest;
 import com.exadel.team3.backend.services.TestService;
 
 import org.bson.types.ObjectId;

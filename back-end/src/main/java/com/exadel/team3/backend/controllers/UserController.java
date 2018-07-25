@@ -27,9 +27,9 @@ public class UserController {
         userService.addItem(user);
         return ResponseEntity.status(HttpStatus.OK).body("User created.");
     }
-    @GetMapping("/{group}")
+    @GetMapping
     @PreAuthorize("hasAnyRole('ADMIN','TEACHER')")
-    public List<User> getUsers(@PathVariable String group){
+    public List<User> getUsers(@RequestParam(value = "group") String group){
         return userService.getByGroup(group);
     }
 

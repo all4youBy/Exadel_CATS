@@ -1,16 +1,16 @@
 package com.exadel.team3.backend.controllers;
 
+import com.exadel.team3.backend.dto.AuthenticateDTO;
 import com.exadel.team3.backend.security.AuthenticatedUser;
-import com.exadel.team3.backend.security.requests.AuthenticationRequest;
+import com.exadel.team3.backend.controllers.requests.AuthenticationRequest;
 import com.exadel.team3.backend.security.SecurityUtils;
+import com.exadel.team3.backend.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.web.bind.annotation.*;
@@ -28,6 +28,9 @@ public class AuthenticationController {
     private UserDetailsService userDetailsService;
 
     @Autowired
+    private UserService userService;
+
+    @Autowired
     private SecurityUtils securityUtils;
 
     @PostMapping("/login")
@@ -38,14 +41,8 @@ public class AuthenticationController {
         final UserDetails user = userDetailsService.loadUserByUsername(request.getUsername());
         final String token = securityUtils.generateToken((AuthenticatedUser)user);
 
-        return ResponseEntity.ok(token);
+        return ResponseEntity.ok(new AuthenticateDTO(token,userService.getItem(user.getUsername()),securityUtils));
     }
-
-    @ExceptionHandler(AuthenticationException.class)
-    public ResponseEntity<?> handleAuthenticationException(AuthenticationException e){
-        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(e.getMessage());
-    }
-
 
     private void authenticate(String email, String password){
 
