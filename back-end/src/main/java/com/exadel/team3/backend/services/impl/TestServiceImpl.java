@@ -183,7 +183,7 @@ public class TestServiceImpl
                 updatedTestObj.setMark(testChecker.checkTest(updatedTestObj));
                 return testRepository.save(updatedTestObj);
             } else {
-                return updatedTestObj;
+                throw new ServiceException("The test \"" + updatedTestObj.getTitle() + "\" is already finished");
             }
         } else {
             throw new ServiceException("There's no test with id " + testId);
@@ -196,7 +196,7 @@ public class TestServiceImpl
         if (!updatedTest.isPresent()) {
             throw new ServiceException("There's no test with id " + answeredItem.getTestId());
         } else if (updatedTest.get().getDeadline().isBefore(LocalDateTime.now())) {
-            throw new ServiceException("The test with id " + answeredItem.getTestId() + " is already closed");
+            throw new ServiceException("The test \"" + updatedTest.get().getTitle() + "\" is already finished");
         }
         Test updatedTestObj = updatedTest.get();
         Optional<TestItem> updatedItem =

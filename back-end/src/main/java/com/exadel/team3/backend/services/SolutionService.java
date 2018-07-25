@@ -3,6 +3,9 @@ package com.exadel.team3.backend.services;
 import com.exadel.team3.backend.entities.Solution;
 import org.bson.types.ObjectId;
 
+import org.springframework.web.multipart.MultipartFile;
+
+import java.io.InputStream;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -21,4 +24,11 @@ public interface SolutionService extends AssignableService<Solution> {
             LocalDateTime deadline,
             String assignedBy
     );
+
+    Solution storeFile(Solution solution, MultipartFile file);
+    Solution storeFile(Solution solution, InputStream stream, String filename);
+
+    InputStream getFile(Solution solution, String filename);
+
+    Solution submit(Solution solution);
 }
