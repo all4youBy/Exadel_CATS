@@ -1,7 +1,8 @@
-.open-a-q-card {
-  border: none;
+.open-answer-question-card {
+  border: 1px solid #d9d9d9;
   border-radius: 12px;
-  width: 100%;
+  width: 95%;
+  margin-bottom: 30px;
   display: flex;
   flex-direction: column;
   div {
@@ -13,4 +14,8 @@
       margin-top: 10px;
     }
   }
+}
+
+.text-area-answer {
+  margin-bottom: 15px;
 }

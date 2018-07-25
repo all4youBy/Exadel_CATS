@@ -6,6 +6,7 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Data
 @Document(collection = "solutions")
@@ -15,13 +16,18 @@ public class Solution implements Assignable {
     private ObjectId id;
 
     @NonNull
-    private String assignedTo;
-
-    @NonNull
     private final ObjectId taskId;
 
+    @NonNull
+    private String assignedTo;
+
+    private List<String> files;
+
     private String assignedBy;
+
     private LocalDateTime start;
+
     private LocalDateTime deadline;
+
     private Integer mark;
 }

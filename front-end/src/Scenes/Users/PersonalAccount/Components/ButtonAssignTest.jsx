@@ -5,8 +5,14 @@ import { Button } from 'antd';
 
 class ButtonAssignTest extends React.Component {
   render() {
+    // console.log(this.handleStudentAdd);
     return (
-      <Button shape="circle" icon="profile" className="button-assign-test" size="small"/>
+      <Button
+        shape="circle"
+        icon="profile"
+        className="button-assign-test"
+        size="small"
+      />
     );
   }
 }
