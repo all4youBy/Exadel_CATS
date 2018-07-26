@@ -54,7 +54,7 @@ class SolutionCheckerImpl implements SolutionChecker {
     }
 
     @Bean
-    private SolutionCheckerRoutine getStubCheckerRoutine() {
+    SolutionCheckerRoutine getStubCheckerRoutine() {
         return ((solution, input, output) -> Math.random()>0.5);
     }
 }

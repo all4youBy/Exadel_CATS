@@ -18,8 +18,7 @@ import java.util.Set;
 public class User {
     @Id
     @NonNull
-    @Setter(AccessLevel.NONE)
-    private String email;
+    private final String email;
 
     @NonNull
     private String firstName;
