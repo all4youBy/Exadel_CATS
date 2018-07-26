@@ -20,6 +20,7 @@ import RegistrationPage from '../../Scenes/Registration';
 
 import AddTaskPage from '../../Scenes/Teachers/Tasks/AddTask/Containers/AddTaskPage';
 import CreateGroupPage from '../../Scenes/Teachers/GroupsList/GroupCreation/Containers/CreateGroupPage';
+import AddQuestion from '../../Scenes/Teachers/Tests/AddQuestion/Containers/AddQuestion';
 
 class Main extends React.Component {
   renderSwitch() {
@@ -46,6 +47,7 @@ class Main extends React.Component {
                 <Route exact path="/usersmaterials" component={Materials}/>
                 <Route exact path="/materials" component={Materials}/>
                 <Route exact path="/creategroup" component={CreateGroupPage}/>
+                <Route exact path="/addquestion" component={AddQuestion}/>
                 <Redirect to="/"/>
               </Switch>
             </div>
