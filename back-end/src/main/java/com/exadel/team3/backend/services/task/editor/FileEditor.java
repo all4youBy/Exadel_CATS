@@ -19,9 +19,8 @@ public class FileEditor {
     private static final String FIND_RUNTIME = "(Runtime\\.).*(;)";
     private static final String FIND_IMPORT = "(import) .*.";
 
-    private static String nameOfOutputFile = "out.txt";
 
-    public static List<File> editFiles(List<File> fileList, String newNameOfOutputFile) throws IOException {
+    public static List<File> editFiles(List<File> fileList) throws IOException {
         List<String> stringList = getNamesFiles(fileList);
 
         for (File file : fileList) {
@@ -35,9 +34,6 @@ public class FileEditor {
             for(String nameFile : stringList) {
                 fileContent = deleteAll(fileContent, FIND_IMPORT  + nameFile + "(;)", "");
             }
-
-            String pathToFile = file.getParent().replaceAll("\\\\", "/") + "/" + newNameOfOutputFile;
-            fileContent = deleteAll(fileContent, nameOfOutputFile, pathToFile);
 
             Files.write(path, fileContent.getBytes());
         }
