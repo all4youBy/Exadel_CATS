@@ -7,7 +7,9 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -20,25 +22,23 @@ public class FileEditor {
     private static final String FIND_IMPORT = "(import) .*.";
 
 
-    public static List<File> editFiles(List<File> fileList) throws IOException {
-        List<String> stringList = getNamesFiles(fileList);
+    public static Map<String, String> editFiles(Map<String, String> fileMap) throws IOException {
 
-        for (File file : fileList) {
-            Path path = file.toPath();
-            String fileContent = new String(Files.readAllBytes(path));
+        for(Map.Entry<String, String> entry : fileMap.entrySet()) {
 
+            String fileContent = entry.getValue();
             fileContent = deleteFirst(fileContent, FIND_PACKAGE, "");
             fileContent = deleteAll(fileContent, FIND_SYSTEM, "");
             fileContent = deleteAll(fileContent, FIND_RUNTIME, "");
 
-            for(String nameFile : stringList) {
-                fileContent = deleteAll(fileContent, FIND_IMPORT  + nameFile + "(;)", "");
+            for(Map.Entry<String, String> fileNames : fileMap.entrySet()) {
+                fileContent = deleteAll(fileContent, FIND_IMPORT  + fileNames.getKey() + "(;)", "");
             }
 
-            Files.write(path, fileContent.getBytes());
+            entry.setValue(fileContent);
         }
 
-        return fileList;
+        return fileMap;
     }
 
     private static List<String> getNamesFiles(List<File> fileList) {
