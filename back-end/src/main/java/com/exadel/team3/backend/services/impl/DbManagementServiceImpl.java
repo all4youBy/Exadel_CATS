@@ -38,10 +38,13 @@ public class DbManagementServiceImpl implements DbManagementService {
     TaskRepository taskRepository;
     @Autowired
     SolutionRepository solutionRepository;
+    @Autowired
+    FileStorage fileStorage;
 
 
     @Override
     public void reset() {
+        fileStorage.deleteAll();
         taskRepository.deleteAll();
         solutionRepository.deleteAll();
         testRepository.deleteAll();
