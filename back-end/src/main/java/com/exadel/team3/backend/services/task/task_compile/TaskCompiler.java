@@ -5,5 +5,5 @@ import java.util.List;
 import java.util.Map;
 
 public interface TaskCompiler {
-    List<Class<?>> compileTask(Map<String, String> fileList) throws IOException, ClassNotFoundException;
+    List<Class<?>> compileTask(Map<String, String> fileList) throws TaskCompileExceptoin ;
 }
