@@ -26,6 +26,7 @@ public class Task implements Taggable {
     @NonNull
     private String author;
 
+    @NonNull
     private TaskTestingType type = TaskTestingType.PASS_ALL;
 
     private List<ObjectId> topicIds;
