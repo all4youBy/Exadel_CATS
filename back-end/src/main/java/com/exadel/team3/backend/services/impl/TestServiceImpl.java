@@ -255,7 +255,12 @@ public class TestServiceImpl
                             .filter(item -> item.getStatus() == TestItemStatus.UNCHECKED)
                             .map(
                                     item ->
-                                    new TestItemDTO(test.getId(), item.getQuestionId(), item.getAnswer())
+                                    new TestItemDTO(
+                                            test.getId(),
+                                            item.getQuestionId(),
+                                            item.getAnswer(),
+                                            item.getStatus()
+                                    )
                             )
                 )
                 .collect(Collectors.toList());
