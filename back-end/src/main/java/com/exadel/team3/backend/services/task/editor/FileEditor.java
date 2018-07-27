@@ -11,6 +11,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
 @Component
 public class FileEditor {
@@ -21,13 +22,7 @@ public class FileEditor {
     private static final String FIND_IMPORT = "(import) .*.";
 
     public static String getFile(InputStream inputStream) throws IOException {
-        BufferedReader bufRead = new BufferedReader(new InputStreamReader(inputStream));
-        StringBuilder builder = new StringBuilder();
-        String line;
-        while((line = bufRead.readLine())!= null){
-            builder.append(line).append("\n");
-        }
-        return builder.toString();
+        return new BufferedReader(new InputStreamReader(inputStream)).lines().collect(Collectors.joining("\n"));
     }
 
     public static Map<String, String> editFiles(Map<String, String> fileMap) throws IOException {
