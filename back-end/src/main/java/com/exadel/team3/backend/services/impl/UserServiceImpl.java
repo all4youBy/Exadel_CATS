@@ -2,6 +2,7 @@ package com.exadel.team3.backend.services.impl;
 
 import java.util.List;
 
+import com.exadel.team3.backend.entities.UserRole;
 import com.exadel.team3.backend.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.repository.MongoRepository;
@@ -27,6 +28,11 @@ public class UserServiceImpl
     @Override
     public List<User> getByGroup(@NonNull String group) {
         return userRepository.findStudentsByGroupName(group);
+    }
+
+    @Override
+    public List<User> getUsersByRole(UserRole role) {
+        return userRepository.findUsersByRole(role);
     }
 
     @Override

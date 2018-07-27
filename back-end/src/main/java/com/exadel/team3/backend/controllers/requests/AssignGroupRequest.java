@@ -3,13 +3,16 @@ package com.exadel.team3.backend.controllers.requests;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
 import lombok.NonNull;
-import org.bson.types.ObjectId;
+
+import java.util.List;
 
 @Data
-public class TrainingTestGenerationRequest {
+public class AssignGroupRequest {
 
     @NonNull
-    @JsonProperty("email")
-    private String userId;
-    private ObjectId topicId;
+    private List<String>emails;
+
+    @JsonProperty("group")
+    @NonNull
+    private String groupId;
 }

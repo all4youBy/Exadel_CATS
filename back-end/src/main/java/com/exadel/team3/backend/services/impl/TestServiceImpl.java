@@ -174,7 +174,7 @@ public class TestServiceImpl
     }
 
     @Override
-    public Test submitTest(ObjectId testId) {
+    public Test submitTest(ObjectId testId) throws ServiceException{
         Optional<Test> updatedTest = testRepository.findById(testId);
         if (updatedTest.isPresent()) {
             Test updatedTestObj = updatedTest.get();

@@ -1,5 +1,7 @@
 package com.exadel.team3.backend.entities;
 
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import org.bson.types.ObjectId;
 import org.springframework.data.mongodb.core.mapping.Document;
 import lombok.AccessLevel;
@@ -13,6 +15,7 @@ import java.util.List;
 @Document(collection="questions")
 public class Question implements Taggable {
     @Setter(AccessLevel.NONE)
+    @JsonSerialize(using = ToStringSerializer.class)
     private ObjectId id;
 
     @NonNull
@@ -29,6 +32,7 @@ public class Question implements Taggable {
 
     private List<QuestionVariant> variants;
 
+    @JsonSerialize(using = ToStringSerializer.class)
     private List<ObjectId> topicIds;
 
     private boolean training;

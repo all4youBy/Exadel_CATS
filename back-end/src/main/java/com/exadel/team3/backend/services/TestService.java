@@ -31,7 +31,7 @@ public interface TestService  extends AssignableService<Test> {
                                int questionsCount,
                                String assignedBy);
 
-    Test submitTest(ObjectId id);
+    Test submitTest(ObjectId id) throws ServiceException;
     Test submitAnswer(TestItemDTO answeredItem);
     Test submitManualAnswerCheck(TestItemDTO checkedItem);
 
