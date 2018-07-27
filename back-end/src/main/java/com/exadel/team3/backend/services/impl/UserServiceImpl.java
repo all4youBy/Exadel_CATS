@@ -1,5 +1,6 @@
 package com.exadel.team3.backend.services.impl;
 
+import java.util.Collection;
 import java.util.List;
 
 import com.exadel.team3.backend.services.UserService;
@@ -30,6 +31,16 @@ public class UserServiceImpl
     }
 
     @Override
+    public List<String> getGroups() {
+        return userRepository.findStudentsGroups();
+    }
+
+    @Override
+    public List<String> getInstitutions() {
+        return userRepository.findInstitutions();
+    }
+
+    @Override
     public User getPasswordHashAndRole(@NonNull String email) {
         return userRepository.findPasswordHashAndRole(email);
     }
@@ -40,13 +51,21 @@ public class UserServiceImpl
     }
 
     @Override
-    public void assignGroup(@NonNull List<String> emails, @NonNull String group) {
-        List<User> matchedUsers = userRepository.findByEmailIn(emails);
-        for (User user : matchedUsers) {
-            user.getGroups().add(group);
-        }
-        userRepository.saveAll(matchedUsers);
+    public void assignGroup(@NonNull Collection<String> userIds, @NonNull String group) {
+        userRepository.addGroup(userIds, group);
     }
+
+    @Override
+    public void renameGroup(Collection<String> userIds, @NonNull String oldGroup, @NonNull String newGroup) {
+        userRepository.removeGroup(userIds, oldGroup);
+        userRepository.addGroup(userIds, newGroup);
+    }
+
+    @Override
+    public void removeGroup(Collection<String> userIds, String group) {
+        userRepository.removeGroup(userIds, group);
+    }
+
 
 
 }
