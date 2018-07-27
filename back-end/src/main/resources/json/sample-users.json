@@ -5,9 +5,10 @@
     "lastName":"Конь",
     "role":"STUDENT",
     "passwordHash":"$2a$10$GqE6IY43930ceftcqRrFdOwz/y8mT7L/H7UxRgu9ntsEtNccsimLO",
-    "groups":["Первая группа"],
-    "education":{
+    "groups":["Первая группа","Первая запасная группа"],
+    "affiliation":{
       "institution":"БГУ",
+      "faculty":"ФПМИ",
       "graduationYear":"2019",
       "specialization":"Прикладная информатика",
       "primarySkill":"Java"
@@ -21,8 +22,9 @@
     "role":"STUDENT",
     "passwordHash":"$2a$10$GqE6IY43930ceftcqRrFdOwz/y8mT7L/H7UxRgu9ntsEtNccsimLO",
     "groups":["Первая группа"],
-    "education":{
+    "affiliation":{
       "institution":"БГУ",
+      "faculty":"ФПМИ",
       "graduationYear":"2019",
       "specialization":"Прикладная информатика",
       "primarySkill":"Java"
@@ -34,7 +36,7 @@
     "firstName":"Макар",
     "lastName":"Свирепый",
     "role":"ADMIN",
-    "passwordHash":"$2a$10$GqE6IY43930ceftcqRrFdOwz/y8mT7L/H7UxRgu9ntsEtNccsimLO",
+    "passwordHash":"$2a$10$0vYSCnti0LwCOchxGbfab.BNsJkKUq9fj7lsX7f/D8xdiYqcGRUC2",
     "groups":[]
   },
 
@@ -43,8 +45,12 @@
     "firstName":"Леокадия",
     "lastName":"Плюшкина",
     "role":"TEACHER",
-    "passwordHash":"$2a$10$GqE6IY43930ceftcqRrFdOwz/y8mT7L/H7UxRgu9ntsEtNccsimLO",
-    "groups":["Первая группа"]
+    "passwordHash":"$2a$10$bna/Cb9DI0gktn1L16Ltu.UIY0zm.HB9Phq.mwoedTu4RX1GbJioC",
+    "groups":["Первая группа"],
+    "affiliation":{
+      "institution":"БГУ",
+      "faculty":"ФПМИ"
+    }
   },
 
   {
@@ -53,7 +59,11 @@
     "lastName":"Кот",
     "role":"TEACHER",
     "passwordHash":"$2a$10$GqE6IY43930ceftcqRrFdOwz/y8mT7L/H7UxRgu9ntsEtNccsimLO",
-    "groups":["Первая группа","Вторая группа"]
+    "groups":["Первая группа","Вторая группа"],
+    "affiliation":{
+      "institution":"БГУ",
+      "faculty":"ФПМИ"
+    }
   },
 
   {
@@ -63,8 +73,9 @@
     "role":"STUDENT",
     "passwordHash":"$2a$10$GqE6IY43930ceftcqRrFdOwz/y8mT7L/H7UxRgu9ntsEtNccsimLO",
     "groups":["Первая группа"],
-    "education":{
+    "affiliation":{
       "institution":"БГУ",
+      "faculty":"ФПМИ",
       "graduationYear":"2020",
       "specialization":"Актуарная математика",
       "primarySkill":"C#"
@@ -78,8 +89,9 @@
     "role":"STUDENT",
     "passwordHash":"$2a$10$GqE6IY43930ceftcqRrFdOwz/y8mT7L/H7UxRgu9ntsEtNccsimLO",
     "groups":["Вторая группа"],
-    "education":{
+    "affiliation":{
       "institution":"БГУ",
+      "faculty":"ФПМИ",
       "graduationYear":"2020",
       "specialization":"Актуарная математика",
       "primarySkill":"Assembler"
@@ -91,13 +103,14 @@
     "firstName":"Анна-Мария",
     "lastName":"Акулич",
     "role":"STUDENT",
-    "passwordHash":"$2a$10$GqE6IY43930ceftcqRrFdOwz/y8mT7L/H7UxRgu9ntsEtNccsimLO",
+    "passwordHash":"$2a$10$X8SQVka14m.WGbefQNdz6OhN7ormP938hWnkQvp2RkILrPDy0fdT2",
     "groups":["Вторая группа"],
-    "education":{
+    "affiliation":{
       "institution":"БГУ",
+      "faculty":"Филфак",
       "graduationYear":"2021",
       "specialization":"Романская филология",
-      "primarySkill":"Java"
+      "primarySkill":"Фортран"
     }
   },
 
@@ -108,8 +121,9 @@
     "role":"STUDENT",
     "passwordHash":"$2a$10$GqE6IY43930ceftcqRrFdOwz/y8mT7L/H7UxRgu9ntsEtNccsimLO",
     "groups":["Первая группа"],
-    "education":{
-      "institution":"БГУ",
+    "affiliation":{
+      "institution":"БГУИР",
+      "faculty":"ФКСС",
       "graduationYear":"2020",
       "specialization":"Компьютерная безопасность",
       "primarySkill":"Python"
@@ -123,8 +137,9 @@
     "role":"STUDENT",
     "passwordHash":"$2a$10$GqE6IY43930ceftcqRrFdOwz/y8mT7L/H7UxRgu9ntsEtNccsimLO",
     "groups":["Вторая группа"],
-    "education":{
-      "institution":"БГУ",
+    "affiliation":{
+      "institution":"БГУИР",
+      "faculty":"ФКСС",
       "graduationYear":"2020",
       "specialization":"Компьютерная безопасность",
       "primarySkill":"С++"

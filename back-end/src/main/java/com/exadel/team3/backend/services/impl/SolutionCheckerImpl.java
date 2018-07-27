@@ -58,6 +58,4 @@ class SolutionCheckerImpl implements SolutionChecker {
         }
 
     }
-
-
 }
