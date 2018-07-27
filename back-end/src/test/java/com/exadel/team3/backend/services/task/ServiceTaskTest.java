@@ -1,6 +1,5 @@
 package com.exadel.team3.backend.services.task;
 
-import com.exadel.team3.backend.services.task.editor.FileEditor;
 import com.exadel.team3.backend.services.task.task_compile.TaskCompiler;
 import com.exadel.team3.backend.services.task.task_compile.impl.TaskCompilerImpl;
 import com.exadel.team3.backend.services.task.task_run.TaskRunner;
@@ -11,14 +10,11 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 
 import java.io.BufferedReader;
-import java.io.File;
 import java.io.InputStreamReader;
-import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 import static org.junit.Assert.assertEquals;
 
@@ -55,7 +51,7 @@ public class ServiceTaskTest {
             TaskRunner taskRunner = context2.getBean(TaskRunnerImpl.class);
 
             String[] arr = {"arr"};
-            Assert.assertEquals("ARR",taskRunner.runTask(classList, arr));
+            Assert.assertEquals("ARR", taskRunner.runTask(taskRunner.findMethod(classList, "executor", arr), arr));
 
         } catch (Exception ex) {
             ex.getMessage();

@@ -2,8 +2,7 @@ package com.exadel.team3.backend.services.task.editor;
 
 import org.springframework.stereotype.Component;
 
-import java.io.File;
-import java.io.IOException;
+import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
@@ -21,6 +20,15 @@ public class FileEditor {
     private static final String FIND_RUNTIME = "(Runtime\\.).*(;)";
     private static final String FIND_IMPORT = "(import) .*.";
 
+    public static String getFile(InputStream inputStream) throws IOException {
+        BufferedReader bufRead = new BufferedReader(new InputStreamReader(inputStream));
+        StringBuilder builder = new StringBuilder();
+        String line;
+        while((line = bufRead.readLine())!= null){
+            builder.append(line).append("\n");
+        }
+        return builder.toString();
+    }
 
     public static Map<String, String> editFiles(Map<String, String> fileMap) throws IOException {
 

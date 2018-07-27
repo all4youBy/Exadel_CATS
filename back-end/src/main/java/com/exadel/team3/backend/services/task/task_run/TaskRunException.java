@@ -1,6 +1,8 @@
 package com.exadel.team3.backend.services.task.task_run;
 
-public class TaskRunException extends Exception {
+import com.exadel.team3.backend.services.ServiceException;
+
+public class TaskRunException extends ServiceException {
 
     public TaskRunException() {
         super();
