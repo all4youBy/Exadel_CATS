@@ -20,21 +20,22 @@ class SolutionCheckerImpl implements SolutionChecker {
     private SolutionCheckerRoutine checker;
 
     @Override
-    public int check(@NonNull Solution solution) {
+    public int check(@NonNull Solution solution) throws ServiceException{
         Optional<Task> task = taskRepository.findById(solution.getTaskId());
+
         if (!task.isPresent()) {
-            throw new ServiceException("Could not verify solution: there's no task with id " +
-                    solution.getId());
+            throw new ServiceException("Could not verify solution: there's no task with id " + solution.getId());
         }
         Task taskObj = task.get();
+        String message;
         if (taskObj.getType() == TaskTestingType.PASS_ALL) {
-            return taskObj.getTestingSets().stream()
-                    .allMatch(
-                        testingSet ->
-                        checker.check(solution, testingSet.getInput(), testingSet.getOutput())
-                    )
-                        ? 10
-                        : 0;
+            return taskObj.getTestingSets().stream().allMatch( testingSet -> {
+                try {
+                    return checker.check(solution, testingSet.getInput(), testingSet.getOutput());
+                } catch (ServiceException e) {
+                    return false;
+                }
+            }) ? 10 : 0;
         } else {
             int maxScore = taskObj.getTestingSets()
                     .stream()
@@ -43,18 +44,18 @@ class SolutionCheckerImpl implements SolutionChecker {
             int currentScore = taskObj.getTestingSets()
                     .stream()
                     .filter(
-                        testingSet ->
-                        checker.check(solution, testingSet.getInput(), testingSet.getOutput())
+                            testingSet -> {
+                                try {
+                                    return checker.check(solution, testingSet.getInput(), testingSet.getOutput());
+                                } catch (ServiceException e) {
+                                    return false;
+                                }
+                            }
                     )
                     .mapToInt(TaskTestingSet::getDifficultyLevel)
                     .sum();
             return (int) Math.floor((double) currentScore / maxScore * 10);
         }
 
-    }
-
-    @Bean
-    SolutionCheckerRoutine getStubCheckerRoutine() {
-        return ((solution, input, output) -> Math.random()>0.5);
     }
 }

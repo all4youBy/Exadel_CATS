@@ -55,7 +55,7 @@ public class DbManagementServiceImpl implements DbManagementService {
     }
 
     @Override
-    public void resetAndFillWithSampleData() {
+    public void resetAndFillWithSampleData()  throws ServiceException{
         reset();
         ObjectMapper mapper = new ObjectMapper();
         fillCollectionWithSampleData(mapper, userRepository, User.class);
@@ -66,7 +66,7 @@ public class DbManagementServiceImpl implements DbManagementService {
 
     private <T,ID> void fillCollectionWithSampleData(ObjectMapper mapper,
                                                      MongoRepository<T,ID> repository,
-                                                     Class<T> entityClass) {
+                                                     Class<T> entityClass) throws ServiceException{
         CollectionType collectionType = mapper.getTypeFactory()
                 .constructCollectionType(List.class, entityClass);
         try (
