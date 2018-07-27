@@ -49,8 +49,6 @@ public class UserRepositoryImpl implements UserRepositoryQueries {
         ).getMappedResults()
                 .stream()
                 .map(StringIdProjectionImpl::getString).collect(Collectors.toList());
-
-
     }
 
     @Override
