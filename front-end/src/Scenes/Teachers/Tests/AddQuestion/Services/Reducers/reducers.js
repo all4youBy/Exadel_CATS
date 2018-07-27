@@ -1,6 +1,4 @@
-// import * as types from '../Actions/types';
-
-import * as types from '../../../../Tasks/AddTask/Services/Actions/types';
+import { ADD_QUESTION_TAG, DELETE_QUESTION_TAG } from '../Actions/type';
 
 const initialState = {
   tags: [],
@@ -9,7 +7,7 @@ const initialState = {
 };
 const addQuestion = (state = initialState, action) => {
   switch (action.type) {
-    case 'ADD_QUESTION_TAG': {
+    case ADD_QUESTION_TAG: {
       if (state.tags.includes(action.payload)) {
         return state;
       }
@@ -21,34 +19,10 @@ const addQuestion = (state = initialState, action) => {
         ],
       };
     }
-    case 'DELETE_QUESTION_TAG': {
+    case DELETE_QUESTION_TAG: {
       return {
         ...state,
         tags: state.tags.filter(tag => tag !== action.payload),
-      };
-    }
-    case 'ADD_QUESTION_LEVEL': {
-      return {
-        ...state,
-        level: action.payload,
-      };
-    }
-    case 'ADD_QUESTION_TYPE': {
-      return {
-        ...state,
-        training: action.payload,
-      };
-    }
-    case types.ADD_IN_OUT_SET: {
-      return {
-        ...state,
-        testSet: [
-          ...state.testSet,
-          {
-            in: '',
-            out: '',
-          },
-        ],
       };
     }
     default:

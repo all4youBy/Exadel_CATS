@@ -39,11 +39,8 @@
   width: 100%;
 }
 
-.text-question {
-}
-
-.add-question {
-
+.text-level, .text-variant {
+  margin-right: 7px;
 }
 
 .false-answer, .true-answer {
@@ -55,4 +52,8 @@
 
 .add-input {
   text-align: center;
+}
+
+.error-input{
+  color: red;
 }

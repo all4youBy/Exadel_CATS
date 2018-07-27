@@ -8,8 +8,8 @@ import TreeWithTags from '../../../../../Components/TreeWithTags';
 import {
   addQuestionTag,
   deleteQuestionTag,
-  addAnswer,
 } from '../Services/Actions/actions';
+import API from '../../../../../Services/API';
 
 const { TextArea } = Input;
 const { Group } = Radio;
@@ -19,7 +19,6 @@ const FormItem = Form.Item;
 class QuestionForm extends React.PureComponent {
   static propTypes = {
     user: PropTypes.shape().isRequired,
-    form: PropTypes.shape().isRequired,
     tags: PropTypes.arrayOf(PropTypes.string).isRequired,
     addTag: PropTypes.func.isRequired,
     deleteTag: PropTypes.func.isRequired,
@@ -36,12 +35,32 @@ class QuestionForm extends React.PureComponent {
       variants: [],
       topicIds: [],
     };
+    this.validateQuestion = (question) => {
+      if (question.type.length === 0 || question.complexity.length === 0
+        || question.text.length === 0 || question.topicIds.length === 0) {
+        return false;
+      }
+      if (question.type === 'SINGLE-VARIANT' || question.type === 'MULTI-VARIANT') {
+        if (!(question.variants.find(element => element.correct === true)
+          && question.variants.find(element => element.correct === false))) {
+          return false;
+        }
+      }
+      if (question.type === 'AUTOCHECK_TEXT') {
+        if (!(question.variants.find(element => element.correct === true))) {
+          return false;
+        }
+      }
+      return true;
+    };
   }
 
   state = {
     answerInputsFalse: [],
     answerInputsTrue: [],
     type: '',
+    error: false,
+    add: false,
   };
 
   onChangeTrainingTest = (e) => {
@@ -88,24 +107,34 @@ class QuestionForm extends React.PureComponent {
   }));
 
   handleSubmit = (e) => {
-    console.log(this.question);
+    const { error } = this.state;
+    if (!error) {
+      API.post('', this.question);
+      console.log(this.question);
+    }
     e.preventDefault();
-    const { form } = this.props;
-    form.validateFields();
   };
 
   render() {
+    const { addTag, tags, deleteTag, user } = this.props;
     const {
       answerInputsFalse,
       answerInputsTrue,
       type,
+      error,
+      add,
     } = this.state;
-    const { addTag, tags, deleteTag, user } = this.props;
-    const onClickAddQuestion = (e) => {
+    const errorInput = error ? <div className="error-input">Введите все данные!</div> : <div/>;
+    const addQuestion = add ? <div>Вопрос добавлен!</div> : <div/>;
+    const onClickAddQuestion = () => {
       this.question.topicIds = tags;
       this.question.author = `${user.lastName} ${user.firstName}`;
-      console.log(this.question);
-      e.preventDefault();
+      if (!this.validateQuestion(this.question)) {
+        this.setState(() => ({ error: true }));
+      } else {
+        this.setState(() => ({ error: false }));
+        this.setState(() => ({ add: true }));
+      }
     };
     const inputFalse = (answerInputsFalse || []).map((item, i) => (
       <Input
@@ -199,12 +228,12 @@ class QuestionForm extends React.PureComponent {
         <div className="header">Добавление вопроса</div>
         <div className="tags"><TreeWithTags deleteTag={deleteTag} tags={tags} addTag={addTag}/></div>
         <Group className="level" onChange={this.onChangeLevel}>
-          Уровень сложности вопроса:
+          <span className="text-level">Уровень сложности вопроса:</span>
           <Radio value="LEVEL_1">1</Radio>
           <Radio value="LEVEL_2">2</Radio>
           <Radio value="LEVEL_3">3</Radio>
           <Radio value="LEVEL_4">4</Radio>
-          <Checkbox onChange={this.onChangeTrainingTest}>Тренировoчный</Checkbox>
+          <Checkbox onChange={this.onChangeTrainingTest}>Тренировoчный тест</Checkbox>
         </Group>
         <FormItem className="form-item">
           <TextArea
@@ -218,7 +247,7 @@ class QuestionForm extends React.PureComponent {
         </FormItem>
         <div className="question">
           <div className="answer-type">
-            Вариант ответа на вопрос:
+            <span className="text-variant">Вариант ответа на вопрос:</span>
             <Group onChange={this.onChangeAnswer}>
               <RadioButton value="SINGLE-VARIANT">Один вариант ответа</RadioButton>
               <RadioButton value="MULTI-VARIANT">Несколько вариантов ответа</RadioButton>
@@ -229,6 +258,8 @@ class QuestionForm extends React.PureComponent {
           <div className="add-task-container"/>
         </div>
         {elem}
+        {errorInput}
+        {addQuestion}
         <FormItem className="add-question">
           <Button
             onClick={onClickAddQuestion}
@@ -247,7 +278,6 @@ function mapStateToProps(state) {
   return {
     user: state.logInInformation.user,
     tags: state.addQuestion.tags,
-    testSet: state.addTask.testSet,
   };
 }
 
@@ -257,9 +287,6 @@ const mapDispatchToProps = dispatch => ({
   },
   deleteTag: (tag) => {
     dispatch(deleteQuestionTag(tag));
-  },
-  addElem: () => {
-    dispatch(addAnswer());
   },
 });
 const StructureQuestion = Form.create()(QuestionForm);
