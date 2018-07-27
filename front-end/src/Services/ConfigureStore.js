@@ -9,8 +9,9 @@ import reducers from './reducers';
 const loggerMiddleware = createLogger();
 export const history = createHistory();
 const middlewareRouter = routerMiddleware(history);
-
 export function configureStore() {
   return createStore(reducers,
     composeWithDevTools(applyMiddleware(thunkMiddleware, loggerMiddleware, middlewareRouter)));
 }
+export const store = configureStore();
+export default store;

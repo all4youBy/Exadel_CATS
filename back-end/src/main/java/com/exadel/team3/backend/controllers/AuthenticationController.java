@@ -1,7 +1,7 @@
 package com.exadel.team3.backend.controllers;
 
 import com.exadel.team3.backend.security.AuthenticatedUser;
-import com.exadel.team3.backend.security.AuthenticationRequest;
+import com.exadel.team3.backend.security.requests.AuthenticationRequest;
 import com.exadel.team3.backend.security.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -13,10 +13,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.web.bind.annotation.ExceptionHandler;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.Objects;
 
@@ -33,7 +30,7 @@ public class AuthenticationController {
     @Autowired
     private SecurityUtils securityUtils;
 
-    @PostMapping("/cats/login")
+    @PostMapping("/login")
     public ResponseEntity<?> authenticateUser(@RequestBody AuthenticationRequest request){
 
         authenticate(request.getUsername(),request.getPassword());

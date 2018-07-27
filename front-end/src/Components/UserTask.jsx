@@ -6,7 +6,7 @@ import { Upload, Button, Icon, Select } from 'antd';
 const { Option } = Select;
 
 export default class UserTask extends React.PureComponent {
-  state = {}
+  state = {};
 
   handleChange = (info) => {
     let { fileList } = info;

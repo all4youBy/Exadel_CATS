@@ -9,6 +9,7 @@ import java.util.Collection;
 import java.util.List;
 
 @Repository
-public interface TopicRepository extends MongoRepository<Topic, ObjectId>, TopicRepositoryAggregation {
+public interface TopicRepository
+        extends MongoRepository<Topic, ObjectId>, TopicRepositoryAggregation {
     List<Topic> findByIdIn(Collection<ObjectId> ids);
 }

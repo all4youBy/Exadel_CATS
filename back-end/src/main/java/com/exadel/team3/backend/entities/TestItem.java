@@ -1,23 +1,21 @@
 package com.exadel.team3.backend.entities;
 
-import lombok.Data;
-import lombok.NonNull;
+import lombok.*;
 
 import org.bson.types.ObjectId;
-import org.springframework.util.StringUtils;
 
 @Data
 public class TestItem {
     @NonNull
-    private ObjectId questionId;
+    private final ObjectId questionId;
 
-    private String answerData;
+    private TestItemStatus status = TestItemStatus.UNANSWERED;
 
-    private TestItemStatus status;
+    private String answer;
 
-    public TestItemStatus getStatus() {
-        if (StringUtils.isEmpty(answerData)) return TestItemStatus.UNANSWERED;
+   /* public TestItemStatus getStatus() {
+        if (CollectionUtils.isEmpty(answers)) return TestItemStatus.UNANSWERED;
         if (status == null) return TestItemStatus.UNCHECKED;
         return status;
-    }
+    }*/
 }

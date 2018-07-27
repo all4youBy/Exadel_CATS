@@ -8,8 +8,9 @@
     <version>0.0.1-SNAPSHOT</version>
     <packaging>war</packaging>
 
-    <name>back-end</name>
+    <name>cats</name>
     <description></description>
+
 
     <parent>
         <groupId>org.springframework.boot</groupId>
@@ -23,6 +24,7 @@
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <java.version>1.8</java.version>
     </properties>
+
 
     <dependencies>
         <dependency>
@@ -76,6 +78,7 @@
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
             </plugin>
+
         </plugins>
     </build>
 

@@ -6,12 +6,13 @@ import com.exadel.team3.backend.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
-@RequestMapping
+@RequestMapping("/users")
 public class UserController {
 
     @Autowired
@@ -23,11 +24,35 @@ public class UserController {
     @PostMapping("/registration")
     public ResponseEntity<?> signUpUser(@RequestBody User user){
         securityUtils.hashUserPassword(user);
-        userService.addUser(user);
+        userService.addItem(user);
         return ResponseEntity.status(HttpStatus.OK).body("User created.");
     }
-    @GetMapping("/users/{group}")
+    @GetMapping("/{group}")
+    @PreAuthorize("hasAnyRole('ADMIN','TEACHER')")
     public List<User> getUsers(@PathVariable String group){
-        return userService.getUsersByGroup(group);
+        return userService.getByGroup(group);
+    }
+
+    @GetMapping("/{email}")
+    public User getUser(@PathVariable(value = "email") String email){
+        return userService.getItem(email);
+
+    }
+
+    @PutMapping
+    public ResponseEntity<?> updateUser(@RequestBody User user){
+        userService.updateItem(user);
+        return new ResponseEntity<String>(HttpStatus.OK);
+    }
+
+    @DeleteMapping
+    public void deleteUser(@RequestBody User user){
+        userService.deleteItem(user);
+    }
+
+    @PostMapping
+    public ResponseEntity<?> assignGroup(@RequestBody List<String> emails,String groupId){
+        userService.assignGroup(emails,groupId);
+        return new ResponseEntity<String>(HttpStatus.OK);
     }
 }
