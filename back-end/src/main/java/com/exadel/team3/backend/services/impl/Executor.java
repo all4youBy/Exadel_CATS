@@ -19,7 +19,7 @@ import java.util.List;
 import java.util.Map;
 
 @Component
-public class ExecutorImpl {
+public class Executor {
     @Autowired
     TaskCompiler taskCompiler;
 
