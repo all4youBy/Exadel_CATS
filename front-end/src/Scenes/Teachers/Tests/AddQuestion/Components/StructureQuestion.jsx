@@ -35,24 +35,6 @@ class QuestionForm extends React.PureComponent {
       variants: [],
       topicIds: [],
     };
-    this.validateQuestion = (question) => {
-      if (question.type.length === 0 || question.complexity.length === 0
-        || question.text.length === 0 || question.topicIds.length === 0) {
-        return false;
-      }
-      if (question.type === 'SINGLE-VARIANT' || question.type === 'MULTI-VARIANT') {
-        if (!(question.variants.find(element => element.correct === true)
-          && question.variants.find(element => element.correct === false))) {
-          return false;
-        }
-      }
-      if (question.type === 'AUTOCHECK_TEXT') {
-        if (!(question.variants.find(element => element.correct === true))) {
-          return false;
-        }
-      }
-      return true;
-    };
   }
 
   state = {
@@ -98,6 +80,25 @@ class QuestionForm extends React.PureComponent {
     }
   };
 
+  validateQuestion = (question) => {
+    if (question.type.length === 0 || question.complexity.length === 0
+      || question.text.length === 0 || question.topicIds.length === 0) {
+      return false;
+    }
+    if (question.type === 'SINGLE-VARIANT' || question.type === 'MULTI-VARIANT') {
+      if (!(question.variants.find(element => element.correct === true)
+        && question.variants.find(element => element.correct === false))) {
+        return false;
+      }
+    }
+    if (question.type === 'AUTOCHECK_TEXT') {
+      if (!(question.variants.find(element => element.correct === true))) {
+        return false;
+      }
+    }
+    return true;
+  };
+
   addAnswerInputsFalse = () => this.setState(prevState => ({
     answerInputsFalse: [...prevState.answerInputsFalse, prevState.answerInputsFalse.length + 1],
   }));
@@ -109,8 +110,8 @@ class QuestionForm extends React.PureComponent {
   handleSubmit = (e) => {
     const { error } = this.state;
     if (!error) {
-      API.post('', this.question);
       console.log(this.question);
+      API.post('', this.question);
     }
     e.preventDefault();
   };
