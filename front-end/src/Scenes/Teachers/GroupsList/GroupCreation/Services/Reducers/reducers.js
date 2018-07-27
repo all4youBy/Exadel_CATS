@@ -1,18 +1,22 @@
 import * as types from '../Actions/types';
+import { ERROR } from '../../../../../../Main/Services/Actions/types';
 
 const initialState = {
   data: [],
   students: [],
+  error: false,
 };
 const createGroup = (state = initialState, action) => {
   switch (action.type) {
-    case 'RECEIVE_STUDENTLIST': {
+    case ERROR:
       return {
         ...state,
-        data: [
-          ...state.data,
-          action.payload,
-        ],
+        error: action.error,
+      };
+    case types.RECEIVE_STUDENTLIST: {
+      return {
+        ...state,
+        data: [...state.data, ...action.payload],
       };
     }
     case types.ADD_STUDENT_TO_GROUP: {

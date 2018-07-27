@@ -1,6 +1,6 @@
 import React from 'react';
 import 'antd/dist/antd.css';
-import { List, Button } from 'antd';
+import { List, Button, message } from 'antd';
 import PropTypes from 'prop-types';
 import './GroupCreation.scss';
 
@@ -9,16 +9,21 @@ export default class StudentList extends React.PureComponent {
     data: PropTypes.arrayOf(PropTypes.object).isRequired,
     addStudent: PropTypes.func.isRequired,
     getData: PropTypes.func.isRequired,
+    error: PropTypes.bool.isRequired,
   };
 
   componentDidMount() {
     const { getData } = this.props;
-    getData('users/students');
+    getData();
   }
 
   render() {
-    const { data } = this.props;
-    const listData = data[0];
+    const { data, error } = this.props;
+    if (error) {
+      message.error('Не удалось загрузить список студентов');
+      return ('');
+    }
+
     return (
       <List
         className="students-list"
@@ -30,7 +35,7 @@ export default class StudentList extends React.PureComponent {
         pagination={{
           pageSize: 10,
         }}
-        dataSource={listData}
+        dataSource={data}
         renderItem={(item) => {
           const { addStudent } = this.props;
           const desc = (

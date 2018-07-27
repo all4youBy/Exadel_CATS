@@ -34,7 +34,6 @@ class Main extends React.Component {
   }
 
   renderSwitch() {
-    console.log(this.props);
     const { userType: { logInInformation: { user: { role } } } } = this.props;
     switch (role) {
       case 'STUDENT':

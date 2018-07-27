@@ -3,7 +3,6 @@ import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { Input, Button } from 'antd';
 import './CreategroupPage.scss';
-// import StudentList from '../Components/StudentList';
 import SectionTree from '../../../../../Components/SectionTree';
 import { addTaskTag, deleteTaskTag } from '../../../Tasks/AddTask/Services/Actions/actions';
 import EditableTagGroup from '../../../../../Components/AddTaskTags';
@@ -22,12 +21,14 @@ class CreateGroupPage extends React.PureComponent {
     addStudent: PropTypes.func.isRequired,
     delStudent: PropTypes.func.isRequired,
     students: PropTypes.arrayOf(PropTypes.object).isRequired,
-    getData: PropTypes.func.isRequired,
+    getStudentData: PropTypes.func.isRequired,
     data: PropTypes.arrayOf(PropTypes.object).isRequired,
+    error: PropTypes.bool.isRequired,
   };
 
   render() {
-    const { addTag, deleteTag, tags, addStudent, delStudent, students, getData, data } = this.props;
+    const { addTag, deleteTag, tags, addStudent, delStudent, students,
+      getStudentData, data, error } = this.props;
     return (
       <div className="create-group-container">
         <Input className="group-name-input" placeholder="Название группы"/>
@@ -41,7 +42,7 @@ class CreateGroupPage extends React.PureComponent {
         </div>
         <EditableTagGroup tags={tags} deleteTag={deleteTag} addTag={addTag}/>
         <div className="student-list-container ">
-          <StudentsList data={data} addStudent={addStudent} getData={getData}/>
+          <StudentsList data={data} addStudent={addStudent} getData={getStudentData} error={error}/>
           <CurrentGroupList students={students} delStudent={delStudent}/>
         </div>
         <Button onClick={API.post()}/>
@@ -55,6 +56,7 @@ function mapStateToProps(state) {
     tags: state.addTask.tags,
     students: state.createGroup.students,
     data: state.createGroup.data,
+    error: state.createGroup.error,
   };
 }
 
@@ -71,8 +73,8 @@ const mapDispatchToProps = dispatch => ({
   delStudent: (student) => {
     dispatch(deleteStudentFromGroup(student));
   },
-  getData: (url) => {
-    dispatch(API.get(url, 'studentList'));
+  getStudentData: () => {
+    dispatch(API.get('users/students', 'studentList'));
   },
 });
 
