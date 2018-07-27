@@ -10,6 +10,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class UserAffiliation {
     private String institution;
+    private String faculty;
     private int graduationYear;
     private String specialization;
     private String primarySkill;
