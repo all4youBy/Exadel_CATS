@@ -36,7 +36,7 @@
     "firstName":"Макар",
     "lastName":"Свирепый",
     "role":"ADMIN",
-    "passwordHash":"$2a$10$GqE6IY43930ceftcqRrFdOwz/y8mT7L/H7UxRgu9ntsEtNccsimLO",
+    "passwordHash":"$2a$10$0vYSCnti0LwCOchxGbfab.BNsJkKUq9fj7lsX7f/D8xdiYqcGRUC2",
     "groups":[]
   },
 
@@ -45,7 +45,7 @@
     "firstName":"Леокадия",
     "lastName":"Плюшкина",
     "role":"TEACHER",
-    "passwordHash":"$2a$10$GqE6IY43930ceftcqRrFdOwz/y8mT7L/H7UxRgu9ntsEtNccsimLO",
+    "passwordHash":"$2a$10$bna/Cb9DI0gktn1L16Ltu.UIY0zm.HB9Phq.mwoedTu4RX1GbJioC",
     "groups":["Первая группа"],
     "affiliation":{
       "institution":"БГУ",
@@ -103,7 +103,7 @@
     "firstName":"Анна-Мария",
     "lastName":"Акулич",
     "role":"STUDENT",
-    "passwordHash":"$2a$10$GqE6IY43930ceftcqRrFdOwz/y8mT7L/H7UxRgu9ntsEtNccsimLO",
+    "passwordHash":"$2a$10$X8SQVka14m.WGbefQNdz6OhN7ormP938hWnkQvp2RkILrPDy0fdT2",
     "groups":["Вторая группа"],
     "affiliation":{
       "institution":"БГУ",
