@@ -22,10 +22,22 @@ import AddTaskPage from '../../Scenes/Teachers/Tasks/AddTask/Containers/AddTaskP
 import CreateGroupPage from '../../Scenes/Teachers/GroupsList/GroupCreation/Containers/CreateGroupPage';
 
 class Main extends React.Component {
+  renderCommonRoutes() {
+    return [
+      (<Route exact path="/groupstudentslist" component={PageGroupStudentsList}/>),
+      (<Route exact path="/allgroups" component={AllGroups}/>),
+      (<Route exact path="/alltasks" component={AllTask}/>),
+      (<Route exact path="/addtask" component={AddTaskPage}/>),
+      (<Route exact path="/teachersmaterials" component={Materials}/>),
+      (<Route exact path="/materials" component={Materials}/>),
+    ];
+  }
+
   renderSwitch() {
-    const { userType } = this.props;
-    switch ('student') {
-      case 'student':
+    console.log(this.props);
+    const { userType: { logInInformation: { user: { role } } } } = this.props;
+    switch (role) {
+      case 'STUDENT':
         return (
           <div className="main-body-container">
             <div className="general-menu">
@@ -35,23 +47,45 @@ class Main extends React.Component {
               <Switch>
                 <Route exact path="/assignedtestlist" component={PageAssignedTestList}/>
                 <Route exact path="/passedtestlist" component={PagePassedTestList}/>
-                <Route exact path="/groupstudentslist" component={PageGroupStudentsList}/>
                 <Route exact path="/passedtasks" component={PagePassedTasks}/>
-                <Route exact path="/allgroups" component={AllGroups}/>
-                <Route exact path="/alltasks" component={AllTask}/>
-                <Route exact path="/Test" component={Test}/>
-                <Route exact path="/Task" component={UserTaskPage}/>
-                <Route exact path="/addtask" component={AddTaskPage}/>
-                <Route exact path="/teachersmaterials" component={Materials}/>
+                <Route exact path="/test" component={Test}/>
+                <Route exact path="/task" component={UserTaskPage}/>
                 <Route exact path="/usersmaterials" component={Materials}/>
-                <Route exact path="/materials" component={Materials}/>
+                <Redirect to="/"/>
+              </Switch>
+            </div>
+          </div>
+        );
+      case 'TEACHER':
+        return (
+          <div className="main-body-container">
+            <div className="general-menu">
+              <UserGeneralMenu/>
+            </div>
+            <div className="switch-div">
+              <Switch>
+                {this.renderCommonRoutes()}
                 <Route exact path="/creategroup" component={CreateGroupPage}/>
                 <Redirect to="/"/>
               </Switch>
             </div>
           </div>
         );
-      case 'guest':
+      case 'ADMIN':
+        return (
+          <div className="main-body-container">
+            <div className="general-menu">
+              <UserGeneralMenu/>
+            </div>
+            <div className="switch-div">
+              <Switch>
+                {this.renderCommonRoutes()}
+                <Redirect to="/"/>
+              </Switch>
+            </div>
+          </div>
+        );
+      case 'GUEST':
         return (
           <div className="main-body-container-unlogged">
             <Switch>
@@ -71,7 +105,7 @@ class Main extends React.Component {
       <div className="main-content">
         <PageHeader/>
 
-        {this.renderSwitch(this.props.userType)}
+        {this.renderSwitch()}
         <PageFooter/>
       </div>
     );
@@ -82,7 +116,7 @@ function mapStateToProps(state) {
   return {
     isReady: state.isReady,
     isAuth: state.isAuth,
-    userType: state.userType,
+    userType: state,
   };
 }
 

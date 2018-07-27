@@ -23,8 +23,6 @@ export default class EditableTagGroup extends React.Component {
 
   handleInputChange = (e) => {
     this.setState({ inputValue: e.target.value });
-    const { inputValue } = this.state;
-    console.log(inputValue);
   };
 
   handleInputConfirm = () => {

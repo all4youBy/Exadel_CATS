@@ -1,4 +1,4 @@
-/* eslint-disable react/no-unused-prop-types */
+/* eslint-disable react/no-unused-prop-types,no-unused-vars */
 import React from 'react';
 import 'antd/dist/antd.css';
 import './GroupCreation.scss';
@@ -9,30 +9,33 @@ import VList from 'react-virtualized/dist/commonjs/List';
 import InfiniteLoader from 'react-virtualized/dist/commonjs/InfiniteLoader';
 import PropTypes from 'prop-types';
 
-const fakeDataUrl = 'https://randomuser.me/api/?results=5&inc=name,gender,email,nat&noinfo';
+// const fakeDataUrl = 'https://exadelcats.herokuapp.com/users/students';
 
 export default class StudentList extends React.PureComponent {
   loadedRowsMap = {};
 
   static propTypes = {
+    data: PropTypes.arrayOf(PropTypes.object).isRequired,
     addStudent: PropTypes.func.isRequired,
     students: PropTypes.arrayOf(PropTypes.object).isRequired,
+    getData: PropTypes.func.isRequired,
   };
 
   state = {
-    data: [],
     loading: false,
   };
 
   componentDidMount() {
-    this.getData((res) => {
+    const { getData } = this.props;
+    getData('users/students');
+    /* this.getData((res) => {
       this.setState({
         data: res.results,
       });
-    });
+    }); */
   }
 
-  getData = (callback) => {
+  /* getData = (callback) => {
     const headers = new Headers({
       type: 'json',
       'Content-type': 'application/json',
@@ -44,10 +47,11 @@ export default class StudentList extends React.PureComponent {
     fetch(request).then((res) => {
       res.json().then(callback);
     });
-  };
+  }; */
 
   handleInfiniteOnLoad = ({ startIndex, stopIndex }) => {
-    let { data } = this.state;
+    const { data } = this.props;
+    const { getData } = this.props;
     this.setState({
       loading: true,
     });
@@ -62,24 +66,21 @@ export default class StudentList extends React.PureComponent {
       });
       return;
     }
-    this.getData((res) => {
-      data = data.concat(res.results);
-      this.setState({
-        data,
-        loading: false,
-      });
+    getData('users/students');
+    this.setState({
+      loading: false,
     });
   };
 
   isRowLoaded = ({ index }) => !!this.loadedRowsMap[index]
 
   renderItem = ({ index, key, style }) => {
-    const [{ data }, { addStudent }] = [this.state, this.props];
-    const item = data[index];
+    const { data, addStudent } = this.props;
+    const item = data[0][index];
     return (
       <List.Item key={key} style={style}>
         <List.Item.Meta
-          title={<a href="https://ant.design">{item.name.last}</a>}
+          title={<a href="https://ant.design">{item.lastName}</a>}
           description={item.email}
         />
         <Button
@@ -94,7 +95,7 @@ export default class StudentList extends React.PureComponent {
   };
 
   render() {
-    const { data } = this.state;
+    const { data } = this.props;
     const { loading } = this.state;
     const vlist = ({ height, isScrolling, onChildScroll, scrollTop, onRowsRendered, width }) => (
       <VList
@@ -139,7 +140,7 @@ export default class StudentList extends React.PureComponent {
       </InfiniteLoader>
     );
     return (
-      <List>
+      <List style={{ width: '50%' }}>
         {
           data.length > 0 && (
             <WindowScroller>

@@ -7,8 +7,16 @@ export function addStudentToGroup(student) {
   };
 }
 
-export function deleteStudentFromGroup() {
+export function deleteStudentFromGroup(student) {
   return {
     type: types.DELETE_STUDENT_FROM_GROUP,
+    payload: student,
+  };
+}
+
+export function receiveStudentList(data) {
+  return {
+    type: 'RECEIVE_STUDENTLIST',
+    payload: data,
   };
 }
