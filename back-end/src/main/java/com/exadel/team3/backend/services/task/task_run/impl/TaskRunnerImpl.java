@@ -16,7 +16,7 @@ public class TaskRunnerImpl implements TaskRunner {
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
     @Override
-    public Method findMethod(List<Class<?>> classList, String methodName, String[] args) throws TaskRunException {
+    public Method findMethod(List<Class<?>> classList, String methodName, String[] args) {
 
         Method execute = null;
         for (Class<?> clazz : classList) {
