@@ -17,6 +17,7 @@ public interface AssignableRepository<T extends Assignable> extends MongoReposit
     List<T> findByAssignedToInAndDeadlineAfterOrderByStartDesc(Collection<String> assignedTo, LocalDateTime deadline);
 
     List<T> findByAssignedToInOrderByStartDesc(Collection<String> assignedIds);
+    List<T> findByAssignedByOrderByStartDesc(String assignedBy);
 
     List<T> findByAssignedToAndAssignedByOrderByStartDesc(String assignedId, String assignedById);
     List<T> findByAssignedToOrderByStartDesc(String assignedId);

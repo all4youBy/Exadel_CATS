@@ -42,7 +42,12 @@ public abstract class AssignableServiceImpl<T extends Assignable>
     }
 
     @Override
-    public List<T> getAssignedItemsToGroup(Collection<String> assignedToIds) {
+    public List<T> getAssignedItemsByAssigner(@NonNull String assignedBy) {
+        return getRepository().findByAssignedByOrderByStartDesc(assignedBy);
+    }
+
+    @Override
+    public List<T> getAssignedItemsToGroup(@NonNull Collection<String> assignedToIds) {
         return getRepository().findByAssignedToInOrderByStartDesc(assignedToIds);
     }
     @Override
@@ -51,6 +56,8 @@ public abstract class AssignableServiceImpl<T extends Assignable>
                 getUserIdsByGroupName(assignedToGroup)
         );
     }
+
+
 
 
     @Override
@@ -79,7 +86,7 @@ public abstract class AssignableServiceImpl<T extends Assignable>
     @Override
     protected abstract AssignableRepository<T> getRepository();
 
-    protected Stream<String> getUserIdsByGroupNameStream (String group){
+    Stream<String> getUserIdsByGroupNameStream (String group){
         return userRepository.findStudentsByGroupName(group)
                 .stream()
                 .map(User::getEmail);
