@@ -1,5 +1,7 @@
 package com.exadel.team3.backend.entities;
 
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import lombok.*;
 
 import org.bson.types.ObjectId;
@@ -7,7 +9,9 @@ import org.bson.types.ObjectId;
 @Data
 public class TestItem {
     @NonNull
-    private final ObjectId questionId;
+    @JsonSerialize(using = ToStringSerializer.class)
+    @Setter(AccessLevel.NONE)
+    private ObjectId questionId;
 
     private TestItemStatus status = TestItemStatus.UNANSWERED;
 
