@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.exadel.team3.backend.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Service;
 
@@ -11,33 +12,20 @@ import com.exadel.team3.backend.dao.UserRepository;
 import com.exadel.team3.backend.entities.User;
 
 @Service
-public class UserServiceImpl implements UserService {
+public class UserServiceImpl
+        extends CrudServiceImpl<User, String>
+        implements UserService {
+
     @Autowired
     private UserRepository userRepository;
 
     @Override
-    public User addUser(@NonNull User user) {
-        return userRepository.insert(user);
+    protected MongoRepository<User, String> getRepository() {
+        return userRepository;
     }
 
     @Override
-    public User getUser(@NonNull String email) {
-        return userRepository.findByEmail(email);
-    }
-
-    @Override
-    public User updateUser(@NonNull User user) {
-        return userRepository.save(user);
-    }
-
-    @Override
-    public void deleteUser(@NonNull User user) {
-        userRepository.delete(user);
-    }
-
-
-    @Override
-    public List<User> getUsersByGroup(@NonNull String group) {
+    public List<User> getByGroup(@NonNull String group) {
         return userRepository.findStudentsByGroupName(group);
     }
 
@@ -47,7 +35,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public boolean userExists(@NonNull String email) {
+    public boolean exists(@NonNull String email) {
         return userRepository.existsById(email);
     }
 
@@ -59,5 +47,7 @@ public class UserServiceImpl implements UserService {
         }
         userRepository.saveAll(matchedUsers);
     }
+
+
 }
 

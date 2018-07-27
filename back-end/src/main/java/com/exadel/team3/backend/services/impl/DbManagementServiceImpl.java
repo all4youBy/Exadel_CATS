@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.List;
 
+import com.exadel.team3.backend.dao.*;
 import com.exadel.team3.backend.services.ServiceException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Primary;
@@ -17,10 +18,6 @@ import com.fasterxml.jackson.databind.type.CollectionType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.exadel.team3.backend.dao.QuestionRepository;
-import com.exadel.team3.backend.dao.TestRepository;
-import com.exadel.team3.backend.dao.TopicRepository;
-import com.exadel.team3.backend.dao.UserRepository;
 import com.exadel.team3.backend.entities.Question;
 import com.exadel.team3.backend.entities.Topic;
 import com.exadel.team3.backend.entities.User;
@@ -37,10 +34,19 @@ public class DbManagementServiceImpl implements DbManagementService {
     TopicRepository topicRepository;
     @Autowired
     TestRepository testRepository;
+    @Autowired
+    TaskRepository taskRepository;
+    @Autowired
+    SolutionRepository solutionRepository;
+    @Autowired
+    FileStorage fileStorage;
 
 
     @Override
     public void reset() {
+        fileStorage.deleteAll();
+        taskRepository.deleteAll();
+        solutionRepository.deleteAll();
         testRepository.deleteAll();
         questionRepository.deleteAll();
         topicRepository.deleteAll();

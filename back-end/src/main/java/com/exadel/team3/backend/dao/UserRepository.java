@@ -1,4 +1,5 @@
 package com.exadel.team3.backend.dao;
+
 import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.data.mongodb.repository.Query;
 import org.springframework.stereotype.Repository;

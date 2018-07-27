@@ -1,7 +1,6 @@
 package com.exadel.team3.backend.services;
 
 import com.exadel.team3.backend.dto.TestItemDTO;
-import com.exadel.team3.backend.entities.TestCompletionStatus;
 import org.bson.types.ObjectId;
 import org.springframework.stereotype.Service;
 
@@ -11,8 +10,7 @@ import java.util.List;
 
 import com.exadel.team3.backend.entities.Test;
 
-@Service
-public interface TestService {
+public interface TestService  extends AssignableService<Test> {
 
     Test generateTestForUser(String userId,
                              String title,
@@ -33,22 +31,9 @@ public interface TestService {
                                int questionsCount,
                                String assignedBy);
 
-    List<Test> getTestsAssignedToUser(String userId);
-    List<Test> getTestsAssignedToUser(String userId, TestCompletionStatus completion);
-    List<Test> getTestsAssignedToGroup(String group);
-    List<Test> getTestsAssignedToGroup(String group, TestCompletionStatus completion);
-
-    Test updateTest(Test test);
-
-
-    Test getTest(String id);
-    Test getTest(ObjectId id);
-
     Test submitTest(ObjectId id);
     Test submitAnswer(TestItemDTO answeredItem);
-    Test submitManualAnswerCheck(TestItemDTO checked);
+    Test submitManualAnswerCheck(TestItemDTO checkedItem);
 
     List<TestItemDTO> getAnswersForManualCheck(String assignedBy);
-
-    void deleteTest(Test test);
 }
