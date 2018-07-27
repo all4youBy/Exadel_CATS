@@ -1,21 +1,23 @@
 package com.exadel.team3.backend.entities;
 
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
-import org.bson.types.ObjectId;
-import org.springframework.data.mongodb.core.mapping.Document;
+import java.util.List;
+
 import lombok.AccessLevel;
 import lombok.Data;
 import lombok.NonNull;
 import lombok.Setter;
-
-import java.util.List;
+import org.bson.types.ObjectId;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.Document;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 
 @Data
 @Document(collection="questions")
 public class Question implements Taggable {
-    @Setter(AccessLevel.NONE)
+    @Id
     @JsonSerialize(using = ToStringSerializer.class)
+    @Setter(AccessLevel.NONE)
     private ObjectId id;
 
     @NonNull
@@ -32,7 +34,6 @@ public class Question implements Taggable {
 
     private List<QuestionVariant> variants;
 
-    @JsonSerialize(using = ToStringSerializer.class)
     private List<ObjectId> topicIds;
 
     private boolean training;

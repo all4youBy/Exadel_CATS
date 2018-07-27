@@ -3,7 +3,6 @@ package com.exadel.team3.backend.dao;
 import com.exadel.team3.backend.entities.UserRole;
 import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.data.mongodb.repository.Query;
-import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Repository;
 
 import java.util.Collection;
@@ -12,7 +11,7 @@ import java.util.List;
 import com.exadel.team3.backend.entities.User;
 
 @Repository
-public interface UserRepository extends MongoRepository<User, String> {
+public interface UserRepository extends MongoRepository<User, String>, UserRepositoryQueries {
     User findByEmail(String email);
 
     List<User> findByEmailIn(Collection<String> emails);
@@ -26,6 +25,5 @@ public interface UserRepository extends MongoRepository<User, String> {
     @Query("{'groups':?0, 'role':'STUDENT'}")
     List<User> findStudentsByGroupName(String group);
 
-
-    List<User> findUsersByRole(UserRole role);
+    List<User> findByRole(UserRole role);
 }

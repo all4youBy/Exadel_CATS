@@ -1,12 +1,11 @@
 package com.exadel.team3.backend.services.task.task_run.impl;
 
-import com.exadel.team3.backend.services.task.task_run.CustomClassLoader;
+import com.exadel.team3.backend.services.task.task_run.TaskRunException;
 import com.exadel.team3.backend.services.task.task_run.TaskRunner;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
-import java.io.File;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.List;
@@ -17,34 +16,28 @@ public class TaskRunnerImpl implements TaskRunner {
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
     @Override
-    public boolean runTask(List<Class<?>> classList, String... args) {
+    public Method findMethod(List<Class<?>> classList, String methodName, String[] args) {
 
-        // create the custom class loader
-        ClassLoader classLoader = new CustomClassLoader();
-        Method main = null;
-
+        Method execute = null;
         for (Class<?> clazz : classList) {
             try {
-
-                // get the main method
-                main = clazz.getMethod("main", args.getClass());
+                execute = clazz.getMethod(methodName, args.getClass());
             } catch (NoSuchMethodException ex) {
-                logger.info("did not find the \"main\" method in this class. " + ex.getMessage());
+                logger.info("Can't find the \"execute\" method in %s class. " + ex.getMessage(), "");
             }
         }
+        return execute;
+    }
 
+    @Override
+    public String runTask(Method method, String[] args) throws TaskRunException{
+        String executeReturn;
         try {
-            main.invoke(null, (Object) args);
+            executeReturn = method != null ? (String) method.invoke(null, (Object) args) : null;
         } catch (IllegalAccessException | InvocationTargetException ex) {
             logger.error("Can not run file" + ex.getMessage());
+            throw new TaskRunException("Can not run file", ex);
         }
-
-        //TODO It is necessary to write this file into the database
-        //new File(getClass().getClassLoader().getResource(nameOfOutputFile).getFile());
-
-
-        //TODO Ask the database if there is such a file
-        // return new File(getClass().getClassLoader().getResource(nameOfOutputFile).getFile()).exists();
-        return true;
+        return executeReturn;
     }
 }

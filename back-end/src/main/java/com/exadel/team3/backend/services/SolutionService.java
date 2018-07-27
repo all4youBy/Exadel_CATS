@@ -25,10 +25,10 @@ public interface SolutionService extends AssignableService<Solution> {
             String assignedBy
     );
 
-    Solution storeFile(Solution solution, MultipartFile file);
-    Solution storeFile(Solution solution, InputStream stream, String filename);
+    Solution storeFile(Solution solution, MultipartFile file) throws ServiceException;
+    Solution storeFile(Solution solution, InputStream stream, String filename) throws ServiceException;
 
-    InputStream getFile(Solution solution, String filename);
+    InputStream getFile(Solution solution, String filename) throws ServiceException;
 
-    Solution submit(Solution solution);
+    Solution submit(Solution solution) throws ServiceException;
 }

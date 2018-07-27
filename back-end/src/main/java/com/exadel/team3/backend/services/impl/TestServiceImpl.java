@@ -54,7 +54,7 @@ public class TestServiceImpl
                                     LocalDateTime deadline,
                                     Collection<ObjectId> topicIds,
                                     int questionsCount,
-                                    String assignedBy) {
+                                    String assignedBy) throws ServiceException {
 
         boolean isTraining = StringUtils.isEmpty(assignedBy);
         Collection<ObjectId> actualTopicIds =
@@ -121,7 +121,7 @@ public class TestServiceImpl
     }
 
     @Override
-    public Test generateTestForUser(String userId, ObjectId topicId) {
+    public Test generateTestForUser(String userId, ObjectId topicId) throws ServiceException{
         return generateTestForUser(
                 userId,
                 null,
@@ -140,12 +140,18 @@ public class TestServiceImpl
                                       LocalDateTime deadline,
                                       Collection<ObjectId> topicIds,
                                       int questionsCount,
-                                      @NonNull String assignedBy) {
+                                      @NonNull String assignedBy) throws ServiceException{
         return getUserIdsByGroupNameStream(group)
                 .map(
-                    userId -> generateTestForUser(
-                        userId, title, start, deadline, topicIds, questionsCount, assignedBy
-                    )
+                        userId -> {
+                            try {
+                                return generateTestForUser(
+                                        userId, title, start, deadline, topicIds, questionsCount, assignedBy
+                                );
+                            } catch (ServiceException e) {
+                                return null;
+                            }
+                        }
                 )
                 .collect(Collectors.toList());
     }
@@ -191,7 +197,7 @@ public class TestServiceImpl
     }
 
     @Override
-    public Test submitAnswer(@NonNull TestItemDTO answeredItem) {
+    public Test submitAnswer(@NonNull TestItemDTO answeredItem) throws ServiceException {
         Optional<Test> updatedTest = testRepository.findById(answeredItem.getTestId());
         if (!updatedTest.isPresent()) {
             throw new ServiceException("There's no test with id " + answeredItem.getTestId());
@@ -221,7 +227,7 @@ public class TestServiceImpl
     }
 
     @Override
-    public Test submitManualAnswerCheck(@NonNull TestItemDTO checkedItem) {
+    public Test submitManualAnswerCheck(@NonNull TestItemDTO checkedItem) throws ServiceException{
         Optional<Test> updatedTest = testRepository.findById(checkedItem.getTestId());
         if (updatedTest.isPresent()) {
             Test updatedTestObj = updatedTest.get();
@@ -255,7 +261,12 @@ public class TestServiceImpl
                             .filter(item -> item.getStatus() == TestItemStatus.UNCHECKED)
                             .map(
                                     item ->
-                                    new TestItemDTO(test.getId(), item.getQuestionId(), item.getAnswer())
+                                    new TestItemDTO(
+                                            test.getId(),
+                                            item.getQuestionId(),
+                                            item.getAnswer(),
+                                            item.getStatus()
+                                    )
                             )
                 )
                 .collect(Collectors.toList());

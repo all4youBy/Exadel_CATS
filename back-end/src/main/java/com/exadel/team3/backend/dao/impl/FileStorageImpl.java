@@ -33,6 +33,7 @@ public class FileStorageImpl implements FileStorage {
     public ObjectId save(@NonNull InputStream stream, @NonNull String filename) {
         return save(stream, filename, null);
     }
+
     @Override
     public ObjectId save(@NonNull InputStream stream, @NonNull String filename, ObjectId associatedId) {
         GridFSUploadOptions uploadOptions = new GridFSUploadOptions();
