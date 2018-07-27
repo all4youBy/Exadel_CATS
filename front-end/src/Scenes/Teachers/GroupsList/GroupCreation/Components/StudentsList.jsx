@@ -19,11 +19,11 @@ export default class StudentList extends React.PureComponent {
 
   render() {
     const { data, error } = this.props;
+
     if (error) {
       message.error('Не удалось загрузить список студентов');
-      return ('');
+      return <div/>;
     }
-
     return (
       <List
         className="students-list"
@@ -38,11 +38,11 @@ export default class StudentList extends React.PureComponent {
         dataSource={data}
         renderItem={(item) => {
           const { addStudent } = this.props;
-          const desc = (
+          const desc = item.education ? (
             <div>{item.email} {item.education.institution} {`${item.education.graduationYear} `}
               {item.education.specialization} {item.education.primarySkill}
             </div>
-          );
+          ) : 'No info';
           return (
             <List.Item key={item.firstName}>
               <List.Item.Meta

@@ -6,7 +6,7 @@ import './CreategroupPage.scss';
 import SectionTree from '../../../../../Components/SectionTree';
 import { addTaskTag, deleteTaskTag } from '../../../Tasks/AddTask/Services/Actions/actions';
 import EditableTagGroup from '../../../../../Components/AddTaskTags';
-import { addStudentToGroup, deleteStudentFromGroup } from '../Services/Actions/actions';
+import { addStudentToGroup, deleteStudentFromGroup, fetchStudentList } from '../Services/Actions/actions';
 import CurrentGroupList from '../Components/CurrentGroupList';
 import API from '../../../../../Services/API';
 import StudentsList from '../Components/StudentsList';
@@ -45,7 +45,7 @@ class CreateGroupPage extends React.PureComponent {
           <StudentsList data={data} addStudent={addStudent} getData={getStudentData} error={error}/>
           <CurrentGroupList students={students} delStudent={delStudent}/>
         </div>
-        <Button onClick={API.post()}/>
+        <Button type="primary" className="create-group-button" onClick={API.post()}>Создать группу</Button>
       </div>
     );
   }
@@ -74,8 +74,9 @@ const mapDispatchToProps = dispatch => ({
     dispatch(deleteStudentFromGroup(student));
   },
   getStudentData: () => {
-    dispatch(API.get('users/students', 'studentList'));
+    dispatch(fetchStudentList());
   },
+  /* sendGroup: () */
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(CreateGroupPage);
