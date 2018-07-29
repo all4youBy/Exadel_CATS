@@ -2,14 +2,16 @@ package com.exadel.team3.backend.services.task.editor;
 
 import org.springframework.stereotype.Component;
 
-import java.io.File;
-import java.io.IOException;
+import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
 @Component
 public class FileEditor {
@@ -19,30 +21,27 @@ public class FileEditor {
     private static final String FIND_RUNTIME = "(Runtime\\.).*(;)";
     private static final String FIND_IMPORT = "(import) .*.";
 
-    private static String nameOfOutputFile = "out.txt";
+    public static String getFile(InputStream inputStream) throws IOException {
+        return new BufferedReader(new InputStreamReader(inputStream)).lines().collect(Collectors.joining("\n"));
+    }
 
-    public static List<File> editFiles(List<File> fileList, String newNameOfOutputFile) throws IOException {
-        List<String> stringList = getNamesFiles(fileList);
+    public static Map<String, String> editFiles(Map<String, String> fileMap) throws IOException {
 
-        for (File file : fileList) {
-            Path path = file.toPath();
-            String fileContent = new String(Files.readAllBytes(path));
+        for(Map.Entry<String, String> entry : fileMap.entrySet()) {
 
+            String fileContent = entry.getValue();
             fileContent = deleteFirst(fileContent, FIND_PACKAGE, "");
             fileContent = deleteAll(fileContent, FIND_SYSTEM, "");
             fileContent = deleteAll(fileContent, FIND_RUNTIME, "");
 
-            for(String nameFile : stringList) {
-                fileContent = deleteAll(fileContent, FIND_IMPORT  + nameFile + "(;)", "");
+            for(Map.Entry<String, String> fileNames : fileMap.entrySet()) {
+                fileContent = deleteAll(fileContent, FIND_IMPORT  + fileNames.getKey() + "(;)", "");
             }
 
-            String pathToFile = file.getParent().replaceAll("\\\\", "/") + "/" + newNameOfOutputFile;
-            fileContent = deleteAll(fileContent, nameOfOutputFile, pathToFile);
-
-            Files.write(path, fileContent.getBytes());
+            entry.setValue(fileContent);
         }
 
-        return fileList;
+        return fileMap;
     }
 
     private static List<String> getNamesFiles(List<File> fileList) {

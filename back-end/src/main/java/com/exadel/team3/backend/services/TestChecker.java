@@ -6,7 +6,7 @@ import com.exadel.team3.backend.entities.TestItemStatus;
 import org.bson.types.ObjectId;
 
 public interface TestChecker {
-    TestItemStatus checkAnswer(ObjectId questionId, String answer);
+    TestItemStatus checkAnswer(ObjectId questionId, String answer) throws  ServiceException;
     TestItemStatus checkAnswer(Question question, String answer);
     Integer checkTest(Test test);
 }

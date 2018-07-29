@@ -6,7 +6,6 @@ import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.Collections;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 import com.exadel.team3.backend.dao.*;
@@ -87,7 +86,7 @@ public class SolutionServiceImpl
 
     @Override
     public Solution storeFile(@NonNull Solution solution,
-                              @NonNull MultipartFile file) {
+                              @NonNull MultipartFile file) throws ServiceException{
         try (InputStream is = file.getInputStream()) {
             return storeFile(solution, is, file.getName());
         } catch (IOException e) {
@@ -99,7 +98,7 @@ public class SolutionServiceImpl
     @Override
     public Solution storeFile(@NonNull Solution solution,
                               @NonNull InputStream stream,
-                              @NonNull String filename) {
+                              @NonNull String filename) throws ServiceException{
             if (isValidFileName(filename)) {
                 ObjectId fileId = fileStorage.save(stream, filename, solution.getId());
                 if (fileId != null) {
@@ -117,7 +116,7 @@ public class SolutionServiceImpl
 
     @Override
     public InputStream getFile(@NonNull Solution solution,
-                               @NonNull String filename) {
+                               @NonNull String filename) throws ServiceException{
         try {
             return fileStorage.read(filename, solution.getId());
         } catch (IOException e) {
@@ -128,7 +127,7 @@ public class SolutionServiceImpl
 
 
     @Override
-    public Solution submit(@NonNull Solution solution) {
+    public Solution submit(@NonNull Solution solution) throws ServiceException{
         if (solution.getDeadline().isBefore(LocalDateTime.now())) {
             throw new ServiceException("The solution is pass the deadline");
         }

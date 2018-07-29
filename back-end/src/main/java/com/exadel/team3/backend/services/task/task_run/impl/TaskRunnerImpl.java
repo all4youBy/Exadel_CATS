@@ -1,12 +1,11 @@
 package com.exadel.team3.backend.services.task.task_run.impl;
 
-import com.exadel.team3.backend.services.task.task_run.CustomClassLoader;
+import com.exadel.team3.backend.services.task.task_run.TaskRunException;
 import com.exadel.team3.backend.services.task.task_run.TaskRunner;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
-import java.io.File;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.List;
@@ -16,45 +15,29 @@ public class TaskRunnerImpl implements TaskRunner {
 
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
-    private static String nameOfOutputFile = "out";
+    @Override
+    public Method findMethod(List<Class<?>> classList, String methodName, String[] args) {
+
+        Method execute = null;
+        for (Class<?> clazz : classList) {
+            try {
+                execute = clazz.getMethod(methodName, args.getClass());
+            } catch (NoSuchMethodException ex) {
+                logger.info("Can't find the \"execute\" method in %s class. " + ex.getMessage(), "");
+            }
+        }
+        return execute;
+    }
 
     @Override
-    public boolean runTask(List<Class<?>> classList, String... args) {
-
-        new Thread( () -> {
-
-            // create the custom class loader
-            ClassLoader classLoader = new CustomClassLoader();
-            Method main = null;
-
-            for (Class<?> clazz : classList) {
-                try {
-                    // load the class
-                    clazz = classLoader.loadClass(classList.get(0).getSimpleName());
-
-                    // get the main method
-                    main = clazz.getMethod("main", args.getClass());
-                } catch (ClassNotFoundException ex) {
-                    logger.error("Could not load class. " + ex.getMessage());
-                    return;
-                } catch (NoSuchMethodException ex) {
-                    logger.info("did not find the \"main\" method in this class. " + ex.getMessage());
-                }
-            }
-
-            try {
-                main.invoke(null, (Object) args);
-            } catch (IllegalAccessException | InvocationTargetException ex) {
-                logger.error("Can not compile file" + ex.getMessage());
-            }
-
-            //TODO It is necessary to write this file into the database
-            new File(getClass().getClassLoader().getResource(nameOfOutputFile).getFile());
-
-        }).start();
-
-        //TODO Ask the database if there is such a file
-        // return new File(getClass().getClassLoader().getResource(nameOfOutputFile).getFile()).exists();
-        return true;
+    public String runTask(Method method, String[] args) throws TaskRunException{
+        String executeReturn;
+        try {
+            executeReturn = method != null ? (String) method.invoke(null, (Object) args) : null;
+        } catch (IllegalAccessException | InvocationTargetException ex) {
+            logger.error("Can not run file" + ex.getMessage());
+            throw new TaskRunException("Can not run file", ex);
+        }
+        return executeReturn;
     }
 }
