@@ -5,8 +5,7 @@ import 'antd/dist/antd.css';
 import './LoginForm.scss';
 import { Form, Icon, Input, Button } from 'antd';
 import { Link } from 'react-router-dom';
-import { logIn } from '../Services/Actions/actions';
-import API from '../../../Services/API';
+import { getDataLogIn, logIn, logInData } from '../Services/Actions/actions';
 
 const FormItem = Form.Item;
 
@@ -100,10 +99,10 @@ function mapDispatch(dispatch) {
       dispatch(logIn(username, password));
     },
     sendLogInData: (url, username, password) => {
-      dispatch(API.login(url, { username, password }, { json: false }));
+      dispatch(logInData(url, { username, password }));
     },
     getData: (url) => {
-      dispatch(API.get(url, 'logInData'));
+      dispatch(getDataLogIn(url));
     },
   };
 }
