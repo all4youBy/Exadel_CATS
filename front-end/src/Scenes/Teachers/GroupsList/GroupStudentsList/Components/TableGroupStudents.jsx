@@ -127,8 +127,8 @@ function mapStateToProps(state) {
 }
 
 const mapDispatchToProps = dispatch => ({
-  handleStudentAdd: (book) => {
-    dispatch(addStudent(book));
+  handleStudentAdd: (student) => {
+    dispatch(addStudent(student));
   },
   handleStudentDelete: (key) => {
     dispatch(deleteStudent(key));
