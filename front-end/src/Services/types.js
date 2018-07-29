@@ -78,8 +78,8 @@ export const TEACHER_GENERAL_MENU_DATA = [{
     link: '/assigntest',
   }, {
     id: '6',
-    text: 'Проверить тест',
-    link: '/',
+    text: 'Проверить тесты',
+    link: '/checktests',
   }, {
     id: '7',
     text: 'Добавить вопрос',

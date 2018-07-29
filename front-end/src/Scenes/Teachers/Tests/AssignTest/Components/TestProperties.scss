@@ -8,30 +8,67 @@
     display: flex;
     flex-direction: column;
     text-align: center;
-    width: 90%;
+    width: 100% !important;
     border: none;
     font-size: 20px;
     margin-bottom: 20px;
     margin-top: 15px;
+
+  }
+  .name-form-item {
+    width: 100%;
   }
   .input-count-questions {
     width: 15%;
   }
   .parent-form {
     display: flex;
-    flex-direction: column;
+    flex-direction: row;
+    justify-content: space-between;
     margin-top: 35px;
-    width: 50%;
+    width: 90%;
     text-align: left;
+  }
+  .input-task-tags {
+    width: 100%;
   }
   .form-item {
     margin-bottom: 10px;
   }
-
+  .form-item-tree-with-tags {
+    margin-left: 100px;
+    width: 95%;
+  }
   .count-questions-input {
     width: 20%;
   }
-  .submit-assign-test {
-    width: 70%;
+  .left-group-form-items {
+    width: 50%;
+  }
+  .right-group-form-items {
+    width: 50%;
+  }
+  .parent-group-input {
+    display: flex;
+    .input-hour-lead-time {
+      width: 40px;
+      border-right: none;
+    }
+    .input-min-lead-time {
+      width: 40px;
+      border-right: none;
+      border-left: none;
+    }
+    .input-second-lead-time {
+      border-left: none;
+      width: 40px;
+    }
+    .text-between-input {
+      width: 25px;
+      border-left: none;
+      border-right: none;
+      pointer-events: none;
+      background-color: #fff;
+    }
   }
 }

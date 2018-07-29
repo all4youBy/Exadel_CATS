@@ -3,26 +3,23 @@ import { Menu, Icon } from 'antd';
 import { Link } from 'react-router-dom';
 import * as types from '../Services/types';
 import './GeneralMenu.scss';
+// import loginInformation from '../Services/loginService';
 
 const { SubMenu } = Menu;
-
-const user = {
-  status: 'teacher',
-};
 
 class GeneralMenu extends React.PureComponent {
   render() {
     let data;
-    switch (user.status) {
-      case 'student': {
+    switch ('TEACHER') {
+      case 'STUDENT': {
         data = types.USER_GENERAL_MENU_DATA;
         break;
       }
-      case 'teacher': {
+      case 'TEACHER': {
         data = types.TEACHER_GENERAL_MENU_DATA;
         break;
       }
-      case 'admin': {
+      case 'ADMIN': {
         data = types.ADMIN_GENERAL_MENU_DATA;
         break;
       }
