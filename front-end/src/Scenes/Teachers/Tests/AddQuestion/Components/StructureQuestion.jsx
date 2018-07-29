@@ -6,10 +6,10 @@ import PropTypes from 'prop-types';
 import { Form, Input, Checkbox, Button, Radio } from 'antd';
 import TreeWithTags from '../../../../../Components/TreeWithTags';
 import {
-  addQuestionTag,
+  addQuestionTag, dataQuestion,
   deleteQuestionTag,
 } from '../Services/Actions/actions';
-import API from '../../../../../Services/API';
+// import API from '../../../../../Services/API';
 
 const { TextArea } = Input;
 const { Group } = Radio;
@@ -22,6 +22,8 @@ class QuestionForm extends React.PureComponent {
     tags: PropTypes.arrayOf(PropTypes.string).isRequired,
     addTag: PropTypes.func.isRequired,
     deleteTag: PropTypes.func.isRequired,
+    addQuestion: PropTypes.func.isRequired,
+    // getQuestion: PropTypes.func.isRequired,
   };
 
   constructor(props) {
@@ -46,6 +48,8 @@ class QuestionForm extends React.PureComponent {
   };
 
   onChangeTrainingTest = (e) => {
+    // const { getQuestion } = this.props;
+    // getQuestion('questions');
     this.question.training = e.target.checked;
   };
 
@@ -109,9 +113,10 @@ class QuestionForm extends React.PureComponent {
 
   handleSubmit = (e) => {
     const { error } = this.state;
+    const { addQuestion } = this.props;
     if (!error) {
       console.log(this.question);
-      API.post('', this.question);
+      addQuestion('questions', this.question);
     }
     e.preventDefault();
   };
@@ -288,6 +293,15 @@ const mapDispatchToProps = dispatch => ({
   },
   deleteTag: (tag) => {
     dispatch(deleteQuestionTag(tag));
+  },
+  // getQuestion: (url) => {
+  //   dispatch(API.get(url, 'get'));
+  // },
+  addQuestion: (url, data) => {
+    data.id = `${Math.random()}`;
+    data.status = 'ACTIVE';
+    data.statistics = null;
+    dispatch(dataQuestion(url, data));
   },
 });
 const StructureQuestion = Form.create()(QuestionForm);
