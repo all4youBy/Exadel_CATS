@@ -18,26 +18,24 @@ class RequestsList extends React.PureComponent {
   onClickConfirm = (e, idEmail) => {
     const { users } = this.state;
     const { upDateUser, upDate } = this.props;
-    const newList = users.filter(el => el.email !== idEmail);
     upDateUser('users/update-rights',
       {
         email: users.find(el => el.email === idEmail).email,
         role: users.find(el => el.email === idEmail).role,
       });
-    upDate(newList);// delete
+    upDate(users, idEmail);// delete
     e.preventDefault();
   };
 
   onClickRefuse = (e, idEmail) => {
     const { users } = this.state;
     const { upDateUser, upDate } = this.props;
-    const newList = users.filter(el => el.email !== idEmail);
     upDateUser('users/update-rights',
       {
         email: users.find(el => el.email === idEmail).email,
         role: 'STUDENT',
       });
-    upDate(newList);// delete
+    upDate(users, idEmail);// delete
     e.preventDefault();
   };
 
@@ -112,8 +110,9 @@ function mapDispatch(dispatch) {
     upDateUser: (url, data) => {
       dispatch(upDataListUsers(url, data));
     },
-    upDate: (users) => {
-      dispatch(dataUsers(users));
+    upDate: (users, idEmail) => {
+      const newList = users.filter(el => el.email !== idEmail);
+      dispatch(dataUsers(newList));
     },
   };
 }

@@ -1,6 +1,8 @@
 import { errorProject, isLoading, getData } from '../Main/Services/Actions/actions';
 import { getUserData } from '../Scenes/LogIn/Services/Actions/actions';
 
+const urlServer = 'https://exadelcats.herokuapp.com/';
+
 const API = {
   getTokenFromStore(state) {
     const token = state.logInInformation.user;
@@ -17,7 +19,7 @@ const API = {
     return fetch(new Request(url, reqInit));
   },
   login(path, data) {
-    const url = `https://exadelcats.herokuapp.com/${path}`;
+    const url = `${urlServer}${path}`;
     return (dispatch) => {
       fetch(url, {
         method: 'POST',
@@ -36,7 +38,7 @@ const API = {
     };
   },
   post(path, data, receiveAction) {
-    const url = `https://exadelcats.herokuapp.com/${path}`;
+    const url = `${urlServer}${path}`;
     return (dispatch, getState) => {
       dispatch(isLoading(true));
       const token = API.getTokenFromStore(getState());
@@ -50,7 +52,7 @@ const API = {
     };
   },
   get(path, receiveAction) {
-    const url = `https://exadelcats.herokuapp.com/${path}`;
+    const url = `${urlServer}${path}`;
     return (dispatch, getState) => {
       dispatch(isLoading(true));
       const token = API.getTokenFromStore(getState());
@@ -70,7 +72,7 @@ const API = {
     };
   },
   put(path, data, receiveAction) {
-    const url = `https://exadelcats.herokuapp.com/${path}`;
+    const url = `${urlServer}${path}`;
     return (dispatch, getState) => {
       dispatch(isLoading(true));
       const token = API.getTokenFromStore(getState());
