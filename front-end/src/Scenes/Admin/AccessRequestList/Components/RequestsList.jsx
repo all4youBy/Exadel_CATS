@@ -1,60 +1,121 @@
 import React from 'react';
 import './RequestsList.scss';
-import { List, Avatar, Button } from 'antd';
+import { List, Avatar, Button, Icon } from 'antd';
+import { connect } from 'react-redux';
+import PropTypes from 'prop-types';
+import { dataUsers, getUsers, upDataListUsers } from '../Services/Actions/actions';
 
-const dataUser = [
-  {
-    login: 'torrallysso-5772@mail.com',
-    name: 'Василий',
-    surname: 'Иванов',
-    university: 'БГУ',
-    status: 'учитель',
-  },
-  {
-    login: 'torrallysso-5772@mail.com',
-    name: 'Василий',
-    surname: 'Иванов',
-    university: 'БГУ',
-    status: 'администратор',
-  },
-  {
-    login: 'uppypysos-9466@gmail.com',
-    name: 'Василий',
-    surname: 'Иванов',
-    university: 'БГУ',
-    status: 'учитель',
-  },
-  {
-    login: 'umodebol-5956@mail.com',
-    name: 'Василий',
-    surname: 'Иванов',
-    university: 'БГУ',
-    status: 'учитель',
-  },
-];
 class RequestsList extends React.PureComponent {
+  static propTypes = {
+    upDateUser: PropTypes.func.isRequired,
+    upDate: PropTypes.func.isRequired,
+  };
+
+  state = {
+    users: [],
+  };
+
+  onClickConfirm = (e, idEmail) => {
+    const { users } = this.state;
+    const { upDateUser, upDate } = this.props;
+    const newList = users.filter(el => el.email !== idEmail);
+    upDateUser('users/update-rights',
+      {
+        email: users.find(el => el.email === idEmail).email,
+        role: users.find(el => el.email === idEmail).role,
+      });
+    upDate(newList);// delete
+    e.preventDefault();
+  };
+
+  onClickRefuse = (e, idEmail) => {
+    const { users } = this.state;
+    const { upDateUser, upDate } = this.props;
+    const newList = users.filter(el => el.email !== idEmail);
+    upDateUser('users/update-rights',
+      {
+        email: users.find(el => el.email === idEmail).email,
+        role: 'STUDENT',
+      });
+    upDate(newList);// delete
+    e.preventDefault();
+  };
+
+  static getDerivedStateFromProps(nextProps, nextState) {
+    if ((nextProps.users !== nextState.users) && !nextProps.users.length) {
+      nextProps.getDataUsers('users');
+    }
+    return {
+      users: nextProps.users,
+    };
+  }
+
   render() {
-    return (
+    const { users } = this.state;
+    const listUsers = (
       <div>
-        <div className="header">Список запросов на доступ</div>
+        <div className="header">Список запросов на статус</div>
         <List
+          className="list-users"
+          pagination={{
+            pageSize: 5,
+          }}
           itemLayout="horizontal"
-          dataSource={dataUser}
+          dataSource={users}
           renderItem={item => (
             <List.Item>
               <List.Item.Meta
+                className="user"
                 avatar={<Avatar className="avatar" size="large" icon="user"/>}
-                title={<a href=" ">{item.login}</a>}
-                description={`${item.name} ${item.surname}
-                Учебное заведение: ${item.university}
-                Запрос на статус: ${item.status}`}
-              /><Button className="button-start-test" type="primary">Подтвердить</Button>
+                title={<a href=" ">{item.email}</a>}
+                description={`${item.lastName} ${item.firstName}
+                Учебное заведение: ${item.education}
+                Запрос на статус: ${item.role}`}
+              />
+              <Button
+                onClick={e => this.onClickConfirm(e, item.email)}
+                className="button-confirm"
+                type="primary"
+              >Подтвердить
+              </Button>
+              <Button
+                onClick={e => this.onClickRefuse(e, item.email)}
+                className="button-refuse"
+                type="primary"
+              >Отказать
+              </Button>
             </List.Item>
           )}
         />
       </div>
     );
+    const addList = users.length ? listUsers : <div className="load"><Icon type="loading"/></div>;
+    return (
+      <div>
+        {addList}
+      </div>
+    );
   }
 }
 
-export default RequestsList;
+function mapState(state) {
+  return {
+    users: state.requestsUsers.users,
+  };
+}
+
+function mapDispatch(dispatch) {
+  return {
+    getDataUsers: (url) => {
+      dispatch(getUsers(url));
+    },
+    upDateUser: (url, data) => {
+      dispatch(upDataListUsers(url, data));
+    },
+    upDate: (users) => {
+      dispatch(dataUsers(users));
+    },
+  };
+}
+
+export default connect(mapState, mapDispatch)(RequestsList);

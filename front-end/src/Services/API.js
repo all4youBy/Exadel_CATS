@@ -69,6 +69,20 @@ const API = {
         .catch(() => dispatch(errorProject(true)));
     };
   },
+  put(path, data, receiveAction) {
+    const url = `https://exadelcats.herokuapp.com/${path}`;
+    return (dispatch, getState) => {
+      dispatch(isLoading(true));
+      const token = API.getTokenFromStore(getState());
+      API.sendRequest(token, url, {
+        method: 'PUT',
+        body: JSON.stringify(data),
+      })
+        .then(response => response.json())
+        .then(items => dispatch(getData(receiveAction, items)))
+        .catch(error => console.error('Fetch Error =\n', error));
+    };
+  },
 };
 
 export default API;

@@ -21,11 +21,12 @@ import AccessRequestList from '../../Scenes/Admin/AccessRequestList';
 
 import AddTaskPage from '../../Scenes/Teachers/Tasks/AddTask/Containers/AddTaskPage';
 import CreateGroupPage from '../../Scenes/Teachers/GroupsList/GroupCreation/Containers/CreateGroupPage';
+import AdminGeneralMenu from '../../Components/AdminGeneralMenu';
 
 class Main extends React.Component {
   renderSwitch() {
     const { userType } = this.props;
-    switch ('student') {
+    switch ('admin') {
       case 'student':
         return (
           <div className="main-body-container">
@@ -61,6 +62,33 @@ class Main extends React.Component {
               <Route exact path="/accessrequestlist" component={AccessRequestList}/>
               <Redirect to="/"/>
             </Switch>
+          </div>
+        );
+      case 'admin':
+        return (
+          <div className="main-body-container">
+            <div className="general-menu">
+              <AdminGeneralMenu/>
+            </div>
+            <div className="switch-div">
+              <Switch>
+                <Route exact path="/accessrequest" component={AccessRequestList}/>
+                <Route exact path="/assignedtestlist" component={PageAssignedTestList}/>
+                <Route exact path="/passedtestlist" component={PagePassedTestList}/>
+                <Route exact path="/groupstudentslist" component={PageGroupStudentsList}/>
+                <Route exact path="/passedtasks" component={PagePassedTasks}/>
+                <Route exact path="/allgroups" component={AllGroups}/>
+                <Route exact path="/alltasks" component={AllTask}/>
+                <Route exact path="/Test" component={Test}/>
+                <Route exact path="/Task" component={UserTaskPage}/>
+                <Route exact path="/addtask" component={AddTaskPage}/>
+                <Route exact path="/teachersmaterials" component={Materials}/>
+                <Route exact path="/usersmaterials" component={Materials}/>
+                <Route exact path="/materials" component={Materials}/>
+                <Route exact path="/creategroup" component={CreateGroupPage}/>
+                <Redirect to="/"/>
+              </Switch>
+            </div>
           </div>
         );
       default:
