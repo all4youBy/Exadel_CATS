@@ -9,5 +9,4 @@ public class QuestionVariant {
     private String text;
 
     private boolean correct;
-
 }

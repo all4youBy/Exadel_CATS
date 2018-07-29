@@ -1,0 +1,19 @@
+[
+  {
+    "title":"Учебник по Java для начинающих",
+    "text":"<a href='http://proglang.su/java/'>Учебный материал доступен по данной ссылке</a>",
+    "topicIds":[
+      "5b4898d987ae4314d278f38d",
+      "5b4898d987ae4314d278f38f"
+    ]
+  },
+  {
+    "title":"Руководство по программированию на C#",
+    "text":"<a href='https://docs.microsoft.com/ru-ru/dotnet/csharp/programming-guide/'>Ознакомиться с руководством можно по данной ссылке</a>",
+    "topicIds":[
+      "5b4898d987ae4314d278f38d",
+      "5b4898d987ae4314d278f390"
+    ]
+  }
+]
+

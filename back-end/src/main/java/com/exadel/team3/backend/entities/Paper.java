@@ -1,28 +1,27 @@
 package com.exadel.team3.backend.entities;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
-import lombok.*;
 import org.bson.types.ObjectId;
+import org.springframework.data.annotation.Id;
+import lombok.AccessLevel;
+import lombok.Data;
+import lombok.Setter;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.util.List;
 
 @Data
-@Document(collection = "topics")
-public class Topic {
-    @Setter(AccessLevel.NONE)
+@Document(collection="papers")
+public class Paper implements Taggable {
+    @Id
     @JsonSerialize(using = ToStringSerializer.class)
+    @Setter(AccessLevel.NONE)
     private ObjectId id;
 
-    @NonNull
+    private String title;
+
     private String text;
 
-    @JsonSerialize(using = ToStringSerializer.class)
-    private ObjectId parentId;
-
-    @Setter(AccessLevel.NONE)
-    @JsonIgnore
-    private List<Topic> parentHierarchy;
+    private List<ObjectId> topicIds;
 }

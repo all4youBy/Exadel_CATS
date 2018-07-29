@@ -77,7 +77,7 @@ class TestCheckerImpl implements TestChecker {
     }
 
     @Override
-    public TestItemStatus checkAnswer(@NonNull ObjectId questionId, String answer) {
+    public TestItemStatus checkAnswer(@NonNull ObjectId questionId, String answer) throws ServiceException {
         Optional<Question> checkedQuestion = questionRepository.findById(questionId);
         if (checkedQuestion.isPresent()) {
             return checkAnswer(checkedQuestion.get(), answer);
