@@ -6,7 +6,7 @@ import { Button } from 'antd';
 class ButtonAddLink extends React.Component {
   render() {
     return (
-      <Button className="button-table-with-border" type="primary">Добавить ссылку</Button>
+      <Button className="button-add-link">Добавить ссылку</Button>
     );
   }
 }

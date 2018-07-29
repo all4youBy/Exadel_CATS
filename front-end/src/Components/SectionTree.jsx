@@ -13,13 +13,11 @@ const options = [{
     children: [{
       value: 'коллекции',
       label: 'Коллекции',
-    },
-    {
+    }, {
       value: 'наследование',
       label: 'Наследование',
     }],
-  },
-  {
+  }, {
     value: 'c++',
     label: 'C++',
     children: [{

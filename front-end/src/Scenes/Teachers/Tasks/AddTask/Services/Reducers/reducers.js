@@ -20,7 +20,7 @@ const addTask = (state = initialState, action) => {
       };
     }
     case types.ADD_TASK_TAG: {
-      if (state.tags.includes(action.payload)) {
+      if (state.tags.includes(action.payload) || action.payload.length === 0) {
         return state;
       }
       return {

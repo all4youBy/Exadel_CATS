@@ -11,12 +11,11 @@ import org.springframework.stereotype.Service;
 
 @Service
 @Primary
-public class TaskServiceImpl
-        extends TaggableServiceImpl<Task>
-        implements TaskService {
+public class TaskServiceImpl extends TaggableServiceImpl<Task> implements TaskService {
 
     @Autowired
     private TaskRepository taskRepository;
+
     @Override
     protected TaggableRepository<Task> getRepository() {
         return taskRepository;

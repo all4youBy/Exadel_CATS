@@ -7,6 +7,7 @@ import lombok.NonNull;
 import lombok.Setter;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
+import org.springframework.data.mongodb.core.mapping.Field;
 import org.springframework.util.StringUtils;
 
 import java.util.HashSet;
@@ -18,8 +19,7 @@ import java.util.Set;
 public class User {
     @Id
     @NonNull
-    @Setter(AccessLevel.NONE)
-    private String email;
+    private final String email;
 
     @NonNull
     private String firstName;
@@ -36,7 +36,8 @@ public class User {
     @Setter(AccessLevel.NONE)
     private Set<String> groups = new HashSet<>();
 
-    private UserAffiliation education;
+    @Field()
+    private UserAffiliation affiliation;
 
     private String emailConfirmationCode;
     public boolean isEmailConfirmed() {
