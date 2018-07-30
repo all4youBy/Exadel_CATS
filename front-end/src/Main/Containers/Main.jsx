@@ -96,7 +96,7 @@ class Main extends React.Component {
               <Switch>
                 <Route exact path="/accessrequestlist" component={AccessRequestList}/>
                 {this.renderCommonRoutes()}
-                <Redirect to="/"/>
+                <Redirect to="/accessrequestlist"/>
               </Switch>
             </div>
           </div>

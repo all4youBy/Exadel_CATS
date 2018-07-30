@@ -1,9 +1,10 @@
 import React from 'react';
 import './RequestsList.scss';
-import { List, Avatar, Button, Icon } from 'antd';
+import { List, Avatar, Button } from 'antd';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { dataUsers, getUsers, upDataListUsers } from '../Services/Actions/actions';
+import Loading from '../../../../Components/Loading';
 
 class RequestsList extends React.PureComponent {
   static propTypes = {
@@ -96,7 +97,7 @@ class RequestsList extends React.PureComponent {
         />
       </div>
     );
-    const stateData = !(getListUsers && !users.length) ? (<div className="load"><Icon type="loading"/></div>)
+    const stateData = !(getListUsers && !users.length) ? (<Loading/>)
       : <div className="empty-list">Список запросов пуст</div>;
     const addList = users.length ? listUsers : stateData;
     return (
