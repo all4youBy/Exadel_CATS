@@ -27,7 +27,7 @@ import Loading from '../../Components/Loading';
 
 class Main extends React.Component {
   static propTypes = {
-    userType: PropTypes.string.isRequired,
+    userType: PropTypes.shape().isRequired,
   };
 
   renderCommonRoutes() {
