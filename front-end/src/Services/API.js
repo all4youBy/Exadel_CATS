@@ -38,7 +38,7 @@ const API = {
         .catch(error => console.error('Fetch Error =\n', error));
     };
   },
-  post(path, data, receiveAction) {
+  post(path, data, receiveAction, errorMessage) {
     const url = `${urlServer}${path}`;
     return (dispatch, getState) => {
       dispatch(isLoading(true));
@@ -52,7 +52,7 @@ const API = {
         .catch(() => dispatch(errorProject(receiveAction, errorMessage)));
     };
   },
-  get(path, receiveAction) {
+  get(path, receiveAction, errorMessage) {
     const url = `${urlServer}${path}`;
     return (dispatch, getState) => {
       dispatch(isLoading(true));
@@ -72,7 +72,8 @@ const API = {
         .catch(() => dispatch(errorProject(receiveAction, errorMessage)));
     };
   },
-  put(path, data, receiveAction) {
+  put(path, data, receiveAction, errorMessage) {
+    console.log(data);
     const url = `${urlServer}${path}`;
     return (dispatch, getState) => {
       dispatch(isLoading(true));
@@ -83,7 +84,7 @@ const API = {
       })
         .then(response => response.json())
         .then(items => dispatch(getData(receiveAction, items)))
-        .catch(error => console.error('Fetch Error =\n', error));
+        .catch(() => dispatch(errorProject(receiveAction, errorMessage)));
     };
   },
 };

@@ -17,6 +17,8 @@ import PagePassedTasks from '../../Scenes/Users/Tasks/PassedTasks';
 import AllGroups from '../../Scenes/Teachers/GroupsList/Groups';
 import Materials from '../../Scenes/Teachers/Materials';
 import RegistrationPage from '../../Scenes/Registration';
+import AccessRequestList from '../../Scenes/Admin/AccessRequestList';
+
 import GeneralMenu from '../../Components/GeneralMenu';
 import PageAssignedTasks from '../../Scenes/Users/Tasks/AssignedTasks';
 import PageAssignTest from '../../Scenes/Teachers/Tests/AssignTest';
@@ -95,8 +97,9 @@ class Main extends React.Component {
             </div>
             <div className="switch-div">
               <Switch>
+                <Route exact path="/accessrequestlist" component={AccessRequestList}/>
                 {this.renderCommonRoutes()}
-                <Redirect to="/"/>
+                <Redirect to="/accessrequestlist"/>
               </Switch>
             </div>
           </div>
