@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import './TableGroupsList.scss';
-import { Table } from 'antd';
+import { message, Table } from 'antd';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import ButtonEditGroup from './ButtonEditGroup';
@@ -10,23 +10,24 @@ import ButtonDeleteGroup from './ButtonDeleteGroup';
 import ButtonAssignTest from '../../../../../Components/ButtonAssignTest';
 import ButtonCreateGroup from './ButtonCreateGroup';
 import InputSearch from './InputSearch';
-import { editGroup, addGroup, deleteGroup } from '../Services/Actions/actions';
-import API from '../../../../../Services/API';
+import { editGroup, addGroup, deleteGroup, fetchGroups } from '../Services/Actions/actions';
 
 class TableGroupsList extends React.Component {
   static propTypes = {
     handleGroupAdd: PropTypes.func.isRequired,
     handleGroupDelete: PropTypes.func.isRequired,
-    // getData: PropTypes.func.isRequired,
+    getGroups: PropTypes.func.isRequired,
+    error: PropTypes.bool.isRequired,
+    groups: PropTypes.arrayOf.isRequired,
   };
 
   componentDidMount() {
-    // const { getData } = this.props;
-    // getData('topics');
+    const { getGroups } = this.props;
+    getGroups();
   }
 
   render() {
-    const { handleGroupAdd, handleGroupDelete } = this.props;
+    const { handleGroupAdd, handleGroupDelete, error, groups } = this.props;
     const columns = [{
       title: ' ',
       dataIndex: 'name',
@@ -70,17 +71,22 @@ class TableGroupsList extends React.Component {
     },
     ];
 
+    console.log(groups, 733);
     const data = [];
-    for (let i = 1; i <= 10; i += 1) {
+    for (let i = 0; i < groups.length; i += 1) {
       data.push({
         key: `${i}`,
-        name: `${i}  группа`,
+        name: groups[i],
         course: `Курс ${i}`,
         date: '17/18 год',
       });
     }
     columns[0].title = <InputSearch/>;
     columns[3].title = <ButtonCreateGroup onAddGroup={handleGroupAdd}/>;
+    if (error) {
+      message.error('Не удалось загрузить список студентов');
+      return <div/>;
+    }
     return (
       <Table
         columns={columns}
@@ -91,7 +97,10 @@ class TableGroupsList extends React.Component {
 }
 
 function mapStateToProps(state) {
-  return { students: state.groupStudentsList.group };
+  return {
+    groups: state.allGroups.groups,
+    error: state.allGroups.error,
+  };
 }
 
 const mapDispatchToProps = dispatch => ({
@@ -104,8 +113,8 @@ const mapDispatchToProps = dispatch => ({
   handleGroupDelete: (key) => {
     dispatch(deleteGroup(key));
   },
-  getData: (url) => {
-    dispatch(API.get(url, 'allgroups')); // !!!!
+  getGroups: () => {
+    dispatch(fetchGroups()); // !!!!
   },
 });
 
