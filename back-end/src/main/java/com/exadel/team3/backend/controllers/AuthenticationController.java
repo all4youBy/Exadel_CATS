@@ -1,7 +1,9 @@
 package com.exadel.team3.backend.controllers;
 
+import com.exadel.team3.backend.controllers.requests.RegistrationRequest;
 import com.exadel.team3.backend.dto.AuthenticateDTO;
 import com.exadel.team3.backend.entities.User;
+import com.exadel.team3.backend.entities.UserAffiliation;
 import com.exadel.team3.backend.security.AuthenticatedUser;
 import com.exadel.team3.backend.controllers.requests.AuthenticationRequest;
 import com.exadel.team3.backend.security.SecurityUtils;
@@ -47,8 +49,25 @@ public class AuthenticationController {
     }
 
     @PostMapping("/registration")
-    public ResponseEntity<?> signUpUser(@RequestBody User user){
-        securityUtils.hashUserPassword(user);
+    public ResponseEntity<?> signUpUser(@RequestBody RegistrationRequest request){
+//        securityUtils.hashUserPassword(user);
+        //TODO password generator
+        String pass = "";
+
+        UserAffiliation userAffiliation = new UserAffiliation(
+                request.getInstitution(),
+                request.getFaculty(),
+                request.getYearTermination(),
+                "",
+                request.getPrimarySkill());
+
+        User user = new User(
+                request.getEmail(),
+                request.getFirstName(),
+                request.getSecondName(),
+                request.getUserRole(),pass);
+
+        user.setAffiliation(userAffiliation);
         userService.addItem(user);
         return ResponseEntity.status(HttpStatus.OK).body("User created.");
     }

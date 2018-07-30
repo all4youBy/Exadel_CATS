@@ -17,11 +17,13 @@ public class TestGenerationRequest {
     private String userId;
     private String title;
 
-    @JsonFormat
+    @JsonFormat(shape = JsonFormat.Shape.STRING,pattern = "yyyy-dd-MM")
     private LocalDateTime start;
 
-    @JsonFormat
+    @JsonFormat(shape = JsonFormat.Shape.STRING,pattern = "yyyy-dd-MM")
     private LocalDateTime deadline;
+
+    @JsonProperty("topics")
     private Collection<ObjectId> topicsId;
     private int questionsCount;
     private String assignedBy;

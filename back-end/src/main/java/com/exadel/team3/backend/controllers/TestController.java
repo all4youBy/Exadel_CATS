@@ -50,7 +50,6 @@ public class TestController {
        if(test == null)
            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Can't generate test.");
 
-       testService.addItem(test);
        return ResponseEntity.ok().body(test);
     }
 

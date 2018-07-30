@@ -7,12 +7,15 @@ import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 
+import lombok.AccessLevel;
 import lombok.Getter;
+import lombok.Setter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
+import java.nio.charset.Charset;
 import java.time.LocalDateTime;
 import java.util.*;
 import java.util.function.Function;
@@ -26,6 +29,10 @@ public class SecurityUtils {
     @Getter
     @Value("${jwt.expiration}")
     private Long expiration;
+
+
+    @Value("${jwt.pass.secret}")
+    private String passSecret;
 
     @Autowired
     private PasswordEncoder encoder;
@@ -56,7 +63,8 @@ public class SecurityUtils {
     }
 
     public Date getTokenCreateTime(String token){
-        return getAllClaims(token).getIssuedAt();
+        return getClaimFromToken(token,Claims::getExpiration);
+
     }
 
     private Claims getAllClaims(String token){
@@ -82,5 +90,16 @@ public class SecurityUtils {
     public void hashUserPassword(User user){
         String hashPass = encoder.encode(user.getPasswordHash());
         user.setPasswordHash(hashPass);
+    }
+
+    public String passwordGenerator(int lenght){
+        Random random = new Random();
+        byte[] bytes = new byte[lenght];
+
+        random.nextBytes(bytes);
+
+        String generatedString = new String(bytes, Charset.forName("UTF-8"));
+        return encoder.encode(generatedString);
+
     }
 }
