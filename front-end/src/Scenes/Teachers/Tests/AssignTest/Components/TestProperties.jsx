@@ -5,7 +5,16 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 // import TimeInputGroup from './TimeInputGroup';
 import TreeWithTags from '../../../../../Components/TreeWithTags';
-import { createTest, addTestTag, deleteTestTag } from '../Services/Actions/actions';
+import {
+  createTest,
+  addTestTag,
+  deleteTestTag,
+  addStudentToList,
+  deleteStudentFromList,
+  fetchStudentListForTest,
+} from '../Services/Actions/actions';
+import StudentsList from '../../../../../Components/StudentsList';
+import CurrentGroupList from '../../../../../Components/CurrentGroupList';
 
 const { TextArea } = Input;
 const { Item: FormItem } = Form;
@@ -41,6 +50,12 @@ class TestProperties extends React.Component {
     handleAddTestTag: PropTypes.func.isRequired,
     handleCreateTest: PropTypes.func.isRequired,
     form: PropTypes.shape().isRequired,
+    data: PropTypes.arrayOf(PropTypes.object).isRequired,
+    addStudent: PropTypes.func.isRequired,
+    delStudent: PropTypes.func.isRequired,
+    getStudentData: PropTypes.func.isRequired,
+    students: PropTypes.arrayOf(PropTypes.object).isRequired,
+    error: PropTypes.bool.isRequired,
   };
 
   state = {
@@ -66,12 +81,18 @@ class TestProperties extends React.Component {
   };
 
   render() {
-    const { handleAddTestTag, handleDeleteTestTag, tags, handleCreateTest } = this.props;
+    const {
+      handleAddTestTag, handleDeleteTestTag, tags, handleCreateTest, data,
+      addStudent, delStudent, getStudentData, students, error,
+    } = this.props;
     const { form } = this.props;
-    const { nameTest, countQuestionsTest, hoursLeadTimeTest, minutesLeadTimeTest } = this.state;
-    const { secondsLeadTimeTest, hoursTimeOpenTest, minutesTimeOpenTest } = this.state;
-    const { secondsTimeOpenTest, hoursPassTimeTest, minutesPassTimeTest } = this.state;
-    const { secondsPassTimeTest } = this.state;
+    const {
+      nameTest, countQuestionsTest, hoursLeadTimeTest, minutesLeadTimeTest,
+      secondsLeadTimeTest, hoursTimeOpenTest, minutesTimeOpenTest,
+      secondsTimeOpenTest, hoursPassTimeTest, minutesPassTimeTest,
+      secondsPassTimeTest,
+    } = this.state;
+
     const { getFieldDecorator } = form;
     const handleSubmit = (e) => {
       e.preventDefault();
@@ -393,6 +414,10 @@ class TestProperties extends React.Component {
             </FormItem>
           </div>
         </Form>
+        <div className="parent-student-list">
+          <StudentsList data={data} addStudent={addStudent} getData={getStudentData} error={error}/>
+          <CurrentGroupList students={students} delStudent={delStudent}/>
+        </div>
         <FormItem {...tailFormItemLayout} >
           <Button
             className="button-table-with-border"
@@ -410,6 +435,9 @@ function mapStateToProps(state) {
   return {
     tags: state.testInformation.tags,
     test: state,
+    students: state.testInformation.students,
+    data: state.testInformation.data,
+    error: state.testInformation.error,
   };
 }
 
@@ -422,6 +450,15 @@ const mapDispatchToProps = dispatch => ({
   },
   handleDeleteTestTag: (tag) => {
     dispatch(deleteTestTag(tag));
+  },
+  addStudent: (student) => {
+    dispatch(addStudentToList(student));
+  },
+  delStudent: (student) => {
+    dispatch(deleteStudentFromList(student));
+  },
+  getStudentData: () => {
+    dispatch(fetchStudentListForTest());
   },
 });
 

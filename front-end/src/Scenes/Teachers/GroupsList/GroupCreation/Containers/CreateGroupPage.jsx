@@ -7,9 +7,9 @@ import SectionTree from '../../../../../Components/SectionTree';
 import { addTaskTag, deleteTaskTag } from '../../../Tasks/AddTask/Services/Actions/actions';
 import EditableTagGroup from '../../../../../Components/AddTaskTags';
 import { addStudentToGroup, deleteStudentFromGroup, fetchStudentList } from '../Services/Actions/actions';
-import CurrentGroupList from '../Components/CurrentGroupList';
 import API from '../../../../../Services/API';
-import StudentsList from '../Components/StudentsList';
+import StudentsList from '../../../../../Components/StudentsList';
+import CurrentGroupList from '../../../../../Components/CurrentGroupList';
 
 const { Search } = Input;
 

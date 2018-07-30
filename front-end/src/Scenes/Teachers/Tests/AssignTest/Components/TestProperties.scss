@@ -1,4 +1,3 @@
-
 .test-properties-content {
   display: flex;
   flex-direction: column;
@@ -76,8 +75,11 @@
       background-color: #fff;
     }
   }
-  .tags-test-properties{
+  .tags-test-properties {
     margin-left: 25px;
     width: 100%;
+  }
+  .parent-student-list {
+    display: flex;
   }
 }
