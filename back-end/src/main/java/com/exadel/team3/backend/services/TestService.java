@@ -10,7 +10,7 @@ import java.util.List;
 
 import com.exadel.team3.backend.entities.Test;
 
-public interface TestService  extends AssignableService<Test> {
+public interface TestService extends AssignableService<Test> {
 
     Test generateTestForUser(String userId,
                              String title,

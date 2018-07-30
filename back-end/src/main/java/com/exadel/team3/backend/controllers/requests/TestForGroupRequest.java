@@ -1,10 +1,9 @@
-package com.exadel.team3.backend.security.requests;
+package com.exadel.team3.backend.controllers.requests;
 
 import lombok.Data;
 import lombok.NonNull;
 import org.bson.types.ObjectId;
 
-import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.Collection;
 

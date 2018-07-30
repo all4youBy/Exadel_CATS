@@ -1,3 +1,4 @@
+/* eslint-disable import/no-cycle */
 import { errorProject, isLoading, getData } from '../Main/Services/Actions/actions';
 import { getUserData } from '../Scenes/LogIn/Services/Actions/actions';
 

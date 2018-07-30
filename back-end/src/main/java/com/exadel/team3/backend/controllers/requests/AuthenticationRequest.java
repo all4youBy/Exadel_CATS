@@ -1,4 +1,4 @@
-package com.exadel.team3.backend.security.requests;
+package com.exadel.team3.backend.controllers.requests;
 
 import lombok.Data;
 import lombok.NonNull;

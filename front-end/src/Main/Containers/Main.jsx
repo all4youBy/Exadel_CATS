@@ -18,17 +18,17 @@ import RegistrationPage from '../../Scenes/Registration';
 import GeneralMenu from '../../Components/GeneralMenu';
 import PageAssignedTasks from '../../Scenes/Users/Tasks/AssignedTasks';
 import PageAssignTest from '../../Scenes/Teachers/Tests/AssignTest';
-import AddTaskPage from '../../Scenes/Teachers/Tasks/AddTask';
 import CreateGroupPage from '../../Scenes/Teachers/GroupsList/GroupCreation';
 import PageListCheckTests from '../../Scenes/Teachers/Tests/ListCheckTests';
 import PageCheckTest from '../../Scenes/Teachers/Tests/CheckTest/Containers/PageCheckTest';
+import AddTaskPage from '../../Scenes/Teachers/Tasks/AddTask/Containers/AddTaskPage';
 
 class Main extends React.Component {
   renderSwitch() {
     // const { userType } = this.props;
     console.log(this);
     switch ('student') {
-      case 'student':
+      case 'quest':
         return (
           <div className="main-body-container">
             <div className="general-menu">
