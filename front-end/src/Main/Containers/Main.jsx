@@ -50,7 +50,7 @@ class Main extends React.Component {
         return (
           <div className="main-body-container">
             <div className="general-menu">
-              <GeneralMenu/>
+              <GeneralMenu userType={role}/>
             </div>
             <div className="switch-div">
               <Switch>
@@ -69,7 +69,7 @@ class Main extends React.Component {
         return (
           <div className="main-body-container">
             <div className="general-menu">
-              <GeneralMenu/>
+              <GeneralMenu userType={role}/>
             </div>
             <div className="switch-div">
               <Switch>
@@ -88,7 +88,7 @@ class Main extends React.Component {
         return (
           <div className="main-body-container">
             <div className="general-menu">
-              <GeneralMenu/>
+              <GeneralMenu userType={role}/>
             </div>
             <div className="switch-div">
               <Switch>
