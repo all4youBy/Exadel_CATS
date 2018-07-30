@@ -36,7 +36,7 @@ const API = {
         .catch(error => console.error('Fetch Error =\n', error));
     };
   },
-  post(path, data, receiveAction) {
+  post(path, data, receiveAction, errorMessage) {
     const url = `https://exadelcats.herokuapp.com/${path}`;
     return (dispatch, getState) => {
       dispatch(isLoading(true));
@@ -47,10 +47,10 @@ const API = {
       })
         .then(response => response.json())
         .then(items => dispatch(getData(receiveAction, items)))
-        .catch(error => console.error('Fetch Error =\n', error));
+        .catch(() => dispatch(errorProject(receiveAction, errorMessage)));
     };
   },
-  get(path, receiveAction) {
+  get(path, receiveAction, errorMessage) {
     const url = `https://exadelcats.herokuapp.com/${path}`;
     return (dispatch, getState) => {
       dispatch(isLoading(true));
@@ -67,7 +67,7 @@ const API = {
         })
         .then(response => response.json())
         .then(items => dispatch(getData(receiveAction, items)))
-        .catch(() => dispatch(errorProject(true)));
+        .catch(() => dispatch(errorProject(receiveAction, errorMessage)));
     };
   },
 };

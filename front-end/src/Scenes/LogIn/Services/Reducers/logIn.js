@@ -2,7 +2,7 @@ import requestLoginInformation from '../../../../Services/loginService';
 import { GET_USER_DATA, LOG_IN, RECEIVE_LOGINDATA } from '../Actions/types';
 
 const initialState = {
-  user: requestLoginInformation(),
+  user: requestLoginInformation() || { role: 'GUEST' },
 };
 
 function logIn(state = initialState, action) {
