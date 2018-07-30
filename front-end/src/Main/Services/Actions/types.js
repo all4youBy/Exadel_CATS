@@ -1,2 +1,2 @@
-export const ERROR = 'ERROR';
 export const LOADING = 'LOADING';
+export const ERROR_MAIN = 'ERROR_MAIN';

@@ -11,7 +11,8 @@
     "linebreak-style": 0,
     "import/no-named-as-default":0,
     "function-paren-newline": ["error", "consistent"],
-    "object-curly-newline": ["error", { "consistent": true }]
+    "object-curly-newline": ["error", { "consistent": true }],
+    "class-methods-use-this": "warn"
   },
   "env": {
     "browser": true,

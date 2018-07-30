@@ -1,5 +1,13 @@
 .create-group-container {
   margin: 10px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  .group-name-input {
+    text-align: center;
+    width: 90%;
+  }
+
   .section-tree {
     width: 100%;
   }
@@ -16,5 +24,10 @@
   .student-list-container {
     display: flex;
     flex-direction: row;
+    width: 100%;
+  }
+
+  .create-group-button {
+    margin: 10px;
   }
 }
