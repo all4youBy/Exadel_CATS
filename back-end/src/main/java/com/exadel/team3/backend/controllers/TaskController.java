@@ -5,6 +5,7 @@ import com.exadel.team3.backend.services.TaskService;
 import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -14,7 +15,7 @@ public class TaskController {
     @Autowired
     TaskService taskService;
 
-    @PostMapping("/add")
+    @PostMapping(value = "/add",produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> addQuestion(@RequestBody Task task){
         Task t = taskService.addItem(task);
         if (t == null) {

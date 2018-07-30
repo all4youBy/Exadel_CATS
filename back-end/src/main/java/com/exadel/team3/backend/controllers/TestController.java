@@ -13,6 +13,7 @@ import org.bson.types.ObjectId;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
@@ -34,7 +35,7 @@ public class TestController {
         return testService.getItem(new ObjectId(testId));
     }
 
-    @PostMapping
+    @PostMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     //TODO simplify дичь снизу
     @PreAuthorize("hasRole('ADMIN') or (hasRole('TEACHER') and testRequest.assignedBy == authentication.name)")
     public ResponseEntity<?> getTestForUser(@RequestBody TestGenerationRequest testRequest){
@@ -53,8 +54,8 @@ public class TestController {
        return ResponseEntity.ok().body(test);
     }
 
-    @PostMapping("/training")
-    @PreAuthorize("#testRequest.userId == authentication.name")
+    @PostMapping(value = "/training",produces = MediaType.APPLICATION_JSON_VALUE)
+    @PreAuthorize("hasRole('ADMIN') or #testRequest.userId == authentication.name")
     public ResponseEntity<?> getTrainingTestForUser(@RequestBody  TrainingTestGenerationRequest testRequest){
         Test test = testService.generateTestForUser(testRequest.getUserId(),testRequest.getTopicId());
         if(test == null)
@@ -63,7 +64,7 @@ public class TestController {
         return new ResponseEntity<>(test, HttpStatus.OK);
     }
 
-    @PostMapping("/test-for-group")
+    @PostMapping(value = "/test-for-group",produces = MediaType.APPLICATION_JSON_VALUE)
     @PreAuthorize("hasAnyRole('ADMIN','TEACHER') and testRequest.assignedBy == authentication.name")
     public ResponseEntity<?> getTestForGroup(@RequestBody TestForGroupRequest testRequest){
 
@@ -116,7 +117,7 @@ public class TestController {
 //        }
 //    }
 
-    @PutMapping
+    @PutMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> updateTest(@RequestBody Test test){
         return ResponseEntity.ok(testService.updateItem(test));
     }

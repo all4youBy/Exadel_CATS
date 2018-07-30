@@ -11,6 +11,7 @@ import com.exadel.team3.backend.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -37,7 +38,7 @@ public class AuthenticationController {
     @Autowired
     private SecurityUtils securityUtils;
 
-    @PostMapping("/login")
+    @PostMapping(value = "/login",produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> authenticateUser(@RequestBody AuthenticationRequest request){
 
         authenticate(request.getUsername(),request.getPassword());
@@ -48,12 +49,11 @@ public class AuthenticationController {
         return ResponseEntity.ok(new AuthenticateDTO(token,userService.getItem(user.getUsername()),securityUtils));
     }
 
-    @PostMapping("/registration")
+    @PostMapping(value = "/registration",produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> signUpUser(@RequestBody RegistrationRequest request){
 //        securityUtils.hashUserPassword(user);
         //TODO password generator
-        String pass = "";
-
+        String userPassword = securityUtils.generateUserPassword();
         UserAffiliation userAffiliation = new UserAffiliation(
                 request.getInstitution(),
                 request.getFaculty(),
@@ -65,7 +65,7 @@ public class AuthenticationController {
                 request.getEmail(),
                 request.getFirstName(),
                 request.getSecondName(),
-                request.getUserRole(),pass);
+                request.getUserRole(),userPassword);
 
         user.setAffiliation(userAffiliation);
         userService.addItem(user);

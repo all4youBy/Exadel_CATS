@@ -6,6 +6,7 @@ import com.exadel.team3.backend.services.QuestionService;
 import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
@@ -19,7 +20,7 @@ public class QuestionController {
     @Autowired
     private QuestionService questionService;
 
-    @PostMapping
+    @PostMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     @PreAuthorize("hasAnyRole('ADMIN','TEACHER')")
     public ResponseEntity<?> addQuestion(@RequestBody Question question){
 
@@ -31,7 +32,7 @@ public class QuestionController {
        return ResponseEntity.status(HttpStatus.CREATED).body("Question added");
     }
 
-    @PutMapping(value = "/complain",consumes = "text/plain")
+    @PutMapping(value = "/complain",consumes = "text/plain",produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> complainOnQuestion(@RequestBody  String questionId){
 
         ObjectId id = new ObjectId(questionId);
@@ -51,6 +52,10 @@ public class QuestionController {
             return questionService.getItems();
         return questionService.getItemsByTopicIds(topicsIds);
     }
+//
+//    public List<Question> getAllQuestion(@RequestBody List<ObjectId> questionId){
+//
+//    }
 
     @GetMapping("/{id}")
     @PreAuthorize("hasAnyRole('ADMIN','TEACHER')")
@@ -58,13 +63,13 @@ public class QuestionController {
         return questionService.getItem(new ObjectId(id));
     }
 
-    @PutMapping
+    @PutMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     @PreAuthorize("hasRole('ADMIN')")
     public Question updateQuestion(@RequestBody Question question){
         return  questionService.updateItem(question);
     }
 
-    @DeleteMapping
+    @DeleteMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     @PreAuthorize("hasRole('ADMIN')")
     public void deleteQuestion(@RequestBody Question question){
         questionService.deleteItem(question);

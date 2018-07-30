@@ -56,7 +56,7 @@ public class UserController {
         return ResponseEntity.ok(String.format("Group %s renamed to %s",request.getOldGroup(),request.getNewGroup()));
     }
 
-    @DeleteMapping("/groups")
+    @DeleteMapping(value = "/groups", produces = MediaType.APPLICATION_JSON_VALUE)
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<?> deleteGroup(@RequestBody RemoveGroupRequest request){
         userService.removeGroup(request.getUserId(),request.getGroup());
@@ -92,7 +92,7 @@ public class UserController {
         return userService.getItem(email);
     }
 
-    @PutMapping(value = "/update-rights", consumes = "application/json")
+    @PutMapping(value = "/update-rights", consumes = "application/json",produces = MediaType.APPLICATION_JSON_VALUE)
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<?> updateUserRights(@RequestBody UpdateUserRightsRequest request){
        User user = userService.getItem(request.getEmail());
@@ -110,7 +110,7 @@ public class UserController {
         return ResponseEntity.status(HttpStatus.OK).body(userService.getByRole(UserRole.TEACHER_UNCONFIRMED));
     }
 
-    @PutMapping
+    @PutMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<?> updateUser(@RequestBody User user){
         userService.updateItem(user);

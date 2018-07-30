@@ -1,10 +1,13 @@
 package com.exadel.team3.backend.controllers;
 
+import com.exadel.team3.backend.dto.TopicDTO;
+import com.exadel.team3.backend.dto.mappers.TopicDTOMapper;
 import com.exadel.team3.backend.entities.Topic;
 import com.exadel.team3.backend.services.TopicService;
 import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
@@ -20,17 +23,17 @@ public class TopicController {
 
     @GetMapping
     @PreAuthorize("hasAnyRole('ADMIN','TEACHER')")
-    public List<Topic> getTopics(){
-        return topicService.getItems();
+    public List<TopicDTO> getTopics(){
+        return TopicDTOMapper.transform(topicService.getItems());
     }
 
     @GetMapping("/find-by-root-topic-id/{rootId}")
     @PreAuthorize("hasAnyRole('ADMIN','TEACHER')")
-    public List<Topic> getTopics(@PathVariable(value = "rootId") String rootId){
-        return topicService.getTopics(new ObjectId(rootId));
+    public List<TopicDTO> getTopics(@PathVariable(value = "rootId") String rootId){
+        return TopicDTOMapper.transform(topicService.getTopics(new ObjectId(rootId)));
     }
 
-    @PostMapping
+    @PostMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<?> addTopic(@RequestBody Topic topic){
         Topic top = topicService.addItem(topic);
@@ -53,7 +56,7 @@ public class TopicController {
         topicService.deleteItem(topic);
     }
 
-    @PutMapping
+    @PutMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<?> updateTopic(@RequestBody Topic topic){
         topicService.updateItem(topic);
