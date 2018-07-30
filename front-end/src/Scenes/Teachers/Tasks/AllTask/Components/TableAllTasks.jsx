@@ -11,6 +11,7 @@ const columns = [{
   dataIndex: 'time',
   key: 'time',
   width: 70,
+  className: 'column-break-point',
   render: () => (
     <div className="all-tasks-time">
       <div className="all-tasks-date-day">18</div>
@@ -23,6 +24,7 @@ const columns = [{
   dataIndex: 'name',
   key: 'name',
   width: 250,
+  className: 'column-break-point',
   render: () => (
     <div className="all-tasks-title">
       <div className="all-tasks-title-text">Название</div>
@@ -34,11 +36,13 @@ const columns = [{
   dataIndex: 'theme',
   key: 'theme',
   width: 800,
+  className: 'column-break-point',
 }, {
   title: ' ',
   dataIndex: 'button',
   key: 'button',
   width: 100,
+  className: 'column-break-point',
   render: () => (
     <div className="all-tasks-group-button">
       <div className="parent-button-edit-task"><ButtonEditTask/></div>

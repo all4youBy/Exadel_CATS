@@ -8,7 +8,7 @@ const { Content } = Layout;
 class LogIn extends React.Component {
   render() {
     return (
-      <div >
+      <div className="login-page">
         <Layout className="container-main" >
           <Content className="login-page content">
             <div className="login-page login-form"><WrappedNormalLoginForm/></div>
@@ -19,4 +19,4 @@ class LogIn extends React.Component {
   }
 }
 
-export default (LogIn);
+export default LogIn;

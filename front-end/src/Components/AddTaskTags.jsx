@@ -1,7 +1,6 @@
 /* eslint-disable no-return-assign */
 
 import React from 'react';
-import 'antd/dist/antd.css';
 import { Tag, Input, Icon } from 'antd';
 import PropTypes from 'prop-types';
 
