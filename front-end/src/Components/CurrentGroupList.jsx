@@ -27,7 +27,7 @@ export default class CurrentGroupList extends React.PureComponent {
               shape="circle"
               icon="close-circle"
               className="button-table"
-              size="medium"
+              size="default"
               onClick={() => delStudent(item)}
             />
           </List.Item>)}

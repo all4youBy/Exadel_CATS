@@ -4,9 +4,15 @@ const initialState = {
   data: [],
   students: [],
   error: '',
+  successMessage: '',
 };
 const createGroup = (state = initialState, action) => {
   switch (action.type) {
+    case types.RECEIVE_POSTGROUP:
+      return {
+        ...state,
+        successMessage: action.payload,
+      };
     case types.ERROR_STUDENTLIST:
       return {
         ...state,
