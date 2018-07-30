@@ -1,7 +1,7 @@
 import React from 'react';
-import 'antd/dist/antd.css';
 import './ButtonAssignTest.scss';
 import { Button } from 'antd';
+// import { Link } from 'react-router-dom';
 
 class ButtonAssignTest extends React.Component {
   render() {
@@ -11,6 +11,7 @@ class ButtonAssignTest extends React.Component {
         icon="profile"
         className="button-table"
         size="small"
+        href="/assigntest"
       />
     );
   }

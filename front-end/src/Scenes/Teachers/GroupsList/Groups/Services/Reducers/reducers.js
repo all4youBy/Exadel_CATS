@@ -1,12 +1,21 @@
 import * as types from '../Actions/types';
-import { RECEIVE_LOGINDATA } from '../../../../../LogIn/Services/Actions/types';
 
 const initialState = {
   groups: [],
+  error: '',
 };
 
 const allGroups = (state = initialState, action) => {
   switch (action.type) {
+    case types.RECEIVE_GROUPSLIST:
+      return { ...state, groups: action.payload };
+
+    case types.ERROR_GROUPSLIST:
+      return {
+        ...state,
+        error: action.payload,
+      };
+
     case types.ADD_GROUP: {
       const lastNumber = state.group.length ? +state.group[state.group.length - 1].number + 1 : 1;
       const lastKey = state.group.length ? +state.group[state.group.length - 1].key + 1 : 1;
@@ -38,9 +47,6 @@ const allGroups = (state = initialState, action) => {
       const newState = { group: students };
       return newState;
     }
-
-    case RECEIVE_LOGINDATA:
-      return { ...state, groups: action.payload };
 
     case types.DELETE_GROUP: {
       let students = [...state.groups];
