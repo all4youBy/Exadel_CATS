@@ -25,13 +25,15 @@ import PageListCheckTests from '../../Scenes/Teachers/Tests/ListCheckTests';
 import PageCheckTest from '../../Scenes/Teachers/Tests/CheckTest/Containers/PageCheckTest';
 import AddTaskPage from '../../Scenes/Teachers/Tasks/AddTask/Containers/AddTaskPage';
 import CreateGroupPage from '../../Scenes/Teachers/GroupsList/GroupCreation/Containers/CreateGroupPage';
+import Loading from '../../Components/Loading';
 
 class Main extends React.Component {
   static propTypes = {
     userType: PropTypes.string.isRequired,
   };
 
-  static renderCommonRoutes() {
+  renderCommonRoutes() {
+    console.log(this);
     return [
       (<Route exact path="/groupstudentslist" component={PageGroupStudentsList}/>),
       (<Route exact path="/allgroups" component={AllGroups}/>),
@@ -50,7 +52,7 @@ class Main extends React.Component {
         return (
           <div className="main-body-container">
             <div className="general-menu">
-              <GeneralMenu/>
+              <GeneralMenu userType={role}/>
             </div>
             <div className="switch-div">
               <Switch>
@@ -69,15 +71,16 @@ class Main extends React.Component {
         return (
           <div className="main-body-container">
             <div className="general-menu">
-              <GeneralMenu/>
+              <GeneralMenu userType={role}/>
             </div>
             <div className="switch-div">
               <Switch>
-                {Main.renderCommonRoutes()}
+                {this.renderCommonRoutes()}
                 <Route exact path="/creategroup" component={CreateGroupPage}/>
                 <Route exact path="/assignedtasks" component={PageAssignedTasks}/>
                 <Route exact path="/assigntest" component={PageAssignTest}/>
                 <Route exact path="/checktests" component={PageListCheckTests}/>
+                <Route exact path="/loading" component={Loading}/>
                 <Redirect to="/"/>
               </Switch>
             </div>
@@ -87,12 +90,12 @@ class Main extends React.Component {
         return (
           <div className="main-body-container">
             <div className="general-menu">
-              <GeneralMenu/>
+              <GeneralMenu userType={role}/>
             </div>
             <div className="switch-div">
               <Switch>
                 <Route exact path="/accessrequestlist" component={AccessRequestList}/>
-                {Main.renderCommonRoutes()}
+                {this.renderCommonRoutes()}
                 <Redirect to="/"/>
               </Switch>
             </div>

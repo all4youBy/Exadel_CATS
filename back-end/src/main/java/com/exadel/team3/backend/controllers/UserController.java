@@ -35,18 +35,18 @@ public class UserController {
     @GetMapping("/students")
     @PreAuthorize("hasAnyRole('ADMIN','TEACHER')")
     public List<User> getAllStudents(){
-        return userService.getUsersByRole(UserRole.STUDENT);
+        return userService.getByRole(UserRole.STUDENT);
     }
 
     @GetMapping("/teachers")
     @PreAuthorize("hasRole('ADMIN')")
     public List<User> getAllTeachers(){
-        return userService.getUsersByRole(UserRole.TEACHER);
+        return userService.getByRole(UserRole.TEACHER);
     }
 
     @GetMapping("/admins")
     public List<User> getAllAdmins(){
-        return userService.getUsersByRole(UserRole.ADMIN);
+        return userService.getByRole(UserRole.ADMIN);
     }
 
     @GetMapping("/{email}")
@@ -70,7 +70,7 @@ public class UserController {
     @GetMapping("/confirm-users")
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<?> getListOfUnconfirmedUsers(){
-        return ResponseEntity.status(HttpStatus.OK).body(userService.getUsersByRole(UserRole.TEACHER_UNCONFIRMED));
+        return ResponseEntity.status(HttpStatus.OK).body(userService.getByRole(UserRole.TEACHER_UNCONFIRMED));
     }
 
     @PutMapping

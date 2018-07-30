@@ -1,16 +1,22 @@
 import React from 'react';
 import { Menu, Icon } from 'antd';
 import { Link } from 'react-router-dom';
+import PropTypes from 'prop-types';
 import * as types from '../Services/types';
 import './GeneralMenu.scss';
-import loginInformation from '../Services/loginService';
+// import loginInformation from '../Services/loginService';
 
 const { SubMenu } = Menu;
 
 class GeneralMenu extends React.PureComponent {
+  static propTypes = {
+    userType: PropTypes.string.isRequired,
+  };
+
   render() {
     let data;
-    switch (loginInformation().role) {
+    const { userType } = this.props;
+    switch (userType) {
       case 'STUDENT': {
         data = types.USER_GENERAL_MENU_DATA;
         break;
