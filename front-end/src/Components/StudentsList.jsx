@@ -38,9 +38,9 @@ export default class StudentList extends React.PureComponent {
         dataSource={data}
         renderItem={(item) => {
           const { addStudent } = this.props;
-          const desc = item.education ? (
-            <div>{item.email} {item.education.institution} {`${item.education.graduationYear} `}
-              {item.education.specialization} {item.education.primarySkill}
+          const desc = item.affiliation ? (
+            <div>{item.email} {item.affiliation.institution} {`${item.affiliation.graduationYear} `}
+              {item.affiliation.specialization} {item.affiliation.primarySkill}
             </div>
           ) : 'No info';
           return (
