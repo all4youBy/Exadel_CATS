@@ -1,3 +1,4 @@
+/* eslint-disable import/no-cycle */
 import { errorProject, isLoading, getData } from '../Main/Services/Actions/actions';
 import { getUserData } from '../Scenes/LogIn/Services/Actions/actions';
 
@@ -48,7 +49,7 @@ const API = {
       })
         .then(response => response.json())
         .then(items => dispatch(getData(receiveAction, items)))
-        .catch(error => console.error('Fetch Error =\n', error));
+        .catch(() => dispatch(errorProject(receiveAction, errorMessage)));
     };
   },
   get(path, receiveAction) {
@@ -68,7 +69,7 @@ const API = {
         })
         .then(response => response.json())
         .then(items => dispatch(getData(receiveAction, items)))
-        .catch(() => dispatch(errorProject(true)));
+        .catch(() => dispatch(errorProject(receiveAction, errorMessage)));
     };
   },
   put(path, data, receiveAction) {

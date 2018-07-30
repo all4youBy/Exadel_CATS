@@ -1,5 +1,6 @@
 package com.exadel.team3.backend.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.AccessLevel;
 import lombok.Data;
@@ -10,6 +11,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.Field;
 import org.springframework.util.StringUtils;
 
+import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -31,6 +33,7 @@ public class User {
     private UserRole role;
 
     @NonNull
+    @JsonIgnore
     private String passwordHash;
 
     @Setter(AccessLevel.NONE)
