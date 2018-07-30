@@ -14,7 +14,7 @@ public class SolutionController {
         for (MultipartFile file : files) {
 
         }
-        return ResponseEntity.status(HttpStatus.CREATED).body("Question added");
+        return ResponseEntity.status(HttpStatus.CREATED).body("Solution added");
     }
 
 
