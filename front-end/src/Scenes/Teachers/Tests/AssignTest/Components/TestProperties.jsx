@@ -150,57 +150,6 @@ class TestProperties extends React.Component {
               )
               }
             </FormItem>
-            <FormItem {...formItemLayout} label="Время выполнения" className="form-item">
-              {getFieldDecorator('leadTime', {
-                rules: [
-                  {
-                    pattern: /^[0-5]\d/,
-                    message: 'Введите число!',
-                  },
-                  {
-                    required: true,
-                    message: 'Пожалуйста, введите время выполнения!',
-                  },
-                  {
-                    max: 2,
-                    message: 'Вы можете ввести не более 2 символов',
-                  },
-                ],
-              })(
-                <div className="parent-group-input">
-                  <Input
-                    className="input-hour-lead-time"
-                    name="hoursLeadTimeTest"
-                    placeholder="00"
-                    onBlur={this.setField}
-                  />
-                  <Input
-                    className="text-between-input"
-                    placeholder=":"
-                    disabled
-                  />
-                  <Input
-                    className="input-min-lead-time"
-                    name="minutesLeadTimTest"
-                    placeholder="00"
-                    onBlur={this.setField}
-                  />
-                  <Input
-                    className="text-between-input"
-                    placeholder=":"
-                    disabled
-                  />
-                  <Input
-                    className="input-second-lead-time"
-                    name="secondsLeadTimeTest"
-                    placeholder="00"
-                    onBlur={this.setField}
-                  />
-                </div>,
-              )}
-            </FormItem>
-          </div>
-          <div className="right-group-form-items">
             <FormItem {...formItemLayout} label="Время открытия теста" className="form-item">
               {getFieldDecorator('timeOpenTest', {
                 rules: [
@@ -244,6 +193,57 @@ class TestProperties extends React.Component {
                   <Input
                     className="input-second-lead-time"
                     name="secondsTimeOpenTest"
+                    placeholder="00"
+                    onBlur={this.setField}
+                  />
+                </div>,
+              )}
+            </FormItem>
+          </div>
+          <div className="right-group-form-items">
+            <FormItem {...formItemLayout} label="Время выполнения" className="form-item">
+              {getFieldDecorator('leadTime', {
+                rules: [
+                  {
+                    pattern: /^[0-5]\d/,
+                    message: 'Введите число!',
+                  },
+                  {
+                    required: true,
+                    message: 'Пожалуйста, введите время выполнения!',
+                  },
+                  {
+                    max: 2,
+                    message: 'Вы можете ввести не более 2 символов',
+                  },
+                ],
+              })(
+                <div className="parent-group-input">
+                  <Input
+                    className="input-hour-lead-time"
+                    name="hoursLeadTimeTest"
+                    placeholder="00"
+                    onBlur={this.setField}
+                  />
+                  <Input
+                    className="text-between-input"
+                    placeholder=":"
+                    disabled
+                  />
+                  <Input
+                    className="input-min-lead-time"
+                    name="minutesLeadTimTest"
+                    placeholder="00"
+                    onBlur={this.setField}
+                  />
+                  <Input
+                    className="text-between-input"
+                    placeholder=":"
+                    disabled
+                  />
+                  <Input
+                    className="input-second-lead-time"
+                    name="secondsLeadTimeTest"
                     placeholder="00"
                     onBlur={this.setField}
                   />
@@ -302,7 +302,12 @@ class TestProperties extends React.Component {
           </div>
         </Form>
         <FormItem {...tailFormItemLayout} >
-          <Button className="button-table-with-border" type="primary" onClick={handleSubmit}>Назначить</Button>
+          <Button
+            className="button-table-with-border"
+            type="primary"
+            onClick={handleSubmit}
+          >Назначить
+          </Button>
         </FormItem>
       </div>
     );
