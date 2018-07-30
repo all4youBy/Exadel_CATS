@@ -16,10 +16,6 @@ export function getUserData(data) {
   };
 }
 
-export function logInData(url, username, password) {
-  return API.login(url, { username, password });
-}
-
-export function getDataLogIn(url) {
-  return API.get(url, 'logInData');
+export function logInData(url, data) {
+  return API.login(url, data);
 }

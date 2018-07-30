@@ -5,7 +5,7 @@ import 'antd/dist/antd.css';
 import './LoginForm.scss';
 import { Form, Icon, Input, Button } from 'antd';
 import { Link } from 'react-router-dom';
-import { getDataLogIn, logIn, logInData } from '../Services/Actions/actions';
+import { logIn, logInData } from '../Services/Actions/actions';
 
 const FormItem = Form.Item;
 
@@ -13,13 +13,11 @@ class LoginForm extends React.Component {
   static propTypes = {
     form: PropTypes.shape().isRequired,
     onLogIn: PropTypes.func.isRequired,
-    getData: PropTypes.func.isRequired,
     sendLogInData: PropTypes.func.isRequired,
   };
 
   constructor(props) {
     super(props);
-    this.onClickLogIn = this.onClickLogIn.bind(this);
     this.getUsername = (elem) => {
       this.username = elem;
     };
@@ -28,22 +26,17 @@ class LoginForm extends React.Component {
     };
   }
 
-  componentDidMount() {
-    const { getData } = this.props;
-    getData('topics');
-  }
-
-  onClickLogIn = (e) => {
-    const { onLogIn, sendLogInData } = this.props;
-    onLogIn(this.username.props.value, this.password.props.value);
-    sendLogInData('login', this.username.props.value, this.password.props.value);
-    e.preventDefault();
-  };
-
   handleSubmit = (e) => {
     e.preventDefault();
-    const { form } = this.props;
-    form.validateFields();
+    const { form, onLogIn, sendLogInData } = this.props;
+
+    form.validateFields((err, values) => {
+      if (!err) {
+        onLogIn(this.username.props.value, this.password.props.value);
+        sendLogInData('login', this.username.props.value, this.password.props.value);
+        console.log('Received values of form: ', values);
+      }
+    });
   };
 
 
@@ -76,7 +69,7 @@ class LoginForm extends React.Component {
           )}
         </FormItem>
         <FormItem className="login">
-          <Button onClick={this.onClickLogIn} type="primary" htmlType="submit" className="login-form-button">
+          <Button type="primary" htmlType="submit" className="login-form-button">
             Войти
           </Button>
           <a className="login-forgot" href="/">Забыли пароль?</a>
@@ -98,11 +91,12 @@ function mapDispatch(dispatch) {
     onLogIn: (username, password) => {
       dispatch(logIn(username, password));
     },
-    sendLogInData: (url, username, password) => {
-      dispatch(logInData(url, { username, password }));
-    },
-    getData: (url) => {
-      dispatch(getDataLogIn(url));
+    sendLogInData: (url, user, key) => {
+      const data = {
+        username: user,
+        password: key,
+      };
+      dispatch(logInData(url, data));
     },
   };
 }
