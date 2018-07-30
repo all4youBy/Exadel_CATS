@@ -1,0 +1,37 @@
+.header {
+  line-height: 50px;
+  text-align: center;
+  border-color: #222222;
+  font-size: 17px;
+  font-weight: 600;
+}
+.empty-list{
+  line-height: 50px;
+  text-align: center;
+  border-color: #222222;
+  font-size: 17px;
+}
+.load {
+  line-height: 50px;
+  text-align: center;
+  border-color: #222222;
+  font-size: 30px;
+}
+.user {
+  flex: auto;
+}
+.avatar{
+  margin: 0 0 0 10px;
+}
+
+.button-confirm, .button-refuse {
+  height: 32px;
+  background-color: #04233d;
+  color: #fff;
+  border-color: #04233d;
+  margin: 7px;
+}
+
+.list-users {
+  margin-bottom: 10px;
+}
