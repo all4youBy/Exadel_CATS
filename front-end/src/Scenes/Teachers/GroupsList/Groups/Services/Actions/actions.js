@@ -20,5 +20,5 @@ export function deleteGroup(id) {
 }
 
 export function fetchGroups() {
-  return (API.get('users/groups', 'groupsList', 'Не удалось загрузить список групп'));
+  return (API.get('users/groups', 'groupsList', ''));
 }

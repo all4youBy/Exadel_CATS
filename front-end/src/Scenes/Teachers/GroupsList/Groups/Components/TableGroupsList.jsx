@@ -11,6 +11,7 @@ import ButtonAssignTest from '../../../../../Components/ButtonAssignTest';
 import ButtonCreateGroup from './ButtonCreateGroup';
 import InputSearch from './InputSearch';
 import { editGroup, addGroup, deleteGroup, fetchGroups } from '../Services/Actions/actions';
+import Loading from '../../../../../Components/Loading';
 
 class TableGroupsList extends React.Component {
   static propTypes = {
@@ -28,6 +29,10 @@ class TableGroupsList extends React.Component {
 
   render() {
     const { handleGroupAdd, handleGroupDelete, error, groups } = this.props;
+    if (error) {
+      message.error('Не удалось загрузить список групп');
+      return <Loading/>;
+    }
     const columns = [{
       title: ' ',
       dataIndex: 'name',
@@ -83,10 +88,6 @@ class TableGroupsList extends React.Component {
     }
     columns[0].title = <InputSearch/>;
     columns[3].title = <ButtonCreateGroup onAddGroup={handleGroupAdd}/>;
-    if (error) {
-      message.error('Не удалось загрузить список студентов');
-      return <div/>;
-    }
     return (
       <Table
         columns={columns}
@@ -114,7 +115,7 @@ const mapDispatchToProps = dispatch => ({
     dispatch(deleteGroup(key));
   },
   getGroups: () => {
-    dispatch(fetchGroups()); // !!!!
+    dispatch(fetchGroups());
   },
 });
 

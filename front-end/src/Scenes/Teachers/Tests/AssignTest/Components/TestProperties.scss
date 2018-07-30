@@ -63,6 +63,11 @@
       border-left: none;
       width: 40px;
     }
+
+    .input-years-lead-time {
+      border-left: none;
+      width: 55px;
+    }
     .text-between-input {
       width: 25px;
       border-left: none;
@@ -70,5 +75,9 @@
       pointer-events: none;
       background-color: #fff;
     }
+  }
+  .tags-test-properties{
+    margin-left: 25px;
+    width: 100%;
   }
 }

@@ -117,15 +117,17 @@ class TestProperties extends React.Component {
           )
           }
         </FormItem>
-        <TreeWithTags
-          tags={tags}
-          deleteTag={handleDeleteTestTag}
-          addTag={handleAddTestTag}
-          valid={handleCreateTest}
-        />
+        <div className="tags-test-properties">
+          <TreeWithTags
+            tags={tags}
+            deleteTag={handleDeleteTestTag}
+            addTag={handleAddTestTag}
+            valid={handleCreateTest}
+          />
+        </div>
         <Form className="parent-form">
           <div className="left-group-form-items">
-            <FormItem {...formItemLayout} label="Количество вопросов" className="form-item">
+            <FormItem {...formItemLayout} label="Кол. вопросов" className="form-item">
               {getFieldDecorator('Количество вопросов', {
                 rules: [
                   {
@@ -150,7 +152,7 @@ class TestProperties extends React.Component {
               )
               }
             </FormItem>
-            <FormItem {...formItemLayout} label="Время открытия теста" className="form-item">
+            <FormItem {...formItemLayout} label="Время откр." className="form-item">
               {getFieldDecorator('timeOpenTest', {
                 rules: [
                   {
@@ -199,9 +201,54 @@ class TestProperties extends React.Component {
                 </div>,
               )}
             </FormItem>
+            <FormItem {...formItemLayout} label="Дата откр." className="form-item">
+              {getFieldDecorator('passDate', {
+                rules: [
+                  {
+                    pattern: /[0-9]/,
+                    message: 'Введите число!',
+                  },
+                  {
+                    required: true,
+                    message: 'Пожалуйста, введите дaту открытия!',
+                  },
+                ],
+              })(
+                <div className="parent-group-input">
+                  <Input
+                    className="input-hour-lead-time"
+                    name="daysPassDateTest"
+                    placeholder="00"
+                    onBlur={this.setField}
+                  />
+                  <Input
+                    className="text-between-input"
+                    placeholder="."
+                    disabled
+                  />
+                  <Input
+                    className="input-min-lead-time"
+                    name="mothsPassDateTest"
+                    placeholder="00"
+                    onBlur={this.setField}
+                  />
+                  <Input
+                    className="text-between-input"
+                    placeholder="."
+                    disabled
+                  />
+                  <Input
+                    className="input-years-lead-time"
+                    name="yearsPassDateTest"
+                    placeholder="0000"
+                    onBlur={this.setField}
+                  />
+                </div>,
+              )}
+            </FormItem>
           </div>
           <div className="right-group-form-items">
-            <FormItem {...formItemLayout} label="Время выполнения" className="form-item">
+            <FormItem {...formItemLayout} label="Время вып." className="form-item">
               {getFieldDecorator('leadTime', {
                 rules: [
                   {
@@ -294,6 +341,51 @@ class TestProperties extends React.Component {
                     className="input-second-lead-time"
                     name="secondsPassTimeTest"
                     placeholder="00"
+                    onBlur={this.setField}
+                  />
+                </div>,
+              )}
+            </FormItem>
+            <FormItem {...formItemLayout} label="Дата сдачи" className="form-item">
+              {getFieldDecorator('passDate', {
+                rules: [
+                  {
+                    pattern: /[0-9]/,
+                    message: 'Введите число!',
+                  },
+                  {
+                    required: true,
+                    message: 'Пожалуйста, введите дaту сдачи!',
+                  },
+                ],
+              })(
+                <div className="parent-group-input">
+                  <Input
+                    className="input-hour-lead-time"
+                    name="daysPassDateTest"
+                    placeholder="00"
+                    onBlur={this.setField}
+                  />
+                  <Input
+                    className="text-between-input"
+                    placeholder="."
+                    disabled
+                  />
+                  <Input
+                    className="input-min-lead-time"
+                    name="mothsPassDateTest"
+                    placeholder="00"
+                    onBlur={this.setField}
+                  />
+                  <Input
+                    className="text-between-input"
+                    placeholder="."
+                    disabled
+                  />
+                  <Input
+                    className="input-years-lead-time"
+                    name="yearsPassDateTest"
+                    placeholder="0000"
                     onBlur={this.setField}
                   />
                 </div>,
