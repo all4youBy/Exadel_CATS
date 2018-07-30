@@ -14,9 +14,6 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.Collections;
 
-
-
-
 public class JWTAuthorizationFilter extends OncePerRequestFilter{
 
     private SecurityUtils securityUtils;

@@ -1,8 +1,5 @@
 package com.exadel.team3.backend.services;
 
-import org.bson.types.ObjectId;
-
-import java.util.Collection;
 import java.util.List;
 
 public interface CrudService<T, I> {
