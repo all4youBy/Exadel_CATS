@@ -75,16 +75,23 @@
 			<scope>test</scope>
 		</dependency>
 
+		<dependency>
+			<groupId>org.springframework.security</groupId>
+			<artifactId>spring-security-test</artifactId>
+			<scope>test</scope>
+		</dependency>
+
 		<!--<dependency>-->
 			<!--<groupId>org.springframework.security</groupId>-->
 			<!--<artifactId>spring-security-test</artifactId>-->
 			<!--<scope>test</scope>-->
 		<!--</dependency>-->
 
+		<!-- https://mvnrepository.com/artifact/org.mdkt.compiler/InMemoryJavaCompiler -->
 		<dependency>
-			<groupId>org.springframework.security</groupId>
-			<artifactId>spring-security-test</artifactId>
-			<scope>test</scope>
+			<groupId>org.mdkt.compiler</groupId>
+			<artifactId>InMemoryJavaCompiler</artifactId>
+			<version>1.3.0</version>
 		</dependency>
 
 		<dependency>
@@ -123,11 +130,7 @@
         </dependency>
 
 		<!-- https://mvnrepository.com/artifact/org.mdkt.compiler/InMemoryJavaCompiler -->
-		<dependency>
-			<groupId>org.mdkt.compiler</groupId>
-			<artifactId>InMemoryJavaCompiler</artifactId>
-			<version>1.3.0</version>
-		</dependency>
+
 
 	</dependencies>
 
