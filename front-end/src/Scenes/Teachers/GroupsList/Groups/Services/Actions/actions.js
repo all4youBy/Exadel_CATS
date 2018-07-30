@@ -1,4 +1,5 @@
 import * as types from './types';
+import API from '../../../../../../Services/API';
 
 export function editGroup(group) {
   return {
@@ -16,4 +17,8 @@ export function deleteGroup(id) {
   return {
     type: types.DELETE_GROUP, payload: id,
   };
+}
+
+export function fetchGroups() {
+  return (API.get('users/groups', 'groupsList', 'Не удалось загрузить список групп'));
 }
