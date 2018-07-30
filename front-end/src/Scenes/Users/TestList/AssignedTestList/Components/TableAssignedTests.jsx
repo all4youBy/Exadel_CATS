@@ -1,5 +1,5 @@
 import React from 'react';
-import 'antd/dist/antd.css';
+import './TableAssignedTests.scss';
 import { Table } from 'antd';
 import ButtonPassTest from './ButtonPassTest';
 
@@ -8,25 +8,30 @@ const columns = [{
   dataIndex: 'name',
   key: 'name',
   width: 400,
+  className: 'column-break-point',
 }, {
   title: 'Тема',
   dataIndex: 'theme',
   key: 'theme',
   width: 600,
+  className: 'column-break-point',
 }, {
   title: 'Кол. вопросов',
   dataIndex: 'countQuestions',
   key: 'countQuestions',
   width: 250,
+  className: 'column-break-point',
 }, {
   title: 'Время выполнения',
   dataIndex: 'time',
   key: 'time',
   width: 500,
+  className: 'column-break-point',
 }, {
   title: '',
   key: 'start',
   width: 100,
+  className: 'column-break-point',
   render: (/* text, record */) => (
     <ButtonPassTest/>
   ),

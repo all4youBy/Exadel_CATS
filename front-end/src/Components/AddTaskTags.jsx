@@ -1,7 +1,6 @@
 /* eslint-disable no-return-assign */
 
 import React from 'react';
-import 'antd/dist/antd.css';
 import { Tag, Input, Icon } from 'antd';
 import PropTypes from 'prop-types';
 
@@ -23,8 +22,6 @@ export default class EditableTagGroup extends React.Component {
 
   handleInputChange = (e) => {
     this.setState({ inputValue: e.target.value });
-    const { inputValue } = this.state;
-    console.log(inputValue);
   };
 
   handleInputConfirm = () => {

@@ -1,10 +1,4 @@
 function requestLoginInformation() {
-  let userInformation;
-  try {
-    userInformation = JSON.parse(localStorage.getItem('user'));
-  } catch (e) {
-    userInformation = null;
-  }
-  return userInformation;
+  return JSON.parse(localStorage.getItem('user'));
 }
 export default requestLoginInformation;
