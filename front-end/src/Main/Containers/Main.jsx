@@ -2,6 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import './Main.scss';
 import { Switch, Route, Redirect, withRouter } from 'react-router-dom';
+import PropTypes from 'prop-types';
 import LogIn from '../../Scenes/LogIn';
 import PageAssignedTestList from '../../Scenes/Users/TestList/AssignedTestList';
 import PagePassedTestList from '../../Scenes/Users/TestList/PassedTestList';
@@ -18,13 +19,16 @@ import RegistrationPage from '../../Scenes/Registration';
 import GeneralMenu from '../../Components/GeneralMenu';
 import PageAssignedTasks from '../../Scenes/Users/Tasks/AssignedTasks';
 import PageAssignTest from '../../Scenes/Teachers/Tests/AssignTest';
-import CreateGroupPage from '../../Scenes/Teachers/GroupsList/GroupCreation';
 import PageListCheckTests from '../../Scenes/Teachers/Tests/ListCheckTests';
 import PageCheckTest from '../../Scenes/Teachers/Tests/CheckTest/Containers/PageCheckTest';
 import AddTaskPage from '../../Scenes/Teachers/Tasks/AddTask/Containers/AddTaskPage';
 import CreateGroupPage from '../../Scenes/Teachers/GroupsList/GroupCreation/Containers/CreateGroupPage';
 
 class Main extends React.Component {
+  static propTypes = {
+    userType: PropTypes.string.isRequired,
+  };
+
   renderCommonRoutes() {
     return [
       (<Route exact path="/groupstudentslist" component={PageGroupStudentsList}/>),
@@ -33,6 +37,7 @@ class Main extends React.Component {
       (<Route exact path="/addtask" component={AddTaskPage}/>),
       (<Route exact path="/teachersmaterials" component={Materials}/>),
       (<Route exact path="/materials" component={Materials}/>),
+      (<Route exact path="/checktest" component={PageCheckTest}/>),
     ];
   }
 
@@ -49,14 +54,7 @@ class Main extends React.Component {
               <Switch>
                 <Route exact path="/assignedtestlist" component={PageAssignedTestList}/>
                 <Route exact path="/passedtestlist" component={PagePassedTestList}/>
-                <Route exact path="/groupstudentslist" component={PageGroupStudentsList}/>
                 <Route exact path="/passedtasks" component={PagePassedTasks}/>
-                <Route exact path="/allgroups" component={AllGroups}/>
-                <Route exact path="/alltasks" component={AllTask}/>
-                <Route exact path="/addtask" component={AddTaskPage}/>
-                <Route exact path="/addtaskpage" component={AddTaskPage}/>
-                <Route exact path="/registration" component={RegistrationPage}/>
-                <Route exact path="/teachersmaterials" component={Materials}/>
                 <Route exact path="/test" component={Test}/>
                 <Route exact path="/task" component={UserTaskPage}/>
                 <Route exact path="/usersmaterials" component={Materials}/>
@@ -69,7 +67,7 @@ class Main extends React.Component {
         return (
           <div className="main-body-container">
             <div className="general-menu">
-              <UserGeneralMenu/>
+              <GeneralMenu/>
             </div>
             <div className="switch-div">
               <Switch>
@@ -87,7 +85,7 @@ class Main extends React.Component {
         return (
           <div className="main-body-container">
             <div className="general-menu">
-              <UserGeneralMenu/>
+              <GeneralMenu/>
             </div>
             <div className="switch-div">
               <Switch>
@@ -132,12 +130,4 @@ function mapStateToProps(state) {
   };
 }
 
-/* const mapDispatchToProps = dispatch => ({
-  handleStudentAdd: () => {
-    dispatch(addStudent(book));
-  },
-  handleStudentDelete: (book) => {
-    dispatch(deleteStudent(book));
-  },
-}); */
 export default withRouter(connect(mapStateToProps)(Main));
