@@ -84,7 +84,7 @@ public class TaskControllerTest {
             Method method = taskRunner.findMethod(classList,"execute", arr);
             String ret  = taskRunner.runTask(method, arr);
 
-            if (ret.equals(arr.toString().toUpperCase())) {
+            if (ret.equals(arr[0].toUpperCase())) {
                 return ResponseEntity.status(HttpStatus.OK).body(ret);
             }
         } catch (Exception ex) {

@@ -8,10 +8,10 @@ import java.time.LocalDateTime;
 import java.util.Collection;
 
 @Data
-public class TaskForGroupRequest {
+public class TaskRequest {
 
     @NonNull
-    private String group;
+    private String assignedTo;
 
     @NonNull
     private ObjectId id;
