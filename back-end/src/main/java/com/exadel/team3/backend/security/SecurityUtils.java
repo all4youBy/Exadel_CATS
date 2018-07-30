@@ -34,6 +34,8 @@ public class SecurityUtils {
     @Value("${jwt.pass.secret}")
     private String passSecret;
 
+    private final static int PASS_STRING_LENGTH = 10;
+
     @Autowired
     private PasswordEncoder encoder;
 
@@ -87,19 +89,22 @@ public class SecurityUtils {
         return createdDate.plusMinutes(expiration);
     }
 
-    public void hashUserPassword(User user){
-        String hashPass = encoder.encode(user.getPasswordHash());
-        user.setPasswordHash(hashPass);
+//    public void hashUserPassword(User user){
+//        String hashPass = encoder.encode(user.getPasswordHash());
+//        user.setPasswordHash(hashPass);
+//    }
+
+    public String generateUserPassword(){
+        String generatedString = generateRandomString(PASS_STRING_LENGTH);
+        return encoder.encode(generatedString);
     }
 
-    public String passwordGenerator(int lenght){
+    private String generateRandomString(int length){
         Random random = new Random();
-        byte[] bytes = new byte[lenght];
 
+        byte[] bytes = new byte[length];
         random.nextBytes(bytes);
 
-        String generatedString = new String(bytes, Charset.forName("UTF-8"));
-        return encoder.encode(generatedString);
-
+        return new String(bytes, Charset.forName("UTF-8"));
     }
 }
