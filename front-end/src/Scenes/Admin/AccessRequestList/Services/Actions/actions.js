@@ -13,5 +13,5 @@ export function getUsers(url) {
 }
 
 export function upDataListUsers(url, data) {
-  return API.put(url, data, 'users');
+  return API.put(url, data, 'upDataUsers');
 }

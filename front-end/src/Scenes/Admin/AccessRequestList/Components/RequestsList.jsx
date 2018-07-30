@@ -13,6 +13,7 @@ class RequestsList extends React.PureComponent {
 
   state = {
     users: [],
+    getListUsers: false,
   };
 
   onClickConfirm = (e, idEmail) => {
@@ -21,7 +22,7 @@ class RequestsList extends React.PureComponent {
     upDateUser('users/update-rights',
       {
         email: users.find(el => el.email === idEmail).email,
-        role: users.find(el => el.email === idEmail).role,
+        role: 'TEACHER',
       });
     upDate(users, idEmail);// delete
     e.preventDefault();
@@ -40,8 +41,18 @@ class RequestsList extends React.PureComponent {
   };
 
   static getDerivedStateFromProps(nextProps, nextState) {
-    if ((nextProps.users !== nextState.users) && !nextProps.users.length) {
-      nextProps.getDataUsers('users');
+    if ((nextProps.users !== nextState.users)
+      && !nextProps.users.length && !nextState.getListUsers) {
+      nextProps.getDataUsers('users/confirm-users');
+    } else if (!nextProps.users.length && !nextState.getListUsers) {
+      return {
+        getListUsers: true,
+      };
+    } else if (nextProps.users.length && !nextState.getListUsers) {
+      return {
+        users: nextProps.users,
+        getListUsers: true,
+      };
     }
     return {
       users: nextProps.users,
@@ -49,10 +60,10 @@ class RequestsList extends React.PureComponent {
   }
 
   render() {
-    const { users } = this.state;
+    const { users, getListUsers } = this.state;
     const listUsers = (
       <div>
-        <div className="header">Список запросов на статус</div>
+        <div className="header">Список запросов на статус преподавателя</div>
         <List
           className="list-users"
           pagination={{
@@ -66,9 +77,7 @@ class RequestsList extends React.PureComponent {
                 className="user"
                 avatar={<Avatar className="avatar" size="large" icon="user"/>}
                 title={<a href=" ">{item.email}</a>}
-                description={`${item.lastName} ${item.firstName}
-                Учебное заведение: ${item.education}
-                Запрос на статус: ${item.role}`}
+                description={`${item.lastName} ${item.firstName}`}
               />
               <Button
                 onClick={e => this.onClickConfirm(e, item.email)}
@@ -87,7 +96,9 @@ class RequestsList extends React.PureComponent {
         />
       </div>
     );
-    const addList = users.length ? listUsers : <div className="load"><Icon type="loading"/></div>;
+    const stateData = !(getListUsers && !users.length) ? (<div className="load"><Icon type="loading"/></div>)
+      : <div className="empty-list">Список запросов пуст</div>;
+    const addList = users.length ? listUsers : stateData;
     return (
       <div>
         {addList}

@@ -25,14 +25,13 @@ import PageListCheckTests from '../../Scenes/Teachers/Tests/ListCheckTests';
 import PageCheckTest from '../../Scenes/Teachers/Tests/CheckTest/Containers/PageCheckTest';
 import AddTaskPage from '../../Scenes/Teachers/Tasks/AddTask/Containers/AddTaskPage';
 import CreateGroupPage from '../../Scenes/Teachers/GroupsList/GroupCreation/Containers/CreateGroupPage';
-import AdminGeneralMenu from '../../Components/AdminGeneralMenu';
 
 class Main extends React.Component {
   static propTypes = {
     userType: PropTypes.string.isRequired,
   };
 
-  renderCommonRoutes() {
+  static renderCommonRoutes() {
     return [
       (<Route exact path="/groupstudentslist" component={PageGroupStudentsList}/>),
       (<Route exact path="/allgroups" component={AllGroups}/>),
@@ -74,7 +73,7 @@ class Main extends React.Component {
             </div>
             <div className="switch-div">
               <Switch>
-                {this.renderCommonRoutes()}
+                {Main.renderCommonRoutes()}
                 <Route exact path="/creategroup" component={CreateGroupPage}/>
                 <Route exact path="/assignedtasks" component={PageAssignedTasks}/>
                 <Route exact path="/assigntest" component={PageAssignTest}/>
@@ -92,7 +91,8 @@ class Main extends React.Component {
             </div>
             <div className="switch-div">
               <Switch>
-                {this.renderCommonRoutes()}
+                <Route exact path="/accessrequestlist" component={AccessRequestList}/>
+                {Main.renderCommonRoutes()}
                 <Redirect to="/"/>
               </Switch>
             </div>

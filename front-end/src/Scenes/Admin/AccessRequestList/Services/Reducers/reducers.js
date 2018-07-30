@@ -6,8 +6,9 @@ const initialState = {
 
 function requestsUsers(state = initialState, action) {
   switch (action.type) {
-    case RECEIVE_USERS:
+    case RECEIVE_USERS: {
       return { ...state, users: action.payload };
+    }
     default:
       return state;
   }

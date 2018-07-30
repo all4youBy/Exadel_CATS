@@ -3,14 +3,14 @@ import { Menu, Icon } from 'antd';
 import { Link } from 'react-router-dom';
 import * as types from '../Services/types';
 import './GeneralMenu.scss';
-// import loginInformation from '../Services/loginService';
+import loginInformation from '../Services/loginService';
 
 const { SubMenu } = Menu;
 
 class GeneralMenu extends React.PureComponent {
   render() {
     let data;
-    switch ('TEACHER') {
+    switch (loginInformation().role) {
       case 'STUDENT': {
         data = types.USER_GENERAL_MENU_DATA;
         break;
