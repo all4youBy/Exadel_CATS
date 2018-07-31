@@ -10,6 +10,7 @@ import com.exadel.team3.backend.services.TaskService;
 import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.RequestEntity;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
@@ -113,4 +114,16 @@ public class TaskController {
         return taskService.getItem(new ObjectId(taskId)).getTestingSets();
     }
 
+    @PutMapping("/add-testing-set/{taskId}")
+    @PreAuthorize("hasAnyRole('ADMIN','TEACHER')")
+    public ResponseEntity<?> addTestingSets(@PathVariable(value = "taskId") String taskId, @RequestBody TaskTestingSet set) {
+        List<TaskTestingSet> taskTestingSets = taskService.getItem(new ObjectId(taskId)).getTestingSets();
+
+        if (taskTestingSets.add(set)) {
+            return new ResponseEntity<>(taskTestingSets, HttpStatus.OK);
+        } else {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Can't add tasks set.");
+        }
+
+    }
 }
