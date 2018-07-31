@@ -9,7 +9,6 @@ import {
   addQuestionTag, dataQuestion,
   deleteQuestionTag,
 } from '../Services/Actions/actions';
-// import API from '../../../../../Services/API';
 
 const { TextArea } = Input;
 const { Group } = Radio;
@@ -23,7 +22,6 @@ class QuestionForm extends React.PureComponent {
     addTag: PropTypes.func.isRequired,
     deleteTag: PropTypes.func.isRequired,
     addQuestion: PropTypes.func.isRequired,
-    // getQuestion: PropTypes.func.isRequired,
   };
 
   constructor(props) {
@@ -48,8 +46,6 @@ class QuestionForm extends React.PureComponent {
   };
 
   onChangeTrainingTest = (e) => {
-    // const { getQuestion } = this.props;
-    // getQuestion('questions');
     this.question.training = e.target.checked;
   };
 
@@ -67,16 +63,22 @@ class QuestionForm extends React.PureComponent {
     const { value } = event.target;
     switch (name) {
       case 'answerFalse': {
-        this.question.variants.push({ text: value, correct: false });
+        if (value !== '') {
+          this.question.variants.push({ text: value, correct: false });
+        }
         break;
       }
       case 'answerTrue': {
-        this.question.variants.push({ text: value, correct: true });
+        if (value !== '') {
+          this.question.variants.push({ text: value, correct: true });
+        }
         break;
       }
       case 'question': {
-        this.setState({ [name]: value });
-        this.question.text = value;
+        if (value !== '') {
+          this.setState({ [name]: value });
+          this.question.text = value;
+        }
         break;
       }
       default:
@@ -103,19 +105,73 @@ class QuestionForm extends React.PureComponent {
     return true;
   };
 
-  addAnswerInputsFalse = () => this.setState(prevState => ({
-    answerInputsFalse: [...prevState.answerInputsFalse, prevState.answerInputsFalse.length + 1],
-  }));
+  addAnswerInputsFalse = () => {
+    const { answerInputsFalse } = this.state;
+    const inputFalse = (
+      <div key={answerInputsFalse.length} className="parent-input">
+        <TextArea
+          onBlur={this.setField}
+          name="answerFalse"
+          type="text"
+          className="answer"
+        />
+        <Button
+          onClick={this.deleteFalseInputs}
+          shape="circle"
+          icon="close"
+          className="button-delete"
+          size="small"
+        />
+      </div>
+    );
+    this.setState(prevState => ({
+      answerInputsFalse: [...prevState.answerInputsFalse,
+        inputFalse],
+    }));
+  };
 
-  addAnswerInputsTrue = () => this.setState(prevState => ({
-    answerInputsTrue: [...prevState.answerInputsTrue, prevState.answerInputsTrue.length + 1],
-  }));
+  addAnswerInputsTrue = () => {
+    const { answerInputsTrue } = this.state;
+    const inputTrue = (
+      <div key={answerInputsTrue.length} className="parent-input">
+        <TextArea
+          onBlur={this.setField}
+          name="answerTrue"
+          type="text"
+          className="answer"
+        />
+        <Button
+          onClick={this.deleteTrueInputs}
+          shape="circle"
+          icon="close"
+          className="button-delete"
+          size="small"
+        />
+      </div>
+    );
+    this.setState(prevState => ({
+      answerInputsTrue: [...prevState.answerInputsTrue,
+        inputTrue],
+    }));
+  };
+
+  deleteTrueInputs = (e) => {
+    const { answerInputsTrue } = this.state;
+    answerInputsTrue.splice(+e.target.value, 1);
+    e.target.parentNode.classList.add('hide');
+  };
+
+  deleteFalseInputs = (e) => {
+    const { answerInputsFalse } = this.state;
+    answerInputsFalse.splice(+e.target.value, 1);
+    e.target.parentNode.classList.add('hide');
+  };
 
   handleSubmit = (e) => {
     const { error } = this.state;
     const { addQuestion } = this.props;
+    console.log(this.question);
     if (!error) {
-      console.log(this.question);
       addQuestion('questions', this.question);
     }
     e.preventDefault();
@@ -142,26 +198,14 @@ class QuestionForm extends React.PureComponent {
         this.setState(() => ({ add: true }));
       }
     };
-    const inputFalse = (answerInputsFalse || []).map((item, i) => (
-      <Input
-        onBlur={this.setField}
-        name="answerFalse"
-        type="text"
-        className="answer"
-        key={i}
-      />));
-    const inputTrue = (answerInputsTrue || []).map((item, i) => (
-      <Input
-        onBlur={this.setField}
-        name="answerTrue"
-        type="text"
-        className="answer"
-        key={i}
-      />));
+    const addInputFalse = (answerInputsFalse || []).map((item, i) => (
+      <div key={i}>{item}</div>));
+    const addiInputTrue = (answerInputsTrue || []).map((item, i) => (
+      <div key={i}>{item}</div>));
     const inputQuestionSingleVariant = (
       <div className="block-answer">
         <div className="true-answer">Введите правильный вариант ответа:
-          <Input
+          <TextArea
             onBlur={this.setField}
             name="answerTrue"
             type="text"
@@ -169,12 +213,12 @@ class QuestionForm extends React.PureComponent {
           />
         </div>
         <div className="false-answer">Введите неправильные варианты ответа:
-          <Input
+          <TextArea
             onBlur={this.setField}
             name="answerFalse"
             type="text"
             className="answer"
-          />{inputFalse}
+          />{addInputFalse}
           <Button onClick={this.addAnswerInputsFalse} type="dashed" className="add-input">+Добавить</Button>
         </div>
       </div>
@@ -182,28 +226,28 @@ class QuestionForm extends React.PureComponent {
     const inputQuestionMultiVariant = (
       <div className="block-answer">
         <div className="true-answer">Введите правильные варианты ответа:
-          <Input
+          <TextArea
             onBlur={this.setField}
             name="answerTrue"
             type="text"
             className="answer"
-          />{inputTrue}
+          />{addiInputTrue}
           <Button onClick={this.addAnswerInputsTrue} type="dashed" className="add-input">+Добавить</Button>
         </div>
         <div className="false-answer">Введите неправильные варианты ответа:
-          <Input
+          <TextArea
             onBlur={this.setField}
             name="answerFalse"
             type="text"
             className="answer"
-          />{inputFalse}
+          />{addInputFalse}
           <Button onClick={this.addAnswerInputsFalse} type="dashed" className="add-input">+Добавить</Button>
         </div>
       </div>);
     const inputQuestionAutoCheckText = (
       <div className="block-answer">
         <div className="true-answer">Введите правильный ответ:
-          <Input
+          <TextArea
             onBlur={this.setField}
             name="answerTrue"
             type="text"
@@ -294,13 +338,10 @@ const mapDispatchToProps = dispatch => ({
   deleteTag: (tag) => {
     dispatch(deleteQuestionTag(tag));
   },
-  // getQuestion: (url) => {
-  //   dispatch(API.get(url, 'get'));
-  // },
   addQuestion: (url, data) => {
-    data.id = `${Math.random()}`;
-    data.status = 'ACTIVE';
-    data.statistics = null;
+    // data.id = `${Math.random()}`;
+    // data.status = 'ACTIVE';
+    // data.statistics = null;
     dispatch(dataQuestion(url, data));
   },
 });

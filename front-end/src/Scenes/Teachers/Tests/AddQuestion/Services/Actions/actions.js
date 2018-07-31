@@ -1,4 +1,5 @@
 import { ADD_QUESTION_TAG, DELETE_QUESTION_TAG } from './type';
+
 import API from '../../../../../../Services/API';
 
 export function addQuestionTag(tag) {
@@ -14,6 +15,8 @@ export function deleteQuestionTag(tag) {
     payload: tag,
   };
 }
+
 export function dataQuestion(url, data) {
-  return API.post(url, data, 'question');
+  console.log(data);
+  return API.post(url, data, 'addQuestion');
 }

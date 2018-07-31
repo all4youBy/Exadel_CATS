@@ -98,6 +98,7 @@ class Main extends React.Component {
             <div className="switch-div">
               <Switch>
                 <Route exact path="/accessrequestlist" component={AccessRequestList}/>
+                <Route exact path="/addquestion" component={AddQuestion}/>
                 {this.renderCommonRoutes()}
                 <Redirect to="/accessrequestlist"/>
               </Switch>
