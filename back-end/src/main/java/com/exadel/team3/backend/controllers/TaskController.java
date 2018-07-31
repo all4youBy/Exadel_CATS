@@ -10,6 +10,7 @@ import com.exadel.team3.backend.services.TaskService;
 import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.RequestEntity;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
@@ -99,18 +100,30 @@ public class TaskController {
         return solutionService.getAssignedItems(userId);
     }
 
-    @GetMapping("/users-task/{usersId}/{taskId}")
-    //TODO Максим напишет аннотацию. Доступ имеет админ, учитель и только один ученик
-    public Solution getUsersSolution(@PathVariable(value = "taskId") String taskId, @PathVariable(value = "usersId") String usersId) {
-         return solutionService.getAssignedItems(usersId).stream().filter(
-                 o1 -> o1.getId().equals(new ObjectId(taskId)))
-                 .findFirst().get();
-    }
-
     @GetMapping("/testing-sets/{taskId}")
     @PreAuthorize("hasAnyRole('ADMIN','TEACHER')")
     public List<TaskTestingSet> getTaskTestingSets(@PathVariable(value = "taskId") String taskId) {
         return taskService.getItem(new ObjectId(taskId)).getTestingSets();
     }
 
+    @GetMapping("/users-task/{usersId}/{taskId}")
+    //TODO Максим напишет аннотацию. Доступ имеет админ, учитель и только один ученик
+    public Solution getUsersSolution(@PathVariable(value = "taskId") String taskId, @PathVariable(value = "usersId") String usersId) {
+        return solutionService.getAssignedItems(usersId).stream().filter(
+                o1 -> o1.getId().equals(new ObjectId(taskId)))
+                .findFirst().get();
+    }
+
+    @PutMapping("/add-testing-set/{taskId}")
+    @PreAuthorize("hasAnyRole('ADMIN','TEACHER')")
+    public ResponseEntity<?> addTestingSets(@PathVariable(value = "taskId") String taskId, @RequestBody TaskTestingSet set) {
+        List<TaskTestingSet> taskTestingSets = taskService.getItem(new ObjectId(taskId)).getTestingSets();
+
+        if (taskTestingSets.add(set)) {
+            return new ResponseEntity<>(taskTestingSets, HttpStatus.OK);
+        } else {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Can't add tasks set.");
+        }
+
+    }
 }
