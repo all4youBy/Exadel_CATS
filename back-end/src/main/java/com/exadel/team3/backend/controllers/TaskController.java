@@ -100,18 +100,18 @@ public class TaskController {
         return solutionService.getAssignedItems(userId);
     }
 
-    @GetMapping("/users-task/{usersId}/{taskId}")
-    //TODO Максим напишет аннотацию. Доступ имеет админ, учитель и только один ученик
-    public Solution getUsersSolution(@PathVariable(value = "taskId") String taskId, @PathVariable(value = "usersId") String usersId) {
-         return solutionService.getAssignedItems(usersId).stream().filter(
-                 o1 -> o1.getId().equals(new ObjectId(taskId)))
-                 .findFirst().get();
-    }
-
     @GetMapping("/testing-sets/{taskId}")
     @PreAuthorize("hasAnyRole('ADMIN','TEACHER')")
     public List<TaskTestingSet> getTaskTestingSets(@PathVariable(value = "taskId") String taskId) {
         return taskService.getItem(new ObjectId(taskId)).getTestingSets();
+    }
+
+    @GetMapping("/users-task/{usersId}/{taskId}")
+    //TODO Максим напишет аннотацию. Доступ имеет админ, учитель и только один ученик
+    public Solution getUsersSolution(@PathVariable(value = "taskId") String taskId, @PathVariable(value = "usersId") String usersId) {
+        return solutionService.getAssignedItems(usersId).stream().filter(
+                o1 -> o1.getId().equals(new ObjectId(taskId)))
+                .findFirst().get();
     }
 
     @PutMapping("/add-testing-set/{taskId}")
