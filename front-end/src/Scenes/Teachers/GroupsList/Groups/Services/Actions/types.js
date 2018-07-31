@@ -1,0 +1,5 @@
+export const ADD_GROUP = 'ADD_GROUP';
+export const DELETE_GROUP = 'DELETE_GROUP';
+export const EDIT_GROUP = 'EDIT_GROUP';
+export const RECEIVE_GROUPSLIST = 'RECEIVE_GROUPSLIST';
+export const ERROR_GROUPSLIST = 'ERROR_GROUPSLIST';

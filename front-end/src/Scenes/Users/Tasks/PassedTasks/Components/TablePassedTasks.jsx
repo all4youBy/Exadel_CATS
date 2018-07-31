@@ -43,6 +43,7 @@ function TablePassedTasks() {
     dataIndex: 'name',
     key: 'name',
     width: 350,
+    className: 'column-break-point',
     render(text, record) {
       return (
         <Link to={`/groupstudentslist/${record.key}`}>{text}</Link>
@@ -53,21 +54,25 @@ function TablePassedTasks() {
     dataIndex: 'theme',
     key: 'theme',
     width: 500,
+    className: 'column-break-point',
   }, {
     title: 'Автор',
     dataIndex: 'author',
     key: 'author',
     width: 500,
+    className: 'column-break-point',
   }, {
     title: 'Дата выполнения',
     dataIndex: 'date',
     key: 'date',
     width: 800,
+    className: 'column-break-point',
   }, {
     title: 'Результат',
     dataIndex: 'result',
     key: 'result',
     width: 200,
+    className: 'column-break-point',
   },
   ];
 

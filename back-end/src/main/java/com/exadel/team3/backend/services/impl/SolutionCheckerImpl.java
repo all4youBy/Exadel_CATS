@@ -27,7 +27,6 @@ class SolutionCheckerImpl implements SolutionChecker {
             throw new ServiceException("Could not verify solution: there's no task with id " + solution.getId());
         }
         Task taskObj = task.get();
-        String message;
         if (taskObj.getType() == TaskTestingType.PASS_ALL) {
             return taskObj.getTestingSets().stream().allMatch( testingSet -> {
                 try {
