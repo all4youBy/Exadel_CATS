@@ -1,0 +1,2 @@
+export const UPDATA_USERS = 'UPDATA_USERS';
+export const RECEIVE_USERS = 'RECEIVE_USERS';

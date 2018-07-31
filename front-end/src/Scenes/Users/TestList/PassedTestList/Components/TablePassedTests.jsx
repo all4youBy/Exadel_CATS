@@ -42,21 +42,25 @@ function TablePassedTests() {
     dataIndex: 'name',
     key: 'name',
     width: 350,
+    className: 'column-break-point',
   }, {
     title: 'Тема',
     dataIndex: 'theme',
     key: 'theme',
     width: 500,
+    className: 'column-break-point',
   }, {
     title: 'Дата выполнения',
     dataIndex: 'date',
     key: 'date',
     width: 800,
+    className: 'column-break-point',
   }, {
     title: 'Результат',
     dataIndex: 'result',
     key: 'result',
     width: 200,
+    className: 'column-break-point',
   },
   ];
 

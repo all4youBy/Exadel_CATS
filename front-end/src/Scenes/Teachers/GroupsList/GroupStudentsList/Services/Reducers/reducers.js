@@ -1,4 +1,5 @@
 import * as types from '../Actions/types';
+import { RECEIVE_LOGINDATA } from '../../../../../LogIn/Services/Actions/types';
 
 const initialState = {
   group: [{
@@ -56,6 +57,8 @@ const groupStudentsList = (state = initialState, action) => {
       });
       return { group: students };
     }
+    case RECEIVE_LOGINDATA:
+      return { ...state, data: action.payload };
     default:
       return state;
   }

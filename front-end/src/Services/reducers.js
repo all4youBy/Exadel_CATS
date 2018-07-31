@@ -9,6 +9,10 @@ import teachers from '../Scenes/Registration/Services/Reducers/teachers';
 import app from '../Main/Services/Reducers/reducers';
 import addTask from '../Scenes/Teachers/Tasks/AddTask/Services/Reducers/reducers';
 import createGroup from '../Scenes/Teachers/GroupsList/GroupCreation/Services/Reducers/reducers';
+import requestsUsers from '../Scenes/Admin/AccessRequestList/Services/Reducers/reducers';
+import testInformation from '../Scenes/Teachers/Tests/AssignTest/Services/Reducers/reducers';
+import allGroups from '../Scenes/Teachers/GroupsList/Groups/Services/Reducers/reducers';
+
 
 const reducers = combineReducers({
   projectInformation,
@@ -20,6 +24,9 @@ const reducers = combineReducers({
   routing: routerReducer,
   app,
   addTask,
+  requestsUsers,
+  testInformation,
+  allGroups,
 });
 
 export default reducers;
