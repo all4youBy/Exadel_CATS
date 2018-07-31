@@ -1,7 +1,7 @@
 import React from 'react';
 import 'antd/dist/antd.css';
 import './TableAllTasks.scss';
-import { Table } from 'antd';
+import { Table, Tag } from 'antd';
 import ButtonEditTask from './ButtonEditTask';
 import ButtonAssignTask from '../../../../../Components/ButtonAssignTask';
 import ButtonDeleteStudent from '../../../GroupsList/GroupStudentsList/Components/ButtonDeleteStudent';
@@ -52,12 +52,16 @@ const columns = [{
   ),
 }];
 
+let tags = ['aaaa', 'ssss', 'ffff'];
+
+tags = tags.map(element => <Tag color="blue">{element}</Tag>);
+
 const data = [];
 for (let i = 1; i <= 20; i += 1) {
   data.push({
     key: `${i}`,
     name: `Задача ${i}`,
-    theme: `Тема ${i}`,
+    theme: tags,
     time: `${i} мин`,
   });
 }

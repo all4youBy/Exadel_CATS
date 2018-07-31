@@ -26,9 +26,9 @@ class AddTask extends React.PureComponent {
       <div className="add-task-container">
         <TextArea className="input-task-name" placeholder="Название задачи" autosize />
         <TextArea className="input-task-desc" placeholder="Описание задачи" autosize={{ minRows: 7 }} />
-        <TreeWithTags tags={tags} deleteTag={deleteTag} addTag={addTag}/>
+        <div className="tree-with-tags"><TreeWithTags tags={tags} deleteTag={deleteTag} addTag={addTag}/></div>
         <InputOutputSet addElem={addElem} testSet={testSet}/>
-        <Button type="primary" className="task-upload-button">Отправить</Button>
+        <Button type="primary" className="button-table-with-border task-upload-button">Отправить</Button>
       </div>
     );
   }

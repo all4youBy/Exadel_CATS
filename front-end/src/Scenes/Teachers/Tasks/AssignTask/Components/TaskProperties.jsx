@@ -1,8 +1,18 @@
 import React from 'react';
 import { Form, Input, Button } from 'antd';
-import './TestProperties.scss';
+import './TaskProperties.scss';
 import PropTypes from 'prop-types';
+import { connect } from 'react-redux';
+// import TimeInputGroup from './TimeInputGroup';
 import TreeWithTags from '../../../../../Components/TreeWithTags';
+import {
+  addTestTag,
+  deleteTestTag,
+  addStudentToList,
+  deleteStudentFromList,
+  fetchStudentListForTask,
+  fetchGroupsListForTask,
+} from '../Services/Actions/actions';
 import StudentsList from '../../../../../Components/StudentsList';
 import CurrentGroupList from '../../../../../Components/CurrentGroupList';
 
@@ -33,7 +43,7 @@ const tailFormItemLayout = {
   },
 };
 
-class TestProperties extends React.Component {
+class TaskProperties extends React.Component {
   static propTypes = {
     tags: PropTypes.arrayOf(PropTypes.string).isRequired,
     handleDeleteTestTag: PropTypes.func.isRequired,
@@ -44,10 +54,10 @@ class TestProperties extends React.Component {
     addStudent: PropTypes.func.isRequired,
     delStudent: PropTypes.func.isRequired,
     getStudentsData: PropTypes.func.isRequired,
+    getGroupsData: PropTypes.func.isRequired,
     students: PropTypes.arrayOf(PropTypes.object).isRequired,
     error: PropTypes.bool.isRequired,
     groups: PropTypes.arrayOf(PropTypes.object).isRequired,
-    getGroupsData: PropTypes.func.isRequired,
   };
 
   state = {
@@ -75,8 +85,8 @@ class TestProperties extends React.Component {
   render() {
     const {
       handleAddTestTag, handleDeleteTestTag, tags, handleCreateTest, data,
-      addStudent, delStudent, getStudentsData, students, error, groups,
-      getGroupsData,
+      addStudent, delStudent, getStudentsData, students, error, getGroupsData,
+      groups,
     } = this.props;
     const { form } = this.props;
     const {
@@ -85,6 +95,7 @@ class TestProperties extends React.Component {
       secondsTimeOpenTest, hoursPassTimeTest, minutesPassTimeTest,
       secondsPassTimeTest,
     } = this.state;
+
     const { getFieldDecorator } = form;
     const handleSubmit = (e) => {
       e.preventDefault();
@@ -116,14 +127,14 @@ class TestProperties extends React.Component {
             rules: [
               {
                 required: true,
-                message: 'Пожалуйста, введите название теста!',
+                message: 'Пожалуйста, введите название задачи!',
               },
             ],
           })(
             <TextArea
               name="nameTest"
               className="input-task-name"
-              placeholder="Название теста"
+              placeholder="Название задачи"
               autosize
               onBlur={this.setField}
             />,
@@ -140,33 +151,8 @@ class TestProperties extends React.Component {
         </div>
         <Form className="parent-form">
           <div className="left-group-form-items">
-            <FormItem {...formItemLayout} label="Кол. вопросов" className="form-item">
-              {getFieldDecorator('Количество вопросов', {
-                rules: [
-                  {
-                    pattern: /[1-9]/,
-                    message: 'Введите число!',
-                  },
-                  {
-                    max: 4,
-                    message: 'Введите 4 цифры!',
-                  },
-                  {
-                    required: true,
-                    message: 'Пожалуйста, введите количество вопросов!',
-                  },
-                ],
-              })(
-                <Input
-                  className="input-count-questions"
-                  name="countQuestionsTest"
-                  onBlur={this.setField}
-                />,
-              )
-              }
-            </FormItem>
-            <FormItem {...formItemLayout} label="Время откр." className="form-item">
-              {getFieldDecorator('timeOpenTest', {
+            <FormItem {...formItemLayout} label="Время сдачи" className="form-item">
+              {getFieldDecorator('timePassTask', {
                 rules: [
                   {
                     pattern: /^[0-5]\d/,
@@ -174,7 +160,7 @@ class TestProperties extends React.Component {
                   },
                   {
                     required: true,
-                    message: 'Пожалуйста, введите время открытия теста!',
+                    message: 'Пожалуйста, введите время сдачи задачи!',
                   },
                   {
                     max: 2,
@@ -214,151 +200,8 @@ class TestProperties extends React.Component {
                 </div>,
               )}
             </FormItem>
-            <FormItem {...formItemLayout} label="Дата откр." className="form-item">
-              {getFieldDecorator('passDate', {
-                rules: [
-                  {
-                    pattern: /[0-9]/,
-                    message: 'Введите число!',
-                  },
-                  {
-                    required: true,
-                    message: 'Пожалуйста, введите дaту открытия!',
-                  },
-                ],
-              })(
-                <div className="parent-group-input">
-                  <Input
-                    className="input-hour-lead-time"
-                    name="daysPassDateTest"
-                    placeholder="00"
-                    onBlur={this.setField}
-                  />
-                  <Input
-                    className="text-between-input"
-                    placeholder="."
-                    disabled
-                  />
-                  <Input
-                    className="input-min-lead-time"
-                    name="mothsPassDateTest"
-                    placeholder="00"
-                    onBlur={this.setField}
-                  />
-                  <Input
-                    className="text-between-input"
-                    placeholder="."
-                    disabled
-                  />
-                  <Input
-                    className="input-years-lead-time"
-                    name="yearsPassDateTest"
-                    placeholder="0000"
-                    onBlur={this.setField}
-                  />
-                </div>,
-              )}
-            </FormItem>
           </div>
           <div className="right-group-form-items">
-            <FormItem {...formItemLayout} label="Время вып." className="form-item">
-              {getFieldDecorator('leadTime', {
-                rules: [
-                  {
-                    pattern: /^[0-5]\d/,
-                    message: 'Введите число!',
-                  },
-                  {
-                    required: true,
-                    message: 'Пожалуйста, введите время выполнения!',
-                  },
-                  {
-                    max: 2,
-                    message: 'Вы можете ввести не более 2 символов',
-                  },
-                ],
-              })(
-                <div className="parent-group-input">
-                  <Input
-                    className="input-hour-lead-time"
-                    name="hoursLeadTimeTest"
-                    placeholder="00"
-                    onBlur={this.setField}
-                  />
-                  <Input
-                    className="text-between-input"
-                    placeholder=":"
-                    disabled
-                  />
-                  <Input
-                    className="input-min-lead-time"
-                    name="minutesLeadTimTest"
-                    placeholder="00"
-                    onBlur={this.setField}
-                  />
-                  <Input
-                    className="text-between-input"
-                    placeholder=":"
-                    disabled
-                  />
-                  <Input
-                    className="input-second-lead-time"
-                    name="secondsLeadTimeTest"
-                    placeholder="00"
-                    onBlur={this.setField}
-                  />
-                </div>,
-              )}
-            </FormItem>
-            <FormItem {...formItemLayout} label="Время сдачи" className="form-item">
-              {getFieldDecorator('passTime', {
-                rules: [
-                  {
-                    pattern: /^[0-5]\d/,
-                    message: 'Введите число!',
-                  },
-                  {
-                    required: true,
-                    message: 'Пожалуйста, введите время сдачи!',
-                  },
-                  {
-                    max: 2,
-                    message: 'Вы можете ввести не более 2 символов',
-                  },
-                ],
-              })(
-                <div className="parent-group-input">
-                  <Input
-                    className="input-hour-lead-time"
-                    name="hoursPassTimeTest"
-                    placeholder="00"
-                    onBlur={this.setField}
-                  />
-                  <Input
-                    className="text-between-input"
-                    placeholder=":"
-                    disabled
-                  />
-                  <Input
-                    className="input-min-lead-time"
-                    name="minutesPassTimeTest"
-                    placeholder="00"
-                    onBlur={this.setField}
-                  />
-                  <Input
-                    className="text-between-input"
-                    placeholder=":"
-                    disabled
-                  />
-                  <Input
-                    className="input-second-lead-time"
-                    name="secondsPassTimeTest"
-                    placeholder="00"
-                    onBlur={this.setField}
-                  />
-                </div>,
-              )}
-            </FormItem>
             <FormItem {...formItemLayout} label="Дата сдачи" className="form-item">
               {getFieldDecorator('passDate', {
                 rules: [
@@ -433,5 +276,37 @@ class TestProperties extends React.Component {
   }
 }
 
-const WrappedTestPropertiesForm = Form.create()(TestProperties);
-export default WrappedTestPropertiesForm;
+function mapStateToProps(state) {
+  return {
+    tags: state.taskInformation.tags,
+    test: state,
+    students: state.taskInformation.students,
+    data: state.taskInformation.data,
+    error: state.taskInformation.error,
+    groups: state.taskInformation.groups,
+  };
+}
+
+const mapDispatchToProps = dispatch => ({
+  handleAddTestTag: (tag) => {
+    dispatch(addTestTag(tag));
+  },
+  handleDeleteTestTag: (tag) => {
+    dispatch(deleteTestTag(tag));
+  },
+  addStudent: (student) => {
+    dispatch(addStudentToList(student));
+  },
+  delStudent: (student) => {
+    dispatch(deleteStudentFromList(student));
+  },
+  getStudentsData: () => {
+    dispatch(fetchStudentListForTask());
+  },
+  getGroupsData: () => {
+    dispatch(fetchGroupsListForTask());
+  },
+});
+
+const WrappedTestPropertiesForm = Form.create()(TaskProperties);
+export default connect(mapStateToProps, mapDispatchToProps)(WrappedTestPropertiesForm);

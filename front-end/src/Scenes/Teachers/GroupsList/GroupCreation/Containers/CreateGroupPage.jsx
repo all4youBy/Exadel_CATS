@@ -1,4 +1,5 @@
 /* eslint-disable no-restricted-globals */
+/* eslint-disable import/no-cycle */
 import React from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
@@ -7,11 +8,19 @@ import './CreategroupPage.scss';
 import SectionTree from '../../../../../Components/SectionTree';
 import { addTaskTag, deleteTaskTag } from '../../../Tasks/AddTask/Services/Actions/actions';
 import EditableTagGroup from '../../../../../Components/AddTaskTags';
-import { addStudentToGroup, deleteStudentFromGroup, fetchStudentList, postGroup } from '../Services/Actions/actions';
+import {
+  addStudentToGroup,
+  deleteStudentFromGroup,
+  fetchStudentList,
+  fetchGroupsList,
+  postGroup,
+} from '../Services/Actions/actions';
 import CurrentGroupList from '../../../../../Components/CurrentGroupList';
 import StudentsList from '../../../../../Components/StudentsList';
+// import StudentsList from '../../../../../Components/StudentsList';
 
-const { Search } = Input;
+const { TextArea } = Input;
+
 
 class CreateGroupPage extends React.PureComponent {
   static propTypes = {
@@ -21,11 +30,13 @@ class CreateGroupPage extends React.PureComponent {
     addStudent: PropTypes.func.isRequired,
     delStudent: PropTypes.func.isRequired,
     students: PropTypes.arrayOf(PropTypes.object).isRequired,
-    getStudentData: PropTypes.func.isRequired,
+    getStudentsData: PropTypes.func.isRequired,
     data: PropTypes.arrayOf(PropTypes.object).isRequired,
     error: PropTypes.string.isRequired,
     successMessage: PropTypes.string.isRequired,
     sendGroupInfo: PropTypes.func.isRequired,
+    getGroupsData: PropTypes.func.isRequired,
+    groups: PropTypes.arrayOf(PropTypes.object).isRequired,
   };
 
   state = {
@@ -44,40 +55,46 @@ class CreateGroupPage extends React.PureComponent {
   render() {
     const {
       addTag, deleteTag, tags, addStudent, delStudent, students,
-      getStudentData, data, error, sendGroupInfo, successMessage,
+      getStudentsData, data, error, sendGroupInfo, successMessage,
+      getGroupsData, groups,
     } = this.props;
+    console.log(addStudent, data, error);
     if (successMessage) {
       message.success('Группа успешно создана');
       location.reload();
     }
+
     return (
       <div className="create-group-container">
-        <Input
+        <TextArea
           className="group-name-input"
           placeholder="Название группы"
+          autosize
           onBlur={(value) => {
             this.setState({ group: value.target.value });
           }}
         />
-        <div className="tags-container">
+        <div className="tags-container-create-group">
           <SectionTree addTag={addTag}/>
-          <Search
-            placeholder="input search text"
-            onSearch={value => console.log(value)}
-            enterButton
-          />
+          <EditableTagGroup tags={tags} deleteTag={deleteTag} addTag={addTag}/>
         </div>
-        <EditableTagGroup tags={tags} deleteTag={deleteTag} addTag={addTag}/>
         <div className="student-list-container ">
-          <StudentsList data={data} addStudent={addStudent} getData={getStudentData} error={error}/>
-          <CurrentGroupList students={students} delStudent={delStudent}/>
+          <StudentsList
+            students={data}
+            addStudent={addStudent}
+            getStudentsData={getStudentsData}
+            getGroupsData={getGroupsData}
+            error={error}
+            groups={groups}
+          />
+          <CurrentGroupList className="current-group-list" students={students} delStudent={delStudent}/>
         </div>
         <Button
-          type="primary"
-          className="create-group-button"
           onClick={() => {
             sendGroupInfo(this.getGroupData());
           }}
+          size="small"
+          className="create-group-button"
         >Создать группу
         </Button>
       </div>
@@ -92,9 +109,17 @@ function mapStateToProps(state) {
     data: state.createGroup.data,
     error: state.createGroup.error,
     successMessage: state.createGroup.successMessage,
+    groups: state.createGroup.groups,
   };
 }
 
+// /* <StudentsList
+//   className="student-list"
+//   data={data}
+//   addStudent={addStudent}
+//   getData={getStudentData}
+//   error={error}
+// /> */
 const mapDispatchToProps = dispatch => ({
   addTag: (tag) => {
     dispatch(addTaskTag(tag));
@@ -108,11 +133,14 @@ const mapDispatchToProps = dispatch => ({
   delStudent: (student) => {
     dispatch(deleteStudentFromGroup(student));
   },
-  getStudentData: () => {
+  getStudentsData: () => {
     dispatch(fetchStudentList());
   },
   sendGroupInfo: (data) => {
     dispatch(postGroup(data));
+  },
+  getGroupsData: () => {
+    dispatch(fetchGroupsList());
   },
 });
 

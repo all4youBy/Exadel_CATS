@@ -26,6 +26,7 @@ import PageCheckTest from '../../Scenes/Teachers/Tests/CheckTest/Containers/Page
 import AddTaskPage from '../../Scenes/Teachers/Tasks/AddTask/Containers/AddTaskPage';
 import CreateGroupPage from '../../Scenes/Teachers/GroupsList/GroupCreation/Containers/CreateGroupPage';
 import Loading from '../../Components/Loading';
+import PageAssignTask from '../../Scenes/Teachers/Tasks/AssignTask/Containers/PageAssignTask';
 
 class Main extends React.Component {
   static propTypes = {
@@ -42,6 +43,7 @@ class Main extends React.Component {
       (<Route exact path="/teachersmaterials" component={Materials}/>),
       (<Route exact path="/materials" component={Materials}/>),
       (<Route exact path="/checktest" component={PageCheckTest}/>),
+      (<Route exact path="/assigntask" component={PageAssignTask}/>),
     ];
   }
 
@@ -56,7 +58,8 @@ class Main extends React.Component {
             </div>
             <div className="switch-div">
               <Switch>
-                <Route exact path="/assignedtestlist" component={PageAssignedTestList}/>
+                <Route exact path="/assignedtasks" component={PageAssignedTasks}/>
+                <Route exact path="/assignedtests/:userId" component={PageAssignedTestList}/>
                 <Route exact path="/passedtestlist" component={PagePassedTestList}/>
                 <Route exact path="/passedtasks" component={PagePassedTasks}/>
                 <Route exact path="/test" component={Test}/>
@@ -79,8 +82,10 @@ class Main extends React.Component {
                 <Route exact path="/creategroup" component={CreateGroupPage}/>
                 <Route exact path="/assignedtasks" component={PageAssignedTasks}/>
                 <Route exact path="/assigntest" component={PageAssignTest}/>
+                <Route exact path="/assigntest/:groupName" component={PageAssignTest}/>
                 <Route exact path="/checktests" component={PageListCheckTests}/>
                 <Route exact path="/loading" component={Loading}/>
+                <Route exact path="/groups/:groupName" component={PageGroupStudentsList}/>
                 <Redirect to="/"/>
               </Switch>
             </div>
@@ -96,7 +101,7 @@ class Main extends React.Component {
               <Switch>
                 <Route exact path="/accessrequestlist" component={AccessRequestList}/>
                 {this.renderCommonRoutes()}
-                <Redirect to="/accessrequestlist"/>
+                <Redirect to="/"/>
               </Switch>
             </div>
           </div>
@@ -120,7 +125,6 @@ class Main extends React.Component {
     return (
       <div className="main-content">
         <PageHeader/>
-
         {this.renderSwitch()}
         <PageFooter/>
       </div>

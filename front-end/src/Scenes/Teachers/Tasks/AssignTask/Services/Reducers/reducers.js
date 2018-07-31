@@ -9,36 +9,23 @@ const initialState = {
     addedStudents: [],
   },
   error: '',
-  users: '',
 };
 
-const testInformation = (state = initialState, action) => {
+const taskInformation = (state = initialState, action) => {
   switch (action.type) {
-    case types.CREATE_TEST: {
-      return {
-        ...state,
-        ...action.payload,
-      };
-    }
-    case types.RECEIVE_STUDENTS_LIST_FOR_TEST: {
+    case types.RECEIVE_STUDENTS_LIST_FOR_TASK: {
       return {
         ...state,
         data: [...state.data, ...action.payload],
       };
     }
-    case types.RECEIVE_ASSIGN_USERS_FROM_GROUP: {
-      return {
-        ...state,
-        users: [...state.users, ...action.payload],
-      };
-    }
-    case types.RECEIVE_GROUPS_LIST_FOR_TEST: {
+    case types.RECEIVE_GROUPS_LIST_FOR_TASK: {
       return {
         ...state,
         groups: [...state.groups, ...action.payload],
       };
     }
-    case types.ADD_STUDENT_TO_LIST: {
+    case types.ADD_STUDENT_TO_LIST_TASK: {
       if (typeof action.payload === 'string') {
         if (state.students.groups.includes(action.payload)) {
           return state;
@@ -68,7 +55,7 @@ const testInformation = (state = initialState, action) => {
         },
       };
     }
-    case types.DELETE_STUDENT_FROM_LIST: {
+    case types.DELETE_STUDENT_FROM_LIST_TASK: {
       let flag = false;
       state.students.addedStudents.forEach((element, index) => {
         if (`${element.lastName} ${element.firstName}` === action.payload) {
@@ -99,7 +86,7 @@ const testInformation = (state = initialState, action) => {
         },
       };
     }
-    case types.ADD_TEST_TAG: {
+    case types.ADD_TASK_TAG: {
       if (state.tags.includes(action.payload) || action.payload.length === 0) {
         return state;
       }
@@ -111,23 +98,18 @@ const testInformation = (state = initialState, action) => {
         ],
       };
     }
-    case types.DELETE_TEST_TAG: {
+    case types.DELETE_TASK_TAG: {
       return {
         ...state,
         tags: state.tags.filter(tag => tag !== action.payload),
       };
     }
-    case types.ERROR_STUDENTS_LIST_FOR_TEST:
+    case types.ERROR_STUDENTS_LIST_FOR_TASK:
       return {
         ...state,
         error: action.payload,
       };
-    case types.ERROR_ASSIGN_USERS_FROM_GROUP:
-      return {
-        ...state,
-        error: action.payload,
-      };
-    case types.ERROR_GROUPS_LIST_FOR_TEST:
+    case types.ERROR_GROUPS_LIST_FOR_TASK:
       return {
         ...state,
         error: action.payload,
@@ -138,4 +120,4 @@ const testInformation = (state = initialState, action) => {
   }
 };
 
-export default testInformation;
+export default taskInformation;

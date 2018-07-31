@@ -1,33 +1,7 @@
 import * as types from '../Actions/types';
-import { RECEIVE_LOGINDATA } from '../../../../../LogIn/Services/Actions/types';
 
 const initialState = {
-  group: [{
-    key: '1',
-    number: '1',
-    name: 'Пупкин Василий Иванович',
-    test1: 'Тест 1',
-    test2: 'Тест 2',
-    countTasks: '1',
-    countTests: '1',
-  }, {
-    key: '2',
-    number: '2',
-    name: 'Быков Иван Николаевич',
-    test1: 'Тест 1',
-    test2: 'Тест 2',
-    countTasks: '2',
-    countTests: '2',
-  }, {
-    key: '3',
-    number: '3',
-    name: 'Вишняков Василий Петрович',
-    test1: 'Тест 1',
-    test2: 'Тест 2',
-    countTasks: '3',
-    countTests: '3',
-  },
-  ],
+  group: [],
 };
 
 const groupStudentsList = (state = initialState, action) => {
@@ -57,10 +31,16 @@ const groupStudentsList = (state = initialState, action) => {
       });
       return { group: students };
     }
-    case RECEIVE_LOGINDATA:
-      return { ...state, data: action.payload };
+    case types.RECEIVE_STUDENTS_BY_GROUP:
+      return { ...state, group: action.payload };
     default:
       return state;
+
+    case types.ERROR_STUDENTS_BY_GROUP:
+      return {
+        ...state,
+        error: action.payload,
+      };
   }
 };
 

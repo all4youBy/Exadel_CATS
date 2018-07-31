@@ -1,4 +1,4 @@
-.button-table{
+.button-table {
   color: #04233d;
   height: 32px;
   border: none;
@@ -10,5 +10,26 @@
 }
 
 .students-list {
+  width: 100%;
+}
+
+.search-student-list {
+  background-color: #04233d;
+}
+
+.student-list-content {
+  width: 50%;
+}
+
+.parent-radio-button {
+  width: 100%;
+  margin-top: 7px;
+}
+
+.parent-radio-button-groups {
+  width: 50%;
+}
+
+.parent-radio-button-students {
   width: 50%;
 }

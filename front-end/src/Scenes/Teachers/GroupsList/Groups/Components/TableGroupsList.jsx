@@ -10,7 +10,7 @@ import ButtonDeleteGroup from './ButtonDeleteGroup';
 import ButtonAssignTest from '../../../../../Components/ButtonAssignTest';
 import ButtonCreateGroup from './ButtonCreateGroup';
 import InputSearch from './InputSearch';
-import { editGroup, addGroup, deleteGroup, fetchGroups } from '../Services/Actions/actions';
+import { addGroup, deleteGroup, fetchGroups } from '../Services/Actions/actions';
 import Loading from '../../../../../Components/Loading';
 
 class TableGroupsList extends React.Component {
@@ -18,7 +18,7 @@ class TableGroupsList extends React.Component {
     handleGroupAdd: PropTypes.func.isRequired,
     handleGroupDelete: PropTypes.func.isRequired,
     getGroups: PropTypes.func.isRequired,
-    error: PropTypes.bool.isRequired,
+    error: PropTypes.string.isRequired,
     groups: PropTypes.arrayOf.isRequired,
   };
 
@@ -30,29 +30,19 @@ class TableGroupsList extends React.Component {
   render() {
     const { handleGroupAdd, handleGroupDelete, error, groups } = this.props;
     if (error) {
-      message.error('Не удалось загрузить список групп');
+      message.error(error);
       return <Loading/>;
     }
     const columns = [{
       title: ' ',
       dataIndex: 'name',
       key: 'name',
-      width: 350,
+      width: 800,
       render(text) {
         return (
-          <Link className="link-name-group" to="/groupstudentslist">{text}</Link>
+          <Link className="link-name-group" to={`/groups/${text}`} >{text}</Link>
         );
       },
-    }, {
-      title: ' ',
-      dataIndex: 'course',
-      key: 'course',
-      width: 500,
-    }, {
-      title: ' ',
-      dataIndex: 'date',
-      key: 'date',
-      width: 800,
     }, {
       title: ' ',
       dataIndex: 'button',
@@ -62,12 +52,12 @@ class TableGroupsList extends React.Component {
         return (
           <div className="buttons-group-table">
             <div className="parent-button-edit-group"><ButtonEditGroup/></div>
-            <div className="parent-button-assign-test"><ButtonAssignTest/></div>
+            <div className="parent-button-assign-test"><ButtonAssignTest groupName={record.name}/></div>
             <div className="parent-button-assign-task"><ButtonAssignTask/></div>
             <div className="parent-button-delete-group">
               <ButtonDeleteGroup
                 onGroupDelete={handleGroupDelete}
-                data={record.key}
+                data={record.name}
               />
             </div>
           </div>
@@ -76,7 +66,6 @@ class TableGroupsList extends React.Component {
     },
     ];
 
-    console.log(groups, 733);
     const data = [];
     for (let i = 0; i < groups.length; i += 1) {
       data.push({
@@ -87,7 +76,7 @@ class TableGroupsList extends React.Component {
       });
     }
     columns[0].title = <InputSearch/>;
-    columns[3].title = <ButtonCreateGroup onAddGroup={handleGroupAdd}/>;
+    columns[1].title = <ButtonCreateGroup onAddGroup={handleGroupAdd}/>;
     return (
       <Table
         columns={columns}
@@ -107,9 +96,6 @@ function mapStateToProps(state) {
 const mapDispatchToProps = dispatch => ({
   handleGroupAdd: (group) => {
     dispatch(addGroup(group));
-  },
-  handleGroupEdit: (group) => {
-    dispatch(editGroup(group));
   },
   handleGroupDelete: (key) => {
     dispatch(deleteGroup(key));

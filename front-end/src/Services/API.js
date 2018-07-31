@@ -52,6 +52,20 @@ const API = {
         .catch(() => dispatch(errorProject(receiveAction, errorMessage)));
     };
   },
+  deleteRequest(path, data, receiveAction, errorMessage) {
+    const url = `${urlServer}${path}`;
+    return (dispatch, getState) => {
+      dispatch(isLoading(true));
+      const token = API.getTokenFromStore(getState());
+      API.sendRequest(token, url, {
+        method: 'DELETE',
+        body: JSON.stringify(data),
+      })
+        .then(response => response.json())
+        .then(items => dispatch(getData(receiveAction, items)))
+        .catch(() => dispatch(errorProject(receiveAction, errorMessage)));
+    };
+  },
   get(path, receiveAction, errorMessage) {
     const url = `${urlServer}${path}`;
     return (dispatch, getState) => {

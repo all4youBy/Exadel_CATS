@@ -37,5 +37,17 @@ export function deleteStudentFromList(student) {
 }
 
 export function fetchStudentListForTest() {
-  return (API.get('users/students', 'studentList_for_test', 'Не удалось загрузить список студентов'));
+  return (API.get('users/students', 'students_list_for_test', 'Не удалось загрузить список студентов'));
+}
+
+export function fetchGroupsListForTest() {
+  return (API.get('users/groups', 'groups_list_for_test', 'Не удалось загрузить список групп'));
+}
+
+export function fetchUsersFromGroup(groupName) {
+  return (API.get(
+    `users/find-by-group?group=${groupName}`,
+    'assign_test_users_from_group',
+    'Не удалось загрузить список групп',
+  ));
 }

@@ -42,7 +42,7 @@ export default class EditableTagGroup extends React.Component {
     const { tags, deleteTag } = this.props;
     const { inputVisible, inputValue } = this.state;
     const tagList = (tags || []).map((item, i) => (
-      <Tag key={item} closable afterClose={() => deleteTag(item)}>{ tags[i] }</Tag>
+      <Tag color="blue" key={item} closable afterClose={() => deleteTag(item)}>{ tags[i] }</Tag>
     ));
     return (
       <div style={{ marginLeft: '50px' }}>
@@ -62,6 +62,7 @@ export default class EditableTagGroup extends React.Component {
         {!inputVisible && (
           <Tag
             onClick={this.showInput}
+            color="blue"
             style={{ background: '#fff', borderStyle: 'dashed' }}
           >
             <Icon type="plus" /> New Tag

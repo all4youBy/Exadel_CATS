@@ -5,18 +5,23 @@
   align-items: center;
   .group-name-input {
     text-align: center;
-    width: 90%;
+    width: 95%;
+    border: none;
+    font-size: 20px;
+    margin-top: 10px;
+    margin-bottom: 10px;
   }
 
   .section-tree {
     width: 100%;
   }
 
-  .tags-container {
+  .tags-container-create-group {
     display: flex;
     flex-direction: row;
-    width: 90%;
+    width: 95%;
     margin-top: 25px;
+    margin-bottom: 25px;
     .tree-container {
       min-width: 40%;
     }
@@ -24,10 +29,21 @@
   .student-list-container {
     display: flex;
     flex-direction: row;
-    width: 100%;
+    width: 95%;
+    justify-content: space-between;
   }
 
   .create-group-button {
-    margin: 10px;
+    margin: 20px;
+    height: 32px;
+    background-color: #04233d;
+    color: #fff;
+    border-color: #04233d;
+  }
+  .student-list {
+    width: 45%
+  }
+  .current-group-list {
+    width: 45%
   }
 }
