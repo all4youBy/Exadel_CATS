@@ -1,7 +1,9 @@
 package com.exadel.team3.backend.controllers;
 
+import com.exadel.team3.backend.controllers.requests.RegistrationRequest;
 import com.exadel.team3.backend.dto.AuthenticateDTO;
 import com.exadel.team3.backend.entities.User;
+import com.exadel.team3.backend.entities.UserAffiliation;
 import com.exadel.team3.backend.security.AuthenticatedUser;
 import com.exadel.team3.backend.controllers.requests.AuthenticationRequest;
 import com.exadel.team3.backend.security.SecurityUtils;
@@ -9,6 +11,7 @@ import com.exadel.team3.backend.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -35,7 +38,7 @@ public class AuthenticationController {
     @Autowired
     private SecurityUtils securityUtils;
 
-    @PostMapping("/login")
+    @PostMapping(value = "/login",produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> authenticateUser(@RequestBody AuthenticationRequest request){
 
         authenticate(request.getUsername(),request.getPassword());
@@ -46,9 +49,27 @@ public class AuthenticationController {
         return ResponseEntity.ok(new AuthenticateDTO(token,userService.getItem(user.getUsername()),securityUtils));
     }
 
-    @PostMapping("/registration")
-    public ResponseEntity<?> signUpUser(@RequestBody User user){
-        securityUtils.hashUserPassword(user);
+    @PostMapping(value = "/registration",produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> signUpUser(@RequestBody RegistrationRequest request){
+
+        String[] userPassInfo = securityUtils.generateUserPassword();
+//        String userPassword = securityUtils.generateUserPassword()[0];
+        System.out.println(userPassInfo[0]);
+        UserAffiliation userAffiliation = new UserAffiliation(
+                request.getInstitution(),
+                request.getFaculty(),
+                request.getYearTermination(),
+                "",
+                request.getPrimarySkill());
+
+        User user = new User(
+                request.getEmail(),
+                request.getFirstName(),
+                request.getSecondName(),
+                request.getUserRole(),
+                userPassInfo[1]);
+
+        user.setAffiliation(userAffiliation);
         userService.addItem(user);
         return ResponseEntity.status(HttpStatus.OK).body("User created.");
     }

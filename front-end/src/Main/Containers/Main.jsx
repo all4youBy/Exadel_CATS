@@ -1,3 +1,4 @@
+/* eslint-disable react/destructuring-assignment,no-unused-vars,react/prop-types */
 import React from 'react';
 import { connect } from 'react-redux';
 import './Main.scss';
@@ -21,10 +22,11 @@ import AccessRequestList from '../../Scenes/Admin/AccessRequestList';
 import GeneralMenu from '../../Components/GeneralMenu';
 import PageAssignedTasks from '../../Scenes/Users/Tasks/AssignedTasks';
 import PageAssignTest from '../../Scenes/Teachers/Tests/AssignTest';
+import CreateGroupPage from '../../Scenes/Teachers/GroupsList/GroupCreation';
 import PageListCheckTests from '../../Scenes/Teachers/Tests/ListCheckTests';
 import PageCheckTest from '../../Scenes/Teachers/Tests/CheckTest/Containers/PageCheckTest';
+import AddQuestion from '../../Scenes/Teachers/Tests/AddQuestion/Containers/AddQuestion';
 import AddTaskPage from '../../Scenes/Teachers/Tasks/AddTask/Containers/AddTaskPage';
-import CreateGroupPage from '../../Scenes/Teachers/GroupsList/GroupCreation/Containers/CreateGroupPage';
 import Loading from '../../Components/Loading';
 import PageAssignTask from '../../Scenes/Teachers/Tasks/AssignTask/Containers/PageAssignTask';
 
@@ -86,6 +88,7 @@ class Main extends React.Component {
                 <Route exact path="/checktests" component={PageListCheckTests}/>
                 <Route exact path="/loading" component={Loading}/>
                 <Route exact path="/groups/:groupName" component={PageGroupStudentsList}/>
+                <Route exact path="/addquestion" component={AddQuestion}/>
                 <Redirect to="/"/>
               </Switch>
             </div>
@@ -100,6 +103,7 @@ class Main extends React.Component {
             <div className="switch-div">
               <Switch>
                 <Route exact path="/accessrequestlist" component={AccessRequestList}/>
+                <Route exact path="/addquestion" component={AddQuestion}/>
                 {this.renderCommonRoutes()}
                 <Redirect to="/"/>
               </Switch>

@@ -65,7 +65,7 @@ export default class EditableTagGroup extends React.Component {
             color="blue"
             style={{ background: '#fff', borderStyle: 'dashed' }}
           >
-            <Icon type="plus" /> New Tag
+            <Icon type="plus" /> Тема
           </Tag>
         )}
       </div>

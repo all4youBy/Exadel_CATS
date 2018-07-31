@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.time.Duration;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -86,13 +87,17 @@ public class SolutionServiceImpl
 
     @Override
     public Solution storeFile(@NonNull Solution solution,
-                              @NonNull MultipartFile file) throws ServiceException{
-        try (InputStream is = file.getInputStream()) {
-            return storeFile(solution, is, file.getName());
-        } catch (IOException e) {
-            throw new ServiceException(String.format("Could not store file %s for solution %s",
-                    file.getName(), solution.getId()), e);
+                              @NonNull MultipartFile... files) throws ServiceException{
+        solution.setFiles(new ArrayList<>());
+        for (MultipartFile file : files) {
+            try (InputStream is = file.getInputStream()) {
+                solution = storeFile(solution, is, file.getName());
+            } catch (IOException e) {
+                throw new ServiceException(String.format("Could not store file %s for solution %s",
+                        file.getName(), solution.getId()), e);
+            }
         }
+        return solution;
     }
 
     @Override

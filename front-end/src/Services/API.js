@@ -87,7 +87,6 @@ const API = {
     };
   },
   put(path, data, receiveAction, errorMessage) {
-    console.log(data);
     const url = `${urlServer}${path}`;
     return (dispatch, getState) => {
       dispatch(isLoading(true));
