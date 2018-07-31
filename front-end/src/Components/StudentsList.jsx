@@ -9,7 +9,7 @@ export default class StudentList extends React.PureComponent {
     data: PropTypes.arrayOf(PropTypes.object).isRequired,
     addStudent: PropTypes.func.isRequired,
     getData: PropTypes.func.isRequired,
-    error: PropTypes.bool.isRequired,
+    error: PropTypes.string.isRequired,
   };
 
   componentDidMount() {
@@ -53,7 +53,7 @@ export default class StudentList extends React.PureComponent {
                 shape="circle"
                 icon="plus-circle"
                 className="button-table"
-                size="medium"
+                size="default"
                 onClick={() => addStudent(item)}
               />
             </List.Item>

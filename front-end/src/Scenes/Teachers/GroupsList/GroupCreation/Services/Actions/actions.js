@@ -20,7 +20,11 @@ export function fetchStudentList() {
 }
 export function receiveStudentList(data) {
   return {
-    type: 'RECEIVE_STUDENTLIST',
+    type: types.RECEIVE_STUDENTLIST,
     payload: data,
   };
+}
+
+export function postGroup(data) {
+  return (API.post('users', data, 'postgroup', 'Не удалось создать группу'));
 }
