@@ -64,7 +64,7 @@ export default class EditableTagGroup extends React.Component {
             onClick={this.showInput}
             style={{ background: '#fff', borderStyle: 'dashed' }}
           >
-            <Icon type="plus" /> New Tag
+            <Icon type="plus" /> Тема
           </Tag>
         )}
       </div>
