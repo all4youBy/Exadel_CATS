@@ -1,6 +1,7 @@
 package com.exadel.team3.backend.controllers;
 
 import com.exadel.team3.backend.entities.Task;
+import com.exadel.team3.backend.security.annotations.AdminAndTeacherAccess;
 import com.exadel.team3.backend.services.TaskService;
 import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,6 +17,7 @@ public class TaskController {
     TaskService taskService;
 
     @PostMapping(value = "/add",produces = MediaType.APPLICATION_JSON_VALUE)
+    @AdminAndTeacherAccess
     public ResponseEntity<?> addQuestion(@RequestBody Task task){
         Task t = taskService.addItem(task);
         if (t == null) {

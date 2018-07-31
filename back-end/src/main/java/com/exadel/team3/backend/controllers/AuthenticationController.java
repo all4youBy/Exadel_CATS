@@ -51,9 +51,10 @@ public class AuthenticationController {
 
     @PostMapping(value = "/registration",produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> signUpUser(@RequestBody RegistrationRequest request){
-//        securityUtils.hashUserPassword(user);
-        //TODO password generator
-        String userPassword = securityUtils.generateUserPassword();
+
+        String[] userPassInfo = securityUtils.generateUserPassword();
+//        String userPassword = securityUtils.generateUserPassword()[0];
+        System.out.println(userPassInfo[0]);
         UserAffiliation userAffiliation = new UserAffiliation(
                 request.getInstitution(),
                 request.getFaculty(),
@@ -65,7 +66,8 @@ public class AuthenticationController {
                 request.getEmail(),
                 request.getFirstName(),
                 request.getSecondName(),
-                request.getUserRole(),userPassword);
+                request.getUserRole(),
+                userPassInfo[1]);
 
         user.setAffiliation(userAffiliation);
         userService.addItem(user);

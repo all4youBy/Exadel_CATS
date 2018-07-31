@@ -6,12 +6,14 @@ import com.exadel.team3.backend.controllers.requests.RenameGroupRequest;
 import com.exadel.team3.backend.controllers.requests.UpdateUserRightsRequest;
 import com.exadel.team3.backend.entities.User;
 import com.exadel.team3.backend.entities.UserRole;
+import com.exadel.team3.backend.security.annotations.AdminAccess;
+import com.exadel.team3.backend.security.annotations.AdminAndTeacherAccess;
+import com.exadel.team3.backend.security.annotations.UserAccess;
 import com.exadel.team3.backend.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -24,13 +26,13 @@ public class UserController {
     private UserService userService;
 
     @GetMapping(value = "/find-by-group")
-    @PreAuthorize("hasAnyRole('ADMIN','TEACHER')")
+    @AdminAndTeacherAccess
     public List<User> getUsers(@RequestParam(value = "group") String group){
         return userService.getByGroup(group);
     }
 
-    @GetMapping("/groups")
-    @PreAuthorize("hasAnyRole('ADMIN','TEACHER')")
+    @GetMapping(value = "/groups",produces = MediaType.APPLICATION_JSON_VALUE)
+    @AdminAndTeacherAccess
     public ResponseEntity<?> getGroups(){
         List<String> groups = userService.getGroups();
 
@@ -40,7 +42,7 @@ public class UserController {
     }
 
     @GetMapping("/institutions")
-    @PreAuthorize("hasAnyRole('ADMIN','TEACHER')")
+    @AdminAndTeacherAccess
     public ResponseEntity<?> getInstitutions(){
         List<String> institutions = userService.getInstitutions();
 
@@ -50,33 +52,33 @@ public class UserController {
     }
 
     @PutMapping(value = "/groups",produces = MediaType.APPLICATION_JSON_VALUE)
-    @PreAuthorize("hasRole('ADMIN')")
+    @AdminAccess
     public ResponseEntity<?> renameGroup(@RequestBody RenameGroupRequest request){
         userService.renameGroup(request.getUsersId(),request.getOldGroup(),request.getNewGroup());
         return ResponseEntity.ok(String.format("Group %s renamed to %s",request.getOldGroup(),request.getNewGroup()));
     }
 
     @DeleteMapping(value = "/groups", produces = MediaType.APPLICATION_JSON_VALUE)
-    @PreAuthorize("hasRole('ADMIN')")
+    @AdminAccess
     public ResponseEntity<?> deleteGroup(@RequestBody RemoveGroupRequest request){
         userService.removeGroup(request.getUserId(),request.getGroup());
         return ResponseEntity.ok(String.format("Group %s removed.",request.getGroup()));
     }
 
     @GetMapping
-    @PreAuthorize("hasRole('ADMIN')")
+    @AdminAccess
     public List<User> getAllUsers(){
         return userService.getItems();
     }
 
     @GetMapping("/students")
-    @PreAuthorize("hasAnyRole('ADMIN','TEACHER')")
+    @AdminAndTeacherAccess
     public List<User> getAllStudents(){
         return userService.getByRole(UserRole.STUDENT);
     }
 
     @GetMapping("/teachers")
-    @PreAuthorize("hasRole('ADMIN')")
+    @AdminAccess
     public List<User> getAllTeachers(){
         return userService.getByRole(UserRole.TEACHER);
     }
@@ -87,13 +89,16 @@ public class UserController {
     }
 
     @GetMapping("/{email}")
-    @PreAuthorize("hasAnyRole('ADMIN','TEACHER') or #email == authentication.name")
+    @UserAccess
     public User getUser(@PathVariable(value = "email") String email){
         return userService.getItem(email);
     }
 
-    @PutMapping(value = "/update-rights", consumes = "application/json",produces = MediaType.APPLICATION_JSON_VALUE)
-    @PreAuthorize("hasRole('ADMIN')")
+    @PutMapping(
+            value = "/update-rights",
+            consumes = MediaType.APPLICATION_JSON_VALUE,
+            produces = MediaType.APPLICATION_JSON_VALUE)
+    @AdminAccess
     public ResponseEntity<?> updateUserRights(@RequestBody UpdateUserRightsRequest request){
        User user = userService.getItem(request.getEmail());
        if(user == null)
@@ -105,26 +110,26 @@ public class UserController {
     }
 
     @GetMapping("/confirm-users")
-    @PreAuthorize("hasRole('ADMIN')")
+    @AdminAccess
     public ResponseEntity<?> getListOfUnconfirmedUsers(){
         return ResponseEntity.status(HttpStatus.OK).body(userService.getByRole(UserRole.TEACHER_UNCONFIRMED));
     }
 
     @PutMapping(produces = MediaType.APPLICATION_JSON_VALUE)
-    @PreAuthorize("hasRole('ADMIN')")
+    @AdminAccess
     public ResponseEntity<?> updateUser(@RequestBody User user){
         userService.updateItem(user);
         return new ResponseEntity<String>(HttpStatus.OK);
     }
 
     @DeleteMapping
-    @PreAuthorize("hasRole('ADMIN')")
+    @AdminAccess
     public void deleteUser(@RequestBody User user){
         userService.deleteItem(user);
     }
 
-    @PostMapping(produces = "application/json")
-    @PreAuthorize("hasAnyRole('ADMIN','TEACHER')")
+    @PostMapping(produces = MediaType.APPLICATION_JSON_VALUE)
+    @AdminAndTeacherAccess
     public ResponseEntity<?> assignGroup(@RequestBody AssignGroupRequest request) {
         userService.assignGroup(request.getEmails(), request.getGroupId());
         return ResponseEntity.ok(HttpStatus.OK);

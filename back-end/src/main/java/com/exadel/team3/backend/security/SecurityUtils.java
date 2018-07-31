@@ -15,6 +15,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
+import java.lang.reflect.Array;
 import java.nio.charset.Charset;
 import java.time.LocalDateTime;
 import java.util.*;
@@ -94,9 +95,9 @@ public class SecurityUtils {
 //        user.setPasswordHash(hashPass);
 //    }
 
-    public String generateUserPassword(){
+    public String[] generateUserPassword(){
         String generatedString = generateRandomString(PASS_STRING_LENGTH);
-        return encoder.encode(generatedString);
+        return new String[]{generatedString,encoder.encode(generatedString)};
     }
 
     private String generateRandomString(int length){

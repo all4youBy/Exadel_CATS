@@ -17,10 +17,10 @@ public class TestGenerationRequest {
     private String userId;
     private String title;
 
-    @JsonFormat(shape = JsonFormat.Shape.STRING,pattern = "yyyy-dd-MM")
+    @JsonFormat(shape = JsonFormat.Shape.STRING,pattern = "yyyy-dd-MM  HH:mm:ss")
     private LocalDateTime start;
 
-    @JsonFormat(shape = JsonFormat.Shape.STRING,pattern = "yyyy-dd-MM")
+    @JsonFormat(shape = JsonFormat.Shape.STRING,pattern = "yyyy-dd-MM  HH:mm:ss")
     private LocalDateTime deadline;
 
     @JsonProperty("topics")

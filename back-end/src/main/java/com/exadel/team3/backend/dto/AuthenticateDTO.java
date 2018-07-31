@@ -15,6 +15,10 @@ public class AuthenticateDTO{
 
     @NonNull
     @Getter
+    private String email;
+
+    @NonNull
+    @Getter
     private String firstName;
 
     @NonNull
@@ -34,6 +38,7 @@ public class AuthenticateDTO{
 
     public AuthenticateDTO (String token,User user,SecurityUtils securityUtils){
         this(token,
+                user.getEmail(),
                 user.getFirstName(),
                 user.getLastName(),
                 user.getRole().toString(),
@@ -42,6 +47,7 @@ public class AuthenticateDTO{
     }
 
     private AuthenticateDTO(String token,
+                            String email,
                             String firstName,
                             String lastName,
                             String role,
@@ -49,6 +55,7 @@ public class AuthenticateDTO{
                             String tokenExpiration){
 
         this.token = token;
+        this.email = email;
         this.firstName = firstName;
         this.lastName = lastName;
         this.tokenCreatedTime = tokenCreatedTime;
