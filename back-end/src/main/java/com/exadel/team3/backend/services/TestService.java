@@ -10,7 +10,7 @@ import java.util.List;
 
 import com.exadel.team3.backend.entities.Test;
 
-public interface TestService  extends AssignableService<Test> {
+public interface TestService extends AssignableService<Test> {
 
     Test generateTestForUser(String userId,
                              String title,
@@ -18,10 +18,10 @@ public interface TestService  extends AssignableService<Test> {
                              LocalDateTime deadline,
                              Collection<ObjectId> topicIds,
                              int questionsCount,
-                             String assignedBy);
+                             String assignedBy) throws ServiceException;
 
     Test generateTestForUser(String userId,
-                             ObjectId topicId);
+                             ObjectId topicId) throws ServiceException;
 
     List<Test> generateTestsForGroup(String group,
                                String title,
@@ -29,11 +29,11 @@ public interface TestService  extends AssignableService<Test> {
                                LocalDateTime deadline,
                                Collection<ObjectId> topicIds,
                                int questionsCount,
-                               String assignedBy);
+                               String assignedBy) throws ServiceException;
 
-    Test submitTest(ObjectId id);
-    Test submitAnswer(TestItemDTO answeredItem);
-    Test submitManualAnswerCheck(TestItemDTO checkedItem);
+    Test submitTest(ObjectId id) throws ServiceException;
+    Test submitAnswer(TestItemDTO answeredItem) throws ServiceException;
+    Test submitManualAnswerCheck(TestItemDTO checkedItem) throws ServiceException;
 
-    List<TestItemDTO> getAnswersForManualCheck(String assignedBy);
+    List<TestItemDTO> getAnswersForManualCheck(String assignedBy) throws ServiceException;
 }

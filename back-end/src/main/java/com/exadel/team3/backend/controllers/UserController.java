@@ -1,7 +1,9 @@
 package com.exadel.team3.backend.controllers;
 
+import com.exadel.team3.backend.controllers.requests.AssignGroupRequest;
+import com.exadel.team3.backend.controllers.requests.UpdateUserRightsRequest;
 import com.exadel.team3.backend.entities.User;
-import com.exadel.team3.backend.security.SecurityUtils;
+import com.exadel.team3.backend.entities.UserRole;
 import com.exadel.team3.backend.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -16,43 +18,81 @@ import java.util.List;
 public class UserController {
 
     @Autowired
-    private SecurityUtils securityUtils;
-
-    @Autowired
     private UserService userService;
 
-    @PostMapping("/registration")
-    public ResponseEntity<?> signUpUser(@RequestBody User user){
-        securityUtils.hashUserPassword(user);
-        userService.addItem(user);
-        return ResponseEntity.status(HttpStatus.OK).body("User created.");
-    }
-    @GetMapping("/{group}")
+    @GetMapping("/find-by-group")
     @PreAuthorize("hasAnyRole('ADMIN','TEACHER')")
-    public List<User> getUsers(@PathVariable String group){
+    public List<User> getUsers(@RequestParam(value = "group") String group){
         return userService.getByGroup(group);
     }
 
+    @GetMapping
+    @PreAuthorize("hasRole('ADMIN')")
+    public List<User> getAllUsers(){
+        return userService.getItems();
+    }
+
+    @GetMapping("/students")
+    @PreAuthorize("hasAnyRole('ADMIN','TEACHER')")
+    public List<User> getAllStudents(){
+        return userService.getByRole(UserRole.STUDENT);
+    }
+
+    @GetMapping("/teachers")
+    @PreAuthorize("hasRole('ADMIN')")
+    public List<User> getAllTeachers(){
+        return userService.getByRole(UserRole.TEACHER);
+    }
+
+    @GetMapping("/admins")
+    public List<User> getAllAdmins(){
+        return userService.getByRole(UserRole.ADMIN);
+    }
+
     @GetMapping("/{email}")
+    @PreAuthorize("hasAnyRole('ADMIN','TEACHER') or #email == authentication.name")
     public User getUser(@PathVariable(value = "email") String email){
         return userService.getItem(email);
+    }
 
+    @PutMapping(value = "/update-rights", consumes = "application/json")
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<?> updateUserRights(@RequestBody UpdateUserRightsRequest request){
+       User user = userService.getItem(request.getEmail());
+       if(user == null)
+           return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Can't find user with email:"+request.getEmail());
+
+       user.setRole(request.getUserRole());
+       userService.updateItem(user);
+       return ResponseEntity.ok().body("User rights increased to:"+request.getUserRole());
+    }
+
+    @GetMapping("/confirm-users")
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<?> getListOfUnconfirmedUsers(){
+        return ResponseEntity.status(HttpStatus.OK).body(userService.getByRole(UserRole.TEACHER_UNCONFIRMED));
     }
 
     @PutMapping
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<?> updateUser(@RequestBody User user){
         userService.updateItem(user);
         return new ResponseEntity<String>(HttpStatus.OK);
     }
 
     @DeleteMapping
+    @PreAuthorize("hasRole('ADMIN')")
     public void deleteUser(@RequestBody User user){
         userService.deleteItem(user);
     }
 
     @PostMapping
-    public ResponseEntity<?> assignGroup(@RequestBody List<String> emails,String groupId){
-        userService.assignGroup(emails,groupId);
+    @PreAuthorize("hasAnyRole('ADMIN','TEACHER')")
+    public ResponseEntity<?> assignGroup(@RequestBody AssignGroupRequest request){
+        userService.assignGroup(request.getEmails(),request.getGroupId());
         return new ResponseEntity<String>(HttpStatus.OK);
     }
+
+//    @PostMapping
+//    public ResponseEntity<?> testRequest(@RequestBody )
 }

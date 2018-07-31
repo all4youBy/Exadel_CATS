@@ -32,7 +32,7 @@ export const USER_GENERAL_MENU_DATA = [{
   }, {
     id: '6',
     text: 'Пробные тесты',
-    link: '/passedtasks',
+    link: '/assignedtestlist',
   }],
 }, {
   key: '7',
@@ -53,7 +53,7 @@ export const TEACHER_GENERAL_MENU_DATA = [{
   }, {
     id: '2',
     text: 'Создать группу',
-    link: '/',
+    link: '/creategroup',
   }],
 }, {
   key: 'sub2',
@@ -65,31 +65,23 @@ export const TEACHER_GENERAL_MENU_DATA = [{
     link: '/alltasks',
   }, {
     id: '4',
-    text: 'Мои задачи',
-    link: '/',
-  }, {
-    id: '5',
     text: 'Добавить задачу',
-    link: '/',
+    link: '/addtask',
   }],
 }, {
   key: 'sub3',
   type: 'profile',
   text: 'Тесты',
   subsections: [{
+    id: '5',
+    text: 'Назначить тест',
+    link: '/assigntest',
+  }, {
     id: '6',
-    text: 'Все тесты',
-    link: '/alltests',
+    text: 'Проверить тесты',
+    link: '/checktests',
   }, {
     id: '7',
-    text: 'Назначить тест',
-    link: '/assignedtestlist',
-  }, {
-    id: '8',
-    text: 'Проверить тест',
-    link: '/',
-  }, {
-    id: '9',
     text: 'Добавить вопрос',
     link: '/',
   }],
@@ -98,15 +90,15 @@ export const TEACHER_GENERAL_MENU_DATA = [{
   type: 'folder',
   text: 'Материалы',
   subsections: [{
-    id: '10',
+    id: '8',
     text: 'Все материалы',
     link: '/materials',
   }, {
-    id: '11',
+    id: '9',
     text: 'Мои материалы',
     link: '/materials',
   }, {
-    id: '12',
+    id: '10',
     text: 'Добавить материал',
     link: '/',
   }],

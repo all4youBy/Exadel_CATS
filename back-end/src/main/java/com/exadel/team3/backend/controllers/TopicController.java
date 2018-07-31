@@ -6,6 +6,7 @@ import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -18,16 +19,19 @@ public class TopicController {
     private TopicService topicService;
 
     @GetMapping
+    @PreAuthorize("hasAnyRole('ADMIN','TEACHER')")
     public List<Topic> getTopics(){
         return topicService.getItems();
     }
 
-    @GetMapping("/{rootId}")
+    @GetMapping("/find-by-root-topic-id/{rootId}")
+    @PreAuthorize("hasAnyRole('ADMIN','TEACHER')")
     public List<Topic> getTopics(@PathVariable(value = "rootId") String rootId){
         return topicService.getTopics(new ObjectId(rootId));
     }
 
-    @PostMapping("/add")
+    @PostMapping
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<?> addTopic(@RequestBody Topic topic){
         Topic top = topicService.addItem(topic);
 
@@ -37,17 +41,20 @@ public class TopicController {
         return ResponseEntity.status(HttpStatus.OK).body("Topic created.");
     }
 
-    @GetMapping("/topic/{topicId}")
+    @GetMapping("/{topicId}")
+    @PreAuthorize("hasAnyRole('ADMIN','TEACHER')")
     public Topic getTopic(@PathVariable(value = "topicId") String id){
         return topicService.getItem(new ObjectId(id));
     }
 
-    @DeleteMapping("/topic")
+    @DeleteMapping
+    @PreAuthorize("hasRole('ADMIN')")
     public void deleteTopic(@RequestBody Topic topic){
         topicService.deleteItem(topic);
     }
 
-    @PutMapping("/topic")
+    @PutMapping
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<?> updateTopic(@RequestBody Topic topic){
         topicService.updateItem(topic);
         return new ResponseEntity<String>(HttpStatus.OK);
