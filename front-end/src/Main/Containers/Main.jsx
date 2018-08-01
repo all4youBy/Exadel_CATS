@@ -130,8 +130,6 @@ class Main extends React.Component {
     return (
       <div className="main-content">
         <PageHeader userType={role} history=""/>
-
-        <PageHeader/>
         {this.renderSwitch()}
         <PageFooter/>
       </div>
