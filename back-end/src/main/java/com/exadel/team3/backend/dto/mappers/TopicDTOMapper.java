@@ -15,19 +15,22 @@ public class TopicDTOMapper {
 
     private static void mergeIntoTopicDTO(TopicDTO ceed, Topic candidate, int level) {
         if (candidate.getParentHierarchy() != null && level < candidate.getParentHierarchy().size()) {
-            Optional<TopicDTO> sibling =
-                    ceed.getChildren()
-                    .stream()
-                    .filter(
-                            tdto ->
-                            tdto.getId().equals(candidate.getParentHierarchy().get(level).getId())
-                    ).findFirst();
+            Optional<TopicDTO> sibling = Optional.empty();
+            if (ceed.getChildren() != null) {
+                sibling = ceed.getChildren()
+                        .stream()
+                        .filter(
+                                tdto ->
+                                        tdto.getId().equals(candidate.getParentHierarchy().get(level).getId())
+                        ).findFirst();
+            }
             if (sibling.isPresent()) {
                 mergeIntoTopicDTO(sibling.get(), candidate, level + 1);
             } else {
                 mergeIntoTopicDTO(ceed, candidate, level + 1);
             }
         } else {
+            if (ceed.getChildren() == null) ceed.setChildren(new ArrayList<TopicDTO>());
             ceed.getChildren().add(new TopicDTO(candidate.getId(), candidate.getText()));
         }
     }
