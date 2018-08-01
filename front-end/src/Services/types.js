@@ -24,7 +24,7 @@ export const USER_GENERAL_MENU_DATA = [{
   subsections: [{
     id: '4',
     text: 'Назначенные тесты',
-    link: '/assignedtestlist',
+    link: '/assignedtests/:userId',
   }, {
     id: '5',
     text: 'Пройденные тесты',
@@ -67,38 +67,42 @@ export const TEACHER_GENERAL_MENU_DATA = [{
     id: '4',
     text: 'Добавить задачу',
     link: '/addtask',
+  }, {
+    id: '5',
+    text: 'Назначить задачу',
+    link: '/assigntask',
   }],
 }, {
   key: 'sub3',
   type: 'profile',
   text: 'Тесты',
   subsections: [{
-    id: '5',
+    id: '6',
     text: 'Назначить тест',
     link: '/assigntest',
   }, {
-    id: '6',
+    id: '7',
     text: 'Проверить тесты',
     link: '/checktests',
   }, {
-    id: '7',
+    id: '8',
     text: 'Добавить вопрос',
-    link: '/',
+    link: '/addquestion',
   }],
 }, {
   key: 'sub4',
   type: 'folder',
   text: 'Материалы',
   subsections: [{
-    id: '8',
+    id: '9',
     text: 'Все материалы',
     link: '/materials',
   }, {
-    id: '9',
+    id: '10',
     text: 'Мои материалы',
     link: '/materials',
   }, {
-    id: '10',
+    id: '11',
     text: 'Добавить материал',
     link: '/',
   }],
@@ -109,7 +113,7 @@ export const ADMIN_GENERAL_MENU_DATA = [{
   type: 'user-add',
   text: 'Список запросов',
   subsections: [],
-  link: '/',
+  link: '/accessrequestlist',
 }, {
   key: 'sub1',
   type: 'team',
@@ -121,7 +125,7 @@ export const ADMIN_GENERAL_MENU_DATA = [{
   }, {
     id: '3',
     text: 'Создать группу',
-    link: '/',
+    link: '/creategroup',
   }],
 }, {
   key: 'sub2',
@@ -133,40 +137,28 @@ export const ADMIN_GENERAL_MENU_DATA = [{
     link: '/alltasks',
   }, {
     id: '5',
-    text: 'Мои задачи',
-    link: '/',
+    text: 'Назначить задачу',
+    link: '/assigntask',
   }, {
     id: '6',
-    text: 'Назначить задачу',
-    link: '/',
-  }, {
-    id: '7',
     text: 'Добавить задачу',
-    link: '/',
+    link: '/addtask',
   }],
 }, {
   key: 'sub3',
   type: 'profile',
   text: 'Тесты',
   subsections: [{
-    id: '8',
-    text: 'Все тесты',
-    link: '/assignedtestlist',
-  }, {
-    id: '9',
-    text: 'Мои тесты',
-    link: '/passedtestlist',
-  }, {
-    id: '10',
+    id: '7',
     text: 'Назначить тесты',
-    link: '/passedtasks',
+    link: '/assigntests',
   }, {
-    id: '11',
-    text: 'Добавить тесты',
-    link: '/assignedtestlist',
+    id: '8',
+    text: 'Добавить вопрос',
+    link: '/addquestion',
   }],
 }, {
-  key: '12',
+  key: '9',
   type: 'folder',
   text: 'Материалы',
   subsections: [],
@@ -176,16 +168,16 @@ export const ADMIN_GENERAL_MENU_DATA = [{
   type: 'area-chart',
   text: 'Статистика',
   subsections: [{
-    id: '13',
+    id: '10',
     text: 'Задачи',
     link: '/',
   }, {
-    id: '14',
+    id: '11',
     text: 'Тесты',
     link: '/',
   }],
 }, {
-  key: '15',
+  key: '12',
   type: 'clock-circle-o',
   text: 'История',
   subsections: [],

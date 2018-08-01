@@ -1,21 +1,23 @@
 import React from 'react';
 import 'antd/dist/antd.css';
-import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
 import './TableGroupStudents.scss';
-import { Table } from 'antd';
+import { message, Table } from 'antd';
 import PropTypes from 'prop-types';
 import ButtonAssignTest from '../../../../../Components/ButtonAssignTest';
 import ButtonAssignTask from '../../../../../Components/ButtonAssignTask';
 import ButtonDeleteStudent from './ButtonDeleteStudent';
-import { addStudent, deleteStudent } from '../Services/Actions/actions';
 import ButtonAddStudent from './ButtonAddStudent';
+import Loading from '../../../../../Components/Loading';
 
 class TableGroupStudents extends React.Component {
   static propTypes = {
+    getGroup: PropTypes.func.isRequired,
     students: PropTypes.objectOf.isRequired,
     handleStudentAdd: PropTypes.func.isRequired,
     handleStudentDelete: PropTypes.func.isRequired,
+    groupName: PropTypes.string.isRequired,
+    error: PropTypes.string.isRequired,
   };
 
   state = {
@@ -27,9 +29,18 @@ class TableGroupStudents extends React.Component {
     showHeader: true,
   };
 
+  componentDidMount() {
+    const { getGroup, groupName } = this.props;
+    getGroup(groupName);
+  }
+
   render() {
-    const { students, handleStudentAdd, handleStudentDelete } = this.props;
+    const { students, handleStudentAdd, handleStudentDelete, error } = this.props;
     const { bordered, loading, pagination, size, title, showHeader } = this.state;
+    if (error) {
+      message.error(error);
+      return <Loading/>;
+    }
     const columns = [{
       title: '№',
       dataIndex: 'number',
@@ -85,7 +96,10 @@ class TableGroupStudents extends React.Component {
           <div className="buttons-group-table">
             <div className="parent-button-assign-test"><ButtonAssignTest/></div>
             <div className="parent-button-assign-task"><ButtonAssignTask/></div>
-            <div className="parent-button-delete-student"><ButtonDeleteStudent onStudentDelete={handleStudentDelete} data={record.number}/>
+            <div className="parent-button-delete-student"><ButtonDeleteStudent
+              onStudentDelete={handleStudentDelete}
+              data={record.number}
+            />
             </div>
           </div>
         );
@@ -122,17 +136,4 @@ class TableGroupStudents extends React.Component {
   }
 }
 
-function mapStateToProps(state) {
-  return { students: state.groupStudentsList.group };
-}
-
-const mapDispatchToProps = dispatch => ({
-  handleStudentAdd: (student) => {
-    dispatch(addStudent(student));
-  },
-  handleStudentDelete: (key) => {
-    dispatch(deleteStudent(key));
-  },
-});
-
-export default connect(mapStateToProps, mapDispatchToProps)(TableGroupStudents);
+export default TableGroupStudents;

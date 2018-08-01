@@ -55,6 +55,21 @@ const API = {
         .catch(() => dispatch(errorProject(receiveAction, errorMessage)));
     };
   },
+  postUploadFiles(path, data, receiveAction, errorMessage) {
+    const url = `${urlServer}${path}`;
+    return (dispatch) => {
+      dispatch(isLoading(true));
+      // const token = API.getTokenFromStore(getState());
+      fetch(url, {
+        method: 'POST',
+        mode: 'cors',
+        body: data,
+      })
+        .then(response => response.json())
+        .then(items => dispatch(getData(receiveAction, items)))
+        .catch(() => dispatch(errorProject(receiveAction, errorMessage)));
+    };
+  },
   deleteRequest(path, data, receiveAction, errorMessage) {
     const url = `${urlServer}${path}`;
     return (dispatch, getState) => {

@@ -2,7 +2,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import 'antd/dist/antd.css';
 import './TablePassedTasks.scss';
-import { Table } from 'antd';
+import { Table, Tag } from 'antd';
 
 function TablePassedTasks() {
   // const expandedRowRender = () => {
@@ -76,12 +76,17 @@ function TablePassedTasks() {
   },
   ];
 
+  let tags = ['aaaa', 'ssss', 'ffff'];
+
+  tags = tags.map(element => <Tag color="blue">{element}</Tag>);
+
+
   const data = [];
   for (let i = 1; i <= 10; i += 1) {
     data.push({
       key: `${i}`,
       name: `Задание ${i}`,
-      theme: `Тема ${i}`,
+      theme: tags,
       author: `Автор ${i}`,
       date: `${i}.${i}.1999`,
       result: `${i}`,

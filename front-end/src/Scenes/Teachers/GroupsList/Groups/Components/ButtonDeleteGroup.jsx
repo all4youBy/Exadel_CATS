@@ -2,6 +2,7 @@ import React from 'react';
 import './ButtonEditGroup.scss';
 import { Button } from 'antd';
 import PropTypes from 'prop-types';
+import requestLoginInformation from '../../../../../Services/loginService';
 
 class ButtonDeleteGroup extends React.Component {
   static propTypes = {
@@ -12,7 +13,11 @@ class ButtonDeleteGroup extends React.Component {
   handleGroupDelete(e) {
     const { onGroupDelete, data } = this.props;
     e.preventDefault();
-    onGroupDelete(data);
+    const object = {
+      group: data,
+      usersId: requestLoginInformation().email,
+    };
+    onGroupDelete(object);
   }
 
   render() {
