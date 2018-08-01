@@ -40,7 +40,7 @@ class CreateGroupPage extends React.PureComponent {
     const { students } = this.props;
     const { group } = this.state;
     return {
-      emails: students.map(item => item.email),
+      emails: students.addedStudents.map(item => item.email),
       group,
     };
   };
@@ -104,13 +104,6 @@ function mapStateToProps(state) {
   };
 }
 
-// /* <StudentsList
-//   className="student-list"
-//   data={data}
-//   addStudent={addStudent}
-//   getData={getStudentData}
-//   error={error}
-// /> */
 const mapDispatchToProps = dispatch => ({
   addStudent: (student) => {
     dispatch(addStudentToGroup(student));

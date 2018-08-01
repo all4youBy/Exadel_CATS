@@ -32,6 +32,7 @@ const options = [{
     children: [{
       value: { text: 'массивы', id: '6' },
       label: 'Массивы',
+      children: null,
     }],
   }],
 }];
