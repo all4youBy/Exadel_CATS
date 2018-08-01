@@ -5,5 +5,5 @@ import com.exadel.team3.backend.entities.TaxonomyItem;
 import java.util.List;
 
 public interface TaxonomyService extends CrudService<TaxonomyItem, String> {
-    List<TaxonomyItem> getByKey(String key);
+    List<String> getByKey(String key);
 }

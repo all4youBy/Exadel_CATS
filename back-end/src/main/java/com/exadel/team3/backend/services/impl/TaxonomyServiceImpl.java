@@ -9,6 +9,7 @@ import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class TaxonomyServiceImpl
@@ -19,8 +20,8 @@ public class TaxonomyServiceImpl
     private TaxonomyRepository taxonomyRepository;
 
     @Override
-    public List<TaxonomyItem> getByKey(@NonNull String key) {
-        return taxonomyRepository.findByKeyOrderByTitle(key);
+    public List<String> getByKey(@NonNull String key) {
+        return taxonomyRepository.findByKeyOrderByTitle(key).stream().map(TaxonomyItem::getTitle).collect(Collectors.toList());
     }
 
     @Override
