@@ -1,4 +1,3 @@
-/* eslint-disable react/destructuring-assignment,no-unused-vars,react/prop-types */
 import React from 'react';
 import { connect } from 'react-redux';
 import './Main.scss';
@@ -36,17 +35,52 @@ class Main extends React.Component {
   };
 
   renderCommonRoutes() {
-    console.log(this);
     return [
-      (<Route exact path="/groupstudentslist" component={PageGroupStudentsList}/>),
-      (<Route exact path="/allgroups" component={AllGroups}/>),
-      (<Route exact path="/alltasks" component={AllTask}/>),
-      (<Route exact path="/addtask" component={AddTaskPage}/>),
-      (<Route exact path="/teachersmaterials" component={Materials}/>),
-      (<Route exact path="/materials" component={Materials}/>),
-      (<Route exact path="/checktest" component={PageCheckTest}/>),
-      (<Route exact path="/assigntask" component={PageAssignTask}/>),
-      (<Route exact path="/creategroup" component={CreateGroupPage}/>),
+      {
+        key: 'groupstudentslist',
+        url: '/groupstudentslist',
+        component: PageGroupStudentsList,
+      },
+      {
+        key: 'allgroups',
+        url: '/allgroups',
+        component: AllGroups,
+      },
+      {
+        key: 'alltasks',
+        url: '/alltasks',
+        component: AllTask,
+      },
+      {
+        key: 'addtask',
+        url: '/addtask',
+        component: AddTaskPage,
+      },
+      {
+        key: 'teachersmaterials',
+        url: '/teachersmaterials',
+        component: Materials,
+      },
+      {
+        key: 'materials',
+        url: '/materials',
+        component: Materials,
+      },
+      {
+        key: 'checktest',
+        url: '/checktest',
+        component: PageCheckTest,
+      },
+      {
+        key: 'assigntask',
+        url: '/assigntask',
+        component: PageAssignTask,
+      },
+      {
+        key: 'creategroup',
+        url: '/creategroup',
+        component: CreateGroupPage,
+      },
     ];
   }
 
@@ -65,8 +99,8 @@ class Main extends React.Component {
                 <Route exact path="/assignedtests/:userId" component={PageAssignedTestList}/>
                 <Route exact path="/passedtestlist" component={PagePassedTestList}/>
                 <Route exact path="/passedtasks" component={PagePassedTasks}/>
-                <Route exact path="/test" component={Test}/>
-                <Route exact path="/task" component={UserTaskPage}/>
+                <Route exact path="/test/:id" component={Test}/>
+                <Route exact path="/task/:id" component={UserTaskPage}/>
                 <Route exact path="/usersmaterials" component={Materials}/>
                 <Redirect to="/"/>
               </Switch>
@@ -81,14 +115,22 @@ class Main extends React.Component {
             </div>
             <div className="switch-div">
               <Switch>
-                {this.renderCommonRoutes()}
                 <Route exact path="/assignedtasks" component={PageAssignedTasks}/>
+                <Route exact path="/creategroup" component={CreateGroupPage}/>
                 <Route exact path="/assigntest" component={PageAssignTest}/>
                 <Route exact path="/assigntest/:groupName" component={PageAssignTest}/>
                 <Route exact path="/checktests" component={PageListCheckTests}/>
                 <Route exact path="/loading" component={Loading}/>
                 <Route exact path="/groups/:groupName" component={PageGroupStudentsList}/>
                 <Route exact path="/addquestion" component={AddQuestion}/>
+                {this.renderCommonRoutes().map(item => (
+                  <Route
+                    key={item.key}
+                    exact
+                    path={item.url}
+                    component={item.component}
+                  />
+                ))}
                 <Redirect to="/"/>
               </Switch>
             </div>
@@ -104,8 +146,15 @@ class Main extends React.Component {
               <Switch>
                 <Route exact path="/accessrequestlist" component={AccessRequestList}/>
                 <Route exact path="/addquestion" component={AddQuestion}/>
-                {this.renderCommonRoutes()}
-                <Redirect to="/"/>
+                {this.renderCommonRoutes().map(item => (
+                  <Route
+                    key={item.key}
+                    exact
+                    path={item.url}
+                    component={item.component}
+                  />
+                ))}
+                <Redirect to="/accessrequestlist"/>
               </Switch>
             </div>
           </div>

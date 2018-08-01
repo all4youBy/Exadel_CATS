@@ -11,13 +11,23 @@ const initialState = {
   groups: [],
   topics: [],
   errorTopics: '',
+  success: false,
 };
 const createGroup = (state = initialState, action) => {
   switch (action.type) {
     case types.RECEIVE_POSTGROUP:
       return {
         ...state,
-        successMessage: action.payload,
+        success: true,
+        students: {
+          groups: [],
+          addedStudents: [],
+        },
+      };
+    case types.ERROR_POSTGROUP:
+      return {
+        ...state,
+        error: action.payload,
       };
     case types.RECEIVE_TOPICS_CREATE_GROUP:
       return {

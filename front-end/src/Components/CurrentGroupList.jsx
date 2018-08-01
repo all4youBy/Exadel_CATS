@@ -11,6 +11,7 @@ export default class CurrentGroupList extends React.PureComponent {
 
   render() {
     const { students, delStudent } = this.props;
+    console.log(students);
     const studentsArray = [];
     students.addedStudents.forEach((element) => {
       if (element.lastName && element.firstName) {
