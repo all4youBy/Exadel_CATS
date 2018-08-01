@@ -83,7 +83,7 @@ public class TestServiceImpl
                     .collect(Collectors.toList());
 
             // collect topicIds that exist in questions answered by this user in his training tests
-            List<ObjectId> trainingQuestionTopicIds = questionRepository.findByIdIn(trainingQuestionIds)
+            List<ObjectId> trainingQuestionTopicIds = questionRepository.findByIdInOrderByText(trainingQuestionIds)
                     .stream()
                     .flatMap(question -> question.getTopicIds().stream())
                     .distinct()
@@ -154,29 +154,6 @@ public class TestServiceImpl
                         }
                 )
                 .collect(Collectors.toList());
-    }
-
-
-    public List<Test> getAssignedItems(@NonNull String userId, TestCompletionStatus completion) {
-        switch(completion) {
-            case UNFINISHED:
-                return getAssignedItems(userId, LocalDateTime.now(),false);
-            case FINISHED:
-                return getAssignedItems(userId, LocalDateTime.now(),true);
-            default:
-                return getAssignedItems(userId);
-        }
-    }
-
-    public List<Test> getAssignedItemsToGroup(@NonNull String group, @NonNull TestCompletionStatus completion) {
-        switch(completion) {
-            case UNFINISHED:
-                return getAssignedItemsToGroup(group, LocalDateTime.now(),false);
-            case FINISHED:
-                return getAssignedItemsToGroup(group, LocalDateTime.now(),true);
-            default:
-                return getAssignedItemsToGroup(group);
-        }
     }
 
     @Override

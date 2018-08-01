@@ -56,7 +56,7 @@ class TestCheckerImpl implements TestChecker {
                 && testItemStatistics.get(TestItemStatus.UNANSWERED) >= test.getItems().size() / 2
            ) {
             List<ObjectId> easyQuestionIds =
-                    questionRepository.findByIdInAndComplexity(
+                    questionRepository.findByIdInAndComplexityOrderByText(
                             test.getItems()
                                 .stream()
                                 .map(TestItem::getQuestionId).collect(Collectors.toList()),
