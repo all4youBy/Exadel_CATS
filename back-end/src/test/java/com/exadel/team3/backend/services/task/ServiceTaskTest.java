@@ -18,43 +18,43 @@ import java.util.Map;
 
 import static org.junit.Assert.assertEquals;
 
-public class ServiceTaskTest {
-    @Test
-    public void test_task() {
-        try {
-            List<String> fileNames = new ArrayList<>();
-            fileNames.add("SampleClass.java");
-            fileNames.add("SampleClassExt.java");
-            fileNames.add("SampleClassExt2.java");
-
-
-            Map<String, String> map = new HashMap<>();
-
-            for (String fileName : fileNames) {
-                InputStreamReader inputStreamReader = new InputStreamReader(getClass().getClassLoader().getResourceAsStream("SampleClass.java"));
-                BufferedReader bufRead = new BufferedReader(inputStreamReader);
-                StringBuilder builder = new StringBuilder();
-                String line = null;
-                while((line = bufRead.readLine())!= null){
-                    builder.append(line).append("\n");
-                }
-                map.put(fileName.replace(".java", ""), builder.toString());
-            }
-
-            ApplicationContext context = new AnnotationConfigApplicationContext(TaskCompilerImpl.class);
-            TaskCompiler taskCompiler = context.getBean(TaskCompilerImpl.class);
-
-
-            List<Class<?>> classList = taskCompiler.compileTask(map);
-
-            ApplicationContext context2 = new AnnotationConfigApplicationContext(TaskRunnerImpl.class);
-            TaskRunner taskRunner = context2.getBean(TaskRunnerImpl.class);
-
-            String[] arr = {"arr"};
-            Assert.assertEquals("ARR", taskRunner.runTask(taskRunner.findMethod(classList, "executor", arr), arr));
-
-        } catch (Exception ex) {
-            ex.getMessage();
-        }
-    }
-}
+//public class ServiceTaskTest {
+//    @Test
+//    public void test_task() {
+//        try {
+//            List<String> fileNames = new ArrayList<>();
+//            fileNames.add("SampleClass.java");
+//            fileNames.add("SampleClassExt.java");
+//            fileNames.add("SampleClassExt2.java");
+//
+//
+//            Map<String, String> map = new HashMap<>();
+//
+//            for (String fileName : fileNames) {
+//                InputStreamReader inputStreamReader = new InputStreamReader(getClass().getClassLoader().getResourceAsStream("SampleClass.java"));
+//                BufferedReader bufRead = new BufferedReader(inputStreamReader);
+//                StringBuilder builder = new StringBuilder();
+//                String line = null;
+//                while((line = bufRead.readLine())!= null){
+//                    builder.append(line).append("\n");
+//                }
+//                map.put(fileName.replace(".java", ""), builder.toString());
+//            }
+//
+//            ApplicationContext context = new AnnotationConfigApplicationContext(TaskCompilerImpl.class);
+//            TaskCompiler taskCompiler = context.getBean(TaskCompilerImpl.class);
+//
+//
+//            List<Class<?>> classList = taskCompiler.compileTask(map);
+//
+//            ApplicationContext context2 = new AnnotationConfigApplicationContext(TaskRunnerImpl.class);
+//            TaskRunner taskRunner = context2.getBean(TaskRunnerImpl.class);
+//
+//            String[] arr = {"arr"};
+//            Assert.assertEquals("ARR", taskRunner.runTask(taskRunner.findMethod(classList, "executor", arr), arr));
+//
+//        } catch (Exception ex) {
+//            ex.getMessage();
+//        }
+//    }
+//}

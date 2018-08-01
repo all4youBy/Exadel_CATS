@@ -10,8 +10,12 @@ import app from '../Main/Services/Reducers/reducers';
 import addTask from '../Scenes/Teachers/Tasks/AddTask/Services/Reducers/reducers';
 import createGroup from '../Scenes/Teachers/GroupsList/GroupCreation/Services/Reducers/reducers';
 import requestsUsers from '../Scenes/Admin/AccessRequestList/Services/Reducers/reducers';
+import addQuestion from '../Scenes/Teachers/Tests/AddQuestion/Services/Reducers/reducers';
 import testInformation from '../Scenes/Teachers/Tests/AssignTest/Services/Reducers/reducers';
 import allGroups from '../Scenes/Teachers/GroupsList/Groups/Services/Reducers/reducers';
+import taskInformation from '../Scenes/Teachers/Tasks/AssignTask/Services/Reducers/reducers';
+import passTask from '../Scenes/Users/Task/Services/Reducers/reducers';
+import allTasks from '../Scenes/Teachers/Tasks/AllTask/Services/Reducers/reducers';
 
 
 const reducers = combineReducers({
@@ -25,8 +29,12 @@ const reducers = combineReducers({
   app,
   addTask,
   requestsUsers,
+  addQuestion,
   testInformation,
   allGroups,
+  taskInformation,
+  passTask,
+  allTasks,
 });
 
 export default reducers;

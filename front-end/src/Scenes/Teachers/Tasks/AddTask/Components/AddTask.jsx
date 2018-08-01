@@ -5,7 +5,7 @@ import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { Button, Input } from 'antd';
 import InputOutputSet from './InputOutputSet';
-import { addInOutSet, addTaskTag, deleteTaskTag } from '../Services/Actions/actions';
+import { addInOutSet, addTaskTag, deleteTaskTag, fetchTopics } from '../Services/Actions/actions';
 import TreeWithTags from '../../../../../Components/TreeWithTags';
 
 
@@ -18,17 +18,27 @@ class AddTask extends React.PureComponent {
     addTag: PropTypes.func.isRequired,
     testSet: PropTypes.arrayOf(PropTypes.object).isRequired,
     addElem: PropTypes.func.isRequired,
+    getTopics: PropTypes.func.isRequired,
+    topics: PropTypes.string.isRequired,
   };
 
   render() {
-    const { addTag, deleteTag, tags, addElem, testSet } = this.props;
+    const { addTag, deleteTag, tags, addElem, testSet, topics, getTopics } = this.props;
     return (
       <div className="add-task-container">
-        <TextArea className="input-task-name" placeholder="Название задачи" autosize />
-        <TextArea className="input-task-desc" placeholder="Описание задачи" autosize={{ minRows: 7 }} />
-        <TreeWithTags tags={tags} deleteTag={deleteTag} addTag={addTag}/>
+        <TextArea className="input-task-name" placeholder="Название задачи" autosize/>
+        <TextArea className="input-task-desc" placeholder="Описание задачи" autosize={{ minRows: 7 }}/>
+        <div className="tree-with-tags">
+          <TreeWithTags
+            tags={tags}
+            deleteTag={deleteTag}
+            topics={topics}
+            addTag={addTag}
+            getTopics={getTopics}
+          />
+        </div>
         <InputOutputSet addElem={addElem} testSet={testSet}/>
-        <Button type="primary" className="task-upload-button">Отправить</Button>
+        <Button type="primary" className="button-table-with-border task-upload-button">Отправить</Button>
       </div>
     );
   }
@@ -36,6 +46,7 @@ class AddTask extends React.PureComponent {
 
 function mapStateToProps(state) {
   return {
+    topics: state.addTask.topics,
     tags: state.addTask.tags,
     testSet: state.addTask.testSet,
   };
@@ -50,6 +61,9 @@ const mapDispatchToProps = dispatch => ({
   },
   addElem: () => {
     dispatch(addInOutSet());
+  },
+  getTopics: () => {
+    dispatch(fetchTopics());
   },
 });
 

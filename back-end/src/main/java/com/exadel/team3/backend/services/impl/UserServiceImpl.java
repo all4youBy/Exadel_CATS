@@ -71,8 +71,5 @@ public class UserServiceImpl
     public void removeGroup(Collection<String> userIds, String group) {
         userRepository.removeGroup(userIds, group);
     }
-
-
-
 }
 

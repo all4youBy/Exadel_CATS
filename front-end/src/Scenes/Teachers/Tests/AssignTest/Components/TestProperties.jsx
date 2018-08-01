@@ -2,10 +2,10 @@ import React from 'react';
 import { Form, Input, Button } from 'antd';
 import './TestProperties.scss';
 import PropTypes from 'prop-types';
-import { connect } from 'react-redux';
-// import TimeInputGroup from './TimeInputGroup';
 import TreeWithTags from '../../../../../Components/TreeWithTags';
-import { createTest, addTestTag, deleteTestTag } from '../Services/Actions/actions';
+import StudentsList from '../../../../../Components/StudentsList';
+import CurrentGroupList from '../../../../../Components/CurrentGroupList';
+// import Loading from '../../../../../Components/Loading';
 
 const { TextArea } = Input;
 const { Item: FormItem } = Form;
@@ -41,6 +41,19 @@ class TestProperties extends React.Component {
     handleAddTestTag: PropTypes.func.isRequired,
     handleCreateTest: PropTypes.func.isRequired,
     form: PropTypes.shape().isRequired,
+    data: PropTypes.arrayOf(PropTypes.object).isRequired,
+    addStudent: PropTypes.func.isRequired,
+    delStudent: PropTypes.func.isRequired,
+    getStudentsData: PropTypes.func.isRequired,
+    students: PropTypes.arrayOf(PropTypes.object).isRequired,
+    error: PropTypes.bool.isRequired,
+    groups: PropTypes.arrayOf(PropTypes.object).isRequired,
+    getGroupsData: PropTypes.func.isRequired,
+    getUsersFromGroup: PropTypes.func.isRequired,
+    groupName: PropTypes.string.isRequired,
+    users: PropTypes.arrayOf(PropTypes.object).isRequired,
+    getTopics: PropTypes.func.isRequired,
+    topics: PropTypes.string.isRequired,
   };
 
   state = {
@@ -57,6 +70,16 @@ class TestProperties extends React.Component {
     secondsPassTimeTest: 0,
   };
 
+  static getDerivedStateFromProps(nextProps, nextState) {
+    if ((nextProps.users !== nextState.users && nextProps.emptyList && !nextState.getListUsers)) {
+      nextProps.getDataUsers('users/users-confirm');
+    }
+    return {
+      getListUsers: true,
+      users: nextProps.users,
+    };
+  }
+
   setField = (event) => {
     const { name } = event.target;
     const { value } = event.target;
@@ -66,12 +89,18 @@ class TestProperties extends React.Component {
   };
 
   render() {
-    const { handleAddTestTag, handleDeleteTestTag, tags, handleCreateTest } = this.props;
+    const {
+      handleAddTestTag, handleDeleteTestTag, tags, handleCreateTest, data,
+      addStudent, delStudent, getStudentsData, students, error, groups,
+      getGroupsData, topics, getTopics,
+    } = this.props;
     const { form } = this.props;
-    const { nameTest, countQuestionsTest, hoursLeadTimeTest, minutesLeadTimeTest } = this.state;
-    const { secondsLeadTimeTest, hoursTimeOpenTest, minutesTimeOpenTest } = this.state;
-    const { secondsTimeOpenTest, hoursPassTimeTest, minutesPassTimeTest } = this.state;
-    const { secondsPassTimeTest } = this.state;
+    const {
+      nameTest, countQuestionsTest, hoursLeadTimeTest, minutesLeadTimeTest,
+      secondsLeadTimeTest, hoursTimeOpenTest, minutesTimeOpenTest,
+      secondsTimeOpenTest, hoursPassTimeTest, minutesPassTimeTest,
+      secondsPassTimeTest,
+    } = this.state;
     const { getFieldDecorator } = form;
     const handleSubmit = (e) => {
       e.preventDefault();
@@ -96,6 +125,12 @@ class TestProperties extends React.Component {
         }
       });
     };
+    // const groupList = users ? (
+    //   <CurrentGroupList
+    //     students={students}
+    //     delStudent={delStudent}
+    //   />
+    // ) : <Loading/>;
     return (
       <div className="test-properties-content">
         <FormItem {...formItemLayout} label="" className="name-form-item">
@@ -117,15 +152,19 @@ class TestProperties extends React.Component {
           )
           }
         </FormItem>
-        <TreeWithTags
-          tags={tags}
-          deleteTag={handleDeleteTestTag}
-          addTag={handleAddTestTag}
-          valid={handleCreateTest}
-        />
+        <div className="tags-test-properties">
+          <TreeWithTags
+            tags={tags}
+            deleteTag={handleDeleteTestTag}
+            addTag={handleAddTestTag}
+            valid={handleCreateTest}
+            topics={topics}
+            getTopics={getTopics}
+          />
+        </div>
         <Form className="parent-form">
           <div className="left-group-form-items">
-            <FormItem {...formItemLayout} label="Количество вопросов" className="form-item">
+            <FormItem {...formItemLayout} label="Кол. вопросов" className="form-item">
               {getFieldDecorator('Количество вопросов', {
                 rules: [
                   {
@@ -150,7 +189,7 @@ class TestProperties extends React.Component {
               )
               }
             </FormItem>
-            <FormItem {...formItemLayout} label="Время открытия теста" className="form-item">
+            <FormItem {...formItemLayout} label="Время откр." className="form-item">
               {getFieldDecorator('timeOpenTest', {
                 rules: [
                   {
@@ -199,9 +238,54 @@ class TestProperties extends React.Component {
                 </div>,
               )}
             </FormItem>
+            <FormItem {...formItemLayout} label="Дата откр." className="form-item">
+              {getFieldDecorator('passDate', {
+                rules: [
+                  {
+                    pattern: /[0-9]/,
+                    message: 'Введите число!',
+                  },
+                  {
+                    required: true,
+                    message: 'Пожалуйста, введите дaту открытия!',
+                  },
+                ],
+              })(
+                <div className="parent-group-input">
+                  <Input
+                    className="input-hour-lead-time"
+                    name="daysPassDateTest"
+                    placeholder="00"
+                    onBlur={this.setField}
+                  />
+                  <Input
+                    className="text-between-input"
+                    placeholder="."
+                    disabled
+                  />
+                  <Input
+                    className="input-min-lead-time"
+                    name="mothsPassDateTest"
+                    placeholder="00"
+                    onBlur={this.setField}
+                  />
+                  <Input
+                    className="text-between-input"
+                    placeholder="."
+                    disabled
+                  />
+                  <Input
+                    className="input-years-lead-time"
+                    name="yearsPassDateTest"
+                    placeholder="0000"
+                    onBlur={this.setField}
+                  />
+                </div>,
+              )}
+            </FormItem>
           </div>
           <div className="right-group-form-items">
-            <FormItem {...formItemLayout} label="Время выполнения" className="form-item">
+            <FormItem {...formItemLayout} label="Время вып." className="form-item">
               {getFieldDecorator('leadTime', {
                 rules: [
                   {
@@ -299,11 +383,70 @@ class TestProperties extends React.Component {
                 </div>,
               )}
             </FormItem>
+            <FormItem {...formItemLayout} label="Дата сдачи" className="form-item">
+              {getFieldDecorator('passDate', {
+                rules: [
+                  {
+                    pattern: /[0-9]/,
+                    message: 'Введите число!',
+                  },
+                  {
+                    required: true,
+                    message: 'Пожалуйста, введите дaту сдачи!',
+                  },
+                ],
+              })(
+                <div className="parent-group-input">
+                  <Input
+                    className="input-hour-lead-time"
+                    name="daysPassDateTest"
+                    placeholder="00"
+                    onBlur={this.setField}
+                  />
+                  <Input
+                    className="text-between-input"
+                    placeholder="."
+                    disabled
+                  />
+                  <Input
+                    className="input-min-lead-time"
+                    name="mothsPassDateTest"
+                    placeholder="00"
+                    onBlur={this.setField}
+                  />
+                  <Input
+                    className="text-between-input"
+                    placeholder="."
+                    disabled
+                  />
+                  <Input
+                    className="input-years-lead-time"
+                    name="yearsPassDateTest"
+                    placeholder="0000"
+                    onBlur={this.setField}
+                  />
+                </div>,
+              )}
+            </FormItem>
           </div>
         </Form>
+        <div className="parent-student-list">
+          <StudentsList
+            students={data}
+            addStudent={addStudent}
+            getStudentsData={getStudentsData}
+            getGroupsData={getGroupsData}
+            error={error}
+            groups={groups}
+          />
+          <CurrentGroupList
+            students={students}
+            delStudent={delStudent}
+          />
+        </div>
         <FormItem {...tailFormItemLayout} >
           <Button
-            className="button-table-with-border"
+            className="button-table-with-border button-assign"
             type="primary"
             onClick={handleSubmit}
           >Назначить
@@ -314,24 +457,5 @@ class TestProperties extends React.Component {
   }
 }
 
-function mapStateToProps(state) {
-  return {
-    tags: state.testInformation.tags,
-    test: state,
-  };
-}
-
-const mapDispatchToProps = dispatch => ({
-  handleCreateTest: (test) => {
-    dispatch(createTest(test));
-  },
-  handleAddTestTag: (tag) => {
-    dispatch(addTestTag(tag));
-  },
-  handleDeleteTestTag: (tag) => {
-    dispatch(deleteTestTag(tag));
-  },
-});
-
 const WrappedTestPropertiesForm = Form.create()(TestProperties);
-export default connect(mapStateToProps, mapDispatchToProps)(WrappedTestPropertiesForm);
+export default WrappedTestPropertiesForm;

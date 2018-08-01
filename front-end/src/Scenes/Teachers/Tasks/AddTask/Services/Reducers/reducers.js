@@ -3,10 +3,24 @@ import * as types from '../Actions/types';
 const initialState = {
   testSet: [],
   tags: [],
+  topics: [],
+  error: '',
 };
 
 const addTask = (state = initialState, action) => {
   switch (action.type) {
+    case types.RECEIVE_TOPICS_ADD_TASK: {
+      return {
+        ...state,
+        topics: action.payload,
+      };
+    }
+    case types.ERROR_TOPICS_ADD_TASK: {
+      return {
+        ...state,
+        error: action.payload,
+      };
+    }
     case types.ADD_IN_OUT_SET: {
       return {
         ...state,
@@ -20,9 +34,6 @@ const addTask = (state = initialState, action) => {
       };
     }
     case types.ADD_TASK_TAG: {
-      if (state.tags.includes(action.payload) || action.payload.length === 0) {
-        return state;
-      }
       return {
         ...state,
         tags: [

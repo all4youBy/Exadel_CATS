@@ -10,6 +10,7 @@ class RequestsList extends React.PureComponent {
   static propTypes = {
     upDateUser: PropTypes.func.isRequired,
     upDate: PropTypes.func.isRequired,
+    emptyList: PropTypes.bool.isRequired,
   };
 
   state = {
@@ -42,26 +43,18 @@ class RequestsList extends React.PureComponent {
   };
 
   static getDerivedStateFromProps(nextProps, nextState) {
-    if ((nextProps.users !== nextState.users)
-      && !nextProps.users.length && !nextState.getListUsers) {
-      nextProps.getDataUsers('users/confirm-users');
-    } else if (!nextProps.users.length && !nextState.getListUsers) {
-      return {
-        getListUsers: true,
-      };
-    } else if (nextProps.users.length && !nextState.getListUsers) {
-      return {
-        users: nextProps.users,
-        getListUsers: true,
-      };
+    if ((nextProps.users !== nextState.users && nextProps.emptyList && !nextState.getListUsers)) {
+      nextProps.getDataUsers('users/users-confirm');
     }
     return {
+      getListUsers: true,
       users: nextProps.users,
     };
   }
 
   render() {
     const { users, getListUsers } = this.state;
+    const { emptyList } = this.props;
     const listUsers = (
       <div>
         <div className="header">Список запросов на статус преподавателя</div>
@@ -97,11 +90,11 @@ class RequestsList extends React.PureComponent {
         />
       </div>
     );
-    const stateData = !(getListUsers && !users.length) ? (<Loading/>)
-      : <div className="empty-list">Список запросов пуст</div>;
+    const stateData = emptyList && getListUsers ? (<Loading/>)
+      : <div className="empty-list">Список запросов на статус пуст</div>;
     const addList = users.length ? listUsers : stateData;
     return (
-      <div>
+      <div className="list-users-request">
         {addList}
       </div>
     );
@@ -111,6 +104,7 @@ class RequestsList extends React.PureComponent {
 function mapState(state) {
   return {
     users: state.requestsUsers.users,
+    emptyList: state.requestsUsers.emptyList,
   };
 }
 
