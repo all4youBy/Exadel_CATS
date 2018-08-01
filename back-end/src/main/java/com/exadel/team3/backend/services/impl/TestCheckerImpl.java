@@ -95,7 +95,7 @@ class TestCheckerImpl implements TestChecker {
             case SINGLE_VARIANT:
                 Integer answerOrdinal;
                 try {
-                    answerOrdinal = NumberUtils.parseNumber(answer, Integer.class);
+                    answerOrdinal = NumberUtils.parseNumber(answer.trim(), Integer.class);
                 } catch (NumberFormatException nfe) {
                     answerOrdinal = null;
                 }
@@ -111,6 +111,7 @@ class TestCheckerImpl implements TestChecker {
                 Pattern splittingPattern = Pattern.compile("[,;]");
                 Supplier<IntStream> answerVariants = () ->
                         splittingPattern.splitAsStream(answer)
+                                .map(String::trim)
                                 .mapToInt(i -> {
                                     try {
                                         return NumberUtils.parseNumber(i, Integer.class);
