@@ -11,3 +11,11 @@ export function receiveTestData(data) {
     payload: data,
   };
 }
+
+export function postTestAnswer(data) {
+  return (API.put('tests/submit-question', data, 'post_test_answer', 'Не удалось отправить вопрос'));
+}
+
+export function postTest(testId) {
+  return (API.put('tests/submit-test', testId, 'post_test', 'Не удалось отправить тест'));
+}

@@ -11,12 +11,23 @@ export default class MultipleAnswersQuestion extends React.PureComponent {
   static propTypes = {
     text: PropTypes.string.isRequired,
     variants: PropTypes.arrayOf().isRequired,
-    // answer: PropTypes.arrayOf().isRequired,
+    answer: PropTypes.arrayOf().isRequired,
+    value: PropTypes.string.isRequired,
+    index: PropTypes.number.isRequired,
+  };
+
+  onChange = (checkedValues) => {
+    const { answer, value, index } = this.props;
+    answer[index] = {
+      answer: checkedValues.toString(),
+      questionId: value,
+    };
+    console.log(answer);
   };
 
   render() {
     const { text, variants } = this.props;
-    const plainOptions = variants.map(item => item.text);
+    const options = variants.map((item, i) => ({ label: item.text, value: i }));
     return (
       <Card className="multiple-answers-question-card">
         <p className="question-text">
@@ -24,7 +35,8 @@ export default class MultipleAnswersQuestion extends React.PureComponent {
         </p>
         <Group
           className="check-box-group"
-          options={plainOptions}
+          options={options}
+          onChange={this.onChange}
         />
       </Card>
     );
