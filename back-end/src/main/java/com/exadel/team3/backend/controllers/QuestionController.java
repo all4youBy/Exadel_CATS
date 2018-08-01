@@ -53,10 +53,6 @@ public class QuestionController {
             return questionService.getItems();
         return questionService.getItemsByTopicIds(topicsIds);
     }
-//
-//    public List<Question> getAllQuestion(@RequestBody List<ObjectId> questionId){
-//
-//    }
 
     @GetMapping("/{id}")
     @AdminAndTeacherAccess

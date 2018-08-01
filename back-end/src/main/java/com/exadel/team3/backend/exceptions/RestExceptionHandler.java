@@ -19,10 +19,10 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler{
         return handleExceptionInternal(e,e.getMessage(),new HttpHeaders(),HttpStatus.UNAUTHORIZED,request);
     }
 
-    @ExceptionHandler(RuntimeException.class)
-    private ResponseEntity<?> handleRuntimeException(RuntimeException e,WebRequest request){
-        return handleExceptionInternal(e,e.getMessage(),new HttpHeaders(),HttpStatus.CONFLICT,request);
-    }
+//    @ExceptionHandler(RuntimeException.class)
+//    private ResponseEntity<?> handleRuntimeException(RuntimeException e,WebRequest request){
+//        return handleExceptionInternal(e,e.getMessage(),new HttpHeaders(),HttpStatus.CONFLICT,request);
+//    }
 
     @Override
     protected ResponseEntity<Object> handleHttpRequestMethodNotSupported(HttpRequestMethodNotSupportedException ex, HttpHeaders headers, HttpStatus status, WebRequest request) {

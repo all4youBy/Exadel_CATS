@@ -51,7 +51,6 @@ public class AuthenticationController {
 
     @PostMapping(value = "/registration",produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> signUpUser(@RequestBody RegistrationRequest request){
-
         String[] userPassInfo = securityUtils.generateUserPassword();
 //        String userPassword = securityUtils.generateUserPassword()[0];
         System.out.println(userPassInfo[0]);

@@ -13,8 +13,10 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.util.List;
 
 @RestController
@@ -40,21 +42,20 @@ public class TopicController {
     public ResponseEntity<?> getFile(){
         final ClassLoader classLoader = getClass().getClassLoader();
         InputStream in = classLoader.getResourceAsStream("static/File.txt");
-        StringBuilder stringBuffer = null;
-        byte[] buf;
+        BufferedReader buf;
+        StringBuilder sb  = null;
         try {
-            buf = new byte[in.available()];
+            buf = new BufferedReader(new InputStreamReader(in));
+            sb = new StringBuilder();
+            String str;
 
-        int i = -1;
-        stringBuffer = new StringBuilder();
-
-            while ((i = in.read(buf)) != -1){
-                stringBuffer.append(new String(buf,0,in.available()));
+            while ((str = buf.readLine()) != null){
+                sb.append(str);
             }
         } catch (IOException e) {
             e.printStackTrace();
         }
-        return ResponseEntity.ok().body(stringBuffer.toString());
+        return ResponseEntity.ok().body(sb);
     }
 
     @PostMapping(produces = MediaType.APPLICATION_JSON_VALUE)

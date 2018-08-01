@@ -12,6 +12,7 @@ import com.exadel.team3.backend.security.annotations.AdminAccess;
 import com.exadel.team3.backend.security.annotations.TrainingTestGenerationAccess;
 import com.exadel.team3.backend.security.annotations.TestGenerationAccess;
 import com.exadel.team3.backend.services.QuestionService;
+import com.exadel.team3.backend.services.ServiceException;
 import com.exadel.team3.backend.services.TestService;
 import com.exadel.team3.backend.services.UserService;
 
@@ -25,6 +26,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -52,6 +54,10 @@ public class TestController {
         Test test = testService.getItem(new ObjectId(testId));
 
 
+        return test.getDeadline().isAfter(LocalDateTime.now())?
+                ResponseEntity.
+        if(test.getDeadline().isAfter(LocalDateTime.now()))
+
         return ResponseEntity.ok().body(testDTOMapper.convertToDTO(test));
     }
 
@@ -70,7 +76,7 @@ public class TestController {
        if(test == null)
            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Can't generate test.");
 
-       return ResponseEntity.ok().body(test.getId());
+       return ResponseEntity.ok().body(test.getId().toString());
     }
 
     @PostMapping(value = "/training",produces = MediaType.APPLICATION_JSON_VALUE)
@@ -138,14 +144,21 @@ public class TestController {
         return new ResponseEntity<>(groupTests,HttpStatus.OK);
     }
 
-//    @PostMapping("/")
-//    public ResponseEntity<?> submitTest(@RequestBody ObjectId testId){
-//        try {
-//            testService.submitTest(testId);
-//        } catch (ServiceException e) {
-//            System.out.println();
-//        }
-//    }
+    @PutMapping(value = "/submit-test",produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> submitTest(@RequestBody ObjectId testId){
+        try {
+            testService.submitTest(testId);
+        } catch (ServiceException e) {
+           return ResponseEntity.status(HttpStatus.CONFLICT).body("Can't submit test.");
+        }
+        return ResponseEntity.ok("Test submit.");
+    }
+
+    @PutMapping(value = "/submit-question",produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> submitAnswer(@RequestBody TestItemDTO testItemDTO){
+        testService.submitAnswer(testItemDTO);
+        return ResponseEntity.ok().body(HttpStatus.OK);
+    }
 
     @PutMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     @AdminAccess
