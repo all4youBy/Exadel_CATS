@@ -2,6 +2,7 @@ package com.exadel.team3.backend.controllers;
 
 import com.exadel.team3.backend.controllers.requests.TaskAttemptRequest;
 import com.exadel.team3.backend.controllers.requests.TaskRequest;
+import com.exadel.team3.backend.dto.TaskDTO;
 import com.exadel.team3.backend.entities.Solution;
 import com.exadel.team3.backend.entities.Task;
 import com.exadel.team3.backend.entities.TaskTestingSet;
@@ -35,9 +36,14 @@ public class TaskController {
         return ResponseEntity.status(HttpStatus.CREATED).body("Task added");
     }
 
-    @GetMapping("/{taskId}")
-    public Task getTask(@PathVariable(value = "taskId") String taskId){
-        return taskService.getItem(new ObjectId(taskId));
+    @GetMapping("/{usersLogin}/{taskId}")
+    public TaskDTO getTask(@PathVariable(value = "taskId") String taskId, @PathVariable(value = "usersLogin") String usersLogin){
+        Task task = taskService.getItem(new ObjectId(taskId));
+        List<Solution> solutions = solutionService.getAssignedItems(usersLogin, task.getAuthor());
+        Solution solution = solutions.stream().filter(
+                o1 -> o1.getId().equals(new ObjectId(usersLogin)))
+                .findFirst().get();
+        return new TaskDTO(task.getId(), task.getTitle(), task.getText(), task.getAuthor(), solution.getMark());
     }
 
     @DeleteMapping("/delete-task")
@@ -46,9 +52,14 @@ public class TaskController {
         taskService.deleteItem(task);
     }
 
-    @PostMapping("/add-solution")
-    public ResponseEntity<?> addFilesInSolution(@RequestBody TaskAttemptRequest taskAttemptRequest) {
-        Solution solution = solutionService.storeFile(taskAttemptRequest.getSolution(), taskAttemptRequest.getMultipartFile());
+    @PostMapping("/add-solution/{taskId}")
+    public ResponseEntity<?> addFilesInSolution(@PathVariable(value = "taskId") String taskId, @RequestBody TaskAttemptRequest taskAttemptRequest) {
+        Task task = taskService.getItem(new ObjectId(taskId));
+        List<Solution> solutions = solutionService.getAssignedItems(taskAttemptRequest.getUsersId(), task.getAuthor());
+        Solution solution = solutions.stream().filter(
+                o1 -> o1.getId().equals(new ObjectId(taskAttemptRequest.getUsersId())))
+                .findFirst().get();
+        solution = solutionService.storeFile(solution, taskAttemptRequest.getMultipartFile());
         solutionService.submit(solution);
         return new ResponseEntity<>(solution, HttpStatus.OK);
     }
