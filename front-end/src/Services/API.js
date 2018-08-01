@@ -35,7 +35,10 @@ const API = {
           localStorage.setItem('user', response);
           dispatch(getUserData(JSON.parse(response)));
         })
-        .catch(error => console.error('Fetch Error =\n', error));
+        .catch(() => {
+          dispatch(errorProject('LogInData', 'Error!'));
+          localStorage.clear();
+        });
     };
   },
   post(path, data, receiveAction, errorMessage) {
