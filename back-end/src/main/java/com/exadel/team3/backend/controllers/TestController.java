@@ -138,15 +138,6 @@ public class TestController {
         return new ResponseEntity<>(groupTests,HttpStatus.OK);
     }
 
-//    @PostMapping("/")
-//    public ResponseEntity<?> submitTest(@RequestBody ObjectId testId){
-//        try {
-//            testService.submitTest(testId);
-//        } catch (ServiceException e) {
-//            System.out.println();
-//        }
-//    }
-
     @PutMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     @AdminAccess
     public ResponseEntity<?> updateTest(@RequestBody Test test){
