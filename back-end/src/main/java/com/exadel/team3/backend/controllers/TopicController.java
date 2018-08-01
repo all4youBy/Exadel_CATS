@@ -13,6 +13,8 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.List;
 
 @RestController
@@ -32,6 +34,27 @@ public class TopicController {
     @AdminAndTeacherAccess
     public List<TopicDTO> getTopics(@PathVariable(value = "rootId") String rootId){
         return TopicDTOMapper.transform(topicService.getTopics(new ObjectId(rootId)));
+    }
+
+    @GetMapping("/file")
+    public ResponseEntity<?> getFile(){
+        final ClassLoader classLoader = getClass().getClassLoader();
+        InputStream in = classLoader.getResourceAsStream("static/File.txt");
+        StringBuilder stringBuffer = null;
+        byte[] buf;
+        try {
+            buf = new byte[in.available()];
+
+        int i = -1;
+        stringBuffer = new StringBuilder();
+
+            while ((i = in.read(buf)) != -1){
+                stringBuffer.append(new String(buf,0,in.available()));
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return ResponseEntity.ok().body(stringBuffer.toString());
     }
 
     @PostMapping(produces = MediaType.APPLICATION_JSON_VALUE)
