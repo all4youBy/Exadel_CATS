@@ -35,7 +35,10 @@ const API = {
           localStorage.setItem('user', response);
           dispatch(getUserData(JSON.parse(response)));
         })
-        .catch(error => console.error('Fetch Error =\n', error));
+        .catch(() => {
+          dispatch(errorProject('LogInData', 'Error!'));
+          localStorage.clear();
+        });
     };
   },
   post(path, data, receiveAction, errorMessage) {
@@ -45,6 +48,20 @@ const API = {
       const token = API.getTokenFromStore(getState());
       API.sendRequest(token, url, {
         method: 'POST',
+        body: JSON.stringify(data),
+      })
+        .then(response => response.json())
+        .then(items => dispatch(getData(receiveAction, items)))
+        .catch(() => dispatch(errorProject(receiveAction, errorMessage)));
+    };
+  },
+  deleteRequest(path, data, receiveAction, errorMessage) {
+    const url = `${urlServer}${path}`;
+    return (dispatch, getState) => {
+      dispatch(isLoading(true));
+      const token = API.getTokenFromStore(getState());
+      API.sendRequest(token, url, {
+        method: 'DELETE',
         body: JSON.stringify(data),
       })
         .then(response => response.json())
@@ -73,7 +90,6 @@ const API = {
     };
   },
   put(path, data, receiveAction, errorMessage) {
-    console.log(data);
     const url = `${urlServer}${path}`;
     return (dispatch, getState) => {
       dispatch(isLoading(true));
