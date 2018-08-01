@@ -90,9 +90,8 @@ class RequestsList extends React.PureComponent {
         />
       </div>
     );
-    console.log('q', getListUsers, emptyList);
     const stateData = emptyList && getListUsers ? (<Loading/>)
-      : <div className="empty-list">Список запросов пуст</div>;
+      : <div className="empty-list">Список запросов на статус пуст</div>;
     const addList = users.length ? listUsers : stateData;
     return (
       <div className="list-users-request">

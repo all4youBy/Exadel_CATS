@@ -126,8 +126,11 @@ class Main extends React.Component {
   }
 
   render() {
+    const { userType: { logInInformation: { user: { role } } } } = this.props;
     return (
       <div className="main-content">
+        <PageHeader userType={role} history=""/>
+
         <PageHeader/>
         {this.renderSwitch()}
         <PageFooter/>
