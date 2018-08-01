@@ -13,7 +13,6 @@ import requestsUsers from '../Scenes/Admin/AccessRequestList/Services/Reducers/r
 import testInformation from '../Scenes/Teachers/Tests/AssignTest/Services/Reducers/reducers';
 import allGroups from '../Scenes/Teachers/GroupsList/Groups/Services/Reducers/reducers';
 import completeTest from '../Scenes/Users/Tests/Services/Reducers/reducers';
-import completeTask from '../Scenes/Users/Task/Sevices/Reducers/reducers';
 
 
 const reducers = combineReducers({
@@ -30,7 +29,6 @@ const reducers = combineReducers({
   testInformation,
   allGroups,
   completeTest,
-  completeTask,
 });
 
 export default reducers;
