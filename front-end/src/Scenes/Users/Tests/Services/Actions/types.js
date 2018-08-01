@@ -1,0 +1,2 @@
+export const RECEIVE_TEST_DATA = 'RECEIVE_TEST_DATA';
+export const ERROR_TEST_DATA = 'ERROR_TEST_DATA';

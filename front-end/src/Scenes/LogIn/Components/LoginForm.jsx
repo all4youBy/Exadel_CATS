@@ -42,7 +42,7 @@ class LoginForm extends React.Component {
 
   render() {
     const { form: { getFieldDecorator }, login } = this.props;
-    const errorLogIn = !login ? <div/> : <div className="error-input">Пороль или почта введены неправильно!</div>;
+    const errorLogIn = !login ? <div/> : <div className="error-input">Пароль или почта введены неправильно!</div>;
     return (
       <Form onSubmit={this.handleSubmit} className="login-form">
         <FormItem className="form-item">

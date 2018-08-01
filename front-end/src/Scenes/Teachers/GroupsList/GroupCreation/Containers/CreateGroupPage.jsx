@@ -1,5 +1,4 @@
-/* eslint-disable no-restricted-globals */
-/* eslint-disable import/no-cycle */
+
 import React from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
@@ -17,8 +16,7 @@ import StudentsList from '../../../../../Components/StudentsList';
 
 const { TextArea } = Input;
 
-
-class CreateGroupPage extends React.PureComponent {
+class CreateGroupPage extends React.Component {
   static propTypes = {
     addStudent: PropTypes.func.isRequired,
     delStudent: PropTypes.func.isRequired,
@@ -26,7 +24,7 @@ class CreateGroupPage extends React.PureComponent {
     getStudentsData: PropTypes.func.isRequired,
     data: PropTypes.arrayOf(PropTypes.object).isRequired,
     error: PropTypes.string.isRequired,
-    successMessage: PropTypes.string.isRequired,
+    success: PropTypes.bool.isRequired,
     sendGroupInfo: PropTypes.func.isRequired,
     getGroupsData: PropTypes.func.isRequired,
     groups: PropTypes.arrayOf(PropTypes.object).isRequired,
@@ -35,6 +33,12 @@ class CreateGroupPage extends React.PureComponent {
   state = {
     group: '',
   };
+
+  shouldComponentUpdate() {
+    const { success } = this.props;
+    if (success) return true;
+    return true;
+  }
 
   getGroupData = () => {
     const { students } = this.props;
@@ -45,17 +49,22 @@ class CreateGroupPage extends React.PureComponent {
     };
   };
 
+  handleGroupData = () => {
+    const { sendGroupInfo, success } = this.props;
+    sendGroupInfo(this.getGroupData());
+    if (success) {
+      message.success('Группа успешно создана');
+      // this.setState({ group: '' });
+    }
+  };
+
   render() {
     const {
       addStudent, delStudent, students,
-      getStudentsData, data, error, sendGroupInfo, successMessage,
+      getStudentsData, data, error,
       getGroupsData, groups,
     } = this.props;
     console.log(addStudent, data, error);
-    if (successMessage) {
-      message.success('Группа успешно создана');
-      location.reload();
-    }
 
     return (
       <div className="create-group-container">
@@ -80,7 +89,7 @@ class CreateGroupPage extends React.PureComponent {
         </div>
         <Button
           onClick={() => {
-            sendGroupInfo(this.getGroupData());
+            this.handleGroupData();
           }}
           size="small"
           className="create-group-button"
@@ -101,6 +110,7 @@ function mapStateToProps(state) {
     groups: state.createGroup.groups,
     topics: state.createGroup.topics,
     errorTopics: state.createGroup.errorTopics,
+    success: state.createGroup.success,
   };
 }
 
