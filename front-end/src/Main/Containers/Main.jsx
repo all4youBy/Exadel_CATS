@@ -1,4 +1,3 @@
-/* eslint-disable react/destructuring-assignment,no-unused-vars,react/prop-types */
 import React from 'react';
 import { connect } from 'react-redux';
 import './Main.scss';
