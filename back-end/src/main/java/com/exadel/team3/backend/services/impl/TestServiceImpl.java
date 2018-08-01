@@ -8,8 +8,8 @@ import java.util.stream.Collectors;
 import com.exadel.team3.backend.dao.*;
 import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Primary;
-import org.springframework.core.env.Environment;
 import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
@@ -33,14 +33,16 @@ public class TestServiceImpl
     private QuestionRepository questionRepository;
     @Autowired
     private TopicRepository topicRepository;
-
-    @Autowired
-    private Environment env;
     @Autowired
     private TestItemPicker testItemGenerator;
     @Autowired
     private TestChecker testChecker;
 
+    @Value("${cats.test.defaultDuration:60}")
+    private long defaultTestDuration;
+
+    @Value("${cats.test.questionsCount:20}")
+    private int defaultQuestionsCount;
 
     @Override
     protected AssignableRepository<Test> getRepository() {
@@ -97,9 +99,7 @@ public class TestServiceImpl
         start = start != null ? start :LocalDateTime.now();
         deadline = deadline != null && deadline.isAfter(start)
                 ? deadline
-                : start.plus(Duration.ofMinutes(
-                                Long.parseLong(env.getProperty("cats.test.defaultDuration", "60"))
-                  ));
+                : start.plus(Duration.ofMinutes(defaultTestDuration));
         title = !StringUtils.isEmpty(title)
                 ? title
                 : topicRepository.findByIdIn(actualTopicIds)
@@ -111,7 +111,7 @@ public class TestServiceImpl
         newTest.setItems(testItemGenerator.generate(
                 questionsCount > 0
                     ? questionsCount
-                    : Integer.parseInt(env.getProperty("cats.test.questionsCount", "10")),
+                    : defaultQuestionsCount,
                 actualTopicIds,
                 isTraining
         ));
@@ -146,7 +146,13 @@ public class TestServiceImpl
                         userId -> {
                             try {
                                 return generateTestForUser(
-                                        userId, title, start, deadline, topicIds, questionsCount, assignedBy
+                                        userId,
+                                        title,
+                                        start,
+                                        deadline,
+                                        topicIds,
+                                        questionsCount,
+                                        assignedBy
                                 );
                             } catch (ServiceException e) {
                                 return null;

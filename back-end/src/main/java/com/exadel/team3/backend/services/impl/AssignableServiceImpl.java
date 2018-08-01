@@ -9,7 +9,7 @@ import java.util.stream.StreamSupport;
 
 import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.env.Environment;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.lang.NonNull;
 
 import com.exadel.team3.backend.dao.AssignableRepository;
@@ -25,18 +25,17 @@ public abstract class AssignableServiceImpl<T extends Assignable>
         implements AssignableService<T> {
     @Autowired
     private UserRepository userRepository;
-    @Autowired
-    private Environment env;
 
     @Override
     protected abstract AssignableRepository<T> getRepository();
 
+    @Value("${cats.statistics.topRatingListSize:10}")
+    private int topRatingListSize;
 
     @Override
     public List<T> getAssignedItems(String assignedTo, String assignedBy) {
         return getRepository().findByAssignedToAndAssignedByOrderByStartDesc(assignedTo, assignedBy);
     }
-
 
     @Override
     public List<T> getAssignedItems(String assignedTo) {
@@ -132,7 +131,7 @@ public abstract class AssignableServiceImpl<T extends Assignable>
 
     private List<UserRatingDTO> getTopRating(Function<Integer, List<RatingProjectionImpl>> collectorFunc) {
         Map<String, Integer> userIdsRatings =
-                        collectorFunc.apply(Integer.parseInt(env.getProperty("cats.statistics.topCount", "10")))
+                        collectorFunc.apply(topRatingListSize)
                         .stream()
                         .collect(Collectors.toMap(
                                 RatingProjectionImpl::getId,
