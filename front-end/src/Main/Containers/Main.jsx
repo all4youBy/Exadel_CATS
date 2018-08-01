@@ -72,8 +72,16 @@ class Main extends React.Component {
         url: '/checktest',
         component: PageCheckTest,
       },
-      (<Route exact path="/assigntask" component={PageAssignTask}/>),
-      (<Route exact path="/creategroup" component={CreateGroupPage}/>),
+      {
+        key: 'assigntask',
+        url: '/assigntask',
+        component: PageAssignTask,
+      },
+      {
+        key: 'creategroup',
+        url: '/creategroup',
+        component: CreateGroupPage,
+      },
     ];
   }
 
