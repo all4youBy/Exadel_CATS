@@ -5,6 +5,7 @@ import PropTypes from 'prop-types';
 import TreeWithTags from '../../../../../Components/TreeWithTags';
 import StudentsList from '../../../../../Components/StudentsList';
 import CurrentGroupList from '../../../../../Components/CurrentGroupList';
+// import Loading from '../../../../../Components/Loading';
 
 const { TextArea } = Input;
 const { Item: FormItem } = Form;
@@ -48,6 +49,9 @@ class TestProperties extends React.Component {
     error: PropTypes.bool.isRequired,
     groups: PropTypes.arrayOf(PropTypes.object).isRequired,
     getGroupsData: PropTypes.func.isRequired,
+    getUsersFromGroup: PropTypes.func.isRequired,
+    groupName: PropTypes.string.isRequired,
+    users: PropTypes.arrayOf(PropTypes.object).isRequired,
   };
 
   state = {
@@ -63,6 +67,16 @@ class TestProperties extends React.Component {
     minutesPassTimeTest: 0,
     secondsPassTimeTest: 0,
   };
+
+  static getDerivedStateFromProps(nextProps, nextState) {
+    if ((nextProps.users !== nextState.users && nextProps.emptyList && !nextState.getListUsers)) {
+      nextProps.getDataUsers('users/users-confirm');
+    }
+    return {
+      getListUsers: true,
+      users: nextProps.users,
+    };
+  }
 
   setField = (event) => {
     const { name } = event.target;
@@ -109,6 +123,12 @@ class TestProperties extends React.Component {
         }
       });
     };
+    // const groupList = users ? (
+    //   <CurrentGroupList
+    //     students={students}
+    //     delStudent={delStudent}
+    //   />
+    // ) : <Loading/>;
     return (
       <div className="test-properties-content">
         <FormItem {...formItemLayout} label="" className="name-form-item">

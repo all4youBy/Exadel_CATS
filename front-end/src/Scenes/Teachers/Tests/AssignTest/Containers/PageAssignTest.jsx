@@ -32,18 +32,11 @@ class PageAssignTest extends React.PureComponent {
     getUsersFromGroup: PropTypes.func.isRequired,
   };
 
-  componentDidMount() {
-    const { getUsersFromGroup, groupName } = this.props;
-    if (groupName) {
-      getUsersFromGroup(groupName);
-    }
-  }
-
   render() {
     const {
       handleAddTestTag, handleDeleteTestTag, tags, handleCreateTest, data,
       addStudent, delStudent, getStudentsData, students, error, groups,
-      getGroupsData,
+      getGroupsData, getUsersFromGroup, groupName,
     } = this.props;
     return (
       <div>
@@ -60,6 +53,8 @@ class PageAssignTest extends React.PureComponent {
           error={error}
           groups={groups}
           getGroupsData={getGroupsData}
+          getUsersFromGroup={getUsersFromGroup}
+          groupName={groupName}
         />
       </div>
     );

@@ -87,7 +87,7 @@ export const TEACHER_GENERAL_MENU_DATA = [{
   }, {
     id: '8',
     text: 'Добавить вопрос',
-    link: '/',
+    link: '/addquestion',
   }],
 }, {
   key: 'sub4',

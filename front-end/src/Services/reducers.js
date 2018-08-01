@@ -14,6 +14,7 @@ import addQuestion from '../Scenes/Teachers/Tests/AddQuestion/Services/Reducers/
 import testInformation from '../Scenes/Teachers/Tests/AssignTest/Services/Reducers/reducers';
 import allGroups from '../Scenes/Teachers/GroupsList/Groups/Services/Reducers/reducers';
 import taskInformation from '../Scenes/Teachers/Tasks/AssignTask/Services/Reducers/reducers';
+import passTask from '../Scenes/Users/Task/Services/Reducers/reducers';
 
 
 const reducers = combineReducers({
@@ -31,6 +32,7 @@ const reducers = combineReducers({
   testInformation,
   allGroups,
   taskInformation,
+  passTask,
 });
 
 export default reducers;
