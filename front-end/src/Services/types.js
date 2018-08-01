@@ -150,12 +150,12 @@ export const ADMIN_GENERAL_MENU_DATA = [{
   text: 'Тесты',
   subsections: [{
     id: '7',
-    text: 'Все тесты',
-    link: '/assignedtestlist',
-  }, {
-    id: '8',
     text: 'Назначить тесты',
     link: '/assigntests',
+  }, {
+    id: '8',
+    text: 'Добавить вопрос',
+    link: '/addquestion',
   }],
 }, {
   key: '9',

@@ -10,14 +10,14 @@ export function createTest(test) {
 
 export function addTestTag(tag) {
   return {
-    type: types.ADD_TEST_TAG,
-    payload: tag[tag.length - 1],
+    type: types.ADD_ASSIGN_TEST_TAG,
+    payload: tag,
   };
 }
 
 export function deleteTestTag(tag) {
   return {
-    type: types.DELETE_TEST_TAG,
+    type: types.DELETE_ASSIGN_TEST_TAG,
     payload: tag,
   };
 }
@@ -50,4 +50,8 @@ export function fetchUsersFromGroup(groupName) {
     'assign_test_users_from_group',
     'Не удалось загрузить список групп',
   ));
+}
+
+export function fetchTopics() {
+  return (API.get('topics', 'topics_assign_test', 'Не удалось загрузить темы'));
 }

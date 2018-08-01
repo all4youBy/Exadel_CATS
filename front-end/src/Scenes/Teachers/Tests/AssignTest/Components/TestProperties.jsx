@@ -52,6 +52,8 @@ class TestProperties extends React.Component {
     getUsersFromGroup: PropTypes.func.isRequired,
     groupName: PropTypes.string.isRequired,
     users: PropTypes.arrayOf(PropTypes.object).isRequired,
+    getTopics: PropTypes.func.isRequired,
+    topics: PropTypes.string.isRequired,
   };
 
   state = {
@@ -90,7 +92,7 @@ class TestProperties extends React.Component {
     const {
       handleAddTestTag, handleDeleteTestTag, tags, handleCreateTest, data,
       addStudent, delStudent, getStudentsData, students, error, groups,
-      getGroupsData,
+      getGroupsData, topics, getTopics,
     } = this.props;
     const { form } = this.props;
     const {
@@ -156,6 +158,8 @@ class TestProperties extends React.Component {
             deleteTag={handleDeleteTestTag}
             addTag={handleAddTestTag}
             valid={handleCreateTest}
+            topics={topics}
+            getTopics={getTopics}
           />
         </div>
         <Form className="parent-form">

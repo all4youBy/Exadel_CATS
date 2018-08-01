@@ -10,10 +10,27 @@ const initialState = {
   },
   error: '',
   users: '',
+  topics: [],
 };
 
 const testInformation = (state = initialState, action) => {
   switch (action.type) {
+    case types.ADD_ASSIGN_TEST_TAG: {
+      console.log(action.payload, 33775);
+      return {
+        ...state,
+        tags: [
+          ...state.tags,
+          action.payload,
+        ],
+      };
+    }
+    case types.DELETE_ASSIGN_TEST_TAG: {
+      return {
+        ...state,
+        tags: state.tags.filter(tag => tag !== action.payload),
+      };
+    }
     case types.CREATE_TEST: {
       return {
         ...state,
@@ -97,24 +114,6 @@ const testInformation = (state = initialState, action) => {
           ...state.students,
           groups: state.students.groups,
         },
-      };
-    }
-    case types.ADD_TEST_TAG: {
-      if (state.tags.includes(action.payload) || action.payload.length === 0) {
-        return state;
-      }
-      return {
-        ...state,
-        tags: [
-          ...state.tags,
-          action.payload,
-        ],
-      };
-    }
-    case types.DELETE_TEST_TAG: {
-      return {
-        ...state,
-        tags: state.tags.filter(tag => tag !== action.payload),
       };
     }
     case types.ERROR_STUDENTS_LIST_FOR_TEST:

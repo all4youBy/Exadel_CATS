@@ -8,6 +8,7 @@ import TreeWithTags from '../../../../../Components/TreeWithTags';
 import {
   addQuestionTag, dataQuestion,
   deleteQuestionTag,
+  fetchTopics,
 } from '../Services/Actions/actions';
 
 const { TextArea } = Input;
@@ -22,6 +23,8 @@ class QuestionForm extends React.PureComponent {
     addTag: PropTypes.func.isRequired,
     deleteTag: PropTypes.func.isRequired,
     addQuestion: PropTypes.func.isRequired,
+    getTopics: PropTypes.func.isRequired,
+    topics: PropTypes.arrayOf.isRequired,
   };
 
   constructor(props) {
@@ -178,7 +181,7 @@ class QuestionForm extends React.PureComponent {
   };
 
   render() {
-    const { addTag, tags, deleteTag, user } = this.props;
+    const { addTag, tags, deleteTag, user, topics, getTopics } = this.props;
     const {
       answerInputsFalse,
       answerInputsTrue,
@@ -276,7 +279,15 @@ class QuestionForm extends React.PureComponent {
     return (
       <Form onSubmit={this.handleSubmit} className="structure-question">
         <div className="header">Добавление вопроса</div>
-        <div className="tags"><TreeWithTags deleteTag={deleteTag} tags={tags} addTag={addTag}/></div>
+        <div className="tags">
+          <TreeWithTags
+            deleteTag={deleteTag}
+            tags={tags}
+            addTag={addTag}
+            getTopics={getTopics}
+            topics={topics}
+          />
+        </div>
         <Group className="level" onChange={this.onChangeLevel}>
           <span className="text-level">Уровень сложности вопроса:</span>
           <Radio value="LEVEL_1">1</Radio>
@@ -328,6 +339,7 @@ function mapStateToProps(state) {
   return {
     user: state.logInInformation.user,
     tags: state.addQuestion.tags,
+    topics: state.addQuestion.topics,
   };
 }
 
@@ -343,6 +355,9 @@ const mapDispatchToProps = dispatch => ({
     // data.status = 'ACTIVE';
     // data.statistics = null;
     dispatch(dataQuestion(url, data));
+  },
+  getTopics: () => {
+    dispatch(fetchTopics());
   },
 });
 const StructureQuestion = Form.create()(QuestionForm);

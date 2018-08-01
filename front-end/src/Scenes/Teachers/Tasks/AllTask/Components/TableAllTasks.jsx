@@ -1,10 +1,12 @@
 import React from 'react';
-import 'antd/dist/antd.css';
 import './TableAllTasks.scss';
+import PropTypes from 'prop-types';
 import { Table, Tag } from 'antd';
 import ButtonEditTask from './ButtonEditTask';
 import ButtonAssignTask from '../../../../../Components/ButtonAssignTask';
 import ButtonDeleteStudent from '../../../GroupsList/GroupStudentsList/Components/ButtonDeleteStudent';
+
+import Loading from '../../../../../Components/Loading';
 
 const columns = [{
   title: ' ',
@@ -68,6 +70,12 @@ for (let i = 1; i <= 20; i += 1) {
 
 
 class TableAllTasks extends React.PureComponent {
+  static propTypes = {
+    tasks: PropTypes.arrayOf(PropTypes.object).isRequired,
+    error: PropTypes.string.isRequired,
+    getTasks: PropTypes.func.isRequired,
+  };
+
   state = {
     bordered: false,
     loading: false,
@@ -77,8 +85,18 @@ class TableAllTasks extends React.PureComponent {
     showHeader: true,
   };
 
+  componentDidMount() {
+    const { getTasks } = this.props;
+    getTasks();
+  }
+
   render() {
     const { bordered, loading, pagination, size, title, showHeader } = this.state;
+    const { tasks, error } = this.props;
+    if (error) {
+      return <Loading/>;
+    }
+    console.log(tasks, 78754);
     return (
       <div>
         <Table

@@ -5,9 +5,6 @@ import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { Input, Button, message } from 'antd';
 import './CreategroupPage.scss';
-import SectionTree from '../../../../../Components/SectionTree';
-import { addTaskTag, deleteTaskTag } from '../../../Tasks/AddTask/Services/Actions/actions';
-import EditableTagGroup from '../../../../../Components/AddTaskTags';
 import {
   addStudentToGroup,
   deleteStudentFromGroup,
@@ -17,16 +14,12 @@ import {
 } from '../Services/Actions/actions';
 import CurrentGroupList from '../../../../../Components/CurrentGroupList';
 import StudentsList from '../../../../../Components/StudentsList';
-// import StudentsList from '../../../../../Components/StudentsList';
 
 const { TextArea } = Input;
 
 
 class CreateGroupPage extends React.PureComponent {
   static propTypes = {
-    tags: PropTypes.arrayOf(PropTypes.string).isRequired,
-    deleteTag: PropTypes.func.isRequired,
-    addTag: PropTypes.func.isRequired,
     addStudent: PropTypes.func.isRequired,
     delStudent: PropTypes.func.isRequired,
     students: PropTypes.arrayOf(PropTypes.object).isRequired,
@@ -54,7 +47,7 @@ class CreateGroupPage extends React.PureComponent {
 
   render() {
     const {
-      addTag, deleteTag, tags, addStudent, delStudent, students,
+      addStudent, delStudent, students,
       getStudentsData, data, error, sendGroupInfo, successMessage,
       getGroupsData, groups,
     } = this.props;
@@ -74,10 +67,6 @@ class CreateGroupPage extends React.PureComponent {
             this.setState({ group: value.target.value });
           }}
         />
-        <div className="tags-container-create-group">
-          <SectionTree addTag={addTag}/>
-          <EditableTagGroup tags={tags} deleteTag={deleteTag} addTag={addTag}/>
-        </div>
         <div className="student-list-container ">
           <StudentsList
             students={data}
@@ -110,6 +99,8 @@ function mapStateToProps(state) {
     error: state.createGroup.error,
     successMessage: state.createGroup.successMessage,
     groups: state.createGroup.groups,
+    topics: state.createGroup.topics,
+    errorTopics: state.createGroup.errorTopics,
   };
 }
 
@@ -121,12 +112,6 @@ function mapStateToProps(state) {
 //   error={error}
 // /> */
 const mapDispatchToProps = dispatch => ({
-  addTag: (tag) => {
-    dispatch(addTaskTag(tag));
-  },
-  deleteTag: (tag) => {
-    dispatch(deleteTaskTag(tag));
-  },
   addStudent: (student) => {
     dispatch(addStudentToGroup(student));
   },

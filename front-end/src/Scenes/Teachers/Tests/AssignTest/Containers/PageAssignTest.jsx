@@ -11,6 +11,7 @@ import {
   fetchGroupsListForTest,
   fetchStudentListForTest,
   fetchUsersFromGroup,
+  fetchTopics,
 } from '../Services/Actions/actions';
 
 
@@ -30,13 +31,15 @@ class PageAssignTest extends React.PureComponent {
     getGroupsData: PropTypes.func.isRequired,
     groupName: PropTypes.string.isRequired,
     getUsersFromGroup: PropTypes.func.isRequired,
+    getTopics: PropTypes.func.isRequired,
+    topics: PropTypes.string.isRequired,
   };
 
   render() {
     const {
       handleAddTestTag, handleDeleteTestTag, tags, handleCreateTest, data,
       addStudent, delStudent, getStudentsData, students, error, groups,
-      getGroupsData, getUsersFromGroup, groupName,
+      getGroupsData, getUsersFromGroup, groupName, getTopics, topics,
     } = this.props;
     return (
       <div>
@@ -55,6 +58,8 @@ class PageAssignTest extends React.PureComponent {
           getGroupsData={getGroupsData}
           getUsersFromGroup={getUsersFromGroup}
           groupName={groupName}
+          getTopics={getTopics}
+          topics={topics}
         />
       </div>
     );
@@ -71,6 +76,7 @@ function mapStateToProps(state, ownProps) {
     groups: state.testInformation.groups,
     groupName: ownProps.match.params.groupName,
     users: state.testInformation.users,
+    topics: state.testInformation.topics,
   };
 }
 
@@ -98,6 +104,9 @@ const mapDispatchToProps = dispatch => ({
   },
   getUsersFromGroup: () => {
     dispatch(fetchUsersFromGroup());
+  },
+  getTopics: () => {
+    dispatch(fetchTopics());
   },
 });
 

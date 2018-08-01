@@ -9,6 +9,8 @@ const initialState = {
   error: '',
   successMessage: '',
   groups: [],
+  topics: [],
+  errorTopics: '',
 };
 const createGroup = (state = initialState, action) => {
   switch (action.type) {
@@ -16,6 +18,16 @@ const createGroup = (state = initialState, action) => {
       return {
         ...state,
         successMessage: action.payload,
+      };
+    case types.RECEIVE_TOPICS_CREATE_GROUP:
+      return {
+        ...state,
+        topics: action.payload,
+      };
+    case types.ERROR_TOPICS_CREATE_GROUP:
+      return {
+        ...state,
+        errorTopics: action.payload,
       };
     case types.ERROR_STUDENT_LIST:
       return {

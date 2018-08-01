@@ -46,6 +46,7 @@ class Main extends React.Component {
       (<Route exact path="/materials" component={Materials}/>),
       (<Route exact path="/checktest" component={PageCheckTest}/>),
       (<Route exact path="/assigntask" component={PageAssignTask}/>),
+      (<Route exact path="/creategroup" component={CreateGroupPage}/>),
     ];
   }
 
@@ -81,7 +82,6 @@ class Main extends React.Component {
             <div className="switch-div">
               <Switch>
                 {this.renderCommonRoutes()}
-                <Route exact path="/creategroup" component={CreateGroupPage}/>
                 <Route exact path="/assignedtasks" component={PageAssignedTasks}/>
                 <Route exact path="/assigntest" component={PageAssignTest}/>
                 <Route exact path="/assigntest/:groupName" component={PageAssignTest}/>

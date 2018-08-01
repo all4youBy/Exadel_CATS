@@ -3,14 +3,14 @@ import API from '../../../../../../Services/API';
 
 export function addTestTag(tag) {
   return {
-    type: types.ADD_TASK_TAG,
-    payload: tag[tag.length - 1],
+    type: types.ADD_ASSIGN_TASK_TAG,
+    payload: tag,
   };
 }
 
 export function deleteTestTag(tag) {
   return {
-    type: types.DELETE_TASK_TAG,
+    type: types.DELETE_ASSIGN_TASK_TAG,
     payload: tag,
   };
 }
@@ -35,4 +35,8 @@ export function fetchStudentListForTask() {
 
 export function fetchGroupsListForTask() {
   return (API.get('users/groups', 'groups_list_for_task', 'Не удалось загрузить список групп'));
+}
+
+export function fetchTopics() {
+  return (API.get('topics', 'topics_assign_task', 'Не удалось загрузить темы'));
 }

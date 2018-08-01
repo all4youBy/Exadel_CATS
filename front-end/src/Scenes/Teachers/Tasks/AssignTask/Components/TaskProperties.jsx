@@ -12,6 +12,7 @@ import {
   deleteStudentFromList,
   fetchStudentListForTask,
   fetchGroupsListForTask,
+  fetchTopics,
 } from '../Services/Actions/actions';
 import StudentsList from '../../../../../Components/StudentsList';
 import CurrentGroupList from '../../../../../Components/CurrentGroupList';
@@ -58,6 +59,8 @@ class TaskProperties extends React.Component {
     students: PropTypes.arrayOf(PropTypes.object).isRequired,
     error: PropTypes.bool.isRequired,
     groups: PropTypes.arrayOf(PropTypes.object).isRequired,
+    getTopics: PropTypes.func.isRequired,
+    topics: PropTypes.arrayOf.isRequired,
   };
 
   state = {
@@ -86,7 +89,7 @@ class TaskProperties extends React.Component {
     const {
       handleAddTestTag, handleDeleteTestTag, tags, handleCreateTest, data,
       addStudent, delStudent, getStudentsData, students, error, getGroupsData,
-      groups,
+      groups, getTopics, topics,
     } = this.props;
     const { form } = this.props;
     const {
@@ -147,6 +150,8 @@ class TaskProperties extends React.Component {
             deleteTag={handleDeleteTestTag}
             addTag={handleAddTestTag}
             valid={handleCreateTest}
+            getTopics={getTopics}
+            topics={topics}
           />
         </div>
         <Form className="parent-form">
@@ -284,6 +289,7 @@ function mapStateToProps(state) {
     data: state.taskInformation.data,
     error: state.taskInformation.error,
     groups: state.taskInformation.groups,
+    topics: state.taskInformation.topics,
   };
 }
 
@@ -305,6 +311,9 @@ const mapDispatchToProps = dispatch => ({
   },
   getGroupsData: () => {
     dispatch(fetchGroupsListForTask());
+  },
+  getTopics: () => {
+    dispatch(fetchTopics());
   },
 });
 

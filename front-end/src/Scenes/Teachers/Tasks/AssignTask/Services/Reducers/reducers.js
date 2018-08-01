@@ -9,10 +9,22 @@ const initialState = {
     addedStudents: [],
   },
   error: '',
+  topics: [],
 };
 
 const taskInformation = (state = initialState, action) => {
   switch (action.type) {
+    case types.RECEIVE_TOPICS_ASSIGN_TASK: {
+      return {
+        ...state,
+        topics: action.payload,
+      };
+    }
+    case types.ERROR_TOPICS_ASSIGN_TASK:
+      return {
+        ...state,
+        error: action.payload,
+      };
     case types.RECEIVE_STUDENTS_LIST_FOR_TASK: {
       return {
         ...state,
@@ -86,10 +98,8 @@ const taskInformation = (state = initialState, action) => {
         },
       };
     }
-    case types.ADD_TASK_TAG: {
-      if (state.tags.includes(action.payload) || action.payload.length === 0) {
-        return state;
-      }
+    case types.ADD_ASSIGN_TASK_TAG: {
+      console.log(action.payload, 33775);
       return {
         ...state,
         tags: [
@@ -98,7 +108,7 @@ const taskInformation = (state = initialState, action) => {
         ],
       };
     }
-    case types.DELETE_TASK_TAG: {
+    case types.DELETE_ASSIGN_TASK_TAG: {
       return {
         ...state,
         tags: state.tags.filter(tag => tag !== action.payload),
