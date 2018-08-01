@@ -9,10 +9,10 @@ import java.time.LocalDateTime;
 import java.util.Collection;
 import java.util.List;
 
-@Repository
-public interface AssignableRepository<T extends Assignable> extends MongoRepository<T, ObjectId> {
-    List<T> findByAssignedToAndDeadlineBeforeOrderByStartDesc(String assignedTo, LocalDateTime deadline);
-    List<T> findByAssignedToInAndDeadlineBeforeOrderByStartDesc(Collection<String> assignedTo, LocalDateTime deadline);
+public interface AssignableRepository<T extends Assignable>
+        extends MongoRepository<T, ObjectId> {
+    List<T> findByAssignedToAndDeadlineBeforeOrderByDeadlineDesc(String assignedTo, LocalDateTime deadline);
+    List<T> findByAssignedToInAndDeadlineBeforeOrderByDeadlineDesc(Collection<String> assignedTo, LocalDateTime deadline);
     List<T> findByAssignedToAndDeadlineAfterOrderByStartDesc(String assignedTo, LocalDateTime deadline);
     List<T> findByAssignedToInAndDeadlineAfterOrderByStartDesc(Collection<String> assignedTo, LocalDateTime deadline);
 
