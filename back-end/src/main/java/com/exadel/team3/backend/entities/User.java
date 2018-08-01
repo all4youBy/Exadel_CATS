@@ -40,7 +40,6 @@ public class User {
     @Setter(AccessLevel.NONE)
     private Set<String> groups = new HashSet<>();
 
-    @Field("education")
     private UserAffiliation affiliation;
 
     private String emailConfirmationCode;
