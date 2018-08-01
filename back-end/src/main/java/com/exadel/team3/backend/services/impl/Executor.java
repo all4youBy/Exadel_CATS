@@ -33,7 +33,7 @@ public class Executor {
     private Method method;
 
     @Bean
-    public SolutionCheckerRoutine getStubCheckerRoutine() throws ServiceException {
+    public SolutionCheckerRoutine getCheckerRoutine() throws ServiceException {
         return ((solution, input, output) -> {
             if (this.solution == null) {
                 this.solution = solution;
@@ -56,7 +56,7 @@ public class Executor {
                 nameAndContentFiles.put(fileName, FileEditor.getFile(inputStream));
             }
             nameAndContentFiles = FileEditor.editFiles(nameAndContentFiles);
-            method = taskRunner.findMethod(taskCompiler.compileTask(nameAndContentFiles), "executor", new String[]{});
+            method = taskRunner.findMethod(taskCompiler.compileTask(nameAndContentFiles), "execute", new String[]{});
         } catch (IOException e) {
             throw new ServiceException(e);
         }

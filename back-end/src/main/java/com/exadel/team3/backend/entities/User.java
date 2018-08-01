@@ -11,7 +11,6 @@ import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.Field;
 import org.springframework.util.StringUtils;
 
-import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;
 
