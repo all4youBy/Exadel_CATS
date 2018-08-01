@@ -20,8 +20,8 @@ public enum MailTypes {
     SEND_LOGIN_AND_PASS("Text_for_send_log_and_pass.txt", "Subject_for_send_log_and_pass.txt"),
     VERIFICATION_TEST("Text_for_notification_verification_test.txt", "Subject_for_notification_verification_test.txt");
 
-    private final static String PATH_TO_FILE_WITH_TEXT = "email_sender/text_for_email/";
-    private final static String PATH_TO_FILE_WITH_SUBJECT = "email_sender/subject_for_email/";
+    private final static String PATH_TO_FILE_WITH_TEXT = "static/email_sender/text_for_email/";
+    private final static String PATH_TO_FILE_WITH_SUBJECT = "static/email_sender/subject_for_email/";
     private String templateText;
     private String templateSubject;
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
@@ -32,15 +32,7 @@ public enum MailTypes {
     }
 
     private String readFile(String nameFile) {
-        String text = "";
-
-        try {
-            text = java.nio.file.Files.lines(Paths.get((new File(getClass().getClassLoader().getResource(nameFile).getFile()).getPath()))).collect(Collectors.joining());
-        } catch (IOException ex) {
-
-            logger.error("Could not read file with subject or message text. " + ex.getMessage());
-        }
-        return text;
+        return new BufferedReader(new InputStreamReader(getClass().getResourceAsStream(nameFile))).lines().collect(Collectors.joining());
     }
 
     public String getTemplateText() {

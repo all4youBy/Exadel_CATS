@@ -10,6 +10,7 @@ import io.jsonwebtoken.SignatureAlgorithm;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;
+import org.apache.commons.lang3.RandomStringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -97,15 +98,10 @@ public class SecurityUtils {
 
     public String[] generateUserPassword(){
         String generatedString = generateRandomString(PASS_STRING_LENGTH);
-        return new String[]{generatedString,encoder.encode(generatedString)};
+        return new String[]{generatedString, encoder.encode(generatedString)};
     }
 
     private String generateRandomString(int length){
-        Random random = new Random();
-
-        byte[] bytes = new byte[length];
-        random.nextBytes(bytes);
-
-        return new String(bytes, Charset.forName("UTF-8"));
+        return RandomStringUtils.randomAlphabetic(length);
     }
 }

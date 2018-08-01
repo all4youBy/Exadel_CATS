@@ -14,6 +14,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @RestController
@@ -113,9 +114,15 @@ public class TaskController {
     @PutMapping("/add-testing-set/{taskId}")
     @PreAuthorize("hasAnyRole('ADMIN','TEACHER')")
     public ResponseEntity<?> addTestingSets(@PathVariable(value = "taskId") String taskId, @RequestBody TaskTestingSet set) {
-        List<TaskTestingSet> taskTestingSets = taskService.getItem(new ObjectId(taskId)).getTestingSets();
-
+        Task task = taskService.getItem(new ObjectId(taskId));
+        List<TaskTestingSet> taskTestingSets = task.getTestingSets();
+        if (taskTestingSets == null) {
+            task.setTestingSets(new ArrayList<>());
+            taskTestingSets = task.getTestingSets();
+        }
         if (taskTestingSets.add(set)) {
+            task.setTestingSets(taskTestingSets);
+            taskService.updateItem(task);
             return new ResponseEntity<>(taskTestingSets, HttpStatus.OK);
         } else {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Can't add tasks set.");
