@@ -19,7 +19,10 @@ const createGroup = (state = initialState, action) => {
       return {
         ...state,
         success: true,
-        students: [],
+        students: {
+          groups: [],
+          addedStudents: [],
+        },
       };
     case types.ERROR_POSTGROUP:
       return {

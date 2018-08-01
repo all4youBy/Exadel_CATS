@@ -1,5 +1,4 @@
-/* eslint-disable no-restricted-globals */
-/* eslint-disable import/no-cycle */
+
 import React from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
@@ -12,20 +11,10 @@ import {
   fetchGroupsList,
   postGroup,
 } from '../Services/Actions/actions';
-import SectionTree from '../../../../../Components/SectionTree';
-import { addTaskTag, deleteTaskTag } from '../../../Tasks/AddTask/Services/Actions/actions';
-import EditableTagGroup from '../../../../../Components/AddTaskTags';
-import {
-  addStudentToGroup,
-  deleteStudentFromGroup,
-  fetchStudentList,
-  postGroup,
-} from '../Services/Actions/actions';
 import CurrentGroupList from '../../../../../Components/CurrentGroupList';
 import StudentsList from '../../../../../Components/StudentsList';
 
 const { TextArea } = Input;
-
 
 class CreateGroupPage extends React.Component {
   static propTypes = {
@@ -55,7 +44,7 @@ class CreateGroupPage extends React.Component {
     const { students } = this.props;
     const { group } = this.state;
     return {
-      emails: students.map(item => item.email),
+      emails: students.addedStudents.map(item => item.email),
       group,
     };
   };
@@ -72,16 +61,10 @@ class CreateGroupPage extends React.Component {
   render() {
     const {
       addStudent, delStudent, students,
-      getStudentsData, data, error, sendGroupInfo, successMessage,
+      getStudentsData, data, error,
       getGroupsData, groups,
-      addTag, deleteTag, tags, addStudent, delStudent, students,
-      getStudentData, data, error,
     } = this.props;
     console.log(addStudent, data, error);
-    if (successMessage) {
-      message.success('Группа успешно создана');
-      location.reload();
-    }
 
     return (
       <div className="create-group-container">
