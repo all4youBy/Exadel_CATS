@@ -27,7 +27,7 @@ public class QuestionController {
 
        Question q = questionService.addItem(question);
 
-       if(q == null)
+       if(q==null)
            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Can't add question");
 
        return ResponseEntity.status(HttpStatus.CREATED).body("Question added");
@@ -53,6 +53,10 @@ public class QuestionController {
             return questionService.getItems();
         return questionService.getItemsByTopicIds(topicsIds);
     }
+//
+//    public List<Question> getAllQuestion(@RequestBody List<ObjectId> questionId){
+//
+//    }
 
     @GetMapping("/{id}")
     @AdminAndTeacherAccess

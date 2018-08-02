@@ -2,6 +2,7 @@ package com.exadel.team3.backend.controllers;
 
 import com.exadel.team3.backend.controllers.requests.TaskAttemptRequest;
 import com.exadel.team3.backend.controllers.requests.TaskRequest;
+import com.exadel.team3.backend.dto.TaskDTO;
 import com.exadel.team3.backend.entities.Solution;
 import com.exadel.team3.backend.entities.Task;
 import com.exadel.team3.backend.entities.TaskTestingSet;
@@ -14,12 +15,12 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @RestController
 @RequestMapping("/task")
 public class TaskController {
-
     @Autowired
     TaskService taskService;
     @Autowired
@@ -35,9 +36,14 @@ public class TaskController {
         return ResponseEntity.status(HttpStatus.CREATED).body("Task added");
     }
 
-    @GetMapping("/{taskId}")
-    public Task getTask(@PathVariable(value = "taskId") String taskId){
-        return taskService.getItem(new ObjectId(taskId));
+    @GetMapping("/{usersLogin}/{taskId}")
+    public TaskDTO getTask(@PathVariable(value = "taskId") String taskId, @PathVariable(value = "usersLogin") String usersLogin){
+        Task task = taskService.getItem(new ObjectId(taskId));
+        List<Solution> solutions = solutionService.getAssignedItems(usersLogin, task.getAuthor());
+        Solution solution = solutions.stream().filter(
+                o1 -> o1.getId().equals(new ObjectId(usersLogin)))
+                .findFirst().get();
+        return new TaskDTO(task.getId(), task.getTitle(), task.getText(), task.getAuthor(), solution.getMark());
     }
 
     @DeleteMapping("/delete-task")
@@ -46,9 +52,14 @@ public class TaskController {
         taskService.deleteItem(task);
     }
 
-    @PostMapping("/add-solution")
-    public ResponseEntity<?> addFilesInSolution(@RequestBody TaskAttemptRequest taskAttemptRequest) {
-        Solution solution = solutionService.storeFile(taskAttemptRequest.getSolution(), taskAttemptRequest.getMultipartFile());
+    @PostMapping("/add-solution/{taskId}")
+    public ResponseEntity<?> addFilesInSolution(@PathVariable(value = "taskId") String taskId, @RequestBody TaskAttemptRequest taskAttemptRequest) {
+        Task task = taskService.getItem(new ObjectId(taskId));
+        List<Solution> solutions = solutionService.getAssignedItems(taskAttemptRequest.getUsersId(), task.getAuthor());
+        Solution solution = solutions.stream().filter(
+                o1 -> o1.getId().equals(new ObjectId(taskAttemptRequest.getUsersId())))
+                .findFirst().get();
+        solution = solutionService.storeFile(solution, taskAttemptRequest.getMultipartFile());
         solutionService.submit(solution);
         return new ResponseEntity<>(solution, HttpStatus.OK);
     }
@@ -114,9 +125,15 @@ public class TaskController {
     @PutMapping("/add-testing-set/{taskId}")
     @PreAuthorize("hasAnyRole('ADMIN','TEACHER')")
     public ResponseEntity<?> addTestingSets(@PathVariable(value = "taskId") String taskId, @RequestBody TaskTestingSet set) {
-        List<TaskTestingSet> taskTestingSets = taskService.getItem(new ObjectId(taskId)).getTestingSets();
-
+        Task task = taskService.getItem(new ObjectId(taskId));
+        List<TaskTestingSet> taskTestingSets = task.getTestingSets();
+        if (taskTestingSets == null) {
+            task.setTestingSets(new ArrayList<>());
+            taskTestingSets = task.getTestingSets();
+        }
         if (taskTestingSets.add(set)) {
+            task.setTestingSets(taskTestingSets);
+            taskService.updateItem(task);
             return new ResponseEntity<>(taskTestingSets, HttpStatus.OK);
         } else {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Can't add tasks set.");

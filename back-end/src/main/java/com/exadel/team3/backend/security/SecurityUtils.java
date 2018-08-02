@@ -1,22 +1,16 @@
 package com.exadel.team3.backend.security;
 
-import com.exadel.team3.backend.entities.User;
-
 import com.exadel.team3.backend.services.time.TimeService;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 
-import lombok.AccessLevel;
 import lombok.Getter;
-import lombok.Setter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
-import java.lang.reflect.Array;
-import java.nio.charset.Charset;
 import java.time.LocalDateTime;
 import java.util.*;
 import java.util.function.Function;
@@ -88,11 +82,6 @@ public class SecurityUtils {
     private LocalDateTime calculateExpirationDate(LocalDateTime createdDate) {
         return createdDate.plusMinutes(expiration);
     }
-
-//    public void hashUserPassword(User user){
-//        String hashPass = encoder.encode(user.getPasswordHash());
-//        user.setPasswordHash(hashPass);
-//    }
 
     public String[] generateUserPassword() {
         String generatedString = generateRandomString();
