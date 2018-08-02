@@ -65,7 +65,7 @@ public class TestController {
     }
 
     @PostMapping(produces = MediaType.APPLICATION_JSON_VALUE)
-//    @TestGenerationAccess
+    @TestGenerationAccess
     public ResponseEntity<?> getTestForUser(@RequestBody TestGenerationRequest request){
 
        Test test =  testService.generateTestForUser(request.getUserId(),

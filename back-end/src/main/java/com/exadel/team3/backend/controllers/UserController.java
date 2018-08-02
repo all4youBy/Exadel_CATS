@@ -7,16 +7,17 @@ import com.exadel.team3.backend.entities.UserRole;
 import com.exadel.team3.backend.security.SecurityUtils;
 import com.exadel.team3.backend.security.annotations.AdminAccess;
 import com.exadel.team3.backend.security.annotations.AdminAndTeacherAccess;
+import com.exadel.team3.backend.security.annotations.AdminAndUserAccess;
 import com.exadel.team3.backend.security.annotations.UserAccess;
 import com.exadel.team3.backend.services.SolutionService;
 import com.exadel.team3.backend.services.UserService;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Lazy;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Collection;
@@ -34,6 +35,9 @@ public class UserController {
 
     @Autowired
     private SecurityUtils securityUtils;
+
+    @Autowired
+    private ModelMapper mapper;
 
     @GetMapping(value = "/find-by-group")
     @AdminAndTeacherAccess
@@ -77,8 +81,10 @@ public class UserController {
         User user = userService.getItem(request.getEmail());
 
 
-        if(securityUtils.getEncoder().matches(request.getOldPassword(),user.getPasswordHash()))
+        if(securityUtils.getEncoder().matches(request.getOldPassword(),user.getPasswordHash())) {
             user.setPasswordHash(securityUtils.getEncoder().encode(request.getNewPassword()));
+            userService.updateItem(user);
+        }
         else
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Old password doesn't match.");
 
@@ -160,10 +166,12 @@ public class UserController {
     }
 
     @PutMapping(produces = MediaType.APPLICATION_JSON_VALUE)
-    @AdminAccess
-    public ResponseEntity<?> updateUser(@RequestBody User user){
-        userService.updateItem(user);
-        return new ResponseEntity<String>(HttpStatus.OK);
+    @AdminAndUserAccess
+    public ResponseEntity<?> updateUser(@RequestBody UserUpdateRequest u){
+
+        User user = mapper.map(u,User.class);
+//        userService.updateItem(user);
+        return ResponseEntity.ok(user);
     }
 
     @DeleteMapping
@@ -178,4 +186,6 @@ public class UserController {
         userService.assignGroup(request.getEmails(), request.getGroupId());
         return ResponseEntity.ok(HttpStatus.OK);
     }
+
+
 }

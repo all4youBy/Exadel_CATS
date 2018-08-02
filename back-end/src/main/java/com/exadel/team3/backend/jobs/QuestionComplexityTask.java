@@ -7,8 +7,8 @@ import org.springframework.stereotype.Component;
 public class QuestionComplexityTask {
 
 
-    @Scheduled(fixedDelay = 2000)
+    @Scheduled(fixedDelay = 3000)
     public void calculateComplexity(){
-        System.out.println("Hello World");
+        System.out.println("Janna skoro pridet, rabotaem rabotyagi");
     }
 }

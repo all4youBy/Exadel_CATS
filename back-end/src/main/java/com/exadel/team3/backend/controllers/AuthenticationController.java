@@ -66,7 +66,8 @@ public class AuthenticationController {
                 request.getFaculty(),
                 request.getYearTermination(),
                 "",
-                request.getPrimarySkill());
+                request.getPrimarySkill(),
+                request.getJob());
 
         UserRole userRole = request.getUserRole();
 
