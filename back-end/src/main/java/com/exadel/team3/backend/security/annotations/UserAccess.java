@@ -7,4 +7,4 @@ import java.lang.annotation.RetentionPolicy;
 
 @Retention(RetentionPolicy.RUNTIME)
 @PreAuthorize("hasAnyRole('ADMIN','TEACHER') or #email == authentication.name")
-public @interface UserAccess { }
+public @interface UserAccess {}

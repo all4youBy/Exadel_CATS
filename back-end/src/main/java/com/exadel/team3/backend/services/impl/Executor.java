@@ -8,7 +8,6 @@ import com.exadel.team3.backend.services.task.editor.FileEditor;
 import com.exadel.team3.backend.services.task.task_compile.TaskCompiler;
 import com.exadel.team3.backend.services.task.task_run.TaskRunner;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Component;
 
@@ -29,9 +28,6 @@ public class Executor {
 
     @Autowired
     SolutionService solutionService;
-
-    @Value("${cats.task.name_of_method}")
-    private String methodName;
 
     private Solution solution;
     private Method method;
@@ -60,7 +56,7 @@ public class Executor {
                 nameAndContentFiles.put(fileName, FileEditor.getFile(inputStream));
             }
             nameAndContentFiles = FileEditor.editFiles(nameAndContentFiles);
-            method = taskRunner.findMethod(taskCompiler.compileTask(nameAndContentFiles), methodName, new String[]{});
+            method = taskRunner.findMethod(taskCompiler.compileTask(nameAndContentFiles), "execute", new String[]{});
         } catch (IOException e) {
             throw new ServiceException(e);
         }

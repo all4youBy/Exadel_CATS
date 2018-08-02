@@ -78,12 +78,12 @@ public class AuthenticationController {
 
         user.setAffiliation(userAffiliation);
         userService.addItem(user);
+
         Map<String, String> replaceMap = new HashMap<>();
         replaceMap.put("&login", request.getEmail());
         replaceMap.put("&password", userPassInfo[0]);
-
-
         mailSender.send(MailTypes.SEND_LOGIN_AND_PASS, request.getEmail(), replaceMap);
+
         return ResponseEntity.status(HttpStatus.OK).body("User created.");
     }
 

@@ -12,8 +12,8 @@ public class TestPostDTO {
 
     @Setter
     @Getter
-    @JsonSerialize(using = ToStringSerializer.class)
-    private ObjectId testId;
+//    @JsonSerialize(using = ToStringSerializer.class)
+    private String testId;
 
     @Setter
     @Getter
