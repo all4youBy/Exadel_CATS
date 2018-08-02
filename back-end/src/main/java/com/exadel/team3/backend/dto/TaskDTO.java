@@ -1,5 +1,6 @@
 package com.exadel.team3.backend.dto;
 
+import com.exadel.team3.backend.entities.Solution;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import lombok.*;
@@ -18,20 +19,14 @@ public class TaskDTO {
     private ObjectId id;
 
     @NonNull
+    Solution solution;
+
+    @NonNull
     private String title;
 
     @NonNull
     private String text;
 
-    @NonNull
-    private String author;
-
     private List<ObjectId> topicIds;
-
-    private LocalDateTime start;
-
-    private LocalDateTime deadline;
-
-    private Integer mark;
 
 }

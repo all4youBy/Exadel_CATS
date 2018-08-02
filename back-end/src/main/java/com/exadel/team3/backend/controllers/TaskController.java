@@ -3,6 +3,7 @@ package com.exadel.team3.backend.controllers;
 import com.exadel.team3.backend.controllers.requests.TaskAttemptRequest;
 import com.exadel.team3.backend.controllers.requests.TaskRequest;
 import com.exadel.team3.backend.dto.SolutionDTO;
+import com.exadel.team3.backend.dto.TaskDTO;
 import com.exadel.team3.backend.dto.mappers.SolutionDTOMapper;
 import com.exadel.team3.backend.entities.Solution;
 import com.exadel.team3.backend.entities.Task;
@@ -109,10 +110,12 @@ public class TaskController {
 
     @GetMapping("/users-task/{usersId}/{taskId}")
     //TODO Максим напишет аннотацию. Доступ имеет админ, учитель и только один ученик
-    public Solution getUsersSolution(@PathVariable(value = "taskId") String taskId, @PathVariable(value = "usersId") String usersId) {
-        return solutionService.getAssignedItems(usersId).stream().filter(
-                o1 -> o1.getId().equals(new ObjectId(taskId)))
+    public TaskDTO getUsersSolution(@PathVariable(value = "taskId") String taskId, @PathVariable(value = "usersId") String usersId) {
+        Solution solution = solutionService.getAssignedItems(usersId).stream().filter(
+                o1 -> o1.getTaskId().equals(new ObjectId(taskId)))
                 .findFirst().get();
+        Task task = taskService.getItem(new ObjectId(taskId));
+        return new TaskDTO(new ObjectId(taskId), solution, task.getTitle(), task.getText(), task.getTopicIds());
     }
 
     @PutMapping("/add-testing-set/{taskId}")
