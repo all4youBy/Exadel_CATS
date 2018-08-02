@@ -1,5 +1,6 @@
 package com.exadel.team3.backend.controllers;
 
+import com.exadel.team3.backend.controllers.requests.FileWrapper;
 import com.exadel.team3.backend.controllers.requests.TaskRequest;
 import com.exadel.team3.backend.dto.SolutionDTO;
 import com.exadel.team3.backend.dto.TaskDTO;
@@ -18,6 +19,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.FileWriter;
 import java.util.List;
 
 @RestController
@@ -53,11 +55,10 @@ public class TaskController {
     }
 
     @PostMapping("/add-solution/{id}")
-    public ResponseEntity<?> addFilesInSolution(@RequestBody MultipartFile file, @PathVariable(value = "id") String id) {
-        System.out.println(file);
-        Solution solution = solutionService.storeFile(solutionService.getItem(new ObjectId(id)), file);
+    public ResponseEntity<?> addFilesInSolution(@RequestBody FileWrapper fileWrapper, @PathVariable(value = "id") String id) {
+        System.out.println(fileWrapper.getFile());
+        Solution solution = solutionService.storeFile(solutionService.getItem(new ObjectId(id)), fileWrapper.getFile());
         solutionService.submit(solution);
-
 
         return new ResponseEntity<>(solution, HttpStatus.OK);
     }
