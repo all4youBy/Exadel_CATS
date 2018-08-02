@@ -57,6 +57,8 @@ public class TaskController {
         System.out.println(multipartFile);
         Solution solution = solutionService.storeFile(solutionService.getItem(new ObjectId(id)), multipartFile);
         solutionService.submit(solution);
+
+
         return new ResponseEntity<>(solution, HttpStatus.OK);
     }
 
