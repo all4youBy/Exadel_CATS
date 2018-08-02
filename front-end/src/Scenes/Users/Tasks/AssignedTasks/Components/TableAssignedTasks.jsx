@@ -1,6 +1,6 @@
 import React from 'react';
 import 'antd/dist/antd.css';
-import { Table } from 'antd';
+import { Table, Tag } from 'antd';
 import { Link } from 'react-router-dom';
 import ButtonPassTask from './ButtonPassTask';
 
@@ -43,12 +43,16 @@ const columns = [{
   ),
 }];
 
+let tags = ['aaaa', 'ssss', 'ffff'];
+
+tags = tags.map(element => <Tag color="blue">{element}</Tag>);
+
 const data = [];
 for (let i = 1; i <= 20; i += 1) {
   data.push({
     key: `${i}`,
     name: `Задача ${i}`,
-    theme: `Тема ${i}`,
+    theme: tags,
     author: `Автор ${i}`,
     deadline: `${i}.${i}.200${i}`,
   });

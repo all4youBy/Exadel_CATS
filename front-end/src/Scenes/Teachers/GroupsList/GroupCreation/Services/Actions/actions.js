@@ -16,13 +16,11 @@ export function deleteStudentFromGroup(student) {
 }
 
 export function fetchStudentList() {
-  return (API.get('users/students', 'studentList', 'Не удалось загрузить список студентов'));
+  return (API.get('users/students', 'student_list', 'Не удалось загрузить список студентов'));
 }
-export function receiveStudentList(data) {
-  return {
-    type: types.RECEIVE_STUDENTLIST,
-    payload: data,
-  };
+
+export function fetchGroupsList() {
+  return (API.get('users/groups', 'groups_list', 'Не удалось загрузить список групп'));
 }
 
 export function postGroup(data) {

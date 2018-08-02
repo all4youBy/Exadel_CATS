@@ -2,10 +2,16 @@ import React from 'react';
 import 'antd/dist/antd.css';
 import './SingleAnswerQuestion.scss';
 import { Radio, Card } from 'antd';
+import PropTypes from 'prop-types';
 
 const { Group } = Radio;
 
 export default class SingleAnswerQuestion extends React.PureComponent {
+  static propTypes = {
+    text: PropTypes.string.isRequired,
+    variants: PropTypes.shape().isRequired,
+  };
+
   state = {
     value: 1,
   };
@@ -17,32 +23,20 @@ export default class SingleAnswerQuestion extends React.PureComponent {
   };
 
   render() {
-    const radioStyle = {
-      display: 'block',
-      height: '22px',
-      lineHeight: '30px',
-    };
+    const { text, variants } = this.props;
+    const plainOptions = variants.map(item => item.text);
     const { value } = this.state;
 
     return (
       <Card className="single-answer-question-card">
         <p className="question-text">
-          Вопрос с одним вариантом ответа
+          {text}
         </p>
-        <Group onChange={this.onChange} value={value}>
-          <Radio style={radioStyle} value={1}>
-            Ответ 1
-          </Radio>
-          <Radio className="RadioAnswer" style={radioStyle} value={2}>
-            Ответ 2
-          </Radio>
-          <Radio style={radioStyle} value={3}>
-            Ответ 3
-          </Radio>
-          <Radio style={radioStyle} value={4}>
-            Ответ 4
-          </Radio>
-        </Group>
+        <Group
+          options={plainOptions}
+          onChange={this.onChange}
+          value={value}
+        />
       </Card>
     );
   }

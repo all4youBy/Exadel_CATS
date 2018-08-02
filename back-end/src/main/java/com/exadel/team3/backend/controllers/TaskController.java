@@ -1,7 +1,10 @@
 package com.exadel.team3.backend.controllers;
 
-import com.exadel.team3.backend.controllers.requests.TaskAttemptRequest;
 import com.exadel.team3.backend.controllers.requests.TaskRequest;
+import com.exadel.team3.backend.dto.SolutionDTO;
+import com.exadel.team3.backend.dto.TaskDTO;
+import com.exadel.team3.backend.dto.mappers.SolutionDTOMapper;
+import com.exadel.team3.backend.dto.mappers.TopicDTOMapper;
 import com.exadel.team3.backend.entities.Solution;
 import com.exadel.team3.backend.entities.Task;
 import com.exadel.team3.backend.entities.TaskTestingSet;
@@ -13,6 +16,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -24,6 +28,8 @@ public class TaskController {
     TaskService taskService;
     @Autowired
     SolutionService solutionService;
+    @Autowired
+    SolutionDTOMapper solutionDTOMapper;
 
     @PostMapping("/add-task")
     @PreAuthorize("hasAnyRole('ADMIN','TEACHER')")
@@ -46,10 +52,13 @@ public class TaskController {
         taskService.deleteItem(task);
     }
 
-    @PostMapping("/add-solution")
-    public ResponseEntity<?> addFilesInSolution(@RequestBody TaskAttemptRequest taskAttemptRequest) {
-        Solution solution = solutionService.storeFile(taskAttemptRequest.getSolution(), taskAttemptRequest.getMultipartFile());
+    @PostMapping("/add-solution/{id}")
+    public ResponseEntity<?> addFilesInSolution(@RequestParam("file") MultipartFile file, @PathVariable(value = "id") String id) {
+        System.out.println(file);
+        Solution solution = solutionService.storeFile(solutionService.getItem(new ObjectId(id)), file);
         solutionService.submit(solution);
+
+
         return new ResponseEntity<>(solution, HttpStatus.OK);
     }
 
@@ -93,8 +102,8 @@ public class TaskController {
 
     @GetMapping("/users-tasks/{userId}")
     //TODO Максим напишет аннотацию. Доступ имеет админ, учитель и только один ученик
-    public List<Solution> getUsersSolutions(@PathVariable(value = "userId") String userId) {
-        return solutionService.getAssignedItems(userId);
+    public List<SolutionDTO> getUsersSolutions(@PathVariable(value = "userId") String userId) {
+        return solutionDTOMapper.convertToDTO(solutionService.getAssignedItems(userId));
     }
 
     @GetMapping("/testing-sets/{taskId}")
@@ -105,10 +114,13 @@ public class TaskController {
 
     @GetMapping("/users-task/{usersId}/{taskId}")
     //TODO Максим напишет аннотацию. Доступ имеет админ, учитель и только один ученик
-    public Solution getUsersSolution(@PathVariable(value = "taskId") String taskId, @PathVariable(value = "usersId") String usersId) {
-        return solutionService.getAssignedItems(usersId).stream().filter(
-                o1 -> o1.getId().equals(new ObjectId(taskId)))
+    public TaskDTO getUsersSolution(@PathVariable(value = "taskId") String taskId, @PathVariable(value = "usersId") String usersId) {
+        Solution solution = solutionService.getAssignedItems(usersId).stream().filter(
+                o1 -> o1.getTaskId().equals(new ObjectId(taskId)))
                 .findFirst().get();
+        Task task = taskService.getItem(new ObjectId(taskId));
+
+        return new TaskDTO(solution, task.getTitle(), task.getText(), TopicDTOMapper.transformInToList(task.getTopicIds()));
     }
 
     @PutMapping("/add-testing-set/{taskId}")

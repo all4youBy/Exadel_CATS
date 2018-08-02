@@ -1,14 +1,11 @@
 .tags-container {
   display: flex;
+  width: 100%;
   flex-direction: row;
-  margin-top: 25px;
   .section-tree {
     width: 100%;
   }
   .tree-container {
     min-width: 40%;
-  }
-  .section-tree{
-    width: 100%;
   }
 }

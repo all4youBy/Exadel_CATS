@@ -44,7 +44,7 @@ public class UserController {
     public ResponseEntity<?> getGroups(){
         List<String> groups = userService.getGroups();
 
-       return groups == null?
+        return groups == null?
                 ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Can't get groups."):
                 ResponseEntity.ok().body(groups);
     }
@@ -144,13 +144,13 @@ public class UserController {
             produces = MediaType.APPLICATION_JSON_VALUE)
     @AdminAccess
     public ResponseEntity<?> updateUserRights(@RequestBody UpdateUserRightsRequest request){
-       User user = userService.getItem(request.getEmail());
-       if(user == null)
-           return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Can't find user with email:"+request.getEmail());
+        User user = userService.getItem(request.getEmail());
+        if(user == null)
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Can't find user with email:"+request.getEmail());
 
-       user.setRole(request.getUserRole());
-       userService.updateItem(user);
-       return ResponseEntity.ok().body("User rights increased to:"+request.getUserRole());
+        user.setRole(request.getUserRole());
+        userService.updateItem(user);
+        return ResponseEntity.ok().body("User rights increased to:"+request.getUserRole());
     }
 
     @GetMapping("/confirm-users")

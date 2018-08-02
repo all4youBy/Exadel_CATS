@@ -7,6 +7,7 @@ import lombok.Data;
 import lombok.NonNull;
 import lombok.Setter;
 import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.Field;
 import org.springframework.util.StringUtils;
@@ -35,10 +36,10 @@ public class User {
     @JsonIgnore
     private String passwordHash;
 
+    @Indexed
     @Setter(AccessLevel.NONE)
     private Set<String> groups = new HashSet<>();
 
-    @Field()
     private UserAffiliation affiliation;
 
     private String emailConfirmationCode;

@@ -14,6 +14,7 @@ class LoginForm extends React.Component {
     form: PropTypes.shape().isRequired,
     onLogIn: PropTypes.func.isRequired,
     sendLogInData: PropTypes.func.isRequired,
+    login: PropTypes.bool.isRequired,
   };
 
   constructor(props) {
@@ -39,9 +40,9 @@ class LoginForm extends React.Component {
     });
   };
 
-
   render() {
-    const { form: { getFieldDecorator } } = this.props;
+    const { form: { getFieldDecorator }, login } = this.props;
+    const errorLogIn = !login ? <div/> : <div className="error-input">Пароль или почта введены неправильно!</div>;
     return (
       <Form onSubmit={this.handleSubmit} className="login-form">
         <FormItem className="form-item">
@@ -68,6 +69,7 @@ class LoginForm extends React.Component {
             />,
           )}
         </FormItem>
+        {errorLogIn}
         <FormItem className="login">
           <Button type="primary" htmlType="submit" className="login-form-button">
             Войти
@@ -82,7 +84,7 @@ class LoginForm extends React.Component {
 
 function mapState(state) {
   return {
-    data: state,
+    login: state.logInInformation.error,
   };
 }
 

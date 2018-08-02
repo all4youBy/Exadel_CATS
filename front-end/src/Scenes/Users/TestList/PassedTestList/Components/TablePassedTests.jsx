@@ -1,7 +1,7 @@
 import React from 'react';
 import 'antd/dist/antd.css';
 import './TablePassedTests.scss';
-import { Table, Badge } from 'antd';
+import { Table, Badge, Tag } from 'antd';
 
 function TablePassedTests() {
   // const expandedRowRender = () => {
@@ -37,6 +37,11 @@ function TablePassedTests() {
   //   );
   // };
 
+  let tags = ['aaaa', 'ssss', 'ffff'];
+
+  tags = tags.map(element => <Tag color="blue">{element}</Tag>);
+
+
   const columns = [{
     title: 'Название',
     dataIndex: 'name',
@@ -69,7 +74,7 @@ function TablePassedTests() {
     data.push({
       key: `${i}`,
       name: `Тест ${i}`,
-      theme: `Тема ${i}`,
+      theme: tags,
       author: `Автор ${i}`,
       date: `${i}.${i}.1999`,
       result: `${i}`,

@@ -8,6 +8,8 @@ import com.exadel.team3.backend.security.AuthenticatedUser;
 import com.exadel.team3.backend.controllers.requests.AuthenticationRequest;
 import com.exadel.team3.backend.security.SecurityUtils;
 import com.exadel.team3.backend.services.UserService;
+import com.exadel.team3.backend.services.mail.mail_sender.MailSender;
+import com.exadel.team3.backend.services.mail.mail_types.MailTypes;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpStatus;
@@ -20,6 +22,8 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Objects;
 
 @RestController
@@ -38,6 +42,9 @@ public class AuthenticationController {
     @Autowired
     private SecurityUtils securityUtils;
 
+    @Autowired
+    private MailSender mailSender;
+
     @PostMapping(value = "/login",produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> authenticateUser(@RequestBody AuthenticationRequest request){
 
@@ -52,7 +59,6 @@ public class AuthenticationController {
     @PostMapping(value = "/registration",produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> signUpUser(@RequestBody RegistrationRequest request){
         String[] userPassInfo = securityUtils.generateUserPassword();
-//        String userPassword = securityUtils.generateUserPassword()[0];
         System.out.println(userPassInfo[0]);
         UserAffiliation userAffiliation = new UserAffiliation(
                 request.getInstitution(),
@@ -70,6 +76,12 @@ public class AuthenticationController {
 
         user.setAffiliation(userAffiliation);
         userService.addItem(user);
+
+        Map<String, String> replaceMap = new HashMap<>();
+        replaceMap.put("&login", request.getEmail());
+        replaceMap.put("&password", userPassInfo[0]);
+        mailSender.send(MailTypes.SEND_LOGIN_AND_PASS, request.getEmail(), replaceMap);
+
         return ResponseEntity.status(HttpStatus.OK).body("User created.");
     }
 

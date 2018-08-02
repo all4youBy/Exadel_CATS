@@ -11,6 +11,19 @@ export default class CurrentGroupList extends React.PureComponent {
 
   render() {
     const { students, delStudent } = this.props;
+    console.log(students);
+    const studentsArray = [];
+    students.addedStudents.forEach((element) => {
+      if (element.lastName && element.firstName) {
+        studentsArray.push(`${element.lastName} ${element.firstName}`);
+      }
+    });
+    students.groups.forEach((element) => {
+      if (element) {
+        studentsArray.push(element);
+      }
+    });
+
     return (
       <List
         className="current-students-list"
@@ -18,10 +31,10 @@ export default class CurrentGroupList extends React.PureComponent {
         locale={{
           emptyText: 'Список группы пуст. Добавьте студентов.',
         }}
-        dataSource={students}
+        dataSource={studentsArray}
         renderItem={item => (
           <List.Item><List.Item.Meta
-            title={<span>{item.lastName} {item.firstName}</span>}
+            title={<span>{item}</span>}
           />
             <Button
               shape="circle"

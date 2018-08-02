@@ -14,7 +14,7 @@ import com.exadel.team3.backend.services.ServiceException;
 import com.exadel.team3.backend.services.SolutionChecker;
 import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.env.Environment;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -40,13 +40,13 @@ public class SolutionServiceImpl
     @Autowired
     private SolutionChecker solutionChecker;
 
-    @Autowired
-    private Environment env;
-
     @Override
     protected AssignableRepository<Solution> getRepository() {
         return solutionRepository;
     }
+
+    @Value("${cats.task.defaultDuration:120}")
+    private long defaultTaskDuration;
 
     @Override
     public Solution assignSolutionToUser(
@@ -60,9 +60,7 @@ public class SolutionServiceImpl
         start = start != null ? start :LocalDateTime.now();
         deadline = deadline != null && deadline.isAfter(start)
                 ? deadline
-                : start.plus(Duration.ofMinutes(
-                Long.parseLong(env.getProperty("cats.task.defaultDuration", "120"))
-        ));
+                : start.plus(Duration.ofMinutes(defaultTaskDuration));
         newSolution.setStart(start);
         newSolution.setDeadline(deadline);
         newSolution.setAssignedBy(assignedBy);

@@ -10,7 +10,6 @@ import java.util.List;
 
 import com.exadel.team3.backend.entities.User;
 
-@Repository
 public interface UserRepository extends MongoRepository<User, String>, UserRepositoryQueries {
     User findByEmail(String email);
 
