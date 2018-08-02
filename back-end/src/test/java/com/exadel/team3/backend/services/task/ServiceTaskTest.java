@@ -1,5 +1,7 @@
 package com.exadel.team3.backend.services.task;
 
+import com.exadel.team3.backend.controllers.TaskController;
+import com.exadel.team3.backend.controllers.TestController;
 import com.exadel.team3.backend.services.mail.mail_sender.MailSender;
 import com.exadel.team3.backend.services.mail.mail_sender.impl.MailSenderImpl;
 import com.exadel.team3.backend.services.mail.mail_types.MailTypes;
@@ -24,10 +26,7 @@ import static org.junit.Assert.assertEquals;
 public class ServiceTaskTest {
 //    @Test
 //    public void test_task() {
-//        MailSender mailSender = new MailSenderImpl();
-//        Map<String, String> replaceMap = new HashMap<>();
-//        replaceMap.put("&login", "Skoriy.97@gmail.com");
-//        replaceMap.put("&password", "pass");
-//        Assert.assertEquals(true, mailSender.send(MailTypes.SEND_LOGIN_AND_PASS, "Skoriy.97@gmail.com", replaceMap));
+//        TaskController taskController = new TaskController();
+//        taskController.addFilesInSolution();
 //    }
 }
