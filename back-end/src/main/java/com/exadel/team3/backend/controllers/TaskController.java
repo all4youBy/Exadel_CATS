@@ -10,7 +10,6 @@ import com.exadel.team3.backend.entities.Task;
 import com.exadel.team3.backend.entities.TaskTestingSet;
 import com.exadel.team3.backend.services.SolutionService;
 import com.exadel.team3.backend.services.TaskService;
-import com.exadel.team3.backend.services.impl.SolutionServiceImpl;
 import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -19,6 +18,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @RestController
@@ -54,18 +54,19 @@ public class TaskController {
     }
 
     @PostMapping("/add-solution/{id}")
-    public ResponseEntity<?> addFilesInSolution(@PathVariable(value = "id") String id, @RequestParam MultipartFile... files) {
-        SolutionService solutionService = new SolutionServiceImpl();
-        Solution solution = solutionService.getItem(new ObjectId(id));
-        solution = solutionService.storeFile(solution, files);
+    public ResponseEntity<?> addFilesInSolution(@RequestParam MultipartFile file, @PathVariable(value = "id") String id) {
+        System.out.println(file);
 
-        return new ResponseEntity<>(solution, HttpStatus.OK);
+        Solution solution = solutionService.getItem(new ObjectId(id));
+        solutionService.storeFile(solution, file);
+
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
     @PostMapping("/compile-solution/{id}")
     public ResponseEntity<?> addFilesInSolution(@PathVariable(value = "id") String id) {
         Solution solution = solutionService.getItem(new ObjectId(id));
-        solutionService.submit(solution);
+        solution = solutionService.submit(solution);
 
         return new ResponseEntity<>(solution, HttpStatus.OK);
     }
@@ -134,8 +135,12 @@ public class TaskController {
     @PutMapping("/add-testing-set/{taskId}")
     @PreAuthorize("hasAnyRole('ADMIN','TEACHER')")
     public ResponseEntity<?> addTestingSets(@PathVariable(value = "taskId") String taskId, @RequestBody TaskTestingSet set) {
-        List<TaskTestingSet> taskTestingSets = taskService.getItem(new ObjectId(taskId)).getTestingSets();
+        Task task = taskService.getItem(new ObjectId(taskId));
+        if (task.getTestingSets() == null) {
+            task.setTestingSets(new ArrayList<>());
+        }
 
+        List<TaskTestingSet> taskTestingSets = task.getTestingSets();
         if (taskTestingSets.add(set)) {
             return new ResponseEntity<>(taskTestingSets, HttpStatus.OK);
         } else {

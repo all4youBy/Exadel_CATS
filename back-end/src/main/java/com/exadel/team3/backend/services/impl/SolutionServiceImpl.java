@@ -85,16 +85,15 @@ public class SolutionServiceImpl
 
     @Override
     public Solution storeFile(@NonNull Solution solution,
-                              @NonNull MultipartFile... files) throws ServiceException {
+                              @NonNull MultipartFile file) throws ServiceException {
         solution.setFiles(new ArrayList<>());
-        for (MultipartFile file : files) {
-            try (InputStream is = file.getInputStream()) {
-                solution = storeFile(solution, is, file.getName());
-            } catch (IOException e) {
-                throw new ServiceException(String.format("Could not store file %s for solution %s",
-                        file.getName(), solution.getId()), e);
-            }
+        try (InputStream is = file.getInputStream()) {
+            solution = storeFile(solution, is, file.getOriginalFilename());
+        } catch (IOException e) {
+            throw new ServiceException(String.format("Could not store file %s for solution %s",
+                    file.getName(), solution.getId()), e);
         }
+
 
         return solution;
     }
