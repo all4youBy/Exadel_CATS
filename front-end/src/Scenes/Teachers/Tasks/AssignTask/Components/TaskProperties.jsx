@@ -13,9 +13,10 @@ import {
   fetchStudentListForTask,
   fetchGroupsListForTask,
   fetchTopics,
+  postAssignTask,
 } from '../Services/Actions/actions';
-import StudentsList from '../../../../../Components/StudentsList';
 import CurrentGroupList from '../../../../../Components/CurrentGroupList';
+import StudentsAndGroupsList from '../../../../../Components/StudentsAndGroupsList';
 
 const { TextArea } = Input;
 const { Item: FormItem } = Form;
@@ -61,6 +62,7 @@ class TaskProperties extends React.Component {
     groups: PropTypes.arrayOf(PropTypes.object).isRequired,
     getTopics: PropTypes.func.isRequired,
     topics: PropTypes.arrayOf.isRequired,
+    sendAssignTask: PropTypes.func.isRequired,
   };
 
   state = {
@@ -101,6 +103,7 @@ class TaskProperties extends React.Component {
 
     const { getFieldDecorator } = form;
     const handleSubmit = (e) => {
+      const { sendAssignTask } = this.props;
       e.preventDefault();
       form.validateFieldsAndScroll((err) => {
         const obj = {
@@ -113,7 +116,7 @@ class TaskProperties extends React.Component {
         };
         console.log(obj, 12546);
         if (!err) {
-          handleCreateTest({
+          sendAssignTask({
             name: nameTest,
             countQuestions: countQuestionsTest,
             leadTime: new Date(hoursLeadTimeTest, minutesLeadTimeTest, secondsLeadTimeTest),
@@ -255,7 +258,7 @@ class TaskProperties extends React.Component {
           </div>
         </Form>
         <div className="parent-student-list">
-          <StudentsList
+          <StudentsAndGroupsList
             students={data}
             addStudent={addStudent}
             getStudentsData={getStudentsData}
@@ -314,6 +317,9 @@ const mapDispatchToProps = dispatch => ({
   },
   getTopics: () => {
     dispatch(fetchTopics());
+  },
+  sendAssignTask: (data) => {
+    dispatch(postAssignTask(data));
   },
 });
 

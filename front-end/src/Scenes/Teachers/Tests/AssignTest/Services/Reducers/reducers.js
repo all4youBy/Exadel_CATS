@@ -16,7 +16,9 @@ const initialState = {
 const testInformation = (state = initialState, action) => {
   switch (action.type) {
     case types.ADD_ASSIGN_TEST_TAG: {
-      console.log(action.payload, 33775);
+      if (state.tags.includes(action.payload)) {
+        return state;
+      }
       return {
         ...state,
         tags: [

@@ -9,7 +9,8 @@ const API = {
     const token = state.logInInformation.user;
     if (token) {
       return token.token;
-    } return null;
+    }
+    return null;
   },
   sendRequest(token, url, reqInit) {
     const headers = reqInit.headers ? reqInit.headers : new Headers();
@@ -17,6 +18,15 @@ const API = {
     headers.append('Content-Type', 'application/json');
     reqInit.headers = headers;
     reqInit.mode = 'cors';
+    return fetch(new Request(url, reqInit));
+  },
+  sendRequestFile(token, url, reqInit) {
+    const headers = reqInit.headers ? reqInit.headers : new Headers();
+    headers.append('Authorization', `Bearer ${token}`);
+    // headers.append('Content-Type', 'multipart/form-data');
+    reqInit.headers = headers;
+    reqInit.mode = 'cors';
+    // delete reqInit.headers['Content-Type'];
     return fetch(new Request(url, reqInit));
   },
   login(path, data) {
@@ -57,12 +67,11 @@ const API = {
   },
   postUploadFiles(path, data, receiveAction, errorMessage) {
     const url = `${urlServer}${path}`;
-    return (dispatch) => {
+    return (dispatch, getState) => {
       dispatch(isLoading(true));
-      // const token = API.getTokenFromStore(getState());
-      fetch(url, {
+      const token = API.getTokenFromStore(getState());
+      API.sendRequestFile(token, url, {
         method: 'POST',
-        mode: 'cors',
         body: data,
       })
         .then(response => response.json())

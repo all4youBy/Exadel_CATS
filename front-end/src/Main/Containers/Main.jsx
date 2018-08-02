@@ -100,8 +100,10 @@ class Main extends React.Component {
                 <Route exact path="/passedtestlist" component={PagePassedTestList}/>
                 <Route exact path="/passedtasks" component={PagePassedTasks}/>
                 <Route exact path="/test/:id" component={Test}/>
-                <Route exact path="/task/:id" component={UserTaskPage}/>
+                <Route exact path="/task" component={UserTaskPage}/>
+                <Route exact path="/assignedtasks/:id" component={UserTaskPage}/>
                 <Route exact path="/usersmaterials" component={Materials}/>
+                <Route exact path="/assignedtests" component={PageAssignedTestList}/>
                 <Redirect to="/"/>
               </Switch>
             </div>

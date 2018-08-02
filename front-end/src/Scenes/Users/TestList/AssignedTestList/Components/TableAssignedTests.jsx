@@ -3,6 +3,7 @@ import './TableAssignedTests.scss';
 import { Table, Tag } from 'antd';
 import PropTypes from 'prop-types';
 import ButtonPassTest from './ButtonPassTest';
+import requestLoginInformation from '../../../../../Services/loginService';
 
 let tags = ['aaaa', 'ssss', 'ffff'];
 
@@ -57,12 +58,9 @@ for (let i = 1; i <= 20; i += 1) {
 
 class TableAssignedTests extends React.PureComponent {
   static propTypes = {
-    getAssignedTests: PropTypes.func.isRequired,
-    students: PropTypes.objectOf.isRequired,
-    handleStudentAdd: PropTypes.func.isRequired,
-    handleStudentDelete: PropTypes.func.isRequired,
-    groupName: PropTypes.string.isRequired,
+    tests: PropTypes.arrayOf.isRequired,
     error: PropTypes.string.isRequired,
+    getAssignedTests: PropTypes.func.isRequired,
   };
 
   state = {
@@ -75,8 +73,8 @@ class TableAssignedTests extends React.PureComponent {
   };
 
   componentDidMount() {
-    const { getAssignedTests, groupName } = this.props;
-    getAssignedTests(groupName);
+    const { getAssignedTests } = this.props;
+    getAssignedTests(requestLoginInformation().email);
   }
 
   render() {

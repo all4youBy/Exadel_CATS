@@ -3,8 +3,8 @@ import { Form, Input, Button } from 'antd';
 import './TestProperties.scss';
 import PropTypes from 'prop-types';
 import TreeWithTags from '../../../../../Components/TreeWithTags';
-import StudentsList from '../../../../../Components/StudentsList';
 import CurrentGroupList from '../../../../../Components/CurrentGroupList';
+import StudentsAndGroupsList from '../../../../../Components/StudentsAndGroupsList';
 // import Loading from '../../../../../Components/Loading';
 
 const { TextArea } = Input;
@@ -431,7 +431,7 @@ class TestProperties extends React.Component {
           </div>
         </Form>
         <div className="parent-student-list">
-          <StudentsList
+          <StudentsAndGroupsList
             students={data}
             addStudent={addStudent}
             getStudentsData={getStudentsData}

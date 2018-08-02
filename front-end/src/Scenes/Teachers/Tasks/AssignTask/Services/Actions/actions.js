@@ -40,3 +40,7 @@ export function fetchGroupsListForTask() {
 export function fetchTopics() {
   return (API.get('topics', 'topics_assign_task', 'Не удалось загрузить темы'));
 }
+
+export function postAssignTask(data) {
+  return (API.post('/', data, 'post_assign_task', 'Не удалось назначить задачу'));
+}
