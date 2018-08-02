@@ -8,4 +8,5 @@ import java.lang.annotation.RetentionPolicy;
 @Retention(RetentionPolicy.RUNTIME)
 @PreAuthorize("hasRole('ADMIN') or #request.userId == authentication.name")
 public @interface TrainingTestGenerationAccess {
+
 }
