@@ -21,7 +21,7 @@ public class SolutionDTOMapper {
 
         for (Solution solution : solutions) {
             Task task = taskService.getItem(solution.getTaskId());
-            solutionDTO.add(new SolutionDTO(solution, task.getTitle(), task.getTopicIds()));
+            solutionDTO.add(new SolutionDTO(solution, task.getTitle(), TopicDTOMapper.transformInToList(task.getTopicIds())));
         }
         return solutionDTO;
     }

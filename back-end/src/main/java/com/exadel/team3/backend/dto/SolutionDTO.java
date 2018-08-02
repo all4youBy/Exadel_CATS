@@ -15,5 +15,5 @@ public class SolutionDTO {
     @NonNull
     private String title;
 
-    private List<ObjectId> topicIds;
+    private List<String> topics;
 }

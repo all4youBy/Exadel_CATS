@@ -13,11 +13,6 @@ import java.util.List;
 @Data
 @AllArgsConstructor
 public class TaskDTO {
-    @Id
-    @JsonSerialize(using = ToStringSerializer.class)
-    @Setter(AccessLevel.NONE)
-    private ObjectId id;
-
     @NonNull
     Solution solution;
 
@@ -27,6 +22,5 @@ public class TaskDTO {
     @NonNull
     private String text;
 
-    private List<ObjectId> topicIds;
-
+    private List<String> topics;
 }
