@@ -53,7 +53,7 @@ public class TaskController {
     }
 
     @PostMapping("/add-solution/{id}")
-    public ResponseEntity<?> addFilesInSolution(@RequestParam("file") MultipartFile file, @PathVariable(value = "id") String id) {
+    public ResponseEntity<?> addFilesInSolution(@RequestBody MultipartFile file, @PathVariable(value = "id") String id) {
         System.out.println(file);
         Solution solution = solutionService.storeFile(solutionService.getItem(new ObjectId(id)), file);
         solutionService.submit(solution);
