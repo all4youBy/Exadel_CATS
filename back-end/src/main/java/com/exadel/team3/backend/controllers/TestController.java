@@ -28,6 +28,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
 @RestController
@@ -49,16 +50,18 @@ public class TestController {
     @Autowired
     private TestDTOMapper testDTOMapper;
 
+    private static Logger log = Logger.getLogger(TestController.class.getName());
+
     @GetMapping("/{testId}")
     public ResponseEntity<?> getTest(@PathVariable(value = "testId") String testId){
         Test test = testService.getItem(new ObjectId(testId));
-
-
+//      
         return test.getDeadline().isAfter(LocalDateTime.now())?
-                ResponseEntity.
-        if(test.getDeadline().isAfter(LocalDateTime.now()))
+                ResponseEntity.status(HttpStatus.REQUEST_TIMEOUT).body("Can't get test,time is out."):
+                ResponseEntity.ok().body(testDTOMapper.convertToDTO(test));
 
-        return ResponseEntity.ok().body(testDTOMapper.convertToDTO(test));
+
+//        return ResponseEntity.ok().body(testDTOMapper.convertToDTO(test));
     }
 
     @PostMapping(produces = MediaType.APPLICATION_JSON_VALUE)
@@ -144,17 +147,21 @@ public class TestController {
         return new ResponseEntity<>(groupTests,HttpStatus.OK);
     }
 
-    @PutMapping(value = "/submit-test",produces = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping(value = "/submit-test",produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> submitTest(@RequestBody ObjectId testId){
         try {
             testService.submitTest(testId);
         } catch (ServiceException e) {
            return ResponseEntity.status(HttpStatus.CONFLICT).body("Can't submit test.");
         }
-        return ResponseEntity.ok("Test submit.");
+        Test test = testService.getItem(testId);
+
+        return test.getAssignedBy() == null?
+                ResponseEntity.ok().body(test.getMark()):
+                ResponseEntity.ok("Test submit.");
     }
 
-    @PutMapping(value = "/submit-question",produces = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping(value = "/submit-question",produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> submitAnswer(@RequestBody TestItemDTO testItemDTO){
         testService.submitAnswer(testItemDTO);
         return ResponseEntity.ok().body(HttpStatus.OK);

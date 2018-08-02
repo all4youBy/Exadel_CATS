@@ -14,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
+import org.springframework.web.bind.annotation.GetMapping;
 
 import java.lang.reflect.Array;
 import java.nio.charset.Charset;
@@ -31,12 +32,11 @@ public class SecurityUtils {
     @Value("${jwt.expiration}")
     private Long expiration;
 
-
     @Value("${jwt.pass.secret}")
     private String passSecret;
 
-
     @Autowired
+    @Getter
     private PasswordEncoder encoder;
 
     public String generateToken(AuthenticatedUser user) {

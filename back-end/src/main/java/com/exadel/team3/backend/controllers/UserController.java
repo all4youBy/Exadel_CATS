@@ -4,12 +4,14 @@ import com.exadel.team3.backend.controllers.requests.*;
 import com.exadel.team3.backend.entities.Solution;
 import com.exadel.team3.backend.entities.User;
 import com.exadel.team3.backend.entities.UserRole;
+import com.exadel.team3.backend.security.SecurityUtils;
 import com.exadel.team3.backend.security.annotations.AdminAccess;
 import com.exadel.team3.backend.security.annotations.AdminAndTeacherAccess;
 import com.exadel.team3.backend.security.annotations.UserAccess;
 import com.exadel.team3.backend.services.SolutionService;
 import com.exadel.team3.backend.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -31,7 +33,7 @@ public class UserController {
     private SolutionService solutionService;
 
     @Autowired
-    private PasswordEncoder encoder;
+    private SecurityUtils securityUtils;
 
     @GetMapping(value = "/find-by-group")
     @AdminAndTeacherAccess
@@ -74,11 +76,9 @@ public class UserController {
     public ResponseEntity<?> changeUserPassword(@RequestBody ChangePasswordRequest request){
         User user = userService.getItem(request.getEmail());
 
-        String oldUserPasswordHash = encoder.encode(request.getOldPassword());
 
-
-        if(encoder.matches(user.getPasswordHash(),oldUserPasswordHash))
-            user.setPasswordHash(encoder.encode(request.getNewPassword()));
+        if(securityUtils.getEncoder().matches(request.getOldPassword(),user.getPasswordHash()))
+            user.setPasswordHash(securityUtils.getEncoder().encode(request.getNewPassword()));
         else
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Old password doesn't match.");
 
