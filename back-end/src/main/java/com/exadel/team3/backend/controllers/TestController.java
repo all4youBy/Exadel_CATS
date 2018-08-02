@@ -59,18 +59,18 @@ public class TestController {
 //    @TestGenerationAccess
     public ResponseEntity<?> getTestForUser(@RequestBody TestGenerationRequest request){
 
-       Test test =  testService.generateTestForUser(request.getUserId(),
-                                        request.getTitle(),
-                                        request.getStart(),
-                                        request.getDeadline(),
-                                        request.getTopicsId(),
-                                        request.getQuestionsCount(),
-                                        request.getAssignedBy());
+        Test test =  testService.generateTestForUser(request.getUserId(),
+                request.getTitle(),
+                request.getStart(),
+                request.getDeadline(),
+                request.getTopicsId(),
+                request.getQuestionsCount(),
+                request.getAssignedBy());
 
-       if(test == null)
-           return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Can't generate test.");
+        if(test == null)
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Can't generate test.");
 
-       return ResponseEntity.ok().body(test.getId());
+        return ResponseEntity.ok().body(test.getId());
     }
 
     @PostMapping(value = "/training",produces = MediaType.APPLICATION_JSON_VALUE)
@@ -78,7 +78,7 @@ public class TestController {
     public ResponseEntity<?> getTrainingTestForUser(@RequestBody  TrainingTestGenerationRequest request){
         Test test = testService.generateTestForUser(request.getUserId(),request.getTopicId());
         if(test == null)
-           return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Can't generate test.");
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Can't generate test.");
         String id = test.getId().toString();
         return new ResponseEntity<>(id, HttpStatus.OK);
     }
@@ -94,12 +94,12 @@ public class TestController {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(String.format("No rights to set test for %s.",group));
 
         List<Test> testsForGroup = testService.generateTestsForGroup(request.getGroup(),
-                                                      request.getTitle(),
-                                                      request.getStart(),
-                                                      request.getDeadline(),
-                                                      request.getTopicsId(),
-                                                      request.getQuestionsCount(),
-                                                      request.getAssignedBy());
+                request.getTitle(),
+                request.getStart(),
+                request.getDeadline(),
+                request.getTopicsId(),
+                request.getQuestionsCount(),
+                request.getAssignedBy());
 
         if(testsForGroup == null)
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Can't generate tests for group.");

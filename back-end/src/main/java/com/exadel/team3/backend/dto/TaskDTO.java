@@ -6,6 +6,9 @@ import lombok.*;
 import org.bson.types.ObjectId;
 import org.springframework.data.annotation.Id;
 
+import java.time.LocalDateTime;
+import java.util.List;
+
 @Data
 @AllArgsConstructor
 public class TaskDTO {
@@ -23,6 +26,12 @@ public class TaskDTO {
     @NonNull
     private String author;
 
-    private int mark;
+    private List<ObjectId> topicIds;
+
+    private LocalDateTime start;
+
+    private LocalDateTime deadline;
+
+    private Integer mark;
 
 }

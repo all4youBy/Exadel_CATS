@@ -2,6 +2,7 @@ package com.exadel.team3.backend.services.mail.mail_types;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.context.annotation.Bean;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -15,7 +16,6 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 public enum MailTypes {
-
     CONFIRM_EMAIL("Text_for_confirm_email.txt", "Subject_for_congirm_email.txt"),
     SEND_LOGIN_AND_PASS("Text_for_send_log_and_pass.txt", "Subject_for_send_log_and_pass.txt"),
     VERIFICATION_TEST("Text_for_notification_verification_test.txt", "Subject_for_notification_verification_test.txt");
