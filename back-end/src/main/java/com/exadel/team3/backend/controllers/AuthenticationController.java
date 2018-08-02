@@ -4,6 +4,7 @@ import com.exadel.team3.backend.controllers.requests.RegistrationRequest;
 import com.exadel.team3.backend.dto.AuthenticateDTO;
 import com.exadel.team3.backend.entities.User;
 import com.exadel.team3.backend.entities.UserAffiliation;
+import com.exadel.team3.backend.entities.UserRole;
 import com.exadel.team3.backend.security.AuthenticatedUser;
 import com.exadel.team3.backend.controllers.requests.AuthenticationRequest;
 import com.exadel.team3.backend.security.SecurityUtils;
@@ -67,11 +68,16 @@ public class AuthenticationController {
                 "",
                 request.getPrimarySkill());
 
+        UserRole userRole = request.getUserRole();
+
+        if(userRole.equals(UserRole.TEACHER) || userRole.equals(UserRole.ADMIN))
+            userRole = UserRole.TEACHER_UNCONFIRMED;
+
         User user = new User(
                 request.getEmail(),
                 request.getFirstName(),
                 request.getSecondName(),
-                request.getUserRole(),
+                userRole,
                 userPassInfo[1]);
 
         user.setAffiliation(userAffiliation);

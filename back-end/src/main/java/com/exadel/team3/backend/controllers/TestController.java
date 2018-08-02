@@ -56,7 +56,7 @@ public class TestController {
     public ResponseEntity<?> getTest(@PathVariable(value = "testId") String testId){
         Test test = testService.getItem(new ObjectId(testId));
 //      
-        return test.getDeadline().isAfter(LocalDateTime.now())?
+        return test.getDeadline().isBefore(LocalDateTime.now())?
                 ResponseEntity.status(HttpStatus.REQUEST_TIMEOUT).body("Can't get test,time is out."):
                 ResponseEntity.ok().body(testDTOMapper.convertToDTO(test));
 
