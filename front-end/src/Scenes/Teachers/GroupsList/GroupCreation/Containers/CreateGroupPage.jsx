@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
@@ -32,13 +31,8 @@ class CreateGroupPage extends React.Component {
 
   state = {
     group: '',
+    dataError: false,
   };
-
-  shouldComponentUpdate() {
-    const { success } = this.props;
-    if (success) return true;
-    return true;
-  }
 
   getGroupData = () => {
     const { students } = this.props;
@@ -49,12 +43,31 @@ class CreateGroupPage extends React.Component {
     };
   };
 
+  validateCreateGroup = (groupData) => {
+    if (groupData.group.length === 0 || groupData.emails.length === 0) {
+      return false;
+    }
+    return true;
+  };
+
   handleGroupData = () => {
     const { sendGroupInfo, success } = this.props;
-    sendGroupInfo(this.getGroupData());
+    const groupInfo = this.getGroupData();
+    if (!this.validateCreateGroup(groupInfo)) {
+      this.setState(() => ({ dataError: true }));
+    } else {
+      this.setState(() => ({ dataError: false }));
+      sendGroupInfo(groupInfo);
+    }
     if (success) {
       message.success('Группа успешно создана');
       // this.setState({ group: '' });
+    }
+  };
+
+  handleSetName = (event) => {
+    if (event.target.value) {
+      this.setState({ group: event.target.value });
     }
   };
 
@@ -64,7 +77,8 @@ class CreateGroupPage extends React.Component {
       getStudentsData, data, error,
       getGroupsData, groups,
     } = this.props;
-    console.log(addStudent, data, error);
+    const { dataError } = this.state;
+    const errorInput = dataError ? <div className="error-input">Введите все данные!</div> : <div/>;
 
     return (
       <div className="create-group-container">
@@ -72,9 +86,7 @@ class CreateGroupPage extends React.Component {
           className="group-name-input"
           placeholder="Название группы"
           autosize
-          onBlur={(value) => {
-            this.setState({ group: value.target.value });
-          }}
+          onBlur={this.handleSetName}
         />
         <div className="student-list-container ">
           <StudentsList
@@ -87,6 +99,7 @@ class CreateGroupPage extends React.Component {
           />
           <CurrentGroupList className="current-group-list" students={students} delStudent={delStudent}/>
         </div>
+        {errorInput}
         <Button
           onClick={() => {
             this.handleGroupData();
@@ -114,13 +127,6 @@ function mapStateToProps(state) {
   };
 }
 
-// /* <StudentsList
-//   className="student-list"
-//   data={data}
-//   addStudent={addStudent}
-//   getData={getStudentData}
-//   error={error}
-// /> */
 const mapDispatchToProps = dispatch => ({
   addStudent: (student) => {
     dispatch(addStudentToGroup(student));

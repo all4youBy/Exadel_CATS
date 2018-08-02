@@ -1,78 +1,19 @@
 import React from 'react';
-import 'antd/dist/antd.css';
 import './UserTask.scss';
 import { Upload, Button, Icon } from 'antd';
 import PropTypes from 'prop-types';
-// import reqwest from 'reqwest';
+import requestLoginInformation from '../../../../Services/loginService';
 
-// const { Option } = Select;
-//
-// export class UserTask extends React.PureComponent {
-//   state = {
-//     fileList: [{
-//       uid: -1,
-//       name: 'xxx.png',
-//       status: 'done',
-//       url: 'http://www.baidu.com/xxx.png',
-//     }],
-//   };
-//
-//   handleChange = (info) => {
-//     let { fileList } = info;
-//     // 2. read from response and show file link
-//     fileList = fileList.map((file) => {
-//       if (file.response) {
-//         // Component will show file.url as link
-//         file.url = file.response.url;
-//       }
-//       return file;
-//     });
-//
-//     // 3. filter successfully uploaded files according to response from server
-//     fileList = fileList.filter((file) => {
-//       if (file.response) {
-//         return file.response.status === 'success';
-//       }
-//       return true;
-//     });
-//
-//     this.setState({ fileList });
-//   };
-//
-//   render() {
-//     const props = {
-//       action: '//jsonplaceholder.typicode.com/posts/',
-//       onChange: this.handleChange,
-//       multiple: true,
-//     };
-//     const { fileList } = this.state;
-//     return (
-//       <div className="task-container">
-//         <h1>Название задачи</h1>
-//         <p>Постановка задачи. Включает формат входных/выходных данных и разбиение по оценкам.
-//         </p>
-//         <div className="upload-task-buttons">
-//           <Select style={{ width: 200 }} placeholder="Выберите компилятор">
-//             <Option value="java">Java</Option>
-//             <Option value="c++">C++</Option>
-//           </Select>
-//           <Upload style={{ margin: 10 }} {...props} fileList={fileList}>
-//             <Button>
-//               <Icon type="upload"/> Загрузить
-//             </Button>
-//           </Upload>
-//           <Button type="primary" className="submit-button">Отправить</Button>
-//         </div>
-//       </div>
-//     );
-//   }
-// }
-//
+let count = 0;
 
 class UserTask extends React.Component {
   static propTypes = {
     uploadFiles: PropTypes.func.isRequired,
     error: PropTypes.string.isRequired,
+    getTaskInformation: PropTypes.func.isRequired,
+    taskId: PropTypes.string.isRequired,
+    taskInfo: PropTypes.arrayOf.isRequired,
+    getAddSolution: PropTypes.func.isRequired,
   };
 
   state = {
@@ -80,39 +21,75 @@ class UserTask extends React.Component {
     uploading: false,
   };
 
+  componentDidMount = () => {
+    const { getTaskInformation, taskId } = this.props;
+    getTaskInformation(requestLoginInformation().email, taskId);
+  };
+
   handleUpload = () => {
-    const { uploadFiles } = this.props;
+    const { uploadFiles, taskInfo } = this.props;
     const { fileList } = this.state;
-    console.log(fileList);
     const formData = new FormData();
-    fileList.forEach((file) => {
-      formData.append('files[]', file);
-      console.log(formData, 88888);
-    });
+    console.log(fileList[0], 855);
+    // fileList.forEach((file) => {
+    // formData.append('file', file);
+    // });
+    // uploadFiles(formData, taskInfo.solution.id);
+    formData.append('file', fileList[0]);
+    count += 1;
+    console.log(count);
+    uploadFiles(formData, taskInfo.solution.id);
     this.setState({
       uploading: true,
     });
-
-    uploadFiles(formData);
     // You can use any AJAX library you like
     // reqwest({
-    //   url: '//jsonplaceholder.typicode.com/posts/',
-    //   method: 'post',
-    //   processData: false,
-    //   data: formData,
-    //   success: () => {
-    //     this.setState({
-    //       fileList: [],
-    //       uploading: false,
-    //     });
-    //     message.success('upload successfully.');
-    //   },
-    //   error: () => {
-    //     this.setState({
-    //       uploading: false,
-    //     });
-    //     message.error('upload failed.');
-    //   },
+    // url: '//jsonplaceholder.typicode.com/posts/',
+    // method: 'post',
+    // processData: false,
+    // data: formData,
+    // success: () => {
+    // this.setState({
+    // fileList: [],
+    // uploading: false,
+    // });
+    // message.success('upload successfully.');
+    // },
+    // error: () => {
+    // this.setState({
+    // uploading: false,
+    // });
+    // message.error('upload failed.');
+    // },
+    // });
+  };
+
+  handleAddSolution = () => {
+    const { getAddSolution, taskInfo } = this.props;
+    // fileList.forEach((file) => {
+    // formData.append('file', file);
+    // });
+    // uploadFiles(formData, taskInfo.solution.id);
+    getAddSolution({}, taskInfo.solution.id);
+    // You can use any AJAX library you like
+    // reqwest({
+    // url: '//jsonplaceholder.typicode.com/posts/',
+    // method: 'post',
+    // processData: false,
+    // data: formData,
+    // success: () => {
+    // this.setState({
+    // fileList: [],
+    // uploading: false,
+    // });
+    // message.success('upload successfully.');
+    // },
+    // error: () => {
+    // this.setState({
+    // uploading: false,
+    // });
+    // message.error('upload failed.');
+    // },
     // });
   };
 
@@ -150,7 +127,7 @@ class UserTask extends React.Component {
         <Button
           className="upload-demo-start"
           type="primary"
-          onClick={this.handleUpload}
+          onClick={this.handleAddSolution}
           disabled={fileList.length === 0}
           loading={uploading}
         >

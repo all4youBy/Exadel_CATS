@@ -6,7 +6,8 @@ import PropTypes from 'prop-types';
 import { Form, Input, Checkbox, Button, Radio } from 'antd';
 import TreeWithTags from '../../../../../Components/TreeWithTags';
 import {
-  addQuestionTag, dataQuestion,
+  addQuestionTag,
+  dataQuestion,
   deleteQuestionTag,
   fetchTopics,
 } from '../Services/Actions/actions';
@@ -173,7 +174,7 @@ class QuestionForm extends React.PureComponent {
   handleSubmit = (e) => {
     const { error } = this.state;
     const { addQuestion } = this.props;
-    console.log(this.question);
+    console.log(this.question, 83739);
     if (!error) {
       addQuestion('questions', this.question);
     }
@@ -192,7 +193,15 @@ class QuestionForm extends React.PureComponent {
     const errorInput = error ? <div className="error-input">Введите все данные!</div> : <div/>;
     const addQuestion = add ? <div>Вопрос добавлен!</div> : <div/>;
     const onClickAddQuestion = () => {
-      this.question.topicIds = tags;
+      if (tags.length) {
+        const tagsArray = [];
+        tags.forEach((element) => {
+          tagsArray.push(element.id);
+        });
+        this.question.topicIds = tagsArray;
+      } else {
+        this.question.topicIds = tags;
+      }
       this.question.author = `${user.lastName} ${user.firstName}`;
       if (!this.validateQuestion(this.question)) {
         this.setState(() => ({ error: true }));
