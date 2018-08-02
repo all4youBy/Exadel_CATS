@@ -9,8 +9,4 @@ public class FileWrapper {
 
     @NonNull
     MultipartFile file;
-
-    @NonNull
-    String name;
-
 }
