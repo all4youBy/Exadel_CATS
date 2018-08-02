@@ -56,14 +56,18 @@ public class UserRepositoryImpl implements UserRepositoryQueries {
 
     @Override
     public void addGroup(@NonNull Collection<String> userIds, @NonNull String groupName) {
-        Query updateQuery = new Query(Criteria.where("email").in(userIds));
+        Query updateQuery = new Query(
+                Criteria.where("email").in(userIds).and("role").is("STUDENT")
+        );
         Update update = new Update().addToSet("groups", groupName);
         mongoTemplate.updateMulti(updateQuery, update, User.class);
     }
 
     @Override
     public void removeGroup(Collection<String> userIds, String groupName) {
-        Query updateQuery = new Query(Criteria.where("email").in(userIds));
+        Query updateQuery = new Query(
+                Criteria.where("email").in(userIds).and("role").is("STUDENT")
+        );
         Update update = new Update().pull("groups", groupName);
         mongoTemplate.updateMulti(updateQuery, update, User.class);
     }
