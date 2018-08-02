@@ -6,6 +6,6 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 
 @Retention(RetentionPolicy.RUNTIME)
-@PreAuthorize("hasAnyRole('ADMIN','TEACHER') and #request.assignedBy == authentication.name")
+@PreAuthorize("hasAnyRole('ADMIN','TEACHER') and request.assignedBy == authentication.name")
 public @interface TestGenerationAccess {
 }

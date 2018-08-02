@@ -7,7 +7,7 @@ import org.bson.BsonObjectId;
 import org.bson.Document;
 import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.env.Environment;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Component;
 
@@ -24,10 +24,11 @@ import com.exadel.team3.backend.dao.FileStorage;
 public class FileStorageImpl implements FileStorage {
     @Autowired
     private MongoClient mongoClient;
-    @Autowired
-    private Environment env;
 
     private GridFSBucket bucket;
+
+    @Value("${spring.data.mongodb.database:cats}")
+    private String databaseName;
 
     @Override
     public ObjectId save(@NonNull InputStream stream, @NonNull String filename) {
@@ -74,9 +75,7 @@ public class FileStorageImpl implements FileStorage {
     private GridFSBucket getGridFsBucket() {
         if (bucket != null) return bucket;
         return bucket = GridFSBuckets.create(
-                mongoClient.getDatabase(
-                        env.getProperty("spring.data.mongodb.database", "cats")
-                ),
+                mongoClient.getDatabase(databaseName),
                 "storage"
         );
     }

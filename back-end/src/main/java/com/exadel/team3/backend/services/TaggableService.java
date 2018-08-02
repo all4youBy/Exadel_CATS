@@ -8,4 +8,5 @@ import java.util.List;
 
 public interface TaggableService<T extends Taggable> extends CrudService<T, ObjectId> {
     List<T> getItemsByTopicIds(Collection<ObjectId> ids);
+    List<T> getItemsByAuthor(String authorId);
 }

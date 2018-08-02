@@ -8,6 +8,7 @@ import com.exadel.team3.backend.entities.TestItemStatus;
 
 @Data
 @AllArgsConstructor
+@RequiredArgsConstructor
 public class TestItemDTO {
     private final ObjectId testId;
 
@@ -15,5 +16,5 @@ public class TestItemDTO {
 
     private final String answer;
 
-    private final TestItemStatus status;
+    private TestItemStatus status = TestItemStatus.UNANSWERED;
 }

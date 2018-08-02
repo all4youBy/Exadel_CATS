@@ -8,7 +8,7 @@ import org.springframework.stereotype.Repository;
 import java.util.Collection;
 import java.util.List;
 
-@Repository
 public interface TaggableRepository<T extends Taggable> extends MongoRepository<T, ObjectId> {
-    List<T> findByTopicIdsIn(Collection<ObjectId> topicIds);
+    List<T> findByTopicIdsInOrderByText(Collection<ObjectId> topicIds);
+    List<T> findByAuthorOrderByText(String authorId);
 }

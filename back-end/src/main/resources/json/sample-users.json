@@ -54,6 +54,20 @@
   },
 
   {
+    "email":"loki@liesmith.com",
+    "firstName":"Кондратий",
+    "lastName":"Пересмешник",
+    "role":"TEACHER_UNCONFIRMED",
+    "passwordHash":"$2a$10$bna/Cb9DI0gktn1L16Ltu.UIY0zm.HB9Phq.mwoedTu4RX1GbJioC",
+    "groups":[],
+    "affiliation":{
+      "institution":"БГУ",
+      "faculty":"ФПМИ"
+    }
+  },
+
+
+  {
     "email":"vasya@mail.ru",
     "firstName":"Василий",
     "lastName":"Кот",

@@ -1,24 +1,31 @@
 package com.exadel.team3.backend.dto;
 
 import com.exadel.team3.backend.entities.Question;
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Getter;
 import lombok.Setter;
-import org.bson.types.ObjectId;
 
+import java.time.LocalDateTime;
 import java.util.Collection;
 
 public class TestDTO {
 
     @Setter
     @Getter
-    @JsonSerialize(using = ToStringSerializer.class)
-    private ObjectId testId;
+    private Collection<Question> questions;
+
+    @Getter
+    @Setter
+    private String title;
 
     @Setter
     @Getter
-    private Collection<Question> testQuestions;
+    @JsonFormat(shape = JsonFormat.Shape.STRING,pattern = "yyyy-dd-MM  HH:mm:ss")
+    private LocalDateTime start;
 
+    @Setter
+    @Getter
+    @JsonFormat(shape = JsonFormat.Shape.STRING,pattern = "yyyy-dd-MM  HH:mm:ss")
+    private LocalDateTime deadline;
 
 }
