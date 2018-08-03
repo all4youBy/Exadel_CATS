@@ -165,49 +165,100 @@ public class TestServiceImpl
     @Override
     public Test submitTest(ObjectId testId) throws ServiceException{
         Optional<Test> updatedTest = testRepository.findById(testId);
-        if (updatedTest.isPresent()) {
-            Test updatedTestObj = updatedTest.get();
-            if (updatedTestObj.getDeadline().isAfter(LocalDateTime.now())) {
-                updatedTestObj.setDeadline(LocalDateTime.now());
-                updatedTestObj.setMark(testChecker.checkTest(updatedTestObj));
-                return testRepository.save(updatedTestObj);
-            } else {
-                throw new ServiceException("The test \"" + updatedTestObj.getTitle() + "\" is already finished");
-            }
-        } else {
-            throw new ServiceException("There's no test with id " + testId);
+        if (!updatedTest.isPresent()) {
+            throw new ServiceException("There's no test [id=" + testId + "]");
+        } else if (!getTestIsSubmittable(updatedTest.get())) {
+            throw new ServiceException("The test [id=" + testId + "] has not started or already expired");
         }
+        Test updatedTestObj = updatedTest.get();
+        updatedTestObj.setDeadline(LocalDateTime.now());
+        updatedTestObj.setMark(testChecker.checkTest(updatedTestObj));
+        return testRepository.save(updatedTestObj);
     }
+
+    @Override
+    public Test submitTest(@NonNull List<TestItemDTO> answers) throws ServiceException {
+        List<ObjectId> testIds = answers
+                .stream()
+                .map(TestItemDTO::getTestId)
+                .distinct()
+                .collect(Collectors.toList());
+        if (testIds.size() > 1) {
+            Test updatedTest = null;
+            for(ObjectId testId: testIds) {
+                updatedTest = submitTest(
+                        testId,
+                        answers
+                                .stream()
+                                .filter(answer -> answer.getTestId().equals(testId))
+                                .collect(Collectors.toList())
+                );
+            }
+            return updatedTest;
+        } else if (testIds.size() == 1) {
+            return submitTest(testIds.get(0), answers);
+        }
+        return null;
+    }
+
+    private Test submitTest(ObjectId testId, List<TestItemDTO> answers) {
+        Optional<Test> updatedTest = testRepository.findById(testId);
+        if (!updatedTest.isPresent()) {
+            throw new ServiceException("There's no test with id " + testId);
+        } else if (!getTestIsSubmittable(updatedTest.get())) {
+            throw new ServiceException("The test [id=" +
+                    updatedTest.get().getTitle() +
+                    "] has not started or already expired");
+        }
+        Test updatedTestObj = updatedTest.get();
+        for (TestItemDTO answer: answers) {
+            submitAnswer(updatedTestObj, answer, false);
+        }
+        updatedTestObj.setDeadline(LocalDateTime.now());
+        updatedTestObj.setMark(testChecker.checkTest(updatedTestObj));
+        return testRepository.save(updatedTestObj);
+    }
+
+
 
     @Override
     public Test submitAnswer(@NonNull TestItemDTO answeredItem) throws ServiceException {
         Optional<Test> updatedTest = testRepository.findById(answeredItem.getTestId());
         if (!updatedTest.isPresent()) {
             throw new ServiceException("There's no test with id " + answeredItem.getTestId());
-        } else if (updatedTest.get().getDeadline().isBefore(LocalDateTime.now())) {
-            throw new ServiceException("The test \"" + updatedTest.get().getTitle() + "\" is already finished");
+        } else if (!getTestIsSubmittable(updatedTest.get())) {
+            throw new ServiceException("The test [id=" +
+                    updatedTest.get().getTitle() +
+                    "] has not started or already expired");
         }
-        Test updatedTestObj = updatedTest.get();
+        return testRepository.save(
+                submitAnswer(updatedTest.get(), answeredItem, true)
+        );
+    }
+
+    private Test submitAnswer(Test test, TestItemDTO answeredItem, boolean doTestCheck) throws ServiceException {
         Optional<TestItem> updatedItem =
-                updatedTestObj.getItems()
-                    .stream()
-                    .filter(item -> item.getQuestionId().equals(answeredItem.getQuestionId()))
-                    .findFirst();
+                test.getItems()
+                        .stream()
+                        .filter(item -> item.getQuestionId().equals(answeredItem.getQuestionId()))
+                        .findFirst();
         Optional<Question> questionToUpdatedItem =
                 updatedItem.flatMap(item -> questionRepository.findById(item.getQuestionId()));
 
-        if (questionToUpdatedItem.isPresent()) {
-            TestItem updatedItemObj = updatedItem.get();
-            updatedItemObj.setAnswer(answeredItem.getAnswer());
-            updatedItemObj.setStatus(
-                    testChecker.checkAnswer(questionToUpdatedItem.get(), answeredItem.getAnswer())
-            );
-            updatedTestObj.setMark(testChecker.checkTest(updatedTestObj));
-            return testRepository.save(updatedTestObj);
-        } else {
+        if (!questionToUpdatedItem.isPresent()) {
             throw new ServiceException("There's no question with id " + answeredItem.getTestId());
         }
+
+        TestItem updatedItemObj = updatedItem.get();
+        updatedItemObj.setAnswer(answeredItem.getAnswer());
+        updatedItemObj.setStatus(
+                testChecker.checkAnswer(questionToUpdatedItem.get(), answeredItem.getAnswer())
+        );
+        if (doTestCheck) test.setMark(testChecker.checkTest(test));
+        return test;
     }
+
+
 
     @Override
     public Test submitManualAnswerCheck(@NonNull TestItemDTO checkedItem) throws ServiceException{
@@ -254,4 +305,11 @@ public class TestServiceImpl
                 )
                 .collect(Collectors.toList());
     }
+
+    private static boolean getTestIsSubmittable(Test test) {
+        return test.getStart().isBefore(LocalDateTime.now())
+                && test.getDeadline().isAfter(LocalDateTime.now());
+    }
+
+
 }

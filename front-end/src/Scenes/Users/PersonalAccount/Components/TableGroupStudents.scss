@@ -1,12 +1,13 @@
 .buttons-group-table {
-    display: flex;
-    flex-direction: row;
-}
+  display: flex;
+  flex-direction: row;
+  .parent-button-assign-test {
+    margin-right: 5px;
+  }
 
-.parent-button-assign-test {
-margin-right: 5px;
-}
-
-.parent-button-assign-task {
+  .parent-button-assign-task {
     margin-right: 50px;
+  }
+
 }
+

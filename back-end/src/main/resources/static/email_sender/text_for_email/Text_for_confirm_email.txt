@@ -1,0 +1,1 @@
+Пожалуйста подтвердите ваш e-mail перейдя по ссылке: <a href="&email?id=&checker">&email?id=&checker</a>

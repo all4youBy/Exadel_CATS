@@ -2,6 +2,7 @@ package com.exadel.team3.backend.entities;
 
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AccessLevel;
 import lombok.Data;
 import lombok.NonNull;
@@ -17,6 +18,7 @@ import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 public class Question implements Taggable {
     @Id
     @JsonSerialize(using = ToStringSerializer.class)
+//    @JsonIgnore
     @Setter(AccessLevel.NONE)
     private ObjectId id;
 
@@ -38,6 +40,7 @@ public class Question implements Taggable {
 
     private boolean training;
 
+//    @JsonIgnore
     private QuestionStatus status = QuestionStatus.ACTIVE;
 
     private QuestionStatistics statistics;

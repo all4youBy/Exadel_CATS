@@ -27,7 +27,7 @@ public class SwaggerConfig {
     private ApiInfo metadata() {
         return new ApiInfoBuilder()
                 .title("CATS Api")
-                .description("Nichego ne rabotaet(9")
+                .description("TEAM 3")
                 .version("1.3/4")
                 .build();
     }

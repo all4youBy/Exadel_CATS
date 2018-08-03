@@ -24,7 +24,6 @@ class InputSearchStudent extends React.Component {
     const suffix = userName ? <Icon type="close-circle" onClick={this.emitEmpty}/> : null;
     return (
       <Input
-        disabled=""
         className="input-search-student"
         placeholder="Поиск"
         prefix={<Icon type="search" style={{ color: 'rgba(0,0,0,.25)' }}/>}
