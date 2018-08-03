@@ -24,7 +24,7 @@ export const USER_GENERAL_MENU_DATA = [{
   subsections: [{
     id: '4',
     text: 'Назначенные тесты',
-    link: '/assignedtests/:userId',
+    link: '/assignedtests',
   }, {
     id: '5',
     text: 'Пройденные тесты',

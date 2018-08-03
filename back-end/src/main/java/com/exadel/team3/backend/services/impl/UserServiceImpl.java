@@ -4,6 +4,7 @@ import java.util.Collection;
 import java.util.List;
 
 import com.exadel.team3.backend.entities.UserRole;
+import com.exadel.team3.backend.services.ServiceException;
 import com.exadel.team3.backend.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.repository.MongoRepository;
@@ -57,19 +58,48 @@ public class UserServiceImpl
     }
 
     @Override
-    public void assignGroup(@NonNull Collection<String> userIds, @NonNull String group) {
-        userRepository.addGroup(userIds, group);
+    public void assignGroup(
+            @NonNull Collection<String> students,
+            @NonNull String teacher,
+            @NonNull String group
+    ) {
+        User teacherUser = getItem(teacher);
+        if (teacherUser != null) {
+            teacherUser.getGroups().add(group);
+            updateItem(teacherUser);
+        };
+        userRepository.addGroup(students, group);
     }
 
     @Override
-    public void renameGroup(Collection<String> userIds, @NonNull String oldGroup, @NonNull String newGroup) {
-        userRepository.removeGroup(userIds, oldGroup);
-        userRepository.addGroup(userIds, newGroup);
+    public void renameGroup(
+            @NonNull Collection<String> students,
+            @NonNull String teacher,
+            @NonNull String oldGroup,
+            @NonNull String newGroup
+    ) {
+        User teacherUser = getItem(teacher);
+        if (teacherUser != null) {
+            teacherUser.getGroups().remove(oldGroup);
+            teacherUser.getGroups().add(newGroup);
+            updateItem(teacherUser);
+        }
+        userRepository.removeGroup(students, oldGroup);
+        userRepository.addGroup(students, newGroup);
     }
 
     @Override
-    public void removeGroup(Collection<String> userIds, String group) {
-        userRepository.removeGroup(userIds, group);
+    public void removeGroup(
+            @NonNull Collection<String> students,
+            @NonNull String teacher,
+            String group
+    ) {
+        User teacherUser = userRepository.findByEmail(teacher);
+        userRepository.removeGroup(students, group);
+        if (teacherUser != null) {
+            teacherUser.getGroups().remove(group);
+            updateItem(teacherUser);
+        }
     }
 }
 
