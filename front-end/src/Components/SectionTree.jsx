@@ -41,7 +41,7 @@ export default class SectionTree extends React.PureComponent {
   static propTypes = {
     addTag: PropTypes.func.isRequired,
     getTopics: PropTypes.func.isRequired,
-    topics: PropTypes.arrayOf(PropTypes.string).isRequired,
+    topics: PropTypes.arrayOf(PropTypes.object).isRequired,
     // errorTopics: PropTypes.string.isRequired,
   };
 

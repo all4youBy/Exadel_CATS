@@ -32,7 +32,7 @@ export const USER_GENERAL_MENU_DATA = [{
   }, {
     id: '6',
     text: 'Пробные тесты',
-    link: '/assignedtestlist',
+    link: '/trainingtest',
   }],
 }, {
   key: '7',
