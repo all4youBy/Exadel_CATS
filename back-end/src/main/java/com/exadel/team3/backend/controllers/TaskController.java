@@ -1,7 +1,9 @@
 package com.exadel.team3.backend.controllers;
 
+import com.exadel.team3.backend.controllers.requests.AddTaskRequest;
 import com.exadel.team3.backend.controllers.requests.TaskRequest;
 import com.exadel.team3.backend.dto.SolutionDTO;
+import com.exadel.team3.backend.dto.StringAnswerDTO;
 import com.exadel.team3.backend.dto.TaskDTO;
 import com.exadel.team3.backend.dto.TaskForTeachersDTO;
 import com.exadel.team3.backend.dto.mappers.SolutionDTOMapper;
@@ -13,6 +15,7 @@ import com.exadel.team3.backend.entities.TaskTestingSet;
 import com.exadel.team3.backend.services.SolutionService;
 import com.exadel.team3.backend.services.TaskService;
 import org.bson.types.ObjectId;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -35,15 +38,19 @@ public class TaskController {
     SolutionDTOMapper solutionDTOMapper;
     @Autowired
     TaskDTOMapper taskDTOMapper;
+    @Autowired
+    ModelMapper mapper;
 
     @PostMapping("/add-task")
     @PreAuthorize("hasAnyRole('ADMIN','TEACHER')")
-    public ResponseEntity<?> addTask(@RequestBody Task task){
+    public ResponseEntity<?> addTask(@RequestBody AddTaskRequest addTask){
+
+        Task task = mapper.map(addTask, Task.class);
         Task t = taskService.addItem(task);
         if (t == null) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Can't add task");
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new StringAnswerDTO("Can't add task"));
         }
-        return ResponseEntity.status(HttpStatus.CREATED).body("Task added");
+        return ResponseEntity.status(HttpStatus.CREATED).body(new StringAnswerDTO("Task added"));
     }
 
     @GetMapping("/{taskId}")
@@ -83,7 +90,7 @@ public class TaskController {
                 taskRequest.getDeadline(),
                 taskRequest.getAssignedBy());
         if(taskForGroup == null) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Can't assign task for group.");
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new StringAnswerDTO("Can't assign task for group."));
         }
 
         return new ResponseEntity<>(taskForGroup, HttpStatus.OK);
@@ -106,7 +113,7 @@ public class TaskController {
                 taskRequest.getDeadline(),
                 taskRequest.getAssignedBy());
         if(solutionForUser == null) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Can't assign task for user.");
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new StringAnswerDTO("Can't assign task for user."));
         }
 
         return new ResponseEntity<>(solutionForUser, HttpStatus.OK);
@@ -149,7 +156,7 @@ public class TaskController {
             taskService.updateItem(task);
             return new ResponseEntity<>(taskTestingSets, HttpStatus.OK);
         } else {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Can't add tasks set.");
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new StringAnswerDTO("Can't add tasks set."));
         }
 
     }

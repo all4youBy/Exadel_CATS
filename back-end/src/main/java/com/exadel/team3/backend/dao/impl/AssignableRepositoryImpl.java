@@ -29,9 +29,8 @@ public abstract class AssignableRepositoryImpl<T extends Assignable>
                 : Aggregation.group("assignedTo").sum("mark").as("rating");
         TypedAggregation<T> aggregation = TypedAggregation.newAggregation(
                 getEntityClass(),
-                Aggregation.match(Criteria.where("assignedBy").ne(null)),
+                Aggregation.match(Criteria.where("mark").ne(null)),
                 groupingOperation,
-//              Aggregation.sort(Sort.Direction.DESC, "rating"),
                 Aggregation.project("rating"),
                 Aggregation.limit(limit > 0 ? limit : 1)
         );
