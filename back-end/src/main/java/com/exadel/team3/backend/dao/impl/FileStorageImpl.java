@@ -54,7 +54,7 @@ public class FileStorageImpl implements FileStorage {
                             @NonNull ObjectId associatedId) throws FileNotFoundException {
         GridFSFile result = getGridFsBucket().find(Filters.and(
                 Filters.eq("filename", filename),
-                Filters.eq("metadata.assocId", associatedId.toString())
+                Filters.eq("metadata.assocId", associatedId)
         )).first();
         if (result == null) throw new FileNotFoundException("File \"" + filename + "\" not found");
         return read(result.getObjectId());
