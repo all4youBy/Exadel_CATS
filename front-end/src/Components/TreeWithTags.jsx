@@ -10,7 +10,7 @@ export default class TreeWithTags extends React.PureComponent {
     deleteTag: PropTypes.func.isRequired,
     addTag: PropTypes.func.isRequired,
     getTopics: PropTypes.func.isRequired,
-    topics: PropTypes.arrayOf.isRequired,
+    topics: PropTypes.arrayOf(PropTypes.string).isRequired,
   };
 
   render() {

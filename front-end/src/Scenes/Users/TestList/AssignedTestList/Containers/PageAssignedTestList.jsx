@@ -4,62 +4,44 @@ import connect from 'react-redux/es/connect/connect';
 import PropTypes from 'prop-types';
 import TableAssignedTests from '../Components/TableAssignedTests';
 import {
-  addStudent,
-  deleteStudent,
   fetchUserAssignedTests,
 } from '../Services/Actions/actions';
 
 
 class PageAssignedTestList extends React.PureComponent {
   static propTypes = {
-    getAssignedTests: PropTypes.func.isRequired,
-    groupName: PropTypes.string.isRequired,
-    students: PropTypes.objectOf.isRequired,
-    handleStudentAdd: PropTypes.func.isRequired,
-    handleStudentDelete: PropTypes.func.isRequired,
+    tests: PropTypes.arrayOf.isRequired,
     error: PropTypes.string.isRequired,
+    getAssignedTests: PropTypes.func.isRequired,
   };
 
   render() {
     const {
-      groupName,
-      students,
-      handleStudentAdd,
-      handleStudentDelete,
-      getAssignedTests,
+      tests,
       error,
+      getAssignedTests,
     } = this.props;
     return (
       <TableAssignedTests
-        groupName={groupName}
-        students={students}
-        handleStudentAdd={handleStudentAdd}
-        handleStudentDelete={handleStudentDelete}
-        getAssignedTests={getAssignedTests}
+        tests={tests}
         error={error}
+        getAssignedTests={getAssignedTests}
       />
     );
   }
 }
 
-function mapStateToProps(state, ownProps) {
-  console.log(ownProps.match, 35343);
+function mapStateToProps(state) {
   return {
-    students: state.groupStudentsList.group,
-    groupName: ownProps.match.params.groupName,
+    tests: state.userAssignedTests.tests,
+    error: state.userAssignedTests.error,
   };
 }
 
 
 const mapDispatchToProps = dispatch => ({
-  handleStudentAdd: (student) => {
-    dispatch(addStudent(student));
-  },
-  handleStudentDelete: (key) => {
-    dispatch(deleteStudent(key));
-  },
-  getAssignedTests: (groupName) => {
-    dispatch(fetchUserAssignedTests(groupName));
+  getAssignedTests: (userId) => {
+    dispatch(fetchUserAssignedTests(userId));
   },
 });
 

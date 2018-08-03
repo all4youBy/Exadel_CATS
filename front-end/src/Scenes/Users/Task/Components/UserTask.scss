@@ -1,3 +1,51 @@
+.add-solution-task-container {
+  margin-top: 10px;
+  width: 90%;
+  text-align: center;
+  .text-task-title {
+    font-size: 19px;
+    margin-bottom: 10px;
+    color: #03233c;
+  }
+  .task-title {
+    text-align: center;
+  }
+  .task-text-border {
+    border: 1px solid rgb(217, 217, 217);
+    border-radius: 4px;
+    margin-top: 30px;
+    width: 100%;
+    height: 200px;
+    text-align: center;
+    align-items: center;
+  }
+  .task-text {
+    text-align: left;
+    padding: 15px;
+  }
+  .tags {
+    margin-top: 10px;
+  }
+  .task-text-border:hover {
+    overflow-y: scroll;
+  }
+  .button-load-file {
+    margin-top: 10px;
+    margin-bottom: 10px;
+  }
+  .parent-buttons {
+    display: flex;
+    justify-content: space-between;
+  }
+  .upload-button {
+    height: 32px;
+    background-color: #04233d;
+    color: #fff;
+    border-color: #04233d;
+    margin-top: 10px;
+  }
+}
+
 .task-container {
   display: flex;
   flex-direction: column;
