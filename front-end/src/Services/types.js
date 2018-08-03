@@ -67,25 +67,17 @@ export const TEACHER_GENERAL_MENU_DATA = [{
     id: '4',
     text: 'Добавить задачу',
     link: '/addtask',
-  }, {
-    id: '5',
-    text: 'Назначить задачу',
-    link: '/assigntask',
   }],
 }, {
   key: 'sub3',
   type: 'profile',
   text: 'Тесты',
   subsections: [{
-    id: '6',
-    text: 'Назначить тест',
-    link: '/assigntest',
-  }, {
-    id: '7',
+    id: '5',
     text: 'Проверить тесты',
     link: '/checktests',
   }, {
-    id: '8',
+    id: '6',
     text: 'Добавить вопрос',
     link: '/addquestion',
   }],
@@ -94,15 +86,15 @@ export const TEACHER_GENERAL_MENU_DATA = [{
   type: 'folder',
   text: 'Материалы',
   subsections: [{
-    id: '9',
+    id: '7',
     text: 'Все материалы',
     link: '/materials',
   }, {
-    id: '10',
+    id: '8',
     text: 'Мои материалы',
     link: '/materials',
   }, {
-    id: '11',
+    id: '9',
     text: 'Добавить материал',
     link: '/',
   }],

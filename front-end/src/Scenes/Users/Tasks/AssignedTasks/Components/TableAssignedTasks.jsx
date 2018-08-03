@@ -1,9 +1,10 @@
 import React from 'react';
-import { Table } from 'antd';
+import { Table, Tag } from 'antd';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 import ButtonPassTask from './ButtonPassTask';
 import requestLoginInformation from '../../../../../Services/loginService';
+import Loading from '../../../../../Components/Loading';
 // import Loading from '../../../../../Components/Loading';
 
 // let tags = ['aaaa', 'ssss', 'ffff'];
@@ -77,32 +78,69 @@ class TableAssignedTasks extends React.PureComponent {
       width: 500,
       className: 'column-break-point',
     }, {
+      title: 'Отметка',
+      dataIndex: 'mark',
+      key: 'mark',
+      width: 500,
+      className: 'column-break-point',
+    }, {
       title: '',
       key: 'start',
       width: 100,
       className: 'column-break-point',
       render: record => (
-        <ButtonPassTask taskId={record.solution.taskId}/>
+        <ButtonPassTask taskId={record.taskId}/>
       ),
     }];
     console.log(tasks);
     if (error) {
       return <div/>;
     }
+
+    const tags = [];
+
+    tasks.forEach((element) => {
+      element.topics.forEach((item, index) => {
+        tags[index] = <Tag color="blue">{item}</Tag>;
+      });
+    });
+    // tags = tags.map(element => <Tag color="blue">{element}</Tag>);
+
+    const data = [];
+    for (let i = 0; i < tasks.length; i += 1) {
+      if (tasks[i].solution.mark === null) {
+        tasks[i].solution.mark = '-----';
+      }
+      data.push({
+        key: `${i}`,
+        name: tasks[i].title,
+        theme: tags,
+        mark: tasks[i].solution.mark,
+        author: tasks[i].solution.assignedBy,
+        date: new Date(tasks[i].solution.deadline),
+        result: `${i}`,
+        comment: 'Комметарий',
+        taskId: tasks[i].solution.taskId,
+      });
+    }
+    const container = tasks.length ? (
+      <Table
+        {...{
+          bordered,
+          loading,
+          pagination,
+          size,
+          title,
+          showHeader,
+        }}
+        columns={columns}
+        dataSource={data}
+        rowClassName={() => 'abc'}
+      />) : <Loading/>;
+
     return (
       <div>
-        <Table
-          {...{
-            bordered,
-            loading,
-            pagination,
-            size,
-            title,
-            showHeader,
-          }}
-          columns={columns}
-          dataSource={tasks}
-        />
+        {container}
       </div>
     );
   }
