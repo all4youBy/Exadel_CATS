@@ -142,6 +142,7 @@ class QuestionForm extends React.PureComponent {
           onBlur={this.setField}
           name="answerTrue"
           type="text"
+          autosize
           className="answer"
         />
         <Button
@@ -221,6 +222,7 @@ class QuestionForm extends React.PureComponent {
             onBlur={this.setField}
             name="answerTrue"
             type="text"
+            autosize
             className="answer"
           />
         </div>
@@ -229,6 +231,7 @@ class QuestionForm extends React.PureComponent {
             onBlur={this.setField}
             name="answerFalse"
             type="text"
+            autosize
             className="answer"
           />{addInputFalse}
           <Button onClick={this.addAnswerInputsFalse} type="dashed" className="add-input">+Добавить</Button>
@@ -242,6 +245,7 @@ class QuestionForm extends React.PureComponent {
             onBlur={this.setField}
             name="answerTrue"
             type="text"
+            autosize
             className="answer"
           />{addiInputTrue}
           <Button onClick={this.addAnswerInputsTrue} type="dashed" className="add-input">+Добавить</Button>
@@ -251,6 +255,7 @@ class QuestionForm extends React.PureComponent {
             onBlur={this.setField}
             name="answerFalse"
             type="text"
+            autosize
             className="answer"
           />{addInputFalse}
           <Button onClick={this.addAnswerInputsFalse} type="dashed" className="add-input">+Добавить</Button>
@@ -263,6 +268,7 @@ class QuestionForm extends React.PureComponent {
             onBlur={this.setField}
             name="answerTrue"
             type="text"
+            autosize
             className="answer"
           />
         </div>

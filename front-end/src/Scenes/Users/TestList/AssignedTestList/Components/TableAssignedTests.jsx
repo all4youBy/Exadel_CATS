@@ -42,9 +42,12 @@ const columns = [{
 
 class TableAssignedTests extends React.PureComponent {
   static propTypes = {
-    tests: PropTypes.arrayOf.isRequired,
-    error: PropTypes.string.isRequired,
     getAssignedTests: PropTypes.func.isRequired,
+    students: PropTypes.objectOf(PropTypes.object).isRequired,
+    handleStudentAdd: PropTypes.func.isRequired,
+    handleStudentDelete: PropTypes.func.isRequired,
+    groupName: PropTypes.string.isRequired,
+    error: PropTypes.bool.isRequired,
   };
 
   state = {
@@ -57,8 +60,8 @@ class TableAssignedTests extends React.PureComponent {
   };
 
   componentDidMount() {
-    const { getAssignedTests } = this.props;
-    getAssignedTests(requestLoginInformation().email);
+    const { getAssignedTests, groupName } = this.props;
+    getAssignedTests(groupName);
   }
 
   render() {
