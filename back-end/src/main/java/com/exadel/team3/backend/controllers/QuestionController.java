@@ -25,12 +25,12 @@ public class QuestionController {
     @AdminAndTeacherAccess
     public ResponseEntity<?> addQuestion(@RequestBody Question question){
 
-       Question q = questionService.addItem(question);
+        Question q = questionService.addItem(question);
 
-       if(q==null)
-           return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Can't add question");
+        if(q == null)
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Can't add question");
 
-       return ResponseEntity.status(HttpStatus.CREATED).body("Question added");
+        return ResponseEntity.status(HttpStatus.CREATED).body("Question added");
     }
 
     @PutMapping(value = "/complain",consumes = "text/plain",produces = MediaType.APPLICATION_JSON_VALUE)
@@ -53,10 +53,6 @@ public class QuestionController {
             return questionService.getItems();
         return questionService.getItemsByTopicIds(topicsIds);
     }
-//
-//    public List<Question> getAllQuestion(@RequestBody List<ObjectId> questionId){
-//
-//    }
 
     @GetMapping("/{id}")
     @AdminAndTeacherAccess

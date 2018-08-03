@@ -1,10 +1,11 @@
+/* eslint-disable no-unused-vars,spaced-comment */
 import React from 'react';
 import { Form, Input, Button } from 'antd';
 import './TestProperties.scss';
 import PropTypes from 'prop-types';
 import TreeWithTags from '../../../../../Components/TreeWithTags';
-import StudentsList from '../../../../../Components/StudentsList';
-import CurrentGroupList from '../../../../../Components/CurrentGroupList';
+// import CurrentGroupList from '../../../../../Components/CurrentGroupList';
+// import StudentsAndGroupsList from '../../../../../Components/StudentsAndGroupsList';
 // import Loading from '../../../../../Components/Loading';
 
 const { TextArea } = Input;
@@ -45,15 +46,14 @@ class TestProperties extends React.Component {
     addStudent: PropTypes.func.isRequired,
     delStudent: PropTypes.func.isRequired,
     getStudentsData: PropTypes.func.isRequired,
-    students: PropTypes.arrayOf(PropTypes.object).isRequired,
-    error: PropTypes.bool.isRequired,
-    groups: PropTypes.arrayOf(PropTypes.object).isRequired,
-    getGroupsData: PropTypes.func.isRequired,
+    students: PropTypes.objectOf(PropTypes.array).isRequired,
+    error: PropTypes.string.isRequired,
     getUsersFromGroup: PropTypes.func.isRequired,
-    groupName: PropTypes.string.isRequired,
-    users: PropTypes.arrayOf(PropTypes.object).isRequired,
     getTopics: PropTypes.func.isRequired,
-    topics: PropTypes.string.isRequired,
+    topics: PropTypes.arrayOf(PropTypes.string).isRequired,
+    teacher: PropTypes.string.isRequired,
+    type: PropTypes.string.isRequired,
+    receiver: PropTypes.string.isRequired,
   };
 
   state = {
@@ -68,17 +68,14 @@ class TestProperties extends React.Component {
     hoursPassTimeTest: 0,
     minutesPassTimeTest: 0,
     secondsPassTimeTest: 0,
+    mothsPassDateTest: 0,
+    daysPassDateTest: 0,
+    yearsPassDateTest: 0,
+    mothsLeadDateTest: 0,
+    daysLeadDateTest: 0,
+    yearsLeadDateTest: 0,
+    add: false,
   };
-
-  static getDerivedStateFromProps(nextProps, nextState) {
-    if ((nextProps.users !== nextState.users && nextProps.emptyList && !nextState.getListUsers)) {
-      nextProps.getDataUsers('users/users-confirm');
-    }
-    return {
-      getListUsers: true,
-      users: nextProps.users,
-    };
-  }
 
   setField = (event) => {
     const { name } = event.target;
@@ -90,40 +87,52 @@ class TestProperties extends React.Component {
 
   render() {
     const {
-      handleAddTestTag, handleDeleteTestTag, tags, handleCreateTest, data,
-      addStudent, delStudent, getStudentsData, students, error, groups,
-      getGroupsData, topics, getTopics,
+      handleAddTestTag, handleDeleteTestTag, receiver, tags, handleCreateTest, data,
+      addStudent, delStudent, getStudentsData, students, error, topics, getTopics, teacher, type,
     } = this.props;
     const { form } = this.props;
     const {
       nameTest, countQuestionsTest, hoursLeadTimeTest, minutesLeadTimeTest,
       secondsLeadTimeTest, hoursTimeOpenTest, minutesTimeOpenTest,
       secondsTimeOpenTest, hoursPassTimeTest, minutesPassTimeTest,
-      secondsPassTimeTest,
+      secondsPassTimeTest, daysPassDateTest, mothsPassDateTest, yearsPassDateTest,
+      mothsLeadDateTest, daysLeadDateTest, yearsLeadDateTest, add,
     } = this.state;
     const { getFieldDecorator } = form;
+
+    const addTest = add ? <div>Вы назначили тест!</div> : <div/>;
     const handleSubmit = (e) => {
       e.preventDefault();
-      form.validateFieldsAndScroll((err) => {
-        const obj = {
-          name: nameTest,
-          countQuestions: countQuestionsTest,
-          leadTime: new Date(hoursLeadTimeTest, minutesLeadTimeTest, secondsLeadTimeTest),
-          timeOpen: new Date(hoursTimeOpenTest, minutesTimeOpenTest, secondsTimeOpenTest),
-          passTime: new Date(hoursPassTimeTest, minutesPassTimeTest, secondsPassTimeTest),
-          hashTags: tags,
-        };
-        console.log(obj, 12546);
-        if (!err) {
-          handleCreateTest({
-            name: nameTest,
-            countQuestions: countQuestionsTest,
-            leadTime: new Date(hoursLeadTimeTest, minutesLeadTimeTest, secondsLeadTimeTest),
-            timeOpen: new Date(hoursTimeOpenTest, minutesTimeOpenTest, secondsTimeOpenTest),
-            passTime: new Date(hoursPassTimeTest, minutesPassTimeTest, secondsPassTimeTest),
-          });
+      // form.validateFieldsAndScroll((err) => {
+      //   if (!err) {
+      const obj = {
+        assignedBy: teacher,
+        title: nameTest,
+        questionsCount: +countQuestionsTest,
+        // leadTime: new Date(hoursLeadTimeTest, minutesLeadTimeTest, secondsLeadTimeTest),
+        start: new Date(yearsLeadDateTest, mothsLeadDateTest,
+          daysLeadDateTest, hoursTimeOpenTest, minutesTimeOpenTest,
+          secondsTimeOpenTest).toISOString(),
+        deadline: new Date(yearsPassDateTest, mothsPassDateTest,
+          daysPassDateTest, hoursPassTimeTest,
+          minutesPassTimeTest, secondsPassTimeTest).toISOString(),
+        topics: '',
+      };
+      // console.log(obj.start);
+      switch (type) {
+        case 'STUDENT': {
+          obj.email = receiver;
+          break;
         }
-      });
+        default: {
+          obj.group = receiver;
+        }
+      }
+      console.log(obj);
+      // handleCreateTest({ obj })
+      this.setState(() => ({ add: true }));
+      //   }
+      // });
     };
     // const groupList = users ? (
     //   <CurrentGroupList
@@ -133,6 +142,7 @@ class TestProperties extends React.Component {
     // ) : <Loading/>;
     return (
       <div className="test-properties-content">
+        <div className="header">Назначение теста</div>
         <FormItem {...formItemLayout} label="" className="name-form-item">
           {getFieldDecorator('Название', {
             rules: [
@@ -144,8 +154,9 @@ class TestProperties extends React.Component {
           })(
             <TextArea
               name="nameTest"
+              type="text"
               className="input-task-name"
-              placeholder="Название теста"
+              placeholder="Введите название теста"
               autosize
               onBlur={this.setField}
             />,
@@ -254,7 +265,7 @@ class TestProperties extends React.Component {
                 <div className="parent-group-input">
                   <Input
                     className="input-hour-lead-time"
-                    name="daysPassDateTest"
+                    name="daysLeadDateTest"
                     placeholder="00"
                     onBlur={this.setField}
                   />
@@ -265,7 +276,7 @@ class TestProperties extends React.Component {
                   />
                   <Input
                     className="input-min-lead-time"
-                    name="mothsPassDateTest"
+                    name="mothsLeadDateTest"
                     placeholder="00"
                     onBlur={this.setField}
                   />
@@ -276,7 +287,7 @@ class TestProperties extends React.Component {
                   />
                   <Input
                     className="input-years-lead-time"
-                    name="yearsPassDateTest"
+                    name="yearsLeadDateTest"
                     placeholder="0000"
                     onBlur={this.setField}
                   />
@@ -285,55 +296,55 @@ class TestProperties extends React.Component {
             </FormItem>
           </div>
           <div className="right-group-form-items">
-            <FormItem {...formItemLayout} label="Время вып." className="form-item">
-              {getFieldDecorator('leadTime', {
-                rules: [
-                  {
-                    pattern: /^[0-5]\d/,
-                    message: 'Введите число!',
-                  },
-                  {
-                    required: true,
-                    message: 'Пожалуйста, введите время выполнения!',
-                  },
-                  {
-                    max: 2,
-                    message: 'Вы можете ввести не более 2 символов',
-                  },
-                ],
-              })(
-                <div className="parent-group-input">
-                  <Input
-                    className="input-hour-lead-time"
-                    name="hoursLeadTimeTest"
-                    placeholder="00"
-                    onBlur={this.setField}
-                  />
-                  <Input
-                    className="text-between-input"
-                    placeholder=":"
-                    disabled
-                  />
-                  <Input
-                    className="input-min-lead-time"
-                    name="minutesLeadTimTest"
-                    placeholder="00"
-                    onBlur={this.setField}
-                  />
-                  <Input
-                    className="text-between-input"
-                    placeholder=":"
-                    disabled
-                  />
-                  <Input
-                    className="input-second-lead-time"
-                    name="secondsLeadTimeTest"
-                    placeholder="00"
-                    onBlur={this.setField}
-                  />
-                </div>,
-              )}
-            </FormItem>
+            {/*<FormItem {...formItemLayout} label="Время вып." className="form-item">*/}
+            {/*{getFieldDecorator('leadTime', {*/}
+            {/*rules: [*/}
+            {/*{*/}
+            {/*pattern: /^[0-5]\d/,*/}
+            {/*message: 'Введите число!',*/}
+            {/*},*/}
+            {/*{*/}
+            {/*required: true,*/}
+            {/*message: 'Пожалуйста, введите время выполнения!',*/}
+            {/*},*/}
+            {/*{*/}
+            {/*max: 2,*/}
+            {/*message: 'Вы можете ввести не более 2 символов',*/}
+            {/*},*/}
+            {/*],*/}
+            {/*})(*/}
+            {/*<div className="parent-group-input">*/}
+            {/*<Input*/}
+            {/*className="input-hour-lead-time"*/}
+            {/*name="hoursLeadTimeTest"*/}
+            {/*placeholder="00"*/}
+            {/*onBlur={this.setField}*/}
+            {/*/>*/}
+            {/*<Input*/}
+            {/*className="text-between-input"*/}
+            {/*placeholder=":"*/}
+            {/*disabled*/}
+            {/*/>*/}
+            {/*<Input*/}
+            {/*className="input-min-lead-time"*/}
+            {/*name="minutesLeadTimTest"*/}
+            {/*placeholder="00"*/}
+            {/*onBlur={this.setField}*/}
+            {/*/>*/}
+            {/*<Input*/}
+            {/*className="text-between-input"*/}
+            {/*placeholder=":"*/}
+            {/*disabled*/}
+            {/*/>*/}
+            {/*<Input*/}
+            {/*className="input-second-lead-time"*/}
+            {/*name="secondsLeadTimeTest"*/}
+            {/*placeholder="00"*/}
+            {/*onBlur={this.setField}*/}
+            {/*/>*/}
+            {/*</div>,*/}
+            {/*)}*/}
+            {/*</FormItem>*/}
             <FormItem {...formItemLayout} label="Время сдачи" className="form-item">
               {getFieldDecorator('passTime', {
                 rules: [
@@ -430,20 +441,21 @@ class TestProperties extends React.Component {
             </FormItem>
           </div>
         </Form>
-        <div className="parent-student-list">
-          <StudentsList
-            students={data}
-            addStudent={addStudent}
-            getStudentsData={getStudentsData}
-            getGroupsData={getGroupsData}
-            error={error}
-            groups={groups}
-          />
-          <CurrentGroupList
-            students={students}
-            delStudent={delStudent}
-          />
-        </div>
+        {/*<div className="parent-student-list">*/}
+        {/*<StudentsList*/}
+        {/*students={data}*/}
+        {/*addStudent={addStudent}*/}
+        {/*getStudentsData={getStudentsData}*/}
+        {/*error={error}*/}
+        {/*teacher={teacher}*/}
+        {/*type={type}*/}
+        {/*/>*/}
+        {/*<CurrentGroupList*/}
+        {/*students={students}*/}
+        {/*delStudent={delStudent}*/}
+        {/*/>*/}
+        {/*</div>*/}
+        {addTest}
         <FormItem {...tailFormItemLayout} >
           <Button
             className="button-table-with-border button-assign"

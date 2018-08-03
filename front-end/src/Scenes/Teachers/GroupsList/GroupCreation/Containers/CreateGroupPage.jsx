@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
@@ -31,6 +30,7 @@ class CreateGroupPage extends React.PureComponent {
 
   state = {
     group: '',
+    dataError: false,
   };
 
   getGroupData = () => {
@@ -42,9 +42,28 @@ class CreateGroupPage extends React.PureComponent {
     };
   };
 
+  validateCreateGroup = (groupData) => {
+    if (groupData.group.length === 0 || groupData.emails.length === 0) {
+      return false;
+    }
+    return true;
+  };
+
   handleGroupData = () => {
     const { sendGroupInfo } = this.props;
-    sendGroupInfo(this.getGroupData());
+    const groupInfo = this.getGroupData();
+    if (!this.validateCreateGroup(groupInfo)) {
+      this.setState(() => ({ dataError: true }));
+    } else {
+      this.setState(() => ({ dataError: false }));
+      sendGroupInfo(groupInfo);
+    }
+  };
+
+  handleSetName = (event) => {
+    if (event.target.value) {
+      this.setState({ group: event.target.value });
+    }
   };
 
   render() {
@@ -53,7 +72,8 @@ class CreateGroupPage extends React.PureComponent {
       getStudentsData, data, error,
       getGroupsData, groups,
     } = this.props;
-    console.log(addStudent, data, error);
+    const { dataError } = this.state;
+    const errorInput = dataError ? <div className="error-input">Введите все данные!</div> : <div/>;
 
     return (
       <div className="create-group-container">
@@ -61,21 +81,20 @@ class CreateGroupPage extends React.PureComponent {
           className="group-name-input"
           placeholder="Название группы"
           autosize
-          onBlur={(value) => {
-            this.setState({ group: value.target.value });
-          }}
+          onBlur={this.handleSetName}
         />
         <div className="student-list-container ">
           <StudentsList
             students={data}
             addStudent={addStudent}
             getStudentsData={getStudentsData}
-            getGroupsData={getGroupsData}
+            getGroups={getGroupsData}
             error={error}
             groups={groups}
           />
           <CurrentGroupList className="current-group-list" students={students} delStudent={delStudent}/>
         </div>
+        {errorInput}
         <Button
           onClick={this.handleGroupData}
           size="small"
@@ -101,13 +120,6 @@ function mapStateToProps(state) {
   };
 }
 
-// /* <StudentsList
-//   className="student-list"
-//   data={data}
-//   addStudent={addStudent}
-//   getData={getStudentData}
-//   error={error}
-// /> */
 const mapDispatchToProps = dispatch => ({
   addStudent: (student) => {
     dispatch(addStudentToGroup(student));

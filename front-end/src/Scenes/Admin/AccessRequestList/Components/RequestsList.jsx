@@ -44,7 +44,7 @@ class RequestsList extends React.PureComponent {
 
   static getDerivedStateFromProps(nextProps, nextState) {
     if ((nextProps.users !== nextState.users && nextProps.emptyList && !nextState.getListUsers)) {
-      nextProps.getDataUsers('users/users-confirm');
+      nextProps.getDataUsers('users/confirm-users');
     }
     return {
       getListUsers: true,

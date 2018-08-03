@@ -10,7 +10,7 @@ const allTasks = (state = initialState, action) => {
     case types.RECEIVE_ALL_TASKS: {
       return {
         ...state,
-        tasks: [...state.tasks, ...action.payload],
+        tasks: [...action.payload],
       };
     }
     case types.ERROR_STUDENTS_LIST_FOR_TASK:

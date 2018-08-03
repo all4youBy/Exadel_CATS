@@ -1,46 +1,37 @@
+/* eslint-disable spaced-comment,max-len */
 import React from 'react';
 import 'antd/dist/antd.css';
-import { List, Button, message, Radio } from 'antd';
+import { List, Button, message } from 'antd';
 import PropTypes from 'prop-types';
 import './GroupCreation.scss';
 import InputSearchStudent from './InputSearchStudent';
 
-const RadioButton = Radio.Button;
-const RadioGroup = Radio.Group;
-
-export default class StudentList extends React.PureComponent {
+class StudentsList extends React.PureComponent {
   static propTypes = {
     students: PropTypes.arrayOf(PropTypes.object).isRequired,
-    groups: PropTypes.arrayOf(PropTypes.object).isRequired,
+    groups: PropTypes.arrayOf(PropTypes.any).isRequired,
     addStudent: PropTypes.func.isRequired,
     getStudentsData: PropTypes.func.isRequired,
-    getGroupsData: PropTypes.func.isRequired,
+    getGroups: PropTypes.func.isRequired,
     error: PropTypes.string.isRequired,
+    teacher: PropTypes.string.isRequired,
+    type: PropTypes.string.isRequired,
   };
 
-  state = {
-    type: '',
-  };
+  // state = {
+  //   type: '',
+  // };
 
   componentDidMount() {
-    const { getStudentsData, getGroupsData } = this.props;
+    const { getStudentsData, getGroups, teacher } = this.props;
     getStudentsData();
-    getGroupsData();
+    getGroups(teacher);
   }
 
-  setList = (event) => {
-    const { value } = event.target;
-    this.setState({
-      type: value,
-    });
-  };
-
   render() {
-    const { students, groups, error, addStudent } = this.props;
-    const { type } = this.state;
+    const { students, groups, error, addStudent, type } = this.props;
     if (error) {
       message.error(error);
-      return <div/>;
     }
     const list = (
       <List
@@ -51,7 +42,7 @@ export default class StudentList extends React.PureComponent {
           emptyText: 'Загрузка...',
         }}
         pagination={{
-          pageSize: 10,
+          pageSize: 5,
         }}
         dataSource={students}
         renderItem={(item) => {
@@ -90,7 +81,7 @@ export default class StudentList extends React.PureComponent {
               emptyText: 'Загрузка...',
             }}
             pagination={{
-              pageSize: 10,
+              pageSize: 5,
             }}
             dataSource={groups}
             renderItem={(item) => {
@@ -106,7 +97,7 @@ export default class StudentList extends React.PureComponent {
                     className="button-table"
                     size="default"
                     name={item}
-                    onClick={() => addStudent(item)}
+                    onClick={() => addStudent(item, type)}
                   />
                 </List.Item>
               );
@@ -126,14 +117,16 @@ export default class StudentList extends React.PureComponent {
     return (
       <div className="student-list-content">
         <InputSearchStudent/>
-        <div>
-          <RadioGroup defaultValue="a" className="parent-radio-button" onChange={this.setList}>
-            <RadioButton value="GROUPS" className="parent-radio-button-groups">Группы</RadioButton>
-            <RadioButton value="STUDENTS" className="parent-radio-button-students">Студенты</RadioButton>
-          </RadioGroup>
-        </div>
+        {/*<div>*/}
+        {/*<RadioGroup defaultValue="a" className="parent-radio-button" onChange={this.setList}>*/}
+        {/*<RadioButton value="GROUPS" className="parent-radio-button-groups">Группы</RadioButton>*/}
+        {/*<RadioButton value="STUDENTS" className="parent-radio-button-students">Студенты</RadioButton>*/}
+        {/*</RadioGroup>*/}
+        {/*</div>*/}
         {listData}
       </div>
     );
   }
 }
+
+export default StudentsList;

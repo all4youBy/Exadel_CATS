@@ -10,4 +10,7 @@ public interface Taggable {
 
     String getText();
     void setText(String text);
+
+    String getAuthor();
+    void setAuthor(String authorId);
 }

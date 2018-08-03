@@ -1,19 +1,21 @@
 package com.exadel.team3.backend.dao.impl;
 
+import java.util.List;
+
 import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.aggregation.GraphLookupOperation;
 import org.springframework.data.mongodb.core.aggregation.MatchOperation;
 import org.springframework.data.mongodb.core.aggregation.TypedAggregation;
+import org.springframework.data.mongodb.core.query.Criteria;
+import org.springframework.stereotype.Repository;
+import org.springframework.util.StringUtils;
 
 import com.exadel.team3.backend.dao.TopicRepositoryAggregation;
 import com.exadel.team3.backend.entities.Topic;
-import org.springframework.data.mongodb.core.query.Criteria;
-import org.springframework.util.StringUtils;
 
-import java.util.List;
-
+@Repository
 public class TopicRepositoryImpl implements TopicRepositoryAggregation {
     @Autowired
     private MongoTemplate mongoTemplate;

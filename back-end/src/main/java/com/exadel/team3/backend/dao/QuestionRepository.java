@@ -8,8 +8,7 @@ import org.springframework.stereotype.Repository;
 import java.util.Collection;
 import java.util.List;
 
-@Repository
 public interface QuestionRepository extends TaggableRepository<Question>, QuestionRepositoryAggregation {
-    List<ObjectIdProjection> findByIdInAndComplexity(Collection<ObjectId> ids, QuestionComplexity complexity);
-    List<Question> findByIdIn(Collection<ObjectId> ids);
+    List<ObjectIdProjection> findByIdInAndComplexityOrderByText(Collection<ObjectId> ids, QuestionComplexity complexity);
+    List<Question> findByIdInOrderByText(Collection<ObjectId> ids);
 }
