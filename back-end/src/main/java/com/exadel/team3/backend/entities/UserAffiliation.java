@@ -14,4 +14,5 @@ public class UserAffiliation {
     private int graduationYear;
     private String specialization;
     private String primarySkill;
+    private String placeOfWork;
 }
