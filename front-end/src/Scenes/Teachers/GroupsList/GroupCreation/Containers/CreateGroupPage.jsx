@@ -93,7 +93,7 @@ class CreateGroupPage extends React.Component {
             students={data}
             addStudent={addStudent}
             getStudentsData={getStudentsData}
-            getGroupsData={getGroupsData}
+            getGroups={getGroupsData}
             error={error}
             groups={groups}
           />

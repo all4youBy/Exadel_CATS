@@ -3,7 +3,7 @@ import './TableAssignedTests.scss';
 import { Table, Tag } from 'antd';
 import PropTypes from 'prop-types';
 import ButtonPassTest from './ButtonPassTest';
-import requestLoginInformation from '../../../../../Services/loginService';
+// import requestLoginInformation from '../../../../../Services/loginService';
 import Loading from '../../../../../Components/Loading';
 
 let tags = ['aaaa', 'ssss', 'ffff'];
@@ -48,6 +48,7 @@ class TableAssignedTests extends React.PureComponent {
     handleStudentDelete: PropTypes.func.isRequired,
     groupName: PropTypes.string.isRequired,
     error: PropTypes.bool.isRequired,
+    tests: PropTypes.arrayOf.isRequired,
   };
 
   state = {

@@ -264,7 +264,7 @@ class TaskProperties extends React.Component {
             students={data}
             addStudent={addStudent}
             getStudentsData={getStudentsData}
-            getGroups={getGroups}
+            getGroupsData={getGroups}
             error={error}
             teacher={teacher}
             groups={groups}
