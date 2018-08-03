@@ -25,6 +25,7 @@ class QuestionForm extends React.PureComponent {
     addQuestion: PropTypes.func.isRequired,
     getTopics: PropTypes.func.isRequired,
     topics: PropTypes.arrayOf.isRequired,
+    // response: PropTypes.string.isRequired,
   };
 
   constructor(props) {
@@ -179,7 +180,7 @@ class QuestionForm extends React.PureComponent {
         questionType: this.question.questionType,
         questionVariants: this.question.questionVariants,
         text: this.question.text,
-        topicsId: this.question.topicsId,
+        topicIds: this.question.topicsId,
         training: this.question.training,
       };
       addQuestion('questions', obj);
@@ -365,6 +366,7 @@ function mapStateToProps(state) {
     user: state.logInInformation.user,
     tags: state.addQuestion.tags,
     topics: state.addQuestion.topics,
+    response: state.addQuestion.response,
   };
 }
 

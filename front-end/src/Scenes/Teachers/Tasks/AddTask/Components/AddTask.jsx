@@ -5,7 +5,7 @@ import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { Button, Input } from 'antd';
 import InputOutputSet from './InputOutputSet';
-import { addInOutSet, addTaskTag, deleteTaskTag, fetchTopics } from '../Services/Actions/actions';
+import { addInOutSet, addTaskTag, deleteTaskTag, fetchTopics, fetchAddTask } from '../Services/Actions/actions';
 import TreeWithTags from '../../../../../Components/TreeWithTags';
 import requestLoginInformation from '../../../../../Services/loginService';
 
@@ -21,12 +21,12 @@ class AddTask extends React.PureComponent {
     addElem: PropTypes.func.isRequired,
     getTopics: PropTypes.func.isRequired,
     topics: PropTypes.string.isRequired,
+    postAddTask: PropTypes.func.isRequired,
   };
 
   state = {
     nameTask: '',
     textTask: '',
-    topicsTask: [],
     testSets: [],
   };
 
@@ -62,9 +62,19 @@ class AddTask extends React.PureComponent {
     }
   };
 
+  setTestSets = (data) => {
+    this.setState({
+      [data]: data,
+    });
+  };
+
   render() {
-    const { addTag, deleteTag, tags, addElem, testSet, topics, getTopics } = this.props;
-    const { nameTask, textTask, topicsTask, testSets } = this.state;
+    const {
+      addTag, deleteTag, tags, addElem, testSet, topics,
+      getTopics, postAddTask,
+    } = this.props;
+    const { nameTask, textTask, testSets } = this.state;
+    let tagsTask = [];
     const handleSubmit = (e) => {
       e.preventDefault();
       if (tags.length) {
@@ -72,25 +82,26 @@ class AddTask extends React.PureComponent {
         tags.forEach((element) => {
           tagsArray.push(element.id);
         });
-        this.setState({
-          [topicsTask]: tagsArray,
-        });
+        tagsTask = tagsArray;
       } else {
-        this.setState({
-          [topicsTask]: tags,
-        });
+        tagsTask = tags;
       }
+      let tests = testSets;
+      tests = tests.map((element) => {
+        if (!element.difficultyLevel || element.difficultyLevel === 0) {
+          element.difficultyLevel = null;
+        }
+        return element;
+      });
       const obj = {
         author: requestLoginInformation().email,
         title: nameTask,
         text: textTask,
-        topicIds: topicsTask,
+        topicIds: tagsTask,
+        testingSets: tests,
         type: 'PASS_ALL',
       };
-      console.log(obj, 12546);
-      // sendAssignTask({
-      //   name: nameTask,
-      // });
+      postAddTask(obj);
     };
     return (
       <div className="add-task-container">
@@ -117,7 +128,12 @@ class AddTask extends React.PureComponent {
             getTopics={getTopics}
           />
         </div>
-        <InputOutputSet addElem={addElem} testSet={testSet} testSets={testSets}/>
+        <InputOutputSet
+          addElem={addElem}
+          testSet={testSet}
+          testSets={testSets}
+          setTestSets={this.setTestSets}
+        />
         <Button
           type="primary"
           className="button-table-with-border task-upload-button"
@@ -149,6 +165,9 @@ const mapDispatchToProps = dispatch => ({
   },
   getTopics: () => {
     dispatch(fetchTopics());
+  },
+  postAddTask: (data) => {
+    dispatch(fetchAddTask(data));
   },
 });
 

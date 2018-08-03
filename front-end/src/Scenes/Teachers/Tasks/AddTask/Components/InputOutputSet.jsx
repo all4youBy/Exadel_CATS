@@ -1,9 +1,9 @@
-/* eslint-disable react/no-array-index-key */
+/* eslint-disable react/no-array-index-key,react/jsx-no-bind,no-undef */
 import React from 'react';
 import 'antd/dist/antd.css';
 import './AddTask.scss';
 import PropTypes from 'prop-types';
-import { Input, Button, Icon, Select, Form } from 'antd';
+import { Input, Button, Icon, Select } from 'antd';
 
 const { TextArea } = Input;
 const { Option } = Select;
@@ -13,49 +13,71 @@ class InputOutputSet extends React.PureComponent {
     testSet: PropTypes.arrayOf(PropTypes.object).isRequired,
     addElem: PropTypes.func.isRequired,
     testSets: PropTypes.arrayOf(PropTypes.object).isRequired,
+    setTestSets: PropTypes.func.isRequired,
   };
 
   setField = (event) => {
-    const { name, formId } = event.target;
-    console.log(event.target, formId, name, 748);
+    const { name } = event.target;
+    const { id } = event.target.closest('.set-container');
     const { value } = event.target;
-    const { testSets } = this.props;
+    const { testSets, setTestSets } = this.props;
+    if (!testSets[id]) {
+      testSets[id] = {};
+    }
     switch (name) {
       case 'inputSet': {
         if (value !== '') {
-          testSets.push({ correct: false, text: value });
+          testSets[id].input = value;
         }
         break;
       }
       case 'outputSet': {
         if (value !== '') {
-          testSets.push({ correct: true, text: value });
+          testSets[id].output = value;
         }
         break;
       }
-      case 'level': {
-        testSets.push({ correct: true, text: value });
+      default: {
+        if (value) {
+          testSets[id].difficultyLevel = value;
+          break;
+        }
+        testSets[id].difficultyLevel = null;
         break;
       }
-      default:
-        console.log(name);
     }
+    setTestSets(testSets);
   };
 
+  setSelectionValue = (id, value) => {
+    const { testSets, setTestSets } = this.props;
+    if (!testSets[id]) {
+      testSets[id] = {};
+    }
+    testSets[id].difficultyLevel = +value;
+    console.log(testSets[id].difficultyLevel, 805);
+    setTestSets(testSets);
+  };
 
   render() {
+    const options = [];
     const { testSet, addElem } = this.props;
+    for (let index = 0; index <= 10; index += 1) {
+      options.push(<Option value={index}>{index}</Option>);
+    }
     const elem = (testSet || []).map((item, i) => (
-      <Form className="set-container" onBlur={this.setField} formId={i}>
+      <div className="set-container" onBlur={this.setField} id={i}>
         <span className="set-num">Сет {i + 1}</span>
-        <Select defaultValue="lucy" style={{ width: 120 }} name="level">
-          <Option value="jack">Jack</Option>
-          <Option value="lucy">Lucy</Option>
-          <Option value="disabled" disabled>Disabled</Option>
-          <Option value="Yiminghe">yiminghe</Option>
+        <Select
+          defaultValue="0"
+          name="level"
+          className="select-add-task"
+          onBlur={this.setSelectionValue.bind(this, i)}
+        >
+          {options}
         </Select>
         <TextArea
-          formId={i}
+          id={i}
           placeholder="Входные данные"
           className="input-set"
           name="inputSet"
@@ -63,14 +85,14 @@ class InputOutputSet extends React.PureComponent {
           onBlur={this.setField}
         />
         <TextArea
-          formId={i}
+          id={i}
           placeholder="Выходные данные"
           className="input-set"
           name="outputSet"
           autosize
           onBlur={this.setField}
         />
-      </Form>
+      </div>
     ));
 
     return (

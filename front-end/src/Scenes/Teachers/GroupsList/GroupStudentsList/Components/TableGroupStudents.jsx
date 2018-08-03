@@ -54,6 +54,9 @@ class TableGroupStudents extends React.Component {
       key: 'name',
       width: 250,
       fixed: 'left',
+      render: (text, record) => (
+        <div>{record.firstName} {record.lastName}</div>
+      ),
     }, {
       title: 'Тест1',
       dataIndex: 'test',
@@ -114,6 +117,15 @@ class TableGroupStudents extends React.Component {
         </div>
       );
     }
+    const data = [];
+    for (let i = 0; i < students.length; i += 1) {
+      data.push({
+        number: `${i + 1}.`,
+        lastName: students[i].lastName,
+        firstName: students[i].firstName,
+      });
+    }
+
     return (
       <div>
         <Table
@@ -127,7 +139,7 @@ class TableGroupStudents extends React.Component {
             showHeader,
           }}
           columns={columns}
-          dataSource={students}
+          dataSource={data}
           scroll={{ x: 1500 }}
         />
         <ButtonAddStudent onStudentAdd={handleStudentAdd}/>
