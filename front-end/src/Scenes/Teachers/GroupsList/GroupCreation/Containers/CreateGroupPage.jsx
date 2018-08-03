@@ -1,7 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-import { Input, Button, message } from 'antd';
+import { Input, Button } from 'antd';
 import './CreategroupPage.scss';
 import {
   addStudentToGroup,
@@ -15,7 +15,7 @@ import StudentsList from '../../../../../Components/StudentsList';
 
 const { TextArea } = Input;
 
-class CreateGroupPage extends React.Component {
+class CreateGroupPage extends React.PureComponent {
   static propTypes = {
     addStudent: PropTypes.func.isRequired,
     delStudent: PropTypes.func.isRequired,
@@ -23,7 +23,6 @@ class CreateGroupPage extends React.Component {
     getStudentsData: PropTypes.func.isRequired,
     data: PropTypes.arrayOf(PropTypes.object).isRequired,
     error: PropTypes.string.isRequired,
-    success: PropTypes.bool.isRequired,
     sendGroupInfo: PropTypes.func.isRequired,
     getGroupsData: PropTypes.func.isRequired,
     groups: PropTypes.arrayOf(PropTypes.object).isRequired,
@@ -51,17 +50,13 @@ class CreateGroupPage extends React.Component {
   };
 
   handleGroupData = () => {
-    const { sendGroupInfo, success } = this.props;
+    const { sendGroupInfo } = this.props;
     const groupInfo = this.getGroupData();
     if (!this.validateCreateGroup(groupInfo)) {
       this.setState(() => ({ dataError: true }));
     } else {
       this.setState(() => ({ dataError: false }));
       sendGroupInfo(groupInfo);
-    }
-    if (success) {
-      message.success('Группа успешно создана');
-      // this.setState({ group: '' });
     }
   };
 
@@ -101,9 +96,7 @@ class CreateGroupPage extends React.Component {
         </div>
         {errorInput}
         <Button
-          onClick={() => {
-            this.handleGroupData();
-          }}
+          onClick={this.handleGroupData}
           size="small"
           className="create-group-button"
         >Создать группу

@@ -7,16 +7,30 @@ export function isLoading(bool) {
   };
 }
 
-export function getData(actionName, items) {
+export function getData(action, items) {
+  if (Array.isArray(action) && action.length > 1) {
+    action[1](items);
+    return {
+      type: `RECEIVE_${action[0].toUpperCase()}`,
+      payload: items,
+    };
+  }
   return {
-    type: `RECEIVE_${actionName.toUpperCase()}`,
+    type: `RECEIVE_${action.toUpperCase()}`,
     payload: items,
   };
 }
 
-export function errorProject(actionName, errorMessage) {
+export function errorProject(action, errorMessage) {
+  if (Array.isArray(action) && action.length > 2) {
+    action[2]();
+    return {
+      type: `ERROR_${action[0].toUpperCase()}`,
+      payload: errorMessage,
+    };
+  }
   return {
-    type: `ERROR_${actionName.toUpperCase()}`,
+    type: `ERROR_${action.toUpperCase()}`,
     payload: errorMessage,
   };
 }

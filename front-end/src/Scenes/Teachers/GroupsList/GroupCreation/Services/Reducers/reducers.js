@@ -7,18 +7,15 @@ const initialState = {
     addedStudents: [],
   },
   error: '',
-  successMessage: '',
   groups: [],
   topics: [],
   errorTopics: '',
-  success: false,
 };
 const createGroup = (state = initialState, action) => {
   switch (action.type) {
     case types.RECEIVE_POSTGROUP:
       return {
         ...state,
-        success: true,
         students: {
           groups: [],
           addedStudents: [],
