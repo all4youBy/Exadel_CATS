@@ -1,7 +1,25 @@
-.link-name-group {
-  color: rgba(0, 0, 0, 0.65);
-}
+.groups-list {
+  .link-name-group {
+    color: rgba(0, 0, 0, 0.65);
+  }
 
-.link-name-group:hover{
-  color: #04233d;
+  .link-name-group:hover{
+    color: #04233d;
+  }
+  .empty-list{
+    line-height: 50px;
+    text-align: center;
+    border-color: #222222;
+    font-size: 17px;
+  }
+  .buttons-group-table {
+    display: flex;
+    flex-direction: row;
+  }
+  .parent-button-edit-group, .parent-button-assign-test, .parent-button-assign-task {
+
+  }
+  .parent-button-delete-group {
+    margin-left: 15px;
+  }
 }

@@ -4,6 +4,7 @@ import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import logo from './kittywithoutbackground.png';
 import './GlobalHeader.scss';
+// import { history } from '../Services/ConfigureStore';
 
 const { Header } = Layout;
 
@@ -21,7 +22,6 @@ class GlobalHeader extends React.PureComponent {
 
   render() {
     const { userType } = this.props;
-    console.log(userType === 'GUEST');
     const logOut = !(userType === 'GUEST') ? (
       <Link
         to="/login"

@@ -25,26 +25,30 @@ export default class CurrentGroupList extends React.PureComponent {
     });
 
     return (
-      <List
-        className="current-students-list"
-        bordered
-        locale={{
-          emptyText: 'Список группы пуст. Добавьте студентов.',
-        }}
-        dataSource={studentsArray}
-        renderItem={item => (
-          <List.Item><List.Item.Meta
-            title={<span>{item}</span>}
-          />
-            <Button
-              shape="circle"
-              icon="close-circle"
-              className="button-table"
-              size="default"
-              onClick={() => delStudent(item)}
+      <div className="border-current-students-list">
+        <List
+          className="current-students-list"
+          locale={{
+            emptyText: 'Список группы пуст. Добавьте студентов.',
+          }}
+          pagination={{
+            pageSize: 10,
+          }}
+          dataSource={studentsArray}
+          renderItem={item => (
+            <List.Item><List.Item.Meta
+              title={<span>{item}</span>}
             />
-          </List.Item>)}
-      />
+              <Button
+                shape="circle"
+                icon="close-circle"
+                className="button-table"
+                size="default"
+                onClick={() => delStudent(item)}
+              />
+            </List.Item>)}
+        />
+      </div>
     );
   }
 }

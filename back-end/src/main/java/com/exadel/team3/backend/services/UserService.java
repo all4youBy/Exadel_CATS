@@ -19,7 +19,7 @@ public interface UserService extends CrudService<User, String>{
 
     boolean exists(String email);
 
-    void assignGroup(Collection<String> userIds, String group);
-    void removeGroup(Collection<String> userIds, String group);
-    void renameGroup(Collection<String> userIds, String oldGroup, String newGroup);
+    void assignGroup(Collection<String> students, String teacher, String group);
+    void removeGroup(Collection<String> students, String teacher, String group);
+    void renameGroup(Collection<String> students, String teacher, String oldGroup, String newGroup);
 }

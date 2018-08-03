@@ -24,9 +24,8 @@ class InputSearch extends React.Component {
     const suffix = userName ? <Icon type="close-circle" onClick={this.emitEmpty}/> : null;
     return (
       <Input
-        disabled=""
         className="input-search"
-        placeholder="Введите название группы"
+        placeholder="Найти группу"
         prefix={<Icon type="search" style={{ color: 'rgba(0,0,0,.25)' }}/>}
         suffix={suffix}
         value={userName}
