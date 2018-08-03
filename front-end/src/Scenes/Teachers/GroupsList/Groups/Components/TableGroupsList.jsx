@@ -24,7 +24,7 @@ class TableGroupsList extends React.PureComponent {
   state = {
     groups: [],
     getListUsers: false,
-    filterForGroups: '',
+    inputFilter: '',
   };
 
   static getDerivedStateFromProps(nextProps, nextState) {
@@ -37,12 +37,16 @@ class TableGroupsList extends React.PureComponent {
     };
   }
 
-  showFilteredGroups = word => this.setState({
-    filterForGroups: word,
-  });
+  filterList = (value) => {
+    console.log(value);
+    this.setState({
+      inputFilter: value,
+    });
+  }
+
 
   render() {
-    const { getListUsers, groups, filterForGroups } = this.state;
+    const { getListUsers, groups, inputFilter } = this.state;
     const { emptyList, handleGroupDelete, upDate, addGroup } = this.props;
     const columns = [{
       title: ' ',
@@ -80,16 +84,15 @@ class TableGroupsList extends React.PureComponent {
     ];
 
     const data = [];
-    const newData = data.filter(
-      group => group.name.toLowerCase().indexOf(filterForGroups.toLowerCase()) !== -1,
-    );
     for (let i = 0; i < groups.length; i += 1) {
       data.push({
         key: i,
         name: groups[i],
       });
     }
-    columns[0].title = <InputSearch/>;
+    const newData = data.filter(elem => elem.name
+      .toLowerCase().indexOf(inputFilter.toLowerCase()) !== -1);
+    columns[0].title = <InputSearch filterList={this.filterList}/>;
     const stateData = emptyList && getListUsers ? (<Loading/>)
       : <div className="empty-list">Список групп пуст</div>;
     const table = data.length ? (

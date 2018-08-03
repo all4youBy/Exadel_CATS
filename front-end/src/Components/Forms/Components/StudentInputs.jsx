@@ -39,7 +39,7 @@ export default class StudentInputs extends React.Component {
       });
 
       setFieldsValue({
-        yearTermination: (userData.yearTermination || 2000).toString(),
+        yearTermination: userData.yearTermination,
       });
 
       setFieldsValue({

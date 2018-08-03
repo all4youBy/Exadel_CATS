@@ -15,10 +15,10 @@ class StudentsList extends React.PureComponent {
     getGroups: PropTypes.func.isRequired,
     error: PropTypes.string.isRequired,
     teacher: PropTypes.string.isRequired,
+    type: PropTypes.string.isRequired,
   };
 
   state = {
-    type: '',
     filterText: '',
   };
 
@@ -32,16 +32,9 @@ class StudentsList extends React.PureComponent {
     filterText: text,
   });
 
-  setList = (event) => {
-    const { value } = event.target;
-    this.setState({
-      type: value,
-    });
-  };
-
   render() {
-    const { students, groups, error, addStudent } = this.props;
-    const { type, filterText } = this.state;
+    const { students, groups, error, addStudent, type } = this.props;
+    const { filterText } = this.state;
     const newGroups = groups.filter(group => group.toLowerCase()
       .indexOf(filterText.toLowerCase()) !== -1);
     const newStudents = students.filter(student => ((student.firstName + student.lastName)
