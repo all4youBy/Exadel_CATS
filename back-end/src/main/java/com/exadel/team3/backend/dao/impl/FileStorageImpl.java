@@ -4,8 +4,6 @@ import java.io.FileNotFoundException;
 import java.io.InputStream;
 import java.util.stream.Stream;
 
-import com.mongodb.client.MongoCursor;
-import com.mongodb.client.gridfs.GridFSFindIterable;
 import org.bson.BsonObjectId;
 import org.bson.Document;
 import org.bson.types.ObjectId;
@@ -14,6 +12,8 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Component;
 
+import com.mongodb.client.MongoCursor;
+import com.mongodb.client.gridfs.GridFSFindIterable;
 import com.mongodb.MongoClient;
 import com.mongodb.client.gridfs.GridFSBucket;
 import com.mongodb.client.gridfs.GridFSBuckets;

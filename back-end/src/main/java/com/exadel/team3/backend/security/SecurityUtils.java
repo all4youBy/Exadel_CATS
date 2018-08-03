@@ -1,11 +1,13 @@
 package com.exadel.team3.backend.security;
 
+
 import com.exadel.team3.backend.services.time.TimeService;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 
 import lombok.Getter;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -25,12 +27,11 @@ public class SecurityUtils {
     @Value("${jwt.expiration}")
     private Long expiration;
 
-
     @Value("${jwt.pass.secret}")
     private String passSecret;
 
-
     @Autowired
+    @Getter
     private PasswordEncoder encoder;
 
     public String generateToken(AuthenticatedUser user) {
@@ -82,6 +83,7 @@ public class SecurityUtils {
     private LocalDateTime calculateExpirationDate(LocalDateTime createdDate) {
         return createdDate.plusMinutes(expiration);
     }
+
 
     public String[] generateUserPassword() {
         String generatedString = generateRandomString();

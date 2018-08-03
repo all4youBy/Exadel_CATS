@@ -5,8 +5,15 @@
 }
 
 .current-students-list {
-  width: 50%;
+  width: 95%;
   margin-left: 10px;
+  margin-top: 25px;
+}
+
+.border-current-students-list {
+  border: 1px solid rgb(217, 217, 217);
+  width: 49%;
+  border-radius: 4px;
 }
 
 .students-list {
