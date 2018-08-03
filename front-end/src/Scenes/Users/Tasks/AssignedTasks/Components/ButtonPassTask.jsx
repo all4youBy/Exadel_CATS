@@ -11,6 +11,7 @@ class ButtonPassTask extends React.Component {
 
   render() {
     const { taskId } = this.props;
+    console.log(taskId, 9);
     const link = `/assignedtasks/${taskId}`;
     return (
       <Button className="button-table-with-border" type="primary">

@@ -36,7 +36,7 @@ function mapStateToProps(state, ownProps) {
   return {
     files: state.passTask.files,
     error: state.passTask.error,
-    taskId: ownProps.match.params.id,
+    taskId: ownProps.match.params.taskId,
     taskInfo: state.passTask.taskInfo,
   };
 }

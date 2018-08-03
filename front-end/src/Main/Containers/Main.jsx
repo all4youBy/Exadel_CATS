@@ -92,6 +92,11 @@ class Main extends React.Component {
         url: '/assigntest/:groupName',
         component: PageAssignTest,
       },
+      {
+        key: '/assignedtasks/:taskId',
+        url: '/assignedtasks/:taskId',
+        component: UserTaskPage,
+      },
     ];
   }
 
@@ -115,6 +120,7 @@ class Main extends React.Component {
                 <Route exact path="/task/:id" component={UserTaskPage}/>
                 <Route exact path="/usersmaterials" component={Materials}/>
                 <Route exact path="/assignedtests" component={PageAssignedTestList}/>
+                <Route exact path="/assignedtasks/:taskId" component={UserTaskPage}/>
                 <Redirect to="/"/>
               </Switch>
             </div>
