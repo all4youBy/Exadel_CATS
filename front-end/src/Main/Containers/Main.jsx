@@ -131,7 +131,6 @@ class Main extends React.Component {
             </div>
             <div className="switch-div">
               <Switch>
-                <Route exact path="/assignedtasks" component={PageAssignedTasks}/>
                 <Route exact path="/creategroup" component={CreateGroupPage}/>
                 <Route exact path="/checktests" component={PageListCheckTests}/>
                 <Route exact path="/loading" component={Loading}/>

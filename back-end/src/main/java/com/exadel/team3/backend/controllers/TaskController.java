@@ -1,10 +1,11 @@
 package com.exadel.team3.backend.controllers;
 
-import com.exadel.team3.backend.controllers.requests.FileWrapper;
 import com.exadel.team3.backend.controllers.requests.TaskRequest;
 import com.exadel.team3.backend.dto.SolutionDTO;
 import com.exadel.team3.backend.dto.TaskDTO;
+import com.exadel.team3.backend.dto.TaskForTeachersDTO;
 import com.exadel.team3.backend.dto.mappers.SolutionDTOMapper;
+import com.exadel.team3.backend.dto.mappers.TaskDTOMapper;
 import com.exadel.team3.backend.dto.mappers.TopicDTOMapper;
 import com.exadel.team3.backend.entities.Solution;
 import com.exadel.team3.backend.entities.Task;
@@ -19,7 +20,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.FileWriter;
+import java.util.ArrayList;
 import java.util.List;
 
 @RestController
@@ -32,6 +33,8 @@ public class TaskController {
     SolutionService solutionService;
     @Autowired
     SolutionDTOMapper solutionDTOMapper;
+    @Autowired
+    TaskDTOMapper taskDTOMapper;
 
     @PostMapping("/add-task")
     @PreAuthorize("hasAnyRole('ADMIN','TEACHER')")
@@ -55,10 +58,17 @@ public class TaskController {
     }
 
     @PostMapping("/add-solution/{id}")
-    public ResponseEntity<?> addFilesInSolution(@RequestBody FileWrapper fileWrapper, @PathVariable(value = "id") String id) {
-        System.out.println(fileWrapper.getFile());
-        Solution solution = solutionService.storeFile(solutionService.getItem(new ObjectId(id)), fileWrapper.getFile());
-        solutionService.submit(solution);
+    public ResponseEntity<?> addFilesInSolution(@RequestParam MultipartFile file, @PathVariable(value = "id") String id) {
+        Solution solution = solutionService.getItem(new ObjectId(id));
+        solution = solutionService.storeFile(solution, file);
+        solutionService.updateItem(solution);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    @PostMapping("/compile-solution/{id}")
+    public ResponseEntity<?> addFilesInSolution(@PathVariable(value = "id") String id) {
+        Solution solution = solutionService.getItem(new ObjectId(id));
+        solution = solutionService.submit(solution);
 
         return new ResponseEntity<>(solution, HttpStatus.OK);
     }
@@ -81,8 +91,9 @@ public class TaskController {
 
     @GetMapping("/tasks")
     @PreAuthorize("hasAnyRole('ADMIN','TEACHER')")
-    public List<Task> getTasks() {
-        return taskService.getItems();
+    public List<TaskForTeachersDTO> getTasks() {
+        List<Task> tasks = taskService.getItems();
+        return taskDTOMapper.convertToTaskForTeachersDTO(tasks);
     }
 
     @PostMapping("/assign-task-for-user")
@@ -127,9 +138,15 @@ public class TaskController {
     @PutMapping("/add-testing-set/{taskId}")
     @PreAuthorize("hasAnyRole('ADMIN','TEACHER')")
     public ResponseEntity<?> addTestingSets(@PathVariable(value = "taskId") String taskId, @RequestBody TaskTestingSet set) {
-        List<TaskTestingSet> taskTestingSets = taskService.getItem(new ObjectId(taskId)).getTestingSets();
+        Task task = taskService.getItem(new ObjectId(taskId));
+        if (task.getTestingSets() == null) {
+            task.setTestingSets(new ArrayList<>());
+        }
 
+        List<TaskTestingSet> taskTestingSets = task.getTestingSets();
         if (taskTestingSets.add(set)) {
+            task.setTestingSets(taskTestingSets);
+            taskService.updateItem(task);
             return new ResponseEntity<>(taskTestingSets, HttpStatus.OK);
         } else {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Can't add tasks set.");
