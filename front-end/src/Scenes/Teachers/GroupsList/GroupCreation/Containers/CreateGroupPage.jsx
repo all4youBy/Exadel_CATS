@@ -1,9 +1,7 @@
-/* eslint-disable no-restricted-globals */
-/* eslint-disable import/no-cycle */
 import React from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-import { Input, Button, message } from 'antd';
+import { Input, Button } from 'antd';
 import './CreategroupPage.scss';
 import {
   addStudentToGroup,
@@ -17,7 +15,6 @@ import StudentsList from '../../../../../Components/StudentsList';
 
 const { TextArea } = Input;
 
-
 class CreateGroupPage extends React.PureComponent {
   static propTypes = {
     addStudent: PropTypes.func.isRequired,
@@ -26,7 +23,6 @@ class CreateGroupPage extends React.PureComponent {
     getStudentsData: PropTypes.func.isRequired,
     data: PropTypes.arrayOf(PropTypes.object).isRequired,
     error: PropTypes.string.isRequired,
-    successMessage: PropTypes.string.isRequired,
     sendGroupInfo: PropTypes.func.isRequired,
     getGroupsData: PropTypes.func.isRequired,
     groups: PropTypes.arrayOf(PropTypes.object).isRequired,
@@ -34,28 +30,50 @@ class CreateGroupPage extends React.PureComponent {
 
   state = {
     group: '',
+    dataError: false,
   };
 
   getGroupData = () => {
     const { students } = this.props;
     const { group } = this.state;
     return {
-      emails: students.map(item => item.email),
+      emails: students.addedStudents.map(item => item.email),
       group,
     };
+  };
+
+  validateCreateGroup = (groupData) => {
+    if (groupData.group.length === 0 || groupData.emails.length === 0) {
+      return false;
+    }
+    return true;
+  };
+
+  handleGroupData = () => {
+    const { sendGroupInfo } = this.props;
+    const groupInfo = this.getGroupData();
+    if (!this.validateCreateGroup(groupInfo)) {
+      this.setState(() => ({ dataError: true }));
+    } else {
+      this.setState(() => ({ dataError: false }));
+      sendGroupInfo(groupInfo);
+    }
+  };
+
+  handleSetName = (event) => {
+    if (event.target.value) {
+      this.setState({ group: event.target.value });
+    }
   };
 
   render() {
     const {
       addStudent, delStudent, students,
-      getStudentsData, data, error, sendGroupInfo, successMessage,
+      getStudentsData, data, error,
       getGroupsData, groups,
     } = this.props;
-    console.log(addStudent, data, error);
-    if (successMessage) {
-      message.success('Группа успешно создана');
-      location.reload();
-    }
+    const { dataError } = this.state;
+    const errorInput = dataError ? <div className="error-input">Введите все данные!</div> : <div/>;
 
     return (
       <div className="create-group-container">
@@ -63,25 +81,22 @@ class CreateGroupPage extends React.PureComponent {
           className="group-name-input"
           placeholder="Название группы"
           autosize
-          onBlur={(value) => {
-            this.setState({ group: value.target.value });
-          }}
+          onBlur={this.handleSetName}
         />
         <div className="student-list-container ">
           <StudentsList
             students={data}
             addStudent={addStudent}
             getStudentsData={getStudentsData}
-            getGroupsData={getGroupsData}
+            getGroups={getGroupsData}
             error={error}
             groups={groups}
           />
           <CurrentGroupList className="current-group-list" students={students} delStudent={delStudent}/>
         </div>
+        {errorInput}
         <Button
-          onClick={() => {
-            sendGroupInfo(this.getGroupData());
-          }}
+          onClick={this.handleGroupData}
           size="small"
           className="create-group-button"
         >Создать группу
@@ -101,16 +116,10 @@ function mapStateToProps(state) {
     groups: state.createGroup.groups,
     topics: state.createGroup.topics,
     errorTopics: state.createGroup.errorTopics,
+    success: state.createGroup.success,
   };
 }
 
-// /* <StudentsList
-//   className="student-list"
-//   data={data}
-//   addStudent={addStudent}
-//   getData={getStudentData}
-//   error={error}
-// /> */
 const mapDispatchToProps = dispatch => ({
   addStudent: (student) => {
     dispatch(addStudentToGroup(student));

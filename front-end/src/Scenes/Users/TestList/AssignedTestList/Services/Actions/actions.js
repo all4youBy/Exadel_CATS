@@ -14,7 +14,7 @@ export function deleteStudent(number) {
 }
 
 export function fetchUserAssignedTests(userId) {
-  return (API.get(`/tests/user-tests/${userId}`,
+  return (API.get(`tests/user-tests/${userId}`,
     'tests_assigned_to_user',
     'Не удалось загрузить список назначенных тестов'));
 }

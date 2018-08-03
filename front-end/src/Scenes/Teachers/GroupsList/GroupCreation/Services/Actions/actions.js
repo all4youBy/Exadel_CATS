@@ -1,3 +1,4 @@
+import { message } from 'antd/lib/index';
 import * as types from './types';
 import API from '../../../../../../Services/API';
 
@@ -24,5 +25,9 @@ export function fetchGroupsList() {
 }
 
 export function postGroup(data) {
-  return (API.post('users', data, 'postgroup', 'Не удалось создать группу'));
+  return (API.post('users', data, ['postgroup', () => {
+    message.success('Группа успешно создана');
+  }, () => {
+    message.error('Не удалось создать группу');
+  }], 'Не удалось создать группу'));
 }

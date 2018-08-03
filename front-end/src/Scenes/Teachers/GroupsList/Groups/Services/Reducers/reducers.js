@@ -3,17 +3,20 @@ import * as types from '../Actions/types';
 const initialState = {
   groups: [],
   error: '',
+  emptyList: true,
 };
 
 const allGroups = (state = initialState, action) => {
   switch (action.type) {
     case types.RECEIVE_GROUPSLIST:
-      return { ...state, groups: action.payload };
+      return { ...state, groups: action.payload, emptyList: false };
 
     case types.ERROR_GROUPSLIST:
       return {
         ...state,
         error: action.payload,
+        groups: [],
+        emptyList: false,
       };
 
     case types.ADD_GROUP: {

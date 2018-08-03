@@ -13,9 +13,13 @@ import requestsUsers from '../Scenes/Admin/AccessRequestList/Services/Reducers/r
 import addQuestion from '../Scenes/Teachers/Tests/AddQuestion/Services/Reducers/reducers';
 import testInformation from '../Scenes/Teachers/Tests/AssignTest/Services/Reducers/reducers';
 import allGroups from '../Scenes/Teachers/GroupsList/Groups/Services/Reducers/reducers';
+import completeTest from '../Scenes/Users/Tests/Services/Reducers/reducers';
 import taskInformation from '../Scenes/Teachers/Tasks/AssignTask/Services/Reducers/reducers';
 import passTask from '../Scenes/Users/Task/Services/Reducers/reducers';
 import allTasks from '../Scenes/Teachers/Tasks/AllTask/Services/Reducers/reducers';
+import trainingTest from '../Scenes/Users/TestList/TrainingTest/Services/Reducers/reducers';
+import userAssignedTasks from '../Scenes/Users/Tasks/AssignedTasks/Services/Reducers/reducers';
+import userAssignedTests from '../Scenes/Users/TestList/AssignedTestList/Services/Reducers/reducers';
 
 
 const reducers = combineReducers({
@@ -35,6 +39,10 @@ const reducers = combineReducers({
   taskInformation,
   passTask,
   allTasks,
+  completeTest,
+  userAssignedTasks,
+  userAssignedTests,
+  trainingTest,
 });
 
 export default reducers;

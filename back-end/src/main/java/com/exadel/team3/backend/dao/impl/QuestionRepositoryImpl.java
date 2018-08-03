@@ -3,22 +3,24 @@ package com.exadel.team3.backend.dao.impl;
 import java.util.Collection;
 import java.util.List;
 
-import com.exadel.team3.backend.entities.QuestionStatus;
+import org.springframework.stereotype.Repository;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.lang.NonNull;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.aggregation.Aggregation;
 import org.springframework.data.mongodb.core.aggregation.MatchOperation;
 import org.springframework.data.mongodb.core.aggregation.SampleOperation;
 import org.springframework.data.mongodb.core.aggregation.TypedAggregation;
 import org.springframework.data.mongodb.core.query.Criteria;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.lang.NonNull;
 import org.bson.types.ObjectId;
 
 import com.exadel.team3.backend.dao.QuestionRepositoryAggregation;
 import com.exadel.team3.backend.entities.Question;
 import com.exadel.team3.backend.entities.QuestionComplexity;
 import com.exadel.team3.backend.entities.QuestionType;
+import com.exadel.team3.backend.entities.QuestionStatus;
 
+@Repository
 public class QuestionRepositoryImpl implements QuestionRepositoryAggregation {
     @Autowired
     private MongoTemplate mongoTemplate;

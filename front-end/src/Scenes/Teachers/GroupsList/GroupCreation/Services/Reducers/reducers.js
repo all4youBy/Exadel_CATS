@@ -7,7 +7,6 @@ const initialState = {
     addedStudents: [],
   },
   error: '',
-  successMessage: '',
   groups: [],
   topics: [],
   errorTopics: '',
@@ -17,7 +16,15 @@ const createGroup = (state = initialState, action) => {
     case types.RECEIVE_POSTGROUP:
       return {
         ...state,
-        successMessage: action.payload,
+        students: {
+          groups: [],
+          addedStudents: [],
+        },
+      };
+    case types.ERROR_POSTGROUP:
+      return {
+        ...state,
+        error: action.payload,
       };
     case types.RECEIVE_TOPICS_CREATE_GROUP:
       return {

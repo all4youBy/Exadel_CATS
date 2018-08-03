@@ -5,5 +5,5 @@ export function fetchTasks3() {
 }
 
 export function fetchTasks() {
-  return (API.get('task/tasks', 'tasks', 'Не удалось загрузить список задач'));
+  return (API.get('task/tasks', 'all_tasks', 'Не удалось загрузить список задач'));
 }

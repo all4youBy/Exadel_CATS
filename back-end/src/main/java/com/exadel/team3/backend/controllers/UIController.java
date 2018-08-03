@@ -11,6 +11,6 @@ public class UIController {
 
     @GetMapping(value = "/**")
     public String getHtml(){
-       return "redirect:/index.html";
+        return "redirect:/index.html";
     }
 }

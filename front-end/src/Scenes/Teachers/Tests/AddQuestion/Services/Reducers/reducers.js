@@ -3,6 +3,8 @@ import {
   DELETE_QUESTION_TAG,
   RECEIVE_ADD_QUESTIONS,
   ERROR_ADD_QUESTIONS,
+  RECEIVE_TOPICS_ADD_QUESTION,
+  ERROR_TOPICS_ADD_QUESTION,
 } from '../Actions/type';
 
 const initialState = {
@@ -11,16 +13,28 @@ const initialState = {
   testSet: [],
   error: '',
   topics: [],
+  response: '',
 };
 const addQuestion = (state = initialState, action) => {
   switch (action.type) {
     case RECEIVE_ADD_QUESTIONS: {
       return {
         ...state,
+        response: action.payload,
+      };
+    }
+    case RECEIVE_TOPICS_ADD_QUESTION: {
+      return {
+        ...state,
         topics: action.payload,
       };
     }
     case ERROR_ADD_QUESTIONS:
+      return {
+        ...state,
+        error: action.payload,
+      };
+    case ERROR_TOPICS_ADD_QUESTION:
       return {
         ...state,
         error: action.payload,
