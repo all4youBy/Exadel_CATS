@@ -28,6 +28,7 @@ import AddQuestion from '../../Scenes/Teachers/Tests/AddQuestion/Containers/AddQ
 import AddTaskPage from '../../Scenes/Teachers/Tasks/AddTask/Containers/AddTaskPage';
 import Loading from '../../Components/Loading';
 import PageAssignTask from '../../Scenes/Teachers/Tasks/AssignTask/Containers/PageAssignTask';
+import TrainingTestPage from '../../Scenes/Users/TestList/TrainingTest/Containers/TrainingTestPage';
 
 class Main extends React.Component {
   static propTypes = {
@@ -102,6 +103,7 @@ class Main extends React.Component {
                 <Route exact path="/test/:id" component={Test}/>
                 <Route exact path="/task/:id" component={UserTaskPage}/>
                 <Route exact path="/usersmaterials" component={Materials}/>
+                <Route exact path="/trainingtest" component={TrainingTestPage}/>
                 <Redirect to="/"/>
               </Switch>
             </div>

@@ -4,6 +4,7 @@ import '../Scenes/Teachers/Tasks/AddTask/Components/AddTask.scss';
 import { Cascader } from 'antd';
 import PropTypes from 'prop-types';
 
+/*
 const options = [{
   value: {
     text: 'программирование',
@@ -35,12 +36,13 @@ const options = [{
     }],
   }],
 }];
+*/
 
 export default class SectionTree extends React.PureComponent {
   static propTypes = {
     addTag: PropTypes.func.isRequired,
     getTopics: PropTypes.func.isRequired,
-    topics: PropTypes.arrayOf.isRequired,
+    topics: PropTypes.arrayOf(PropTypes.object).isRequired,
     // errorTopics: PropTypes.string.isRequired,
   };
 
@@ -63,7 +65,7 @@ export default class SectionTree extends React.PureComponent {
       <div className="tree-container">
         <Cascader
           className="section-tree"
-          options={options}
+          options={topics}
           onChange={this.handleAddTag}
           changeOnSelect
           placeholder="Выберите раздел"

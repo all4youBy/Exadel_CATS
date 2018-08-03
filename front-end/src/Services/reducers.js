@@ -17,6 +17,7 @@ import completeTest from '../Scenes/Users/Tests/Services/Reducers/reducers';
 import taskInformation from '../Scenes/Teachers/Tasks/AssignTask/Services/Reducers/reducers';
 import passTask from '../Scenes/Users/Task/Services/Reducers/reducers';
 import allTasks from '../Scenes/Teachers/Tasks/AllTask/Services/Reducers/reducers';
+import trainingTest from '../Scenes/Users/TestList/TrainingTest/Services/Reducers/reducers';
 
 
 const reducers = combineReducers({
@@ -37,6 +38,7 @@ const reducers = combineReducers({
   passTask,
   allTasks,
   completeTest,
+  trainingTest,
 });
 
 export default reducers;

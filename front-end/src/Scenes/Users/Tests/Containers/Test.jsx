@@ -1,3 +1,4 @@
+/* eslint-disable react/prop-types,no-unused-vars,react/forbid-prop-types */
 import React from 'react';
 import './Test.scss';
 import { connect } from 'react-redux';
@@ -14,7 +15,7 @@ import Loading from '../../../../Components/Loading';
 class Test extends React.PureComponent {
   static propTypes = {
     getTestData: PropTypes.func.isRequired,
-    testData: PropTypes.shape().isRequired,
+    testData: PropTypes.objectOf.isRequired,
     testId: PropTypes.string.isRequired,
     submitQuestion: PropTypes.func.isRequired,
     submitTest: PropTypes.func.isRequired,
@@ -30,54 +31,66 @@ class Test extends React.PureComponent {
   }
 
   handleSubmitTest = () => {
-    const { submitQuestion, testId, submitTest } = this.props;
-    const { answers } = this.state;
-    const answersToSubmit = answers.map(item => ({ ...item, testId }));
-    answersToSubmit.forEach(item => submitQuestion(item));
-    submitTest({ testId });
+    const { testId, submitTest } = this.props;
+    submitTest(testId);
   };
 
   render() {
-    const { testData } = this.props;
+    const { testData, error, history, submitQuestion, testId } = this.props;
     const { answers } = this.state;
+    if (error) {
+      history.push('/');
+    }
     const test = testData ? (testData.questions || []).map((item, i) => {
       switch (item.type) {
         case 'SINGLE_VARIANT':
           return (
             <Single
+              key={item.id}
               value={item.id}
               index={i}
               text={item.text}
               variants={item.variants}
               answer={answers}
+              submit={submitQuestion}
+              testId={testId}
             />
           );
         case 'MULTI_VARIANT':
           return (
             <Multi
+              key={item.id}
               value={item.id}
               text={item.text}
               index={i}
               variants={item.variants}
               answer={answers}
+              submit={submitQuestion}
+              testId={testId}
             />
           );
         case 'AUTOCHECK_TEXT':
           return (
             <SymbolAnswersQuestion
+              key={item.id}
               value={item.id}
               index={i}
               text={item.text}
               answer={answers}
+              submit={submitQuestion}
+              testId={testId}
             />
           );
         case 'MANUAL_CHECK_TEXT':
           return (
             <OpenAnswer
+              key={item.id}
               value={item.id}
               text={item.text}
               index={i}
               answer={answers}
+              submit={submitQuestion}
+              testId={testId}
             />
           );
         default:
@@ -91,7 +104,7 @@ class Test extends React.PureComponent {
         <Button
           className="button-table-with-border"
           type="primary"
-          onClick={() => this.handleSubmitTest()}
+          onClick={this.handleSubmitTest}
         >Завершить
         </Button>
       </div>
