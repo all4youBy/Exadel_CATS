@@ -106,6 +106,7 @@ public class SolutionServiceImpl
                 if (fileId != null) {
                     if (solution.getFiles() != null) {
                         solution.getFiles().add(filename);
+                        solution.setFiles(solution.getFiles().stream().distinct().collect(Collectors.toList()));
                     } else {
                         solution.setFiles(Collections.singletonList(filename));
                     }
