@@ -56,6 +56,11 @@ public class QuestionController {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new StringAnswerDTO("Confirm on question doesn't accepted"));
     }
 
+    @GetMapping("/get-by-author/{authorId}")
+    public List<Question> getQuestionsByAuthor(@PathVariable String authorId){
+        return questionService.getItemsByAuthor(authorId);
+    }
+
     @GetMapping
     @AdminAndTeacherAccess
     public List<Question> getQuestions(@RequestParam(value = "topics",required = false)List<ObjectId> topicsIds){

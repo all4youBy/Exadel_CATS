@@ -76,7 +76,7 @@ public class UserController {
 
 
     @PutMapping(value = "/change-password",produces = MediaType.APPLICATION_JSON_VALUE)
-    @PreAuthorize("hasRole('ADMIN') or request.email==authentication.name")
+    @PreAuthorize("hasRole('ADMIN') or #request.email==authentication.name")
     public ResponseEntity<?> changeUserPassword(@RequestBody ChangePasswordRequest request){
         User user = userService.getItem(request.getEmail());
 
@@ -167,9 +167,13 @@ public class UserController {
     @PutMapping(produces = MediaType.APPLICATION_JSON_VALUE)
 //    @PreAuthorize("hasRole('ADMIN') or #u.email")
     public ResponseEntity<?> updateUser(@RequestBody UserUpdateRequest u){
+        User user = userService.getItem(u.getEmail());
 
-        User user = mapper.map(u,User.class);
-//        userService.updateItem(user);
+        user.setFirstName(u.getFirstName());
+        user.setLastName(u.getLastName());
+        user.setAffiliation(u.getUserAffiliation());
+        userService.updateItem(user);
+
         return ResponseEntity.ok(user);
     }
 
