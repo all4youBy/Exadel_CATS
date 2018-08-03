@@ -103,36 +103,49 @@ class TestProperties extends React.Component {
     const addTest = add ? <div>Вы назначили тест!</div> : <div/>;
     const handleSubmit = (e) => {
       e.preventDefault();
-      // form.validateFieldsAndScroll((err) => {
-      //   if (!err) {
-      const obj = {
-        assignedBy: teacher,
-        title: nameTest,
-        questionsCount: +countQuestionsTest,
-        // leadTime: new Date(hoursLeadTimeTest, minutesLeadTimeTest, secondsLeadTimeTest),
-        start: new Date(yearsLeadDateTest, mothsLeadDateTest,
-          daysLeadDateTest, hoursTimeOpenTest, minutesTimeOpenTest,
-          secondsTimeOpenTest).toISOString(),
-        deadline: new Date(yearsPassDateTest, mothsPassDateTest,
-          daysPassDateTest, hoursPassTimeTest,
-          minutesPassTimeTest, secondsPassTimeTest).toISOString(),
-        topics: '',
-      };
-      // console.log(obj.start);
-      switch (type) {
-        case 'STUDENT': {
-          obj.email = receiver;
-          break;
+      form.validateFieldsAndScroll((err) => {
+        if (!err) {
+          const obj = {
+            assignedBy: teacher,
+            title: nameTest,
+            questionsCount: +countQuestionsTest,
+            // leadTime: new Date(hoursLeadTimeTest, minutesLeadTimeTest, secondsLeadTimeTest),
+            start: new Date(yearsLeadDateTest, mothsLeadDateTest,
+              daysLeadDateTest, hoursTimeOpenTest, minutesTimeOpenTest,
+              secondsTimeOpenTest).toISOString(),
+            deadline: new Date(yearsPassDateTest, mothsPassDateTest,
+              daysPassDateTest, hoursPassTimeTest,
+              minutesPassTimeTest, secondsPassTimeTest).toISOString(),
+            topics: ['5b4898d987ae4314d278f38e'],
+          };
+          // console.log(obj.start);
+          switch (type) {
+            case 'STUDENT': {
+              obj.email = receiver;
+              break;
+            }
+            default: {
+              obj.group = receiver;
+            }
+          }
+          console.log(obj);
+          handleCreateTest({
+            assignedBy: teacher,
+            title: nameTest,
+            questionsCount: +countQuestionsTest,
+            // leadTime: new Date(hoursLeadTimeTest, minutesLeadTimeTest, secondsLeadTimeTest),
+            start: new Date(yearsLeadDateTest, mothsLeadDateTest,
+              daysLeadDateTest, hoursTimeOpenTest, minutesTimeOpenTest,
+              secondsTimeOpenTest).toISOString(),
+            deadline: new Date(yearsPassDateTest, mothsPassDateTest,
+              daysPassDateTest, hoursPassTimeTest,
+              minutesPassTimeTest, secondsPassTimeTest).toISOString(),
+            topics: ['5b4898d987ae4314d278f38e'],
+            group: receiver,
+          });
+          this.setState(() => ({ add: true }));
         }
-        default: {
-          obj.group = receiver;
-        }
-      }
-      console.log(obj);
-      // handleCreateTest({ obj })
-      this.setState(() => ({ add: true }));
-      //   }
-      // });
+      });
     };
     // const groupList = users ? (
     //   <CurrentGroupList
