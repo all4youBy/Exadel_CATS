@@ -86,7 +86,6 @@ public class SolutionServiceImpl
     @Override
     public Solution storeFile(@NonNull Solution solution,
                               @NonNull MultipartFile file) throws ServiceException {
-        solution.setFiles(new ArrayList<>());
         try (InputStream is = file.getInputStream()) {
             solution = storeFile(solution, is, file.getOriginalFilename());
         } catch (IOException e) {

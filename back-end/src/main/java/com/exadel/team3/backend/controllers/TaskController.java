@@ -3,7 +3,9 @@ package com.exadel.team3.backend.controllers;
 import com.exadel.team3.backend.controllers.requests.TaskRequest;
 import com.exadel.team3.backend.dto.SolutionDTO;
 import com.exadel.team3.backend.dto.TaskDTO;
+import com.exadel.team3.backend.dto.TaskForTeachersDTO;
 import com.exadel.team3.backend.dto.mappers.SolutionDTOMapper;
+import com.exadel.team3.backend.dto.mappers.TaskDTOMapper;
 import com.exadel.team3.backend.dto.mappers.TopicDTOMapper;
 import com.exadel.team3.backend.entities.Solution;
 import com.exadel.team3.backend.entities.Task;
@@ -31,6 +33,8 @@ public class TaskController {
     SolutionService solutionService;
     @Autowired
     SolutionDTOMapper solutionDTOMapper;
+    @Autowired
+    TaskDTOMapper taskDTOMapper;
 
     @PostMapping("/add-task")
     @PreAuthorize("hasAnyRole('ADMIN','TEACHER')")
@@ -55,11 +59,9 @@ public class TaskController {
 
     @PostMapping("/add-solution/{id}")
     public ResponseEntity<?> addFilesInSolution(@RequestParam MultipartFile file, @PathVariable(value = "id") String id) {
-        System.out.println(file);
-
         Solution solution = solutionService.getItem(new ObjectId(id));
-        solutionService.storeFile(solution, file);
-
+        solution = solutionService.storeFile(solution, file);
+        solutionService.updateItem(solution);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
@@ -89,8 +91,9 @@ public class TaskController {
 
     @GetMapping("/tasks")
     @PreAuthorize("hasAnyRole('ADMIN','TEACHER')")
-    public List<Task> getTasks() {
-        return taskService.getItems();
+    public List<TaskForTeachersDTO> getTasks() {
+        List<Task> tasks = taskService.getItems();
+        return taskDTOMapper.convertToTaskForTeachersDTO(tasks);
     }
 
     @PostMapping("/assign-task-for-user")
@@ -142,6 +145,8 @@ public class TaskController {
 
         List<TaskTestingSet> taskTestingSets = task.getTestingSets();
         if (taskTestingSets.add(set)) {
+            task.setTestingSets(taskTestingSets);
+            taskService.updateItem(task);
             return new ResponseEntity<>(taskTestingSets, HttpStatus.OK);
         } else {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Can't add tasks set.");
