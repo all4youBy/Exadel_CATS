@@ -58,11 +58,11 @@ for (let i = 1; i <= 20; i += 1) {
 class TableAssignedTests extends React.PureComponent {
   static propTypes = {
     getAssignedTests: PropTypes.func.isRequired,
-    students: PropTypes.objectOf.isRequired,
+    students: PropTypes.objectOf(PropTypes.object).isRequired,
     handleStudentAdd: PropTypes.func.isRequired,
     handleStudentDelete: PropTypes.func.isRequired,
     groupName: PropTypes.string.isRequired,
-    error: PropTypes.string.isRequired,
+    error: PropTypes.bool.isRequired,
   };
 
   state = {

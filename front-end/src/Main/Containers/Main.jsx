@@ -81,6 +81,17 @@ class Main extends React.Component {
         url: '/creategroup',
         component: CreateGroupPage,
       },
+      {
+        key: 'assigntests',
+        url: '/assigntests',
+        component: PageAssignTest,
+      },
+      {
+
+        key: '/assigntest/:groupName',
+        url: '/assigntest/:groupName',
+        component: PageAssignTest,
+      },
     ];
   }
 
@@ -100,6 +111,7 @@ class Main extends React.Component {
                 <Route exact path="/passedtestlist" component={PagePassedTestList}/>
                 <Route exact path="/passedtasks" component={PagePassedTasks}/>
                 <Route exact path="/test/:id" component={Test}/>
+                <Route exact path="/task" component={UserTaskPage}/>
                 <Route exact path="/task/:id" component={UserTaskPage}/>
                 <Route exact path="/usersmaterials" component={Materials}/>
                 <Redirect to="/"/>
@@ -117,8 +129,6 @@ class Main extends React.Component {
               <Switch>
                 <Route exact path="/assignedtasks" component={PageAssignedTasks}/>
                 <Route exact path="/creategroup" component={CreateGroupPage}/>
-                <Route exact path="/assigntest" component={PageAssignTest}/>
-                <Route exact path="/assigntest/:groupName" component={PageAssignTest}/>
                 <Route exact path="/checktests" component={PageListCheckTests}/>
                 <Route exact path="/loading" component={Loading}/>
                 <Route exact path="/groups/:groupName" component={PageGroupStudentsList}/>

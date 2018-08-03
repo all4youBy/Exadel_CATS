@@ -11,6 +11,7 @@ const initialState = {
   error: '',
   users: '',
   topics: [],
+  type: 'GROUPS',
 };
 
 const testInformation = (state = initialState, action) => {
@@ -55,20 +56,15 @@ const testInformation = (state = initialState, action) => {
         groups: [...state.groups, ...action.payload],
       };
     }
-    case types.ADD_STUDENT_TO_LIST: {
+    case types.RECEIVE_TEST: {
       if (typeof action.payload === 'string') {
         if (state.students.groups.includes(action.payload)) {
           return state;
         }
         return {
           ...state,
-          students: {
-            ...state.students,
-            groups: [
-              ...state.students.groups,
-              action.payload,
-            ],
-          },
+          receiver: action.payload,
+          type: action.typeData,
         };
       }
       if (state.students.addedStudents.includes(action.payload)) {

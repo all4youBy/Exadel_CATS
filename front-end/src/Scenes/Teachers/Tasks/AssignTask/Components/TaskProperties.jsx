@@ -11,7 +11,7 @@ import {
   addStudentToList,
   deleteStudentFromList,
   fetchStudentListForTask,
-  fetchGroupsListForTask,
+  groupsListForTask,
   fetchTopics,
 } from '../Services/Actions/actions';
 import StudentsList from '../../../../../Components/StudentsList';
@@ -55,12 +55,13 @@ class TaskProperties extends React.Component {
     addStudent: PropTypes.func.isRequired,
     delStudent: PropTypes.func.isRequired,
     getStudentsData: PropTypes.func.isRequired,
-    getGroupsData: PropTypes.func.isRequired,
+    getGroups: PropTypes.func.isRequired,
     students: PropTypes.arrayOf(PropTypes.object).isRequired,
     error: PropTypes.bool.isRequired,
     groups: PropTypes.arrayOf(PropTypes.object).isRequired,
     getTopics: PropTypes.func.isRequired,
     topics: PropTypes.arrayOf.isRequired,
+    teacher: PropTypes.string.isRequired,
   };
 
   state = {
@@ -88,8 +89,8 @@ class TaskProperties extends React.Component {
   render() {
     const {
       handleAddTestTag, handleDeleteTestTag, tags, handleCreateTest, data,
-      addStudent, delStudent, getStudentsData, students, error, getGroupsData,
-      groups, getTopics, topics,
+      addStudent, delStudent, getStudentsData, students, error, getGroups,
+      groups, getTopics, topics, teacher,
     } = this.props;
     const { form } = this.props;
     const {
@@ -125,6 +126,7 @@ class TaskProperties extends React.Component {
     };
     return (
       <div className="test-properties-content">
+        <div className="header">Назначение задачи</div>
         <FormItem {...formItemLayout} label="" className="name-form-item">
           {getFieldDecorator('Название', {
             rules: [
@@ -259,8 +261,9 @@ class TaskProperties extends React.Component {
             students={data}
             addStudent={addStudent}
             getStudentsData={getStudentsData}
-            getGroupsData={getGroupsData}
+            getGroups={getGroups}
             error={error}
+            teacher={teacher}
             groups={groups}
           />
           <CurrentGroupList
@@ -288,8 +291,9 @@ function mapStateToProps(state) {
     students: state.taskInformation.students,
     data: state.taskInformation.data,
     error: state.taskInformation.error,
-    groups: state.taskInformation.groups,
+    groups: state.allGroups.groups,
     topics: state.taskInformation.topics,
+    teacher: state.logInInformation.user.email,
   };
 }
 
@@ -309,8 +313,8 @@ const mapDispatchToProps = dispatch => ({
   getStudentsData: () => {
     dispatch(fetchStudentListForTask());
   },
-  getGroupsData: () => {
-    dispatch(fetchGroupsListForTask());
+  getGroups: (userId) => {
+    dispatch(groupsListForTask(userId));
   },
   getTopics: () => {
     dispatch(fetchTopics());

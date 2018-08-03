@@ -33,8 +33,8 @@ export function fetchStudentListForTask() {
   return (API.get('users/students', 'students_list_for_task', 'Не удалось загрузить список студентов'));
 }
 
-export function fetchGroupsListForTask() {
-  return (API.get('users/groups', 'groups_list_for_task', 'Не удалось загрузить список групп'));
+export function groupsListForTask(userId) {
+  return (API.get(`users/groups/${userId}`, 'groupsList', 'Не удалось загрузить список групп'));
 }
 
 export function fetchTopics() {
