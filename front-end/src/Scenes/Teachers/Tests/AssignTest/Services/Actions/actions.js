@@ -7,7 +7,7 @@ export function createTest(test) {
   //   payload: test,
   // };
   console.log(test);
-  return API.post('/tests', test, 'create_test');
+  return API.post('tests/for-group', test, 'create_test');
 }
 
 export function addTestTag(tag) {
