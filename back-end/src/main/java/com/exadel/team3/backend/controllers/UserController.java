@@ -1,17 +1,16 @@
 package com.exadel.team3.backend.controllers;
 
 import com.exadel.team3.backend.controllers.requests.*;
+import com.exadel.team3.backend.dto.StringAnswerDTO;
 import com.exadel.team3.backend.entities.Solution;
 import com.exadel.team3.backend.entities.User;
 import com.exadel.team3.backend.entities.UserRole;
 import com.exadel.team3.backend.security.SecurityUtils;
 import com.exadel.team3.backend.security.annotations.AdminAccess;
 import com.exadel.team3.backend.security.annotations.AdminAndTeacherAccess;
-import com.exadel.team3.backend.security.annotations.AdminAndUserAccess;
 import com.exadel.team3.backend.security.annotations.UserAccess;
 import com.exadel.team3.backend.services.SolutionService;
 import com.exadel.team3.backend.services.UserService;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -51,7 +50,7 @@ public class UserController {
         List<String> groups = userService.getGroups();
 
         return groups == null?
-                ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Can't get groups."):
+                ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new StringAnswerDTO("Can't get groups.")):
                 ResponseEntity.ok().body(groups);
     }
 
@@ -62,7 +61,7 @@ public class UserController {
         List<Solution> solutions = solutionService.getAssignedItems(assignedTo);
 
         return solutions == null?
-                ResponseEntity.status(HttpStatus.NOT_FOUND).body(String.format("Can't find items assigned to%s",assignedTo))
+                ResponseEntity.status(HttpStatus.NOT_FOUND).body(new StringAnswerDTO(String.format("Can't find items assigned to%s",assignedTo)))
                 :ResponseEntity.ok().body(solutions);
 
     }
@@ -80,15 +79,14 @@ public class UserController {
     public ResponseEntity<?> changeUserPassword(@RequestBody ChangePasswordRequest request){
         User user = userService.getItem(request.getEmail());
 
-
         if(securityUtils.getEncoder().matches(request.getOldPassword(),user.getPasswordHash())) {
             user.setPasswordHash(securityUtils.getEncoder().encode(request.getNewPassword()));
             userService.updateItem(user);
         }
         else
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Old password doesn't match.");
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(new StringAnswerDTO("Old password doesn't match."));
 
-        return ResponseEntity.ok().body("Password changed.");
+        return ResponseEntity.ok().body(new StringAnswerDTO("Password changed."));
     }
 
     @GetMapping("/institutions")
@@ -97,7 +95,7 @@ public class UserController {
         List<String> institutions = userService.getInstitutions();
 
         return institutions == null?
-                ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Can't get institutions."):
+                ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new StringAnswerDTO("Can't get institutions.")):
                 ResponseEntity.ok().body(institutions);
     }
 
@@ -152,11 +150,11 @@ public class UserController {
     public ResponseEntity<?> updateUserRights(@RequestBody UpdateUserRightsRequest request){
         User user = userService.getItem(request.getEmail());
         if(user == null)
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Can't find user with email:"+request.getEmail());
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new StringAnswerDTO("Can't find user with email:"+request.getEmail()));
 
         user.setRole(request.getUserRole());
         userService.updateItem(user);
-        return ResponseEntity.ok().body("User rights increased to:"+request.getUserRole());
+        return ResponseEntity.ok().body(new StringAnswerDTO("User rights increased to:"+request.getUserRole()));
     }
 
     @GetMapping("/confirm-users")
@@ -166,7 +164,7 @@ public class UserController {
     }
 
     @PutMapping(produces = MediaType.APPLICATION_JSON_VALUE)
-    @AdminAndUserAccess
+//    @PreAuthorize("hasRole('ADMIN') or #u.email")
     public ResponseEntity<?> updateUser(@RequestBody UserUpdateRequest u){
 
         User user = mapper.map(u,User.class);

@@ -9,6 +9,6 @@ public class QuestionComplexityTask {
 
     @Scheduled(fixedDelay = 3000)
     public void calculateComplexity(){
-        System.out.println("Janna skoro pridet, rabotaem rabotyagi");
+//        System.out.println("Janna skoro pridet, rabotaem rabotyagi");
     }
 }

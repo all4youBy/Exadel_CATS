@@ -1,5 +1,7 @@
 package com.exadel.team3.backend.controllers;
 
+import com.exadel.team3.backend.dto.ObjectIdDTO;
+import com.exadel.team3.backend.dto.StringAnswerDTO;
 import com.exadel.team3.backend.dto.TestItemDTO;
 import com.exadel.team3.backend.dto.TestPostDTO;
 import com.exadel.team3.backend.dto.mappers.TestDTOMapper;
@@ -24,7 +26,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -57,7 +58,7 @@ public class TestController {
         Test test = testService.getItem(new ObjectId(testId));
 //      
         return test.getDeadline().isBefore(LocalDateTime.now())?
-                ResponseEntity.status(HttpStatus.REQUEST_TIMEOUT).body("Can't get test,time is out."):
+                ResponseEntity.status(HttpStatus.REQUEST_TIMEOUT).body(new StringAnswerDTO("Can't get test,time is out.")):
                 ResponseEntity.ok().body(testDTOMapper.convertToDTO(test));
 
 
@@ -77,7 +78,7 @@ public class TestController {
                                         request.getAssignedBy());
 
        if(test == null)
-           return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Can't generate test.");
+           return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new StringAnswerDTO("Can't generate test."));
 
        return ResponseEntity.ok().body(test.getId().toString());
     }
@@ -87,20 +88,20 @@ public class TestController {
     public ResponseEntity<?> getTrainingTestForUser(@RequestBody  TrainingTestGenerationRequest request){
         Test test = testService.generateTestForUser(request.getUserId(),request.getTopicId());
         if(test == null)
-           return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Can't generate test.");
-        String id = test.getId().toString();
-        return new ResponseEntity<>(id, HttpStatus.OK);
+           return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(HttpStatus.BAD_REQUEST);
+//        String id = mapper.map(test.getId(),String.class);
+
+        return new ResponseEntity<>(new ObjectIdDTO(test.getId()),HttpStatus.OK);
     }
 
-    @PostMapping(value = "/test-for-group",produces = MediaType.APPLICATION_JSON_VALUE)
-    @TestGenerationAccess
+    @PostMapping(value = "/for-group",produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> getTestForGroup(@RequestBody TestForGroupRequest request){
 
         User teacher = userService.getItem(request.getAssignedBy());
         String group = request.getGroup();
 
         if(!validateUser(teacher,group))
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(String.format("No rights to set test for %s.",group));
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(new StringAnswerDTO(String.format("No rights to set test for %s.",group)));
 
         List<Test> testsForGroup = testService.generateTestsForGroup(request.getGroup(),
                                                       request.getTitle(),
@@ -111,7 +112,7 @@ public class TestController {
                                                       request.getAssignedBy());
 
         if(testsForGroup == null)
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Can't generate tests for group.");
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new StringAnswerDTO("Can't generate tests for group."));
 
         return new ResponseEntity<>(testsForGroup,HttpStatus.OK);
     }
@@ -120,7 +121,7 @@ public class TestController {
     public ResponseEntity<?> getTestsAssignedToUser(@PathVariable(value = "userId") String userId){
         List<Test> userTests = testService.getAssignedItems(userId);
         if(userTests == null)
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Can't get list of tests, user:" + userId);
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new StringAnswerDTO("Can't get list of tests, user:" + userId));
 
         List<TestPostDTO> testPostDTO = userTests.stream().map(this::convertToTestPostDTO).collect(Collectors.toList());
         return new ResponseEntity<>(testPostDTO,HttpStatus.OK);
@@ -131,7 +132,7 @@ public class TestController {
         List<TestItemDTO> answers = testService.getAnswersForManualCheck(email);
 
         if(answers == null)
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Can't get answers for manual check.");
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new StringAnswerDTO("Can't get answers for manual check."));
 
         return ResponseEntity.ok().body(answers);
     }
@@ -142,7 +143,7 @@ public class TestController {
         List<Test> groupTests = testService.getAssignedItemsToGroup(group);
 
         if(groupTests == null)
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Can't get list of tests, group:" + group);
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new StringAnswerDTO("Can't get list of tests, group:" + group));
 
         return new ResponseEntity<>(groupTests,HttpStatus.OK);
     }
@@ -152,7 +153,7 @@ public class TestController {
         try {
             testService.submitTest(testId);
         } catch (ServiceException e) {
-           return ResponseEntity.status(HttpStatus.CONFLICT).body("Can't submit test.");
+           return ResponseEntity.status(HttpStatus.CONFLICT).body(new StringAnswerDTO("Can't submit test."));
         }
         Test test = testService.getItem(testId);
 
@@ -171,6 +172,12 @@ public class TestController {
     @AdminAccess
     public ResponseEntity<?> updateTest(@RequestBody Test test){
         return ResponseEntity.ok(testService.updateItem(test));
+    }
+
+    @PutMapping(value = "/submit-manual",produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> submitManualAnswerCheck(TestItemDTO checkItemDto) {
+        testService.submitManualAnswerCheck(checkItemDto);
+        return ResponseEntity.ok(HttpStatus.OK);
     }
 
     @DeleteMapping

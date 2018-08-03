@@ -3,6 +3,7 @@ package com.exadel.team3.backend.controllers;
 import com.exadel.team3.backend.controllers.requests.FileWrapper;
 import com.exadel.team3.backend.controllers.requests.TaskRequest;
 import com.exadel.team3.backend.dto.SolutionDTO;
+import com.exadel.team3.backend.dto.StringAnswerDTO;
 import com.exadel.team3.backend.dto.TaskDTO;
 import com.exadel.team3.backend.dto.mappers.SolutionDTOMapper;
 import com.exadel.team3.backend.dto.mappers.TopicDTOMapper;
@@ -11,15 +12,14 @@ import com.exadel.team3.backend.entities.Task;
 import com.exadel.team3.backend.entities.TaskTestingSet;
 import com.exadel.team3.backend.services.SolutionService;
 import com.exadel.team3.backend.services.TaskService;
+
 import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
 
-import java.io.FileWriter;
 import java.util.List;
 
 @RestController
@@ -55,10 +55,9 @@ public class TaskController {
     }
 
     @PostMapping("/add-solution/{id}")
-    public ResponseEntity<?> addFilesInSolution(@RequestBody FileWrapper fileWrapper, @PathVariable(value = "id") String id) {
-        System.out.println(fileWrapper.getFile());
-        Solution solution = solutionService.storeFile(solutionService.getItem(new ObjectId(id)), fileWrapper.getFile());
-        solutionService.submit(solution);
+    public ResponseEntity<?> addFilesInSolution(@RequestParam FileWrapper fileWrapper, @PathVariable(value = "id") String id) {
+        Solution solution = solutionService.getItem(new ObjectId(id));
+        solution = solutionService.storeFile(solution, fileWrapper.getFile());
 
         return new ResponseEntity<>(solution, HttpStatus.OK);
     }
@@ -73,7 +72,7 @@ public class TaskController {
                 taskRequest.getDeadline(),
                 taskRequest.getAssignedBy());
         if(taskForGroup == null) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Can't assign task for group.");
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new StringAnswerDTO("Can't assign task for group."));
         }
 
         return new ResponseEntity<>(taskForGroup, HttpStatus.OK);
@@ -95,7 +94,7 @@ public class TaskController {
                 taskRequest.getDeadline(),
                 taskRequest.getAssignedBy());
         if(solutionForUser == null) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Can't assign task for user.");
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new StringAnswerDTO("Can't assign task for user."));
         }
 
         return new ResponseEntity<>(solutionForUser, HttpStatus.OK);
@@ -132,7 +131,7 @@ public class TaskController {
         if (taskTestingSets.add(set)) {
             return new ResponseEntity<>(taskTestingSets, HttpStatus.OK);
         } else {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Can't add tasks set.");
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new StringAnswerDTO("Can't add tasks set."));
         }
 
     }
