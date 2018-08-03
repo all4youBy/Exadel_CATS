@@ -26,5 +26,4 @@ public interface AssignableService<T extends Assignable> extends CrudService<T, 
 
     List<UserRatingDTO> getTopRatingBySum();
     List<UserRatingDTO> getTopRatingByAverage();
-
 }
