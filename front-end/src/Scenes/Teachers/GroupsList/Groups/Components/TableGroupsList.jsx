@@ -24,6 +24,7 @@ class TableGroupsList extends React.PureComponent {
   state = {
     groups: [],
     getListUsers: false,
+    filterForGroups: '',
   };
 
   static getDerivedStateFromProps(nextProps, nextState) {
@@ -36,8 +37,12 @@ class TableGroupsList extends React.PureComponent {
     };
   }
 
+  showFilteredGroups = word => this.setState({
+    filterForGroups: word,
+  });
+
   render() {
-    const { getListUsers, groups } = this.state;
+    const { getListUsers, groups, filterForGroups } = this.state;
     const { emptyList, handleGroupDelete, upDate, addGroup } = this.props;
     const columns = [{
       title: ' ',
@@ -75,6 +80,9 @@ class TableGroupsList extends React.PureComponent {
     ];
 
     const data = [];
+    const newData = data.filter(
+      group => group.name.toLowerCase().indexOf(filterForGroups.toLowerCase()) !== -1,
+    );
     for (let i = 0; i < groups.length; i += 1) {
       data.push({
         key: i,
@@ -87,7 +95,7 @@ class TableGroupsList extends React.PureComponent {
     const table = data.length ? (
       <Table
         columns={columns}
-        dataSource={data}
+        dataSource={newData}
       />) : (<Loading/>);
     const addList = groups.length ? table : stateData;
     return (

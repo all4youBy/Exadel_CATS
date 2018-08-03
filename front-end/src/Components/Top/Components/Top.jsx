@@ -12,7 +12,7 @@ class Top extends React.Component {
 
 
     return (
-      <Carousel autoplay effect="fade">
+      <Carousel autoplay effect="fade" className="top-general">
         <TemplateTop
           nameTop="По количеству набранных баллов"
           nameTheFirstColumn="Пользователь"

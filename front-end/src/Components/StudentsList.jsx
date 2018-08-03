@@ -15,12 +15,12 @@ class StudentsList extends React.PureComponent {
     getGroups: PropTypes.func.isRequired,
     error: PropTypes.string.isRequired,
     teacher: PropTypes.string.isRequired,
-    type: PropTypes.string.isRequired,
   };
 
-  // state = {
-  //   type: '',
-  // };
+  state = {
+    type: '',
+    filterText: '',
+  };
 
   componentDidMount() {
     const { getStudentsData, getGroups, teacher } = this.props;
@@ -28,8 +28,24 @@ class StudentsList extends React.PureComponent {
     getGroups(teacher);
   }
 
+  setFilterText = text => this.setState({
+    filterText: text,
+  });
+
+  setList = (event) => {
+    const { value } = event.target;
+    this.setState({
+      type: value,
+    });
+  };
+
   render() {
-    const { students, groups, error, addStudent, type } = this.props;
+    const { students, groups, error, addStudent } = this.props;
+    const { type, filterText } = this.state;
+    const newGroups = groups.filter(group => group.toLowerCase()
+      .indexOf(filterText.toLowerCase()) !== -1);
+    const newStudents = students.filter(student => ((student.firstName + student.lastName)
+      .toLowerCase().indexOf(filterText.toLowerCase()) !== -1));
     if (error) {
       message.error(error);
     }
@@ -44,7 +60,7 @@ class StudentsList extends React.PureComponent {
         pagination={{
           pageSize: 5,
         }}
-        dataSource={students}
+        dataSource={newStudents}
         renderItem={(item) => {
           const desc = item.affiliation ? (
             <div>{item.email} {item.affiliation.institution} {`${item.affiliation.graduationYear} `}
@@ -83,7 +99,7 @@ class StudentsList extends React.PureComponent {
             pagination={{
               pageSize: 5,
             }}
-            dataSource={groups}
+            dataSource={newGroups}
             renderItem={(item) => {
               const desc = item;
               return (
@@ -116,13 +132,7 @@ class StudentsList extends React.PureComponent {
     }
     return (
       <div className="student-list-content">
-        <InputSearchStudent/>
-        {/*<div>*/}
-        {/*<RadioGroup defaultValue="a" className="parent-radio-button" onChange={this.setList}>*/}
-        {/*<RadioButton value="GROUPS" className="parent-radio-button-groups">Группы</RadioButton>*/}
-        {/*<RadioButton value="STUDENTS" className="parent-radio-button-students">Студенты</RadioButton>*/}
-        {/*</RadioGroup>*/}
-        {/*</div>*/}
+        <InputSearchStudent setFilter={this.setFilterText}/>
         {listData}
       </div>
     );

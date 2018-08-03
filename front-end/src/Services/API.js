@@ -127,6 +127,21 @@ const API = {
         .catch(() => dispatch(errorProject(receiveAction, errorMessage)));
     };
   },
+  registratePost(receiveAction, data, errorMessage) {
+    const url = 'https://exadelcats.herokuapp.com/registration';
+    return (dispatch) => {
+      fetch(url, {
+        method: 'POST',
+        mode: 'cors',
+        headers: {
+          'Content-Type': 'application/json; charset=utf-8',
+        },
+        body: JSON.stringify(data),
+      })
+        .then(response => response.text())
+        .catch(() => dispatch(errorProject(receiveAction, errorMessage)));
+    };
+  },
 };
 
 export default API;

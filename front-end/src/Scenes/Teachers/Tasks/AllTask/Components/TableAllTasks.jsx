@@ -5,7 +5,6 @@ import { Table } from 'antd';
 import ButtonEditTask from './ButtonEditTask';
 import ButtonAssignTask from '../../../../../Components/ButtonAssignTask';
 import ButtonDeleteStudent from '../../../GroupsList/GroupStudentsList/Components/ButtonDeleteStudent';
-
 import Loading from '../../../../../Components/Loading';
 
 const columns = [{
@@ -80,7 +79,12 @@ class TableAllTasks extends React.PureComponent {
   }
 
   render() {
-    const { bordered, loading, pagination, size, title, showHeader } = this.state;
+    const { bordered,
+      loading,
+      pagination,
+      size,
+      title,
+      showHeader } = this.state;
     const { tasks, error } = this.props;
     // const data = [];
     // for (let i = 1; i <= 20; i += 1) {

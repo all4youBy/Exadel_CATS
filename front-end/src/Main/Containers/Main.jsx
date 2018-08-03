@@ -29,10 +29,13 @@ import AddTaskPage from '../../Scenes/Teachers/Tasks/AddTask/Containers/AddTaskP
 import Loading from '../../Components/Loading';
 import PageAssignTask from '../../Scenes/Teachers/Tasks/AssignTask/Containers/PageAssignTask';
 import TrainingTestPage from '../../Scenes/Users/TestList/TrainingTest/Containers/TrainingTestPage';
+import Profile from '../../Scenes/Users/Profile';
+
 
 class Main extends React.Component {
   static propTypes = {
     userType: PropTypes.shape().isRequired,
+    email: PropTypes.string,
   };
 
   renderCommonRoutes() {
@@ -98,12 +101,16 @@ class Main extends React.Component {
 
   renderSwitch() {
     const { userType: { logInInformation: { user: { role } } } } = this.props;
+    const { email } = this.props;
     switch (role) {
       case 'STUDENT':
         return (
           <div className="main-body-container">
             <div className="general-menu">
-              <GeneralMenu userType={role}/>
+              <GeneralMenu
+                userType={role}
+                email={email}
+              />
             </div>
             <div className="switch-div">
               <Switch>
@@ -118,6 +125,7 @@ class Main extends React.Component {
                 <Route exact path="/trainingtest" component={TrainingTestPage}/>
                 <Route exact path="/assignedtests" component={PageAssignedTestList}/>
                 <Route exact path="/assignedtasks/:taskId" component={UserTaskPage}/>
+                <Route exact path="/profile/:email" component={Profile}/>
                 <Redirect to="/"/>
               </Switch>
             </div>
@@ -205,7 +213,12 @@ function mapStateToProps(state) {
     isReady: state.isReady,
     isAuth: state.isAuth,
     userType: state,
+    email: state.logInInformation.user.email,
   };
 }
+
+Main.defaultProps = {
+  email: '',
+};
 
 export default withRouter(connect(mapStateToProps)(Main));

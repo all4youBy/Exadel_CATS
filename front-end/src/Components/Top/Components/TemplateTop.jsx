@@ -7,18 +7,18 @@ class TemplateTop extends React.PureComponent {
     const { listUsers, nameTop, nameTheFirstColumn, nameTheSecondColumn } = this.props;
     const formedTable = (listUsers || []).map(element => (
       <tr key={element.id}>
-        <td className="left">{element.name}</td>
-        <td className="right">{element.score}</td>
+        <td>{element.name}</td>
+        <td>{element.score}</td>
       </tr>
     ));
     return (
-      <div align="center">
+      <div align="center" className="tepmplate-top">
         <h4>{nameTop}</h4>
         <table>
           <thead>
             <tr>
-              <th className="left">{nameTheFirstColumn}</th>
-              <th className="right">{nameTheSecondColumn}</th>
+              <th>{nameTheFirstColumn}</th>
+              <th>{nameTheSecondColumn}</th>
             </tr>
           </thead>
           <tbody>
