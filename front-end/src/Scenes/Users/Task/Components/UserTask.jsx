@@ -23,6 +23,7 @@ class UserTask extends React.Component {
 
   componentDidMount() {
     const { getTaskInformation, taskId } = this.props;
+    console.log(taskId, 898);
     getTaskInformation(requestLoginInformation().email, taskId);
   }
 
