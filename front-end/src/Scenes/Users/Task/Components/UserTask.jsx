@@ -4,6 +4,7 @@ import { Upload, Button, Icon, Tag } from 'antd';
 import PropTypes from 'prop-types';
 import requestLoginInformation from '../../../../Services/loginService';
 import Loading from '../../../../Components/Loading';
+// import { history } from '../../../../Services/ConfigureStore';
 
 
 class UserTask extends React.Component {
