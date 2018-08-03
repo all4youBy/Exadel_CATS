@@ -19,7 +19,6 @@ const FormItem = Form.Item;
 
 class QuestionForm extends React.PureComponent {
   static propTypes = {
-    user: PropTypes.shape().isRequired,
     tags: PropTypes.arrayOf(PropTypes.string).isRequired,
     addTag: PropTypes.func.isRequired,
     deleteTag: PropTypes.func.isRequired,
@@ -31,13 +30,12 @@ class QuestionForm extends React.PureComponent {
   constructor(props) {
     super(props);
     this.question = {
-      type: '',
-      training: false,
-      complexity: '',
+      questionComplexity: '',
+      questionType: '',
+      questionVariants: [],
       text: '',
-      author: '',
-      variants: [],
-      topicIds: [],
+      topicsId: [],
+      training: false,
     };
   }
 
@@ -54,12 +52,12 @@ class QuestionForm extends React.PureComponent {
   };
 
   onChangeLevel = (e) => {
-    this.question.complexity = e.target.value;
+    this.question.questionComplexity = e.target.value;
   };
 
   onChangeAnswer = (e) => {
     this.setState(() => ({ type: e.target.value }));
-    this.question.type = e.target.value;
+    this.question.questionType = e.target.value;
   };
 
   setField = (event) => {
@@ -68,13 +66,13 @@ class QuestionForm extends React.PureComponent {
     switch (name) {
       case 'answerFalse': {
         if (value !== '') {
-          this.question.variants.push({ text: value, correct: false });
+          this.question.questionVariants.push({ correct: false, text: value });
         }
         break;
       }
       case 'answerTrue': {
         if (value !== '') {
-          this.question.variants.push({ text: value, correct: true });
+          this.question.questionVariants.push({ correct: true, text: value });
         }
         break;
       }
@@ -91,18 +89,18 @@ class QuestionForm extends React.PureComponent {
   };
 
   validateQuestion = (question) => {
-    if (question.type.length === 0 || question.complexity.length === 0
-      || question.text.length === 0 || question.topicIds.length === 0) {
+    if (question.questionType.length === 0 || question.questionComplexity.length === 0
+      || question.text.length === 0 || question.topicsId.length === 0) {
       return false;
     }
-    if (question.type === 'SINGLE-VARIANT' || question.type === 'MULTI-VARIANT') {
-      if (!(question.variants.find(element => element.correct === true)
-        && question.variants.find(element => element.correct === false))) {
+    if (question.questionType === 'SINGLE-VARIANT' || question.questionType === 'MULTI-VARIANT') {
+      if (!(question.questionVariants.find(element => element.correct === true)
+        && question.questionVariants.find(element => element.correct === false))) {
         return false;
       }
     }
     if (question.type === 'AUTOCHECK_TEXT') {
-      if (!(question.variants.find(element => element.correct === true))) {
+      if (!(question.questionVariants.find(element => element.correct === true))) {
         return false;
       }
     }
@@ -175,15 +173,28 @@ class QuestionForm extends React.PureComponent {
   handleSubmit = (e) => {
     const { error } = this.state;
     const { addQuestion } = this.props;
-    console.log(this.question, 83739);
     if (!error) {
-      addQuestion('questions', this.question);
+      const obj = {
+        questionComplexity: this.question.questionComplexity,
+        questionType: this.question.questionType,
+        questionVariants: this.question.questionVariants,
+        text: this.question.text,
+        topicsId: this.question.topicsId,
+        training: this.question.training,
+      };
+      addQuestion('questions', obj);
+      this.question.questionComplexity = '';
+      this.question.questionType = '';
+      this.question.questionVariants = [];
+      this.question.text = '';
+      this.question.topicsId = [];
+      this.question.training = false;
     }
     e.preventDefault();
   };
 
   render() {
-    const { addTag, tags, deleteTag, user, topics, getTopics } = this.props;
+    const { addTag, tags, deleteTag, topics, getTopics } = this.props;
     const {
       answerInputsFalse,
       answerInputsTrue,
@@ -199,11 +210,10 @@ class QuestionForm extends React.PureComponent {
         tags.forEach((element) => {
           tagsArray.push(element.id);
         });
-        this.question.topicIds = tagsArray;
+        this.question.topicsId = tagsArray;
       } else {
-        this.question.topicIds = tags;
+        this.question.topicsId = tags;
       }
-      this.question.author = `${user.lastName} ${user.firstName}`;
       if (!this.validateQuestion(this.question)) {
         this.setState(() => ({ error: true }));
       } else {
@@ -275,11 +285,11 @@ class QuestionForm extends React.PureComponent {
       </div>);
     let elem;
     switch (type) {
-      case 'SINGLE-VARIANT': {
+      case 'SINGLE_VARIANT': {
         elem = inputQuestionSingleVariant;
         break;
       }
-      case 'MULTI-VARIANT': {
+      case 'MULTI_VARIANT': {
         elem = inputQuestionMultiVariant;
         break;
       }
@@ -325,8 +335,8 @@ class QuestionForm extends React.PureComponent {
           <div className="answer-type">
             <span className="text-variant">Вариант ответа на вопрос:</span>
             <Group onChange={this.onChangeAnswer}>
-              <RadioButton value="SINGLE-VARIANT">Один вариант ответа</RadioButton>
-              <RadioButton value="MULTI-VARIANT">Несколько вариантов ответа</RadioButton>
+              <RadioButton value="SINGLE_VARIANT">Один вариант ответа</RadioButton>
+              <RadioButton value="MULTI_VARIANT">Несколько вариантов ответа</RadioButton>
               <RadioButton value="AUTOCHECK_TEXT">Короткий ответ</RadioButton>
               <RadioButton value="MANUAL_CHECK_TEST">Развернутый ответ</RadioButton>
             </Group>
@@ -366,9 +376,7 @@ const mapDispatchToProps = dispatch => ({
     dispatch(deleteQuestionTag(tag));
   },
   addQuestion: (url, data) => {
-    // data.id = `${Math.random()}`;
-    // data.status = 'ACTIVE';
-    // data.statistics = null;
+    console.log(data, url, 897);
     dispatch(dataQuestion(url, data));
   },
   getTopics: () => {

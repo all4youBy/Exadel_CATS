@@ -17,7 +17,6 @@ export function deleteQuestionTag(tag) {
 }
 
 export function dataQuestion(url, data) {
-  console.log(data);
   return API.post(url, data, 'addQuestion');
 }
 

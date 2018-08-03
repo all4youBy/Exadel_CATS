@@ -7,6 +7,7 @@ import { Button, Input } from 'antd';
 import InputOutputSet from './InputOutputSet';
 import { addInOutSet, addTaskTag, deleteTaskTag, fetchTopics } from '../Services/Actions/actions';
 import TreeWithTags from '../../../../../Components/TreeWithTags';
+import requestLoginInformation from '../../../../../Services/loginService';
 
 
 const { TextArea } = Input;
@@ -22,12 +23,91 @@ class AddTask extends React.PureComponent {
     topics: PropTypes.string.isRequired,
   };
 
+  state = {
+    nameTask: '',
+    textTask: '',
+    topicsTask: [],
+    testSets: [],
+  };
+
+  setField = (event) => {
+    const { name } = event.target;
+    const { value } = event.target;
+    const { testSets } = this.state;
+    this.setState({
+      [name]: value,
+    });
+    switch (name) {
+      case 'answerFalse': {
+        if (value !== '') {
+          testSets.push({ correct: false, text: value });
+        }
+        break;
+      }
+      case 'answerTrue': {
+        if (value !== '') {
+          testSets.push({ correct: true, text: value });
+        }
+        break;
+      }
+      case 'question': {
+        if (value !== '') {
+          this.setState({ [name]: value });
+          this.question.text = value;
+        }
+        break;
+      }
+      default:
+        console.log(name);
+    }
+  };
+
   render() {
     const { addTag, deleteTag, tags, addElem, testSet, topics, getTopics } = this.props;
+    const { nameTask, textTask, topicsTask, testSets } = this.state;
+    const handleSubmit = (e) => {
+      e.preventDefault();
+      if (tags.length) {
+        const tagsArray = [];
+        tags.forEach((element) => {
+          tagsArray.push(element.id);
+        });
+        this.setState({
+          [topicsTask]: tagsArray,
+        });
+      } else {
+        this.setState({
+          [topicsTask]: tags,
+        });
+      }
+      const obj = {
+        author: requestLoginInformation().email,
+        title: nameTask,
+        text: textTask,
+        topicIds: topicsTask,
+        type: 'PASS_ALL',
+      };
+      console.log(obj, 12546);
+      // sendAssignTask({
+      //   name: nameTask,
+      // });
+    };
     return (
       <div className="add-task-container">
-        <TextArea className="input-task-name" placeholder="Название задачи" autosize/>
-        <TextArea className="input-task-desc" placeholder="Описание задачи" autosize={{ minRows: 7 }}/>
+        <TextArea
+          className="input-task-name"
+          placeholder="Название задачи"
+          autosize
+          name="nameTask"
+          onBlur={this.setField}
+        />
+        <TextArea
+          className="input-task-desc"
+          placeholder="Описание задачи"
+          name="textTask"
+          autosize={{ minRows: 7 }}
+          onBlur={this.setField}
+        />
         <div className="tree-with-tags">
           <TreeWithTags
             tags={tags}
@@ -37,8 +117,13 @@ class AddTask extends React.PureComponent {
             getTopics={getTopics}
           />
         </div>
-        <InputOutputSet addElem={addElem} testSet={testSet}/>
-        <Button type="primary" className="button-table-with-border task-upload-button">Отправить</Button>
+        <InputOutputSet addElem={addElem} testSet={testSet} testSets={testSets}/>
+        <Button
+          type="primary"
+          className="button-table-with-border task-upload-button"
+          onClick={handleSubmit}
+        >Отправить
+        </Button>
       </div>
     );
   }
