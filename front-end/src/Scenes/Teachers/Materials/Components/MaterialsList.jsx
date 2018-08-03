@@ -1,9 +1,10 @@
+// /* eslint-disable no-unused-vars */
 // import React from 'react';
 // import './MaterialsList.scss';
+// import { connect } from 'react-redux';
 // import { Link } from 'react-router-dom';
 // import { Collapse, Badge } from 'antd';
 // import ButtonAddLink from './ButtonAddLink';
-// import { connect } from 'react-redux';
 //
 // const { Panel } = Collapse;
 //
@@ -36,12 +37,12 @@
 // }
 //
 // const mapDispatchToProps = dispatch => ({
-//   handleStudentAdd: (book) => {
-//     dispatch(addStudent(book));
-//   },
-//   handleStudentDelete: (key) => {
-//     dispatch(deleteStudent(key));
-//   },
+//   // handleStudentAdd: (book) => {
+//   //   dispatch(addStudent(book));
+//   // },
+//   // handleStudentDelete: (key) => {
+//   //   dispatch(deleteStudent(key));
+//   // },
 // });
 //
 // export default connect(mapStateToProps, mapDispatchToProps)(MaterialsList);

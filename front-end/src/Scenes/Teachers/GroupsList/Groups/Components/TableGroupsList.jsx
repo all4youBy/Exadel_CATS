@@ -1,38 +1,44 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import './TableGroupsList.scss';
-import { message, Table } from 'antd';
+import { Table } from 'antd';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import ButtonEditGroup from './ButtonEditGroup';
 import ButtonAssignTask from '../../../../../Components/ButtonAssignTask';
 import ButtonDeleteGroup from './ButtonDeleteGroup';
 import ButtonAssignTest from '../../../../../Components/ButtonAssignTest';
-import ButtonCreateGroup from './ButtonCreateGroup';
 import InputSearch from './InputSearch';
-import { addGroup, deleteGroup, fetchGroups } from '../Services/Actions/actions';
+import { deleteGroup, getMyGroups, listGroup } from '../Services/Actions/actions';
 import Loading from '../../../../../Components/Loading';
+import { receiveTest } from '../../../Tests/AssignTest/Services/Actions/actions';
 
-class TableGroupsList extends React.Component {
+class TableGroupsList extends React.PureComponent {
   static propTypes = {
-    handleGroupAdd: PropTypes.func.isRequired,
     handleGroupDelete: PropTypes.func.isRequired,
-    getGroups: PropTypes.func.isRequired,
-    error: PropTypes.string.isRequired,
-    groups: PropTypes.arrayOf.isRequired,
+    upDate: PropTypes.func.isRequired,
+    emptyList: PropTypes.bool.isRequired,
+    addGroup: PropTypes.func.isRequired,
   };
 
-  componentDidMount() {
-    const { getGroups } = this.props;
-    getGroups();
+  state = {
+    groups: [],
+    getListUsers: false,
+  };
+
+  static getDerivedStateFromProps(nextProps, nextState) {
+    if ((nextProps.groups !== nextState.groups && nextProps.emptyList && !nextState.getListUsers)) {
+      nextProps.getGroups(nextProps.teacher);
+    }
+    return {
+      getListUsers: true,
+      groups: nextProps.groups,
+    };
   }
 
   render() {
-    const { handleGroupAdd, handleGroupDelete, error, groups } = this.props;
-    if (error) {
-      message.error(error);
-      return <Loading/>;
-    }
+    const { getListUsers, groups } = this.state;
+    const { emptyList, handleGroupDelete, upDate, addGroup } = this.props;
     const columns = [{
       title: ' ',
       dataIndex: 'name',
@@ -40,7 +46,7 @@ class TableGroupsList extends React.Component {
       width: 800,
       render(text) {
         return (
-          <Link className="link-name-group" to={`/groups/${text}`} >{text}</Link>
+          <Link className="link-name-group" to={`/groups/${text}`}>{text}</Link>
         );
       },
     }, {
@@ -52,12 +58,14 @@ class TableGroupsList extends React.Component {
         return (
           <div className="buttons-group-table">
             <div className="parent-button-edit-group"><ButtonEditGroup/></div>
-            <div className="parent-button-assign-test"><ButtonAssignTest groupName={record.name}/></div>
-            <div className="parent-button-assign-task"><ButtonAssignTask/></div>
+            <div className="parent-button-assign-test"><ButtonAssignTest addGroup={addGroup} groupName={record.name}/></div>
+            <div className="parent-button-assign-task"><ButtonAssignTask addGroup={addGroup} groupName={record.name}/></div>
             <div className="parent-button-delete-group">
               <ButtonDeleteGroup
                 onGroupDelete={handleGroupDelete}
                 data={record.name}
+                upDate={upDate}
+                groups={groups}
               />
             </div>
           </div>
@@ -69,19 +77,23 @@ class TableGroupsList extends React.Component {
     const data = [];
     for (let i = 0; i < groups.length; i += 1) {
       data.push({
-        key: `${i}`,
+        key: i,
         name: groups[i],
-        course: `Курс ${i}`,
-        date: '17/18 год',
       });
     }
     columns[0].title = <InputSearch/>;
-    columns[1].title = <ButtonCreateGroup onAddGroup={handleGroupAdd}/>;
-    return (
+    const stateData = emptyList && getListUsers ? (<Loading/>)
+      : <div className="empty-list">Список групп пуст</div>;
+    const table = data.length ? (
       <Table
         columns={columns}
         dataSource={data}
-      />
+      />) : (<Loading/>);
+    const addList = groups.length ? table : stateData;
+    return (
+      <div className="groups-list">
+        {addList}
+      </div>
     );
   }
 }
@@ -90,18 +102,24 @@ function mapStateToProps(state) {
   return {
     groups: state.allGroups.groups,
     error: state.allGroups.error,
+    teacher: state.logInInformation.user.email,
+    emptyList: state.allGroups.emptyList,
   };
 }
 
 const mapDispatchToProps = dispatch => ({
-  handleGroupAdd: (group) => {
-    dispatch(addGroup(group));
+  handleGroupDelete: (obj) => {
+    dispatch(deleteGroup(obj));
   },
-  handleGroupDelete: (key) => {
-    dispatch(deleteGroup(key));
+  getGroups: (userId) => {
+    dispatch(getMyGroups(userId));
   },
-  getGroups: () => {
-    dispatch(fetchGroups());
+  upDate: (groups, group) => {
+    const newList = groups.filter(el => el !== group);
+    dispatch(listGroup(newList));
+  },
+  addGroup: (group) => {
+    dispatch(receiveTest(group, 'GROUPS'));
   },
 });
 
