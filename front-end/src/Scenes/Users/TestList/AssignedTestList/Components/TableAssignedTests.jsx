@@ -5,6 +5,7 @@ import PropTypes from 'prop-types';
 import ButtonPassTest from './ButtonPassTest';
 // import requestLoginInformation from '../../../../../Services/loginService';
 import Loading from '../../../../../Components/Loading';
+import requestLoginInformation from '../../../../../Services/loginService';
 
 let tags = ['aaaa', 'ssss', 'ffff'];
 
@@ -61,8 +62,8 @@ class TableAssignedTests extends React.PureComponent {
   };
 
   componentDidMount() {
-    const { getAssignedTests, groupName } = this.props;
-    getAssignedTests(groupName);
+    const { getAssignedTests } = this.props;
+    getAssignedTests(requestLoginInformation().email);
   }
 
   render() {
