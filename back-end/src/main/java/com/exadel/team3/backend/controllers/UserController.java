@@ -19,6 +19,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+import java.security.Principal;
 import java.util.Collection;
 import java.util.List;
 
@@ -101,15 +102,15 @@ public class UserController {
 
     @PutMapping(value = "/groups",produces = MediaType.APPLICATION_JSON_VALUE)
     @AdminAccess
-    public ResponseEntity<?> renameGroup(@RequestBody RenameGroupRequest request){
-        userService.renameGroup(request.getUsersId(),request.getOldGroup(),request.getNewGroup());
+    public ResponseEntity<?> renameGroup(@RequestBody RenameGroupRequest request,Principal principal){
+        userService.renameGroup(request.getUsersId(),principal.getName(),request.getOldGroup(),request.getNewGroup());
         return ResponseEntity.ok(String.format("Group %s renamed to %s",request.getOldGroup(),request.getNewGroup()));
     }
 
     @DeleteMapping(value = "/groups", produces = MediaType.APPLICATION_JSON_VALUE)
     @AdminAccess
-    public ResponseEntity<?> deleteGroup(@RequestBody RemoveGroupRequest request){
-        userService.removeGroup(request.getUserId(),request.getGroup());
+    public ResponseEntity<?> deleteGroup(@RequestBody RemoveGroupRequest request,Principal principal){
+        userService.removeGroup(request.getUserId(),principal.getName(),request.getGroup());
         return ResponseEntity.ok(String.format("Group %s removed.",request.getGroup()));
     }
 
@@ -180,8 +181,8 @@ public class UserController {
 
     @PostMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     @AdminAndTeacherAccess
-    public ResponseEntity<?> assignGroup(@RequestBody AssignGroupRequest request) {
-        userService.assignGroup(request.getEmails(), request.getGroupId());
+    public ResponseEntity<?> assignGroup(@RequestBody AssignGroupRequest request, Principal principal) {
+        userService.assignGroup(request.getEmails(),principal.getName(), request.getGroupId());
         return ResponseEntity.ok(HttpStatus.OK);
     }
 

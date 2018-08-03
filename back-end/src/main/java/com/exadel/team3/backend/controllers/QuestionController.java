@@ -43,7 +43,7 @@ public class QuestionController {
         return ResponseEntity.status(HttpStatus.CREATED).body(new StringAnswerDTO("Question added"));
     }
 
-    @PutMapping(value = "/complain",consumes = "text/plain",produces = MediaType.APPLICATION_JSON_VALUE)
+    @PutMapping(value = "/complain",produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> complainOnQuestion(@RequestBody  String questionId){
 
         ObjectId id = new ObjectId(questionId);

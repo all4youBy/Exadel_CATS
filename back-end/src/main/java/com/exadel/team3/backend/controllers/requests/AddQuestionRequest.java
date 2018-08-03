@@ -16,6 +16,5 @@ public class AddQuestionRequest{
     private QuestionComplexity questionComplexity;
     private List<QuestionVariant> questionVariants;
     private List<ObjectId> topicsId;
-    private String author;
     private boolean training;
 }
