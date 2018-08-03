@@ -27,6 +27,18 @@ const testInformation = (state = initialState, action) => {
         ],
       };
     }
+    case types.RECEIVE_TOPICS_ASSIGN_TEST: {
+      return {
+        ...state,
+        topics: action.payload,
+      };
+    }
+    case types.ERROR_TOPICS_ASSIGN_TEST: {
+      return {
+        ...state,
+        error: action.payload,
+      };
+    }
     case types.DELETE_ASSIGN_TEST_TAG: {
       return {
         ...state,

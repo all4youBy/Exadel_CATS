@@ -4,6 +4,7 @@ import { Table, Tag } from 'antd';
 import PropTypes from 'prop-types';
 import ButtonPassTest from './ButtonPassTest';
 import requestLoginInformation from '../../../../../Services/loginService';
+import Loading from '../../../../../Components/Loading';
 
 let tags = ['aaaa', 'ssss', 'ffff'];
 
@@ -23,13 +24,7 @@ const columns = [{
   width: 600,
   className: 'column-break-point',
 }, {
-  title: 'Кол. вопросов',
-  dataIndex: 'countQuestions',
-  key: 'countQuestions',
-  width: 250,
-  className: 'column-break-point',
-}, {
-  title: 'Время выполнения',
+  title: 'Дата сдачи',
   dataIndex: 'time',
   key: 'time',
   width: 500,
@@ -43,17 +38,6 @@ const columns = [{
     <ButtonPassTest/>
   ),
 }];
-
-const data = [];
-for (let i = 1; i <= 20; i += 1) {
-  data.push({
-    key: `${i}`,
-    name: `Тест ${i}`,
-    theme: tags,
-    countQuestions: `${i}`,
-    time: `${i} мин`,
-  });
-}
 
 
 class TableAssignedTests extends React.PureComponent {
@@ -78,22 +62,55 @@ class TableAssignedTests extends React.PureComponent {
   }
 
   render() {
+    const { tests } = this.props;
+
+    function formatDate(date) {
+      let dd = date.getDate();
+      if (dd < 10) dd = `0${dd}`;
+
+      let mm = date.getMonth() + 1;
+      if (mm < 10) mm = `0${mm}`;
+
+      let yy = date.getFullYear() % 100;
+      if (yy < 10) yy = `0${yy}`;
+
+      return `${dd}.${mm}.${yy}`;
+    }
+
+    const data = [];
+    let deadline = null;
+    if (tests.length) {
+      for (let i = 0; i < 10; i += 1) {
+        const date = new Date(tests[i].deadline);
+        deadline = formatDate(date);
+        data.push({
+          key: tests[i].testId,
+          name: `Тест ${i}`,
+          theme: tags,
+          countQuestions: `${i}`,
+          time: deadline,
+        });
+      }
+    }
     const { bordered, loading, pagination, size, title, showHeader } = this.state;
+    const container = tests.length ? (
+      <Table
+        {...{
+          bordered,
+          loading,
+          pagination,
+          size,
+          title,
+          showHeader,
+        }}
+        columns={columns}
+        dataSource={data}
+        rowClassName={() => 'abc'}
+      />) : <Loading/>;
+
     return (
       <div>
-        <Table
-          {...{
-            bordered,
-            loading,
-            pagination,
-            size,
-            title,
-            showHeader,
-          }}
-          columns={columns}
-          dataSource={data}
-          rowClassName={() => 'abc'}
-        />
+        {container}
       </div>
     );
   }
