@@ -75,7 +75,7 @@ class TableGroupsList extends React.PureComponent {
     ];
 
     const data = [];
-    for (let i = 0; i < groups.length; i += 1) {
+    for (let i = groups.length - 1; i >= 0; i -= 1) {
       data.push({
         key: i,
         name: groups[i],
