@@ -68,16 +68,6 @@ class TaskProperties extends React.Component {
 
   state = {
     nameTest: '',
-    countQuestionsTest: -1,
-    hoursLeadTimeTest: 0,
-    minutesLeadTimeTest: 0,
-    secondsLeadTimeTest: 0,
-    hoursTimeOpenTest: 0,
-    minutesTimeOpenTest: 0,
-    secondsTimeOpenTest: 0,
-    hoursPassTimeTest: 0,
-    minutesPassTimeTest: 0,
-    secondsPassTimeTest: 0,
   };
 
   setField = (event) => {

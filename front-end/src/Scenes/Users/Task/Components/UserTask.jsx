@@ -4,6 +4,7 @@ import { Upload, Button, Icon, Tag } from 'antd';
 import PropTypes from 'prop-types';
 import requestLoginInformation from '../../../../Services/loginService';
 import Loading from '../../../../Components/Loading';
+
 // import { history } from '../../../../Services/ConfigureStore';
 
 
@@ -15,6 +16,7 @@ class UserTask extends React.Component {
     taskId: PropTypes.string.isRequired,
     taskInfo: PropTypes.arrayOf.isRequired,
     getAddSolution: PropTypes.func.isRequired,
+    response: PropTypes.string.isRequired,
   };
 
   state = {
@@ -24,7 +26,6 @@ class UserTask extends React.Component {
 
   componentDidMount() {
     const { getTaskInformation, taskId } = this.props;
-    console.log(taskId, 898);
     getTaskInformation(requestLoginInformation().email, taskId);
   }
 
@@ -84,7 +85,7 @@ class UserTask extends React.Component {
     }
 
     const { fileList } = this.state;
-    const { taskInfo } = this.props;
+    const { taskInfo, response } = this.props;
     let deadline = null;
     let tags = ['sas', 'sss', 'pos'];
     tags = tags.map(element => <Tag color="blue">{element}</Tag>);
@@ -92,7 +93,7 @@ class UserTask extends React.Component {
       const date = new Date(taskInfo.solution.deadline);
       deadline = formatDate(date);
     }
-    const container = taskInfo.solution ? (
+    let container = taskInfo.solution ? (
       <div>
         <div className="task-title">
           <div className="text-task-title">{taskInfo.title}</div>
@@ -123,6 +124,9 @@ class UserTask extends React.Component {
           </Button>
         </div>
       </div>) : <Loading/>;
+    if (response.solution) {
+      container = <div className="mark-add-solution">Ваша отметка: {response.solution.mark}</div>;
+    }
     return (
       <div className="add-solution-task-container">
         {container}

@@ -52,7 +52,7 @@ public class TopicDTOMapper {
 
     public static List<String> transformInToList(List<ObjectId> topicsId) {
         List<String> topics = new ArrayList<>();
-        if (topicsId != null) {
+        if (topicsId != null || topicsId.size() == 0) {
             for (ObjectId objectId : topicsId) {
                 topics.add(topicService.getItem(objectId).getText());
             }

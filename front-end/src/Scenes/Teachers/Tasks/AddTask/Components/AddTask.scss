@@ -26,13 +26,13 @@
     width: 100%;
     display: flex;
     flex-direction: row;
-    .set-num {
-      margin-top: 5px;
-    }
     .input-set {
       width: 45%;
-      margin: 5px;
+      margin: 0 5px 5px 5px;
     }
+  }
+  .set-num {
+    width: 60px;
   }
 
   .in-out-container {
@@ -45,6 +45,9 @@
       margin-top: 10px;
       width: 40%;
     }
+  }
+  .select-add-task {
+    width: 60px;
   }
   .task-upload-button {
     margin: 20px;
