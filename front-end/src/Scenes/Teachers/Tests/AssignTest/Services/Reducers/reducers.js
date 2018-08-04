@@ -18,7 +18,10 @@ const testInformation = (state = initialState, action) => {
   switch (action.type) {
     case types.ADD_ASSIGN_TEST_TAG: {
       if (state.tags.includes(action.payload)) {
-        return state;
+        return { ...state };
+      }
+      if (!action.payload) {
+        return { ...state };
       }
       return {
         ...state,
@@ -43,7 +46,7 @@ const testInformation = (state = initialState, action) => {
     case types.DELETE_ASSIGN_TEST_TAG: {
       return {
         ...state,
-        tags: state.tags.filter(tag => tag !== action.payload),
+        tags: state.tags.filter(tag => tag.text !== action.payload),
       };
     }
     case types.CREATE_TEST: {

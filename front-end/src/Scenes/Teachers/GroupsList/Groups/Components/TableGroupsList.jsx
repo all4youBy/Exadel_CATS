@@ -8,17 +8,19 @@ import ButtonEditGroup from './ButtonEditGroup';
 import ButtonAssignTask from '../../../../../Components/ButtonAssignTask';
 import ButtonDeleteGroup from './ButtonDeleteGroup';
 import ButtonAssignTest from '../../../../../Components/ButtonAssignTest';
-import InputSearch from './InputSearch';
+// import InputSearch from './InputSearch';
 import { deleteGroup, getMyGroups, listGroup } from '../Services/Actions/actions';
 import Loading from '../../../../../Components/Loading';
 import { receiveTest } from '../../../Tests/AssignTest/Services/Actions/actions';
+import { receiveTask } from '../../../Tasks/AssignTask/Services/Actions/actions';
 
 class TableGroupsList extends React.PureComponent {
   static propTypes = {
     handleGroupDelete: PropTypes.func.isRequired,
     upDate: PropTypes.func.isRequired,
     emptyList: PropTypes.bool.isRequired,
-    addGroup: PropTypes.func.isRequired,
+    addGroupTest: PropTypes.func.isRequired,
+    addGroupTask: PropTypes.func.isRequired,
   };
 
   state = {
@@ -38,28 +40,36 @@ class TableGroupsList extends React.PureComponent {
 
   render() {
     const { getListUsers, groups } = this.state;
-    const { emptyList, handleGroupDelete, upDate, addGroup } = this.props;
+    const { emptyList, handleGroupDelete, upDate, addGroupTask, addGroupTest } = this.props;
     const columns = [{
       title: ' ',
       dataIndex: 'name',
       key: 'name',
-      width: 800,
+      width: 1000,
       render(text) {
+        const nameGroup = (<Link className="link-name-group" to={`/groups/${text}`}>{text}</Link>);
         return (
-          <Link className="link-name-group" to={`/groups/${text}`}>{text}</Link>
-        );
+          <div>{nameGroup}</div>);
       },
     }, {
       title: ' ',
       dataIndex: 'button',
       key: 'button',
-      width: 100,
+      // width: 100,
       render(text, record) {
         return (
           <div className="buttons-group-table">
             <div className="parent-button-edit-group"><ButtonEditGroup/></div>
-            <div className="parent-button-assign-test"><ButtonAssignTest addGroup={addGroup} groupName={record.name}/></div>
-            <div className="parent-button-assign-task"><ButtonAssignTask addGroup={addGroup} groupName={record.name}/></div>
+            <div className="parent-button-assign-test"><ButtonAssignTest
+              addGroup={addGroupTest}
+              groupName={record.name}
+            />
+            </div>
+            <div className="parent-button-assign-task"><ButtonAssignTask
+              addGroup={addGroupTask}
+              groupName={record.name}
+            />
+            </div>
             <div className="parent-button-delete-group">
               <ButtonDeleteGroup
                 onGroupDelete={handleGroupDelete}
@@ -81,14 +91,18 @@ class TableGroupsList extends React.PureComponent {
         name: groups[i],
       });
     }
-    columns[0].title = <InputSearch/>;
+    columns[0].title = <div className="header">Список моих групп</div>;
+    // <InputSearch/>
     const stateData = emptyList && getListUsers ? (<Loading/>)
       : <div className="empty-list">Список групп пуст</div>;
     const table = data.length ? (
       <Table
+        className="table-groups"
         columns={columns}
         dataSource={data}
-      />) : (<Loading/>);
+      />) : (
+        <Loading/>
+    );
     const addList = groups.length ? table : stateData;
     return (
       <div className="groups-list">
@@ -118,8 +132,11 @@ const mapDispatchToProps = dispatch => ({
     const newList = groups.filter(el => el !== group);
     dispatch(listGroup(newList));
   },
-  addGroup: (group) => {
+  addGroupTest: (group) => {
     dispatch(receiveTest(group, 'GROUPS'));
+  },
+  addGroupTask: (group) => {
+    dispatch(receiveTask(group, 'GROUPS'));
   },
 });
 
