@@ -18,7 +18,7 @@ import com.exadel.team3.backend.entities.Assignable;
 import com.exadel.team3.backend.entities.User;
 import com.exadel.team3.backend.services.AssignableService;
 import com.exadel.team3.backend.dao.AssignableRepositoryAggregation;
-import com.exadel.team3.backend.dao.impl.RatingProjectionImpl;
+import com.exadel.team3.backend.dao.projections.RatingProjection;
 import com.exadel.team3.backend.dto.UserRatingDTO;
 public abstract class AssignableServiceImpl<T extends Assignable>
         extends CrudServiceImpl<T, ObjectId>
@@ -129,19 +129,17 @@ public abstract class AssignableServiceImpl<T extends Assignable>
         );
     }
 
-    private List<UserRatingDTO> getTopRating(Function<Integer, List<RatingProjectionImpl>> collectorFunc) {
-        Map<String, Integer> userIdsRatings =
-                        collectorFunc.apply(topRatingListSize)
-                        .stream()
-                        .collect(Collectors.toMap(
-                                RatingProjectionImpl::getId,
-                                RatingProjectionImpl::getRating
-                        ));
-
-        return StreamSupport
-                .stream(userRepository.findAllById(userIdsRatings.keySet()).spliterator(),false)
-                .map(user -> new UserRatingDTO(user.getFirstName(), user.getLastName(), userIdsRatings.get(user.getEmail())))
-                .sorted(Comparator.comparingInt(UserRatingDTO::getRating).reversed())
+    private List<UserRatingDTO> getTopRating(Function<Integer, List<RatingProjection>> collectorFunc) {
+        return collectorFunc.apply(topRatingListSize)
+                .stream()
+                .map(
+                    projection ->
+                    new UserRatingDTO(
+                            projection.getFirstName(),
+                            projection.getLastName(),
+                            projection.getRating()
+                    )
+                )
                 .collect(Collectors.toList());
     }
 

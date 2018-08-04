@@ -2,6 +2,10 @@ package com.exadel.team3.backend.dao.impl;
 
 import java.util.List;
 
+import com.exadel.team3.backend.dao.projections.RatingProjection;
+import org.bson.Document;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.mongodb.core.aggregation.LookupOperation;
 import org.springframework.stereotype.Repository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoTemplate;
@@ -22,31 +26,52 @@ public abstract class AssignableRepositoryImpl<T extends Assignable>
 
     protected abstract Class<T> getEntityClass();
 
-    private List<RatingProjectionImpl> collectRating(int limit, boolean byAverage) {
-        AggregationOperation groupingOperation =
-                byAverage
-                ? Aggregation.group("assignedTo").avg("mark").as("rating")
-                : Aggregation.group("assignedTo").sum("mark").as("rating");
-        TypedAggregation<T> aggregation = TypedAggregation.newAggregation(
-                getEntityClass(),
-                Aggregation.match(Criteria.where("mark").ne(null)),
-                groupingOperation,
-                Aggregation.project("rating"),
-                Aggregation.limit(limit > 0 ? limit : 1)
-        );
+    private List<RatingProjection> collectRating(int limit, boolean byAverage) {
+        AggregationOperation groupingOperation;
+        if (byAverage) {
+            groupingOperation = Aggregation
+                    .group("assignedTo")
+                    .avg("mark")
+                    .as("rating");
+        } else {
+            groupingOperation = Aggregation
+                    .group("assignedTo")
+                    .sum("mark")
+                    .as("rating");
+        }
+
+        AggregationOperation lookupOperation =
+                LookupOperation.newLookup()
+                        .from("users")
+                        .localField("_id")
+                        .foreignField("_id")
+                        .as("user");
+
+
+        AggregationOperation projectionOperation =
+                Aggregation.project("user._id", "user.firstName", "user.lastName", "rating");
+
         return mongoTemplate.aggregate(
-                aggregation,
-                RatingProjectionImpl.class
+                TypedAggregation.newAggregation(
+                        Aggregation.match(Criteria.where("mark").ne(null)),
+                        groupingOperation,
+                        lookupOperation,
+                        projectionOperation,
+                        Aggregation.sort(Sort.Direction.DESC, "rating"),
+                        Aggregation.limit(limit > 0 ? limit : 1)
+                ),
+                getEntityClass().getSimpleName().toLowerCase() + "s",
+                RatingProjection.class
         ).getMappedResults();
     }
 
     @Override
-    public List<RatingProjectionImpl> collectRatingBySum(int limit) {
+    public List<RatingProjection> collectRatingBySum(int limit) {
         return collectRating(limit, false);
     }
 
     @Override
-    public List<RatingProjectionImpl> collectRatingByAverage(int limit) {
+    public List<RatingProjection> collectRatingByAverage(int limit) {
         return collectRating(limit, true);
     }
 }
