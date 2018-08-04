@@ -82,8 +82,8 @@ class TaskProperties extends React.Component {
       const task = {
         assignedBy: teacher,
         title: nameTest,
-        start: new Date(getStart.toString()),
-        deadline: new Date(getDeadline.toString()),
+        start: getStart,
+        deadline: getDeadline,
         topicsId: tagsTask,
       };
       if (this.validateTest(task)) {
@@ -95,7 +95,7 @@ class TaskProperties extends React.Component {
           case 'GROUPS': {
             task.assignedTo = receiver;
             this.setState(() => ({ error: false }));
-            handleCreateTask({ task }, '/assign-task-for-group');
+            handleCreateTask(task, '/assign-task-for-group');
             break;
           }
           default: {
@@ -138,7 +138,7 @@ class TaskProperties extends React.Component {
                 <RangePicker
                   showTime={{ format: 'HH:mm' }}
                   format="YYYY-MM-DD HH:mm"
-                  placeholder={['Открытие теста', 'Закрытие теста']}
+                  placeholder={['Открытие', 'Закрытие']}
                   onChange={this.onChangeData}
                   onOk={this.onOk}
                 />
