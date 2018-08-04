@@ -1,62 +1,10 @@
 import React from 'react';
 import './TableAllTasks.scss';
 import PropTypes from 'prop-types';
-import { Table } from 'antd';
+import { Table, Tag } from 'antd';
 import ButtonEditTask from './ButtonEditTask';
-import ButtonAssignTask from '../../../../../Components/ButtonAssignTask';
-import ButtonDeleteStudent from '../../../GroupsList/GroupStudentsList/Components/ButtonDeleteStudent';
-
 import Loading from '../../../../../Components/Loading';
-
-const columns = [{
-  title: ' ',
-  dataIndex: 'time',
-  key: 'time',
-  width: 70,
-  className: 'column-break-point',
-  render: () => (
-    <div className="all-tasks-time">
-      <div className="all-tasks-date-day">18</div>
-      <div className="all-tasks-date-month">Июня</div>
-      <div className="all-tasks-date-year">2018</div>
-    </div>
-  ),
-}, {
-  title: 'Название',
-  dataIndex: 'title',
-  key: 'title',
-  width: 250,
-  className: 'column-break-point',
-  render: (text, record) => (
-    <div className="all-tasks-title">
-      <div className="all-tasks-title-text">{text}</div>
-      <div className="all-tasks-author">{record.author}</div>
-    </div>
-  ),
-}, {
-  title: 'Тема',
-  dataIndex: 'theme',
-  key: 'theme',
-  width: 800,
-  className: 'column-break-point',
-}, {
-  title: ' ',
-  dataIndex: 'button',
-  key: 'button',
-  width: 100,
-  className: 'column-break-point',
-  render: () => (
-    <div className="all-tasks-group-button">
-      <div className="parent-button-edit-task"><ButtonEditTask/></div>
-      <div className="parent-button-assign-task"><ButtonAssignTask/></div>
-      <div className="parent-button-delete-student"><ButtonDeleteStudent/></div>
-    </div>
-  ),
-}];
-
-// let tags = ['aaaa', 'ssss', 'ffff'];
-
-// tags = tags.map(element => <Tag color="blue">{element}</Tag>);
+import requestLoginInformation from '../../../../../Services/loginService';
 
 class TableAllTasks extends React.PureComponent {
   static propTypes = {
@@ -81,34 +29,115 @@ class TableAllTasks extends React.PureComponent {
 
   render() {
     const { bordered, loading, pagination, size, title, showHeader } = this.state;
-    const { tasks, error } = this.props;
-    // const data = [];
-    // for (let i = 1; i <= 20; i += 1) {
-    //   data.push({
-    //     key: `${i}`,
-    //     name: `Задача ${i}`,
-    //     theme: tags,
-    //     time: `${i} мин`,
-    //   });
-    // }
-    if (error) {
-      return <Loading/>;
+    const { tasks } = this.props;
+    const data = [];
+    const arrMonth = [
+      'Январь',
+      'Февраль',
+      'Март',
+      'Апрель',
+      'Май',
+      'Июнь',
+      'Июль',
+      'Август',
+      'Сентябрь',
+      'Ноябрь',
+      'Декабрь',
+    ];
+
+
+    const columns = [{
+      title: 'Дата сдачи',
+      dataIndex: 'day',
+      key: 'dat',
+      width: 70,
+      className: 'column-break-point',
+      render: (text, record) => (
+        <div className="all-tasks-time">
+          <div className="all-tasks-date-day">{record.day}</div>
+          <div className="all-tasks-date-month">{record.month}</div>
+          <div className="all-tasks-date-year">{record.year}</div>
+        </div>
+      ),
+    }, {
+      title: 'Название',
+      dataIndex: 'taskName',
+      key: 'taskName',
+      width: 250,
+      className: 'column-break-point',
+      render: (text, record) => (
+        <div className="all-tasks-title">
+          <div className="all-tasks-title-text">{record.taskName}</div>
+          <div className="all-tasks-author">{record.author}</div>
+        </div>),
+    }, {
+      title: 'Тема',
+      dataIndex: 'theme',
+      key: 'theme',
+      width: 800,
+      className: 'column-break-point',
+    }, {
+      title: ' ',
+      dataIndex: 'button',
+      key: 'button',
+      width: 100,
+      className: 'column-break-point',
+      render: (text) => {
+        if (requestLoginInformation().email === text) {
+          return (
+            <div className="all-tasks-group-button">
+              <div className="parent-button-edit-task"><ButtonEditTask/></div>
+            </div>
+          );
+        }
+        return <div/>;
+      },
+    }];
+
+    for (let i = 0; i < tasks.length; i += 1) {
+      const date = new Date(tasks[i].id.date);
+      let tags = [];
+      if (tasks[i].topics.length > 3) {
+        for (let index = 0; index < 3; index += 1) {
+          tags[index] = <Tag color="blue">{tasks[i].topics[index]}</Tag>;
+        }
+      } else {
+        tags = tasks[i].topics.map(element => (<Tag color="blue">{element}</Tag>));
+      }
+
+      console.log(date.getDay(), 2);
+      data.push({
+        key: `${i}`,
+        author: `${tasks[i].firstName} ${tasks[i].lastName}`,
+        theme: tags,
+        taskName: tasks[i].title,
+        day: date.getDate(),
+        month: arrMonth[date.getMonth()],
+        year: date.getFullYear(),
+        button: tasks[i].email,
+        formDate: date,
+      });
     }
-    console.log(tasks, 78754);
+
+    data.sort((a, b) => (
+      b.formDate - a.formDate
+    ));
+    const content = tasks.length ? (
+      <Table
+        {...{
+          bordered,
+          loading,
+          pagination,
+          size,
+          title,
+          showHeader,
+        }}
+        columns={columns}
+        dataSource={data}
+      />) : <Loading/>;
     return (
       <div>
-        <Table
-          {...{
-            bordered,
-            loading,
-            pagination,
-            size,
-            title,
-            showHeader,
-          }}
-          columns={columns}
-          dataSource={tasks}
-        />
+        {content}
       </div>
     );
   }

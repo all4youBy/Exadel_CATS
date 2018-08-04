@@ -15,7 +15,6 @@ public class BeanConfig {
     }
     @Bean
     public TestDTOMapper testDTOMapper(){return new TestDTOMapper();}
-
     @Bean
     public SolutionDTOMapper solutionDTOMapper() {
         return new SolutionDTOMapper();

@@ -10,6 +10,12 @@ const initialState = {
 
 const passTask = (state = initialState, action) => {
   switch (action.type) {
+    case types.RECEIVE_POST_ADD_TASK_SOLUTION: {
+      return {
+        ...state,
+        response: { ...action.payload },
+      };
+    }
     case types.RECEIVE_USER_TASK_INFORMATION: {
       return {
         ...state,

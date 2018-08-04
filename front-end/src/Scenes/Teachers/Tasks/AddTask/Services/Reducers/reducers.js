@@ -5,10 +5,23 @@ const initialState = {
   tags: [],
   topics: [],
   error: '',
+  response: '',
 };
 
 const addTask = (state = initialState, action) => {
   switch (action.type) {
+    case types.RECIEVE_ADD_TASK: {
+      return {
+        ...state,
+        response: action.payload,
+      };
+    }
+    case types.ERROR_ADD_TASK: {
+      return {
+        ...state,
+        error: action.payload,
+      };
+    }
     case types.RECEIVE_TOPICS_ADD_TASK: {
       return {
         ...state,
