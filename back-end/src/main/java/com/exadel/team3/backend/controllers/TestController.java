@@ -1,7 +1,7 @@
 package com.exadel.team3.backend.controllers;
 
 import com.exadel.team3.backend.dto.ObjectIdDTO;
-import com.exadel.team3.backend.dto.StringAnswerDTO;
+import com.exadel.team3.backend.dto.JSONAnswerDTO;
 import com.exadel.team3.backend.dto.TestItemDTO;
 import com.exadel.team3.backend.dto.TestPostDTO;
 import com.exadel.team3.backend.dto.mappers.TestDTOMapper;
@@ -58,7 +58,7 @@ public class TestController {
         Test test = testService.getItem(new ObjectId(testId));
 //      
         return test.getDeadline().isBefore(LocalDateTime.now())?
-                ResponseEntity.status(HttpStatus.REQUEST_TIMEOUT).body(new StringAnswerDTO("Can't get test,time is out.")):
+                ResponseEntity.status(HttpStatus.REQUEST_TIMEOUT).body(new JSONAnswerDTO("Can't get test,time is out.")):
                 ResponseEntity.ok().body(testDTOMapper.convertToDTO(test));
 
 
@@ -78,7 +78,7 @@ public class TestController {
                                         request.getAssignedBy());
 
        if(test == null)
-           return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new StringAnswerDTO("Can't generate test."));
+           return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new JSONAnswerDTO("Can't generate test."));
 
        return ResponseEntity.ok().body(test.getId().toString());
     }
@@ -101,7 +101,7 @@ public class TestController {
         String group = request.getGroup();
 
         if(!validateUser(teacher,group))
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(new StringAnswerDTO(String.format("No rights to set test for %s.",group)));
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(new JSONAnswerDTO(String.format("No rights to set test for %s.",group)));
 
         List<Test> testsForGroup = testService.generateTestsForGroup(request.getGroup(),
                                                       request.getTitle(),
@@ -112,7 +112,7 @@ public class TestController {
                                                       request.getAssignedBy());
 
         if(testsForGroup == null)
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new StringAnswerDTO("Can't generate tests for group."));
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new JSONAnswerDTO("Can't generate tests for group."));
 
         return new ResponseEntity<>(testsForGroup,HttpStatus.OK);
     }
@@ -121,7 +121,7 @@ public class TestController {
     public ResponseEntity<?> getTestsAssignedToUser(@PathVariable(value = "userId") String userId){
         List<Test> userTests = testService.getAssignedItems(userId);
         if(userTests == null)
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new StringAnswerDTO("Can't get list of tests, user:" + userId));
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new JSONAnswerDTO("Can't get list of tests, user:" + userId));
 
         List<TestPostDTO> testPostDTO = userTests.stream().map(this::convertToTestPostDTO).collect(Collectors.toList());
         return new ResponseEntity<>(testPostDTO,HttpStatus.OK);
@@ -132,7 +132,7 @@ public class TestController {
         List<TestItemDTO> answers = testService.getAnswersForManualCheck(email);
 
         if(answers == null)
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new StringAnswerDTO("Can't get answers for manual check."));
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new JSONAnswerDTO("Can't get answers for manual check."));
 
         return ResponseEntity.ok().body(answers);
     }
@@ -143,7 +143,7 @@ public class TestController {
         List<Test> groupTests = testService.getAssignedItemsToGroup(group);
 
         if(groupTests == null)
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new StringAnswerDTO("Can't get list of tests, group:" + group));
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new JSONAnswerDTO("Can't get list of tests, group:" + group));
 
         return new ResponseEntity<>(groupTests,HttpStatus.OK);
     }
@@ -153,7 +153,7 @@ public class TestController {
         try {
             testService.submitTest(testId);
         } catch (ServiceException e) {
-           return ResponseEntity.status(HttpStatus.CONFLICT).body(new StringAnswerDTO("Can't submit test."));
+           return ResponseEntity.status(HttpStatus.CONFLICT).body(new JSONAnswerDTO("Can't submit test."));
         }
         Test test = testService.getItem(testId);
 

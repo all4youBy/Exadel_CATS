@@ -6,6 +6,7 @@ import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import lombok.Getter;
 import lombok.Setter;
 import org.bson.types.ObjectId;
+import org.springframework.web.bind.annotation.GetMapping;
 
 import java.time.LocalDateTime;
 public class TestPostDTO {
@@ -19,6 +20,10 @@ public class TestPostDTO {
     @Getter
     @JsonFormat(shape = JsonFormat.Shape.STRING,pattern = "yyyy-dd-MM  HH:mm:ss")
     private LocalDateTime start;
+
+    @Setter
+    @Getter
+    private String title;
 
     @Setter
     @Getter

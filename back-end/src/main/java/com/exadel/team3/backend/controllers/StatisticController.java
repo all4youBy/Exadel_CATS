@@ -22,7 +22,6 @@ public class StatisticController {
     @Autowired
     private SolutionService solutionService;
 
-//    public List<String> get
 
     @GetMapping(value = "/tests",produces = MediaType.APPLICATION_JSON_VALUE)
     public List<UserRatingDTO> getTopRatingsSumTest(){
