@@ -1,3 +1,5 @@
+import { message } from 'antd';
+import { history } from '../../../../../../Services/ConfigureStore';
 import * as types from './types';
 import API from '../../../../../../Services/API';
 
@@ -23,4 +25,12 @@ export function deleteTaskTag(tag) {
 
 export function fetchTopics() {
   return (API.get('topics', 'topics_add_task', 'Не удалось загрузить темы'));
+}
+export function fetchAddTask(data) {
+  return API.post('task/add-task', data, ['add_task', () => {
+    message.success('Вопрос успешно добавлен');
+    history.push('/alltasks');
+  }, () => {
+    message.error('Не удалось добавить вопрос');
+  }]);
 }

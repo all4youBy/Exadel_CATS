@@ -11,5 +11,7 @@ public interface FileStorage {
     InputStream read(ObjectId fileId);
     InputStream read(String filename, ObjectId associatedId) throws IOException;
     InputStream read(String filename) throws IOException;
+    void delete(String filename);
+    void delete(String filename, ObjectId associatedId);
     void deleteAll();
 }

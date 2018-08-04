@@ -1,6 +1,7 @@
+import { message } from 'antd';
 import { ADD_QUESTION_TAG, DELETE_QUESTION_TAG } from './type';
-
 import API from '../../../../../../Services/API';
+
 
 export function addQuestionTag(tag) {
   return {
@@ -17,8 +18,12 @@ export function deleteQuestionTag(tag) {
 }
 
 export function dataQuestion(url, data) {
-  console.log(data);
-  return API.post(url, data, 'addQuestion');
+  return API.post(url, data, ['addQuestion', () => {
+    message.success('Вопрос успешно добавлен');
+    // history.purh('/');
+  }, () => {
+    message.error('Не удалось добавить вопрос');
+  }]);
 }
 
 export function fetchTopics() {

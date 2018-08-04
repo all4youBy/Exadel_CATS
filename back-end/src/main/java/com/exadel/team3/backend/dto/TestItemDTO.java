@@ -21,5 +21,6 @@ public class TestItemDTO {
 
     private final TestItemStatus status;
 
+    private String questionText;
 
 }

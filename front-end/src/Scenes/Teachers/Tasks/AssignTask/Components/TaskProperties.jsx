@@ -1,83 +1,47 @@
+/* eslint-disable no-unused-vars,spaced-comment */
 import React from 'react';
-import { Form, Input, Button } from 'antd';
-import './TaskProperties.scss';
-import PropTypes from 'prop-types';
+import { Form, Input, Button, DatePicker, TimePicker, InputNumber } from 'antd';
 import { connect } from 'react-redux';
-// import TimeInputGroup from './TimeInputGroup';
+import PropTypes from 'prop-types';
 import TreeWithTags from '../../../../../Components/TreeWithTags';
+
 import {
-  addTestTag,
-  deleteTestTag,
-  addStudentToList,
-  deleteStudentFromList,
-  fetchStudentListForTask,
-  groupsListForTask,
+  addTaskTag, createTask,
+  deleteTaskTag,
   fetchTopics,
-  postAssignTask,
 } from '../Services/Actions/actions';
-import CurrentGroupList from '../../../../../Components/CurrentGroupList';
-import StudentsAndGroupsList from '../../../../../Components/StudentsAndGroupsList';
 
 const { TextArea } = Input;
-const { Item: FormItem } = Form;
-
-const formItemLayout = {
-  labelCol: {
-    xs: { span: 100 },
-    sm: { span: 8 },
-  },
-  wrapperCol: {
-    xs: { span: 80 },
-    sm: { span: 80 },
-  },
-};
-
-const tailFormItemLayout = {
-  wrapperCol: {
-    xs: {
-      span: 50,
-      offset: 50,
-    },
-    sm: {
-      span: 19,
-      offset: 50,
-    },
-  },
-};
+const { RangePicker } = DatePicker;
 
 class TaskProperties extends React.Component {
   static propTypes = {
-    tags: PropTypes.arrayOf(PropTypes.string).isRequired,
-    handleDeleteTestTag: PropTypes.func.isRequired,
-    handleAddTestTag: PropTypes.func.isRequired,
-    handleCreateTest: PropTypes.func.isRequired,
-    form: PropTypes.shape().isRequired,
-    data: PropTypes.arrayOf(PropTypes.object).isRequired,
-    addStudent: PropTypes.func.isRequired,
-    delStudent: PropTypes.func.isRequired,
-    getStudentsData: PropTypes.func.isRequired,
-    getGroups: PropTypes.func.isRequired,
-    students: PropTypes.arrayOf(PropTypes.object).isRequired,
-    error: PropTypes.bool.isRequired,
-    groups: PropTypes.arrayOf(PropTypes.object).isRequired,
+    tags: PropTypes.arrayOf(PropTypes.any).isRequired,
+    handleDeleteTaskTag: PropTypes.func.isRequired,
+    handleAddTaskTag: PropTypes.func.isRequired,
+    handleCreateTask: PropTypes.func.isRequired,
     getTopics: PropTypes.func.isRequired,
-    topics: PropTypes.arrayOf.isRequired,
+    topics: PropTypes.arrayOf(PropTypes.any).isRequired,
     teacher: PropTypes.string.isRequired,
-    sendAssignTask: PropTypes.func.isRequired,
+    type: PropTypes.string.isRequired,
+    receiver: PropTypes.string.isRequired,
   };
 
   state = {
     nameTest: '',
-    countQuestionsTest: -1,
-    hoursLeadTimeTest: 0,
-    minutesLeadTimeTest: 0,
-    secondsLeadTimeTest: 0,
-    hoursTimeOpenTest: 0,
-    minutesTimeOpenTest: 0,
-    secondsTimeOpenTest: 0,
-    hoursPassTimeTest: 0,
-    minutesPassTimeTest: 0,
-    secondsPassTimeTest: 0,
+    getStart: '',
+    getDeadline: '',
+    error: false,
+  };
+
+  onChangeData = (value, dateString) => {
+    this.setState(() => ({
+      getStart: dateString[0],
+      getDeadline: dateString[1],
+    }));
+  };
+
+  onOk = (value) => {
   };
 
   setField = (event) => {
@@ -88,200 +52,107 @@ class TaskProperties extends React.Component {
     });
   };
 
+  validateTest = (task) => {
+    if (task.nameTest !== '' && task.getStart !== ''
+      && task.getDeadline !== '' && task.topicsId.length) {
+      return true;
+    }
+    return false;
+  };
+
   render() {
     const {
-      handleAddTestTag, handleDeleteTestTag, tags, handleCreateTest, data,
-      addStudent, delStudent, getStudentsData, students, error, getGroups,
-      groups, getTopics, topics, teacher,
+      handleAddTaskTag, handleDeleteTaskTag, receiver, tags, handleCreateTask,
+      topics, getTopics, teacher, type,
     } = this.props;
-    const { form } = this.props;
     const {
-      nameTest, countQuestionsTest, hoursLeadTimeTest, minutesLeadTimeTest,
-      secondsLeadTimeTest, hoursTimeOpenTest, minutesTimeOpenTest,
-      secondsTimeOpenTest, hoursPassTimeTest, minutesPassTimeTest,
-      secondsPassTimeTest,
+      nameTest, getStart, getDeadline, error,
     } = this.state;
-
-    const { getFieldDecorator } = form;
-    const handleSubmit = (e) => {
-      const { sendAssignTask } = this.props;
-      e.preventDefault();
-      form.validateFieldsAndScroll((err) => {
-        const obj = {
-          name: nameTest,
-          countQuestions: countQuestionsTest,
-          leadTime: new Date(hoursLeadTimeTest, minutesLeadTimeTest, secondsLeadTimeTest),
-          timeOpen: new Date(hoursTimeOpenTest, minutesTimeOpenTest, secondsTimeOpenTest),
-          passTime: new Date(hoursPassTimeTest, minutesPassTimeTest, secondsPassTimeTest),
-          hashTags: tags,
-        };
-        console.log(obj, 12546);
-        if (!err) {
-          sendAssignTask({
-            name: nameTest,
-            countQuestions: countQuestionsTest,
-            leadTime: new Date(hoursLeadTimeTest, minutesLeadTimeTest, secondsLeadTimeTest),
-            timeOpen: new Date(hoursTimeOpenTest, minutesTimeOpenTest, secondsTimeOpenTest),
-            passTime: new Date(hoursPassTimeTest, minutesPassTimeTest, secondsPassTimeTest),
-          });
+    const handleSubmit = () => {
+      let tagsTask = [];
+      if (tags.length) {
+        const tagsArray = [];
+        tags.forEach((element) => {
+          tagsArray.push(element.id);
+        });
+        tagsTask = tagsArray;
+      } else {
+        tagsTask = tags;
+      }
+      const task = {
+        assignedBy: teacher,
+        title: nameTest,
+        start: new Date(getStart.toString()),
+        deadline: new Date(getDeadline.toString()),
+        topicsId: tagsTask,
+      };
+      if (this.validateTest(task)) {
+        switch (type) {
+          case 'STUDENT': {
+            task.email = receiver;
+            break;
+          }
+          case 'GROUPS': {
+            task.assignedTo = receiver;
+            this.setState(() => ({ error: false }));
+            handleCreateTask({ task }, '/assign-task-for-group');
+            break;
+          }
+          default: {
+            this.setState(() => ({ error: false }));
+          }
         }
-      });
+      } else {
+        this.setState(() => ({ error: true }));
+      }
     };
+    const errorInput = error ? <div className="error-input">Введите все данные!</div> : <div/>;
+
     return (
       <div className="test-properties-content">
         <div className="header">Назначение задачи</div>
-        <FormItem {...formItemLayout} label="" className="name-form-item">
-          {getFieldDecorator('Название', {
-            rules: [
-              {
-                required: true,
-                message: 'Пожалуйста, введите название задачи!',
-              },
-            ],
-          })(
-            <TextArea
-              name="nameTest"
-              className="input-task-name"
-              placeholder="Название задачи"
-              autosize
-              onBlur={this.setField}
-            />,
-          )
-          }
-        </FormItem>
-        <div className="tags-test-properties">
-          <TreeWithTags
-            tags={tags}
-            deleteTag={handleDeleteTestTag}
-            addTag={handleAddTestTag}
-            valid={handleCreateTest}
-            getTopics={getTopics}
-            topics={topics}
+        <div>Назначается: {receiver}</div>
+        <div className="name-form-item">
+          <TextArea
+            name="nameTest"
+            type="text"
+            className="input-task-name"
+            placeholder="Введите название теста"
+            autosize
+            onBlur={this.setField}
           />
-        </div>
-        <Form className="parent-form">
-          <div className="left-group-form-items">
-            <FormItem {...formItemLayout} label="Время сдачи" className="form-item">
-              {getFieldDecorator('timePassTask', {
-                rules: [
-                  {
-                    pattern: /^[0-5]\d/,
-                    message: 'Введите число!',
-                  },
-                  {
-                    required: true,
-                    message: 'Пожалуйста, введите время сдачи задачи!',
-                  },
-                  {
-                    max: 2,
-                    message: 'Вы можете ввести не более 2 символов',
-                  },
-                ],
-              })(
-                <div className="parent-group-input">
-                  <Input
-                    className="input-hour-lead-time"
-                    name="hoursTimeOpenTest"
-                    placeholder="00"
-                    onBlur={this.setField}
-                  />
-                  <Input
-                    className="text-between-input"
-                    placeholder=":"
-                    disabled
-                  />
-                  <Input
-                    className="input-min-lead-time"
-                    name="minutesTimeOpenTest"
-                    placeholder="00"
-                    onBlur={this.setField}
-                  />
-                  <Input
-                    className="text-between-input"
-                    placeholder=":"
-                    disabled
-                  />
-                  <Input
-                    className="input-second-lead-time"
-                    name="secondsTimeOpenTest"
-                    placeholder="00"
-                    onBlur={this.setField}
-                  />
-                </div>,
-              )}
-            </FormItem>
+          <div className="tags-test-properties">
+            <TreeWithTags
+              tags={tags}
+              deleteTag={handleDeleteTaskTag}
+              addTag={handleAddTaskTag}
+              valid={handleCreateTask}
+              topics={topics}
+              getTopics={getTopics}
+            />
           </div>
-          <div className="right-group-form-items">
-            <FormItem {...formItemLayout} label="Дата сдачи" className="form-item">
-              {getFieldDecorator('passDate', {
-                rules: [
-                  {
-                    pattern: /[0-9]/,
-                    message: 'Введите число!',
-                  },
-                  {
-                    required: true,
-                    message: 'Пожалуйста, введите дaту сдачи!',
-                  },
-                ],
-              })(
-                <div className="parent-group-input">
-                  <Input
-                    className="input-hour-lead-time"
-                    name="daysPassDateTest"
-                    placeholder="00"
-                    onBlur={this.setField}
-                  />
-                  <Input
-                    className="text-between-input"
-                    placeholder="."
-                    disabled
-                  />
-                  <Input
-                    className="input-min-lead-time"
-                    name="mothsPassDateTest"
-                    placeholder="00"
-                    onBlur={this.setField}
-                  />
-                  <Input
-                    className="text-between-input"
-                    placeholder="."
-                    disabled
-                  />
-                  <Input
-                    className="input-years-lead-time"
-                    name="yearsPassDateTest"
-                    placeholder="0000"
-                    onBlur={this.setField}
-                  />
-                </div>,
-              )}
-            </FormItem>
+          <div className="parent-form">
+            <div className="form-item">
+              <div>Выберите дату и время открытия и закрытия условия задачи:</div>
+              <div className="input-data">
+                <RangePicker
+                  showTime={{ format: 'HH:mm' }}
+                  format="YYYY-MM-DD HH:mm"
+                  placeholder={['Открытие теста', 'Закрытие теста']}
+                  onChange={this.onChangeData}
+                  onOk={this.onOk}
+                />
+              </div>
+            </div>
           </div>
-        </Form>
-        <div className="parent-student-list">
-          <StudentsAndGroupsList
-            students={data}
-            addStudent={addStudent}
-            getStudentsData={getStudentsData}
-            getGroupsData={getGroups}
-            error={error}
-            teacher={teacher}
-            groups={groups}
-          />
-          <CurrentGroupList
-            students={students}
-            delStudent={delStudent}
-          />
         </div>
-        <FormItem {...tailFormItemLayout} >
-          <Button
-            className="button-table-with-border button-assign"
-            type="primary"
-            onClick={handleSubmit}
-          >Назначить
-          </Button>
-        </FormItem>
+        {errorInput}
+        <Button
+          className="button-table-with-border button-assign"
+          type="primary"
+          onClick={handleSubmit}
+        >Назначить
+        </Button>
       </div>
     );
   }
@@ -297,33 +168,23 @@ function mapStateToProps(state) {
     groups: state.allGroups.groups,
     topics: state.taskInformation.topics,
     teacher: state.logInInformation.user.email,
+    receiver: state.taskInformation.receiver,
+    type: state.taskInformation.type,
   };
 }
 
 const mapDispatchToProps = dispatch => ({
-  handleAddTestTag: (tag) => {
-    dispatch(addTestTag(tag));
+  handleCreateTask: (task, url) => {
+    dispatch(createTask(task, url));
   },
-  handleDeleteTestTag: (tag) => {
-    dispatch(deleteTestTag(tag));
+  handleAddTaskTag: (tag) => {
+    dispatch(addTaskTag(tag));
   },
-  addStudent: (student) => {
-    dispatch(addStudentToList(student));
-  },
-  delStudent: (student) => {
-    dispatch(deleteStudentFromList(student));
-  },
-  getStudentsData: () => {
-    dispatch(fetchStudentListForTask());
-  },
-  getGroups: (userId) => {
-    dispatch(groupsListForTask(userId));
+  handleDeleteTaskTag: (tag) => {
+    dispatch(deleteTaskTag(tag));
   },
   getTopics: () => {
     dispatch(fetchTopics());
-  },
-  sendAssignTask: (data) => {
-    dispatch(postAssignTask(data));
   },
 });
 

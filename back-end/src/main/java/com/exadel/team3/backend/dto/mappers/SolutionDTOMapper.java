@@ -15,13 +15,15 @@ public class SolutionDTOMapper {
     SolutionService solutionService;
     @Autowired
     TaskService taskService;
+    @Autowired
+    TopicDTOMapper topicDTOMapper;
 
     public List<SolutionDTO> convertToDTO(List<Solution> solutions){
         List<SolutionDTO> solutionDTO = new ArrayList<>();
 
         for (Solution solution : solutions) {
             Task task = taskService.getItem(solution.getTaskId());
-            solutionDTO.add(new SolutionDTO(solution, task.getTitle(), TopicDTOMapper.transformInToList(task.getTopicIds())));
+            solutionDTO.add(new SolutionDTO(solution, task.getTitle(), topicDTOMapper.transformInToList(task.getTopicIds())));
         }
         return solutionDTO;
     }

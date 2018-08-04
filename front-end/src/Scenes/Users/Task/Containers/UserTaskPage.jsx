@@ -13,10 +13,14 @@ class UserTaskPage extends React.PureComponent {
     getTaskInformation: PropTypes.func.isRequired,
     taskInfo: PropTypes.arrayOf.isRequired,
     getAddSolution: PropTypes.func.isRequired,
+    response: PropTypes.string.isRequired,
   };
 
   render() {
-    const { uploadFiles, error, taskId, getTaskInformation, taskInfo, getAddSolution } = this.props;
+    const {
+      uploadFiles, error, taskId, getTaskInformation, taskInfo,
+      getAddSolution, response,
+    } = this.props;
     return (
       <div className="task">
         <UserTask
@@ -26,6 +30,7 @@ class UserTaskPage extends React.PureComponent {
           getTaskInformation={getTaskInformation}
           taskInfo={taskInfo}
           getAddSolution={getAddSolution}
+          response={response}
         />
       </div>
     );
@@ -38,6 +43,7 @@ function mapStateToProps(state, ownProps) {
     error: state.passTask.error,
     taskId: ownProps.match.params.taskId,
     taskInfo: state.passTask.taskInfo,
+    response: state.passTask.response,
   };
 }
 
