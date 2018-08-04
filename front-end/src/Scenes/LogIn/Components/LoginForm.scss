@@ -1,6 +1,7 @@
 .login-form {
   display: flex;
   align-self: center;
+  width: 310px;
   .login-form a {
     color: #04233d !important;
   }
@@ -8,6 +9,7 @@
   .form-item {
     width: auto;
     margin-bottom: 10px;
+    text-align: center;
   }
 
   .login-form-button {
@@ -17,12 +19,9 @@
   }
 
   .login {
-    float: left;
+    text-align: center;
   }
 
-  .login-forgot {
-    float: right;
-  }
   .error-input {
     text-align: center;
     color: red;

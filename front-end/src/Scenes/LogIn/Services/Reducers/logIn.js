@@ -16,8 +16,12 @@ function logIn(state = initialState, action) {
       };
     case RECEIVE_LOGINDATA:
       return { ...state, data: action.payload, error: false };
-    case GET_USER_DATA:
-      return { ...state, user: action.payload, error: false };
+    case GET_USER_DATA: {
+      if (action.payload.text !== 'Bad credentials') {
+        return { ...state, user: action.payload, error: false };
+      }
+      return { ...state, error: true };
+    }
     case ERROR_LOGINDATA:
       return { ...state, error: true };
     default:
