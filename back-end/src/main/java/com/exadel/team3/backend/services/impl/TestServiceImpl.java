@@ -288,22 +288,16 @@ public class TestServiceImpl
 
     @Override
     public List<TestItemDTO> getAnswersForManualCheck(@NonNull String assignedBy) {
-        return testRepository.findNeedingManualCheck(assignedBy,LocalDateTime.now())
-                .stream().flatMap(
-                    test -> test.getItems()
-                            .stream()
-                            .filter(item -> item.getStatus() == TestItemStatus.UNCHECKED)
-                            .map(
-                                    item ->
-                                    new TestItemDTO(
-                                            test.getId(),
-                                            item.getQuestionId(),
-                                            item.getAnswer(),
-                                            item.getStatus()
-                                    )
-                            )
+        return testRepository.findNeedingManualCheck(assignedBy).stream().map(
+                item -> new TestItemDTO(
+                                item.getId(),
+                                item.getQuestionId(),
+                                item.getAnswer(),
+                                item.getStatus(),
+                                item.getText()
                 )
-                .collect(Collectors.toList());
+        )
+        .collect(Collectors.toList());
     }
 
     private static boolean getTestIsSubmittable(Test test) {
