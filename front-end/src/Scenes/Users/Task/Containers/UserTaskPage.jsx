@@ -3,7 +3,10 @@ import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import './UserTaskPage.scss';
 import UserTask from '../Components/UserTask';
-import { postUploadFiles, fetchTaskInformation, postAddSolution } from '../Services/Actions/actions';
+import {
+  postUploadFiles, fetchTaskInformation,
+  postAddSolution, deleteTaskSolution,
+} from '../Services/Actions/actions';
 
 class UserTaskPage extends React.PureComponent {
   static propTypes = {
@@ -14,12 +17,13 @@ class UserTaskPage extends React.PureComponent {
     taskInfo: PropTypes.arrayOf.isRequired,
     getAddSolution: PropTypes.func.isRequired,
     response: PropTypes.string.isRequired,
+    deleteSolution: PropTypes.func.isRequired,
   };
 
   render() {
     const {
       uploadFiles, error, taskId, getTaskInformation, taskInfo,
-      getAddSolution, response,
+      getAddSolution, response, deleteSolution,
     } = this.props;
     return (
       <div className="task">
@@ -31,6 +35,7 @@ class UserTaskPage extends React.PureComponent {
           taskInfo={taskInfo}
           getAddSolution={getAddSolution}
           response={response}
+          deleteSolution={deleteSolution}
         />
       </div>
     );
@@ -56,6 +61,9 @@ const mapDispatchToProps = dispatch => ({
   },
   getAddSolution: (data, id) => {
     dispatch(postAddSolution(data, id));
+  },
+  deleteSolution: (id) => {
+    dispatch(deleteTaskSolution(id));
   },
 });
 

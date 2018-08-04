@@ -6,12 +6,12 @@ const initialState = {
   emptyList: true,
 };
 
-const myGroups = (state = initialState, action) => {
+const allGroups = (state = initialState, action) => {
   switch (action.type) {
-    case types.RECEIVE_GROUPSLIST:
-      return { ...state, groups: action.payload, emptyList: false };
+    case types.RECEIVE_ALL_GROUPS_LIST:
+      return { groups: action.payload, emptyList: false };
 
-    case types.ERROR_GROUPSLIST:
+    case types.ERROR_ALL_GROUPS_LIST:
       return {
         ...state,
         error: action.payload,
@@ -65,4 +65,4 @@ const myGroups = (state = initialState, action) => {
   }
 };
 
-export default myGroups;
+export default allGroups;

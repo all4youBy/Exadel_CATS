@@ -1,12 +1,12 @@
 import React from 'react';
 import './AllGroups.scss';
-import TableGroupsList from '../Components/TableGroupsList';
+import TableAllGroupsList from '../Components/TableAllGroupsList';
 
 class AllGroups extends React.PureComponent {
   render() {
     return (
       <div>
-        <TableGroupsList/>
+        <TableAllGroupsList/>
       </div>
     );
   }

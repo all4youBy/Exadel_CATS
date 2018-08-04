@@ -13,7 +13,7 @@ import PageHeader from '../../Components/GlobalHeader';
 import PageFooter from '../../Components/GlobalFooter';
 import AllTask from '../../Scenes/Teachers/Tasks/AllTask';
 import PagePassedTasks from '../../Scenes/Users/Tasks/PassedTasks';
-import AllGroups from '../../Scenes/Teachers/GroupsList/Groups';
+import MyGroups from '../../Scenes/Teachers/GroupsList/Groups';
 import Materials from '../../Scenes/Teachers/Materials';
 import RegistrationPage from '../../Scenes/Registration';
 import AccessRequestList from '../../Scenes/Admin/AccessRequestList';
@@ -29,6 +29,7 @@ import AddTaskPage from '../../Scenes/Teachers/Tasks/AddTask/Containers/AddTaskP
 import Loading from '../../Components/Loading';
 import PageAssignTask from '../../Scenes/Teachers/Tasks/AssignTask/Containers/PageAssignTask';
 import TrainingTestPage from '../../Scenes/Users/TestList/TrainingTest/Containers/TrainingTestPage';
+import AllGroups from '../../Scenes/Teachers/GroupsList/AllGroups/Containers/AllGroups';
 
 class Main extends React.Component {
   static propTypes = {
@@ -43,9 +44,9 @@ class Main extends React.Component {
         component: PageGroupStudentsList,
       },
       {
-        key: 'allgroups',
-        url: '/allgroups',
-        component: AllGroups,
+        key: 'mygroups',
+        url: '/mygroups',
+        component: MyGroups,
       },
       {
         key: 'alltasks',
@@ -97,6 +98,11 @@ class Main extends React.Component {
         key: '/assigntask/:groupName',
         url: '/assigntask/:groupName',
         component: PageAssignTask,
+      },
+      {
+        key: '/allgroups',
+        url: '/allgroups',
+        component: AllGroups,
       },
     ];
   }

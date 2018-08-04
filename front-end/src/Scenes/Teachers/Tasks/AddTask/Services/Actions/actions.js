@@ -28,9 +28,9 @@ export function fetchTopics() {
 }
 export function fetchAddTask(data) {
   return API.post('task/add-task', data, ['add_task', () => {
-    message.success('Вопрос успешно добавлен');
+    message.success('Задача успешно добавлена');
     history.push('/alltasks');
   }, () => {
-    message.error('Не удалось добавить вопрос');
+    message.error('Не удалось добавить задачу');
   }]);
 }
