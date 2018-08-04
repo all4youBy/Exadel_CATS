@@ -16,6 +16,10 @@ class InputOutputSet extends React.PureComponent {
     setTestSets: PropTypes.func.isRequired,
   };
 
+  state = {
+    arraySets: [],
+  };
+
   setField = (event) => {
     const { name } = event.target;
     const { id } = event.target.closest('.set-container');
@@ -55,13 +59,22 @@ class InputOutputSet extends React.PureComponent {
       testSets[id] = {};
     }
     testSets[id].difficultyLevel = +value;
-    console.log(testSets[id].difficultyLevel, 805);
     setTestSets(testSets);
+  };
+
+  deleteSet = (id) => {
+    const { arraySets } = this.state;
+    arraySets.splice(id, 1);
+    this.setState(({
+      [arraySets]: arraySets,
+    }));
   };
 
   render() {
     const options = [];
     const { testSet, addElem } = this.props;
+    const { arraySets } = this.state;
+    console.log(arraySets);
     for (let index = 0; index <= 10; index += 1) {
       options.push(<Option value={index}>{index}</Option>);
     }
@@ -92,9 +105,19 @@ class InputOutputSet extends React.PureComponent {
           autosize
           onBlur={this.setField}
         />
+        <Button
+          onClick={this.deleteSet.bind(this, i)}
+          shape="circle"
+          icon="close"
+          className="button-table"
+          size="small"
+        />
       </div>
     ));
 
+    // this.setState(({
+    //   [arraySets]: elem,
+    // }));
     return (
       <div className="in-out-container">
         {elem}
