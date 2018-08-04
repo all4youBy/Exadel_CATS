@@ -12,7 +12,6 @@ import java.util.List;
 @AllArgsConstructor
 public class TaskForTeachersDTO {
     @NonNull
-    @JsonProperty("value")
     private ObjectId id;
 
     @NonNull

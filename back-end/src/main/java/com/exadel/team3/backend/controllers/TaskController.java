@@ -60,12 +60,6 @@ public class TaskController {
         return taskService.getItem(new ObjectId(taskId));
     }
 
-    @DeleteMapping("/delete-task")
-    @PreAuthorize("hasRole('ADMIN')")
-    public void deleteTask(@RequestBody Task task){
-        taskService.deleteItem(task);
-    }
-
     @DeleteMapping("/delete-solution/{id}")
     @PreAuthorize("hasAnyRole('ADMIN','STUDENT')")
     public ResponseEntity<?> deleteSolution(@PathVariable(value = "id") String id){
