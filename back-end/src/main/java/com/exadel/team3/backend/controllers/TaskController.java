@@ -39,6 +39,8 @@ public class TaskController {
     @Autowired
     TaskDTOMapper taskDTOMapper;
     @Autowired
+    TopicDTOMapper topicDTOMapper;
+    @Autowired
     ModelMapper mapper;
 
     @PostMapping("/add-task")
@@ -62,6 +64,14 @@ public class TaskController {
     @PreAuthorize("hasRole('ADMIN')")
     public void deleteTask(@RequestBody Task task){
         taskService.deleteItem(task);
+    }
+
+    @DeleteMapping("/delete-solution/{id}")
+    @PreAuthorize("hasAnyRole('ADMIN','STUDENT')")
+    public ResponseEntity<?> deleteSolution(@PathVariable(value = "id") String id){
+        Solution solution = solutionService.getItem(new ObjectId(id));
+        solutionService.updateItem(solutionService.deleteFiles(solution));
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
     @PostMapping("/add-solution/{id}")
@@ -139,7 +149,7 @@ public class TaskController {
                 .findFirst().get();
         Task task = taskService.getItem(new ObjectId(taskId));
 
-        return new TaskDTO(solution, task.getTitle(), task.getText(), TopicDTOMapper.transformInToList(task.getTopicIds()));
+        return new TaskDTO(solution, task.getTitle(), task.getText(), topicDTOMapper.transformInToList(task.getTopicIds()));
     }
 
     @PutMapping("/add-testing-set/{taskId}")

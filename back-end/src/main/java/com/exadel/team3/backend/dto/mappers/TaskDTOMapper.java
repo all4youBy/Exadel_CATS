@@ -20,13 +20,15 @@ public class TaskDTOMapper {
     TaskService taskService;
     @Autowired
     UserService userService;
+    @Autowired
+    TopicDTOMapper topicDTOMapper;
 
     public List<TaskForTeachersDTO> convertToTaskForTeachersDTO(List<Task> tasks){
         List<TaskForTeachersDTO> tasksForUserDTO = new ArrayList<>();
         for(Task task : tasks) {
             User user = userService.getItem(task.getAuthor());
             TaskForTeachersDTO taskForTeachersDTO = new TaskForTeachersDTO(task.getId(), task.getTitle(),
-                    TopicDTOMapper.transformInToList(task.getTopicIds()),
+                    topicDTOMapper.transformInToList(task.getTopicIds()),
                     task.getAuthor(), user.getFirstName(), user.getLastName());
             tasksForUserDTO.add(taskForTeachersDTO);
         }
