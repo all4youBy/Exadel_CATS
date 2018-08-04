@@ -119,6 +119,17 @@ public class SolutionServiceImpl
     }
 
     @Override
+    public Solution deleteFiles(@NonNull Solution solution) throws ServiceException {
+        if (solution.getFiles() != null) {
+            solution.getFiles().forEach(
+                    filename -> fileStorage.delete(filename, solution.getId())
+            );
+        }
+        solution.setFiles(null);
+        return solutionRepository.save(solution);
+    }
+
+    @Override
     public InputStream getFile(@NonNull Solution solution,
                                @NonNull String filename) throws ServiceException{
         try {

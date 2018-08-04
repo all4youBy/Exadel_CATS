@@ -28,7 +28,7 @@ public interface SolutionService extends AssignableService<Solution> {
 
     Solution storeFile(Solution solution, MultipartFile file) throws ServiceException;
     Solution storeFile(Solution solution, InputStream stream, String filename) throws ServiceException;
-
+    Solution deleteFiles(Solution solution) throws ServiceException;
     InputStream getFile(Solution solution, String filename) throws ServiceException;
 
     Solution submit(Solution solution) throws ServiceException;
