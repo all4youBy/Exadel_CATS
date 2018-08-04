@@ -4,14 +4,13 @@ import java.util.List;
 
 import com.exadel.team3.backend.dao.projections.RatingProjection;
 import org.bson.Document;
+import org.bson.types.ObjectId;
 import org.springframework.data.domain.Sort;
-import org.springframework.data.mongodb.core.aggregation.LookupOperation;
+import org.springframework.data.mongodb.core.aggregation.*;
+import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Repository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoTemplate;
-import org.springframework.data.mongodb.core.aggregation.Aggregation;
-import org.springframework.data.mongodb.core.aggregation.AggregationOperation;
-import org.springframework.data.mongodb.core.aggregation.TypedAggregation;
 import org.springframework.data.mongodb.core.query.Criteria;
 
 import com.exadel.team3.backend.dao.AssignableRepositoryAggregation;
@@ -26,20 +25,46 @@ public abstract class AssignableRepositoryImpl<T extends Assignable>
 
     protected abstract Class<T> getEntityClass();
 
-    private List<RatingProjection> collectRating(int limit, boolean byAverage) {
-        AggregationOperation groupingOperation;
-        if (byAverage) {
-            groupingOperation = Aggregation
-                    .group("assignedTo")
-                    .avg("mark")
-                    .as("rating");
-        } else {
-            groupingOperation = Aggregation
-                    .group("assignedTo")
-                    .sum("mark")
-                    .as("rating");
-        }
+    @Override
+    public List<RatingProjection> collectRatingBySum(int limit) {
+        return collectRating(
+                getMatchOperation(),
+                getBySumGroupingOperation(),
+                limit
+        );
+    }
 
+    @Override
+    public List<RatingProjection> collectRatingByAverage(int limit) {
+        return collectRating(
+                getMatchOperation(),
+                getByAverageGroupingOperation(),
+                limit
+        );
+    }
+
+
+    private MatchOperation getMatchOperation() {
+        return Aggregation.match(Criteria.where("mark").ne(null));
+    }
+    GroupOperation getBySumGroupingOperation() {
+        return Aggregation
+                .group("assignedTo")
+                .sum("mark")
+                .as("rating");
+    }
+    GroupOperation getByAverageGroupingOperation() {
+        return Aggregation
+                .group("assignedTo")
+                .avg("mark")
+                .as("rating");
+    }
+
+    List<RatingProjection> collectRating(
+            @NonNull MatchOperation matchOperation,
+            @NonNull GroupOperation groupingOperation,
+            int limit
+    ) {
         AggregationOperation lookupOperation =
                 LookupOperation.newLookup()
                         .from("users")
@@ -53,7 +78,7 @@ public abstract class AssignableRepositoryImpl<T extends Assignable>
 
         return mongoTemplate.aggregate(
                 TypedAggregation.newAggregation(
-                        Aggregation.match(Criteria.where("mark").ne(null)),
+                        matchOperation,
                         groupingOperation,
                         lookupOperation,
                         projectionOperation,
@@ -65,13 +90,4 @@ public abstract class AssignableRepositoryImpl<T extends Assignable>
         ).getMappedResults();
     }
 
-    @Override
-    public List<RatingProjection> collectRatingBySum(int limit) {
-        return collectRating(limit, false);
-    }
-
-    @Override
-    public List<RatingProjection> collectRatingByAverage(int limit) {
-        return collectRating(limit, true);
-    }
 }

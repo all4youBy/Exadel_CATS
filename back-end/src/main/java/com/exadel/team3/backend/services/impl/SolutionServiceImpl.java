@@ -10,6 +10,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import com.exadel.team3.backend.dao.*;
+import com.exadel.team3.backend.dto.UserRatingDTO;
 import com.exadel.team3.backend.services.ServiceException;
 import com.exadel.team3.backend.services.SolutionChecker;
 import org.bson.types.ObjectId;
@@ -136,6 +137,28 @@ public class SolutionServiceImpl
         }
         solution.setMark(solutionChecker.check(solution));
         return updateItem(solution);
+    }
+
+    @Override
+    public List<UserRatingDTO> getTopRatingBySum(@NonNull ObjectId taskId) {
+        return getTopRating(
+                () -> ((SolutionRepositoryAggregation)solutionRepository)
+                        .collectRatingBySum(
+                                taskId,
+                                getTopRatingListSize()
+                        )
+        );
+    }
+
+    @Override
+    public List<UserRatingDTO> getTopRatingByAverage(@NonNull ObjectId taskId) {
+        return getTopRating(
+                () -> ((SolutionRepositoryAggregation)solutionRepository)
+                        .collectRatingByAverage(
+                                taskId,
+                                getTopRatingListSize()
+                        )
+        );
     }
 
     private static boolean isValidFileName(@NonNull String fileName) {

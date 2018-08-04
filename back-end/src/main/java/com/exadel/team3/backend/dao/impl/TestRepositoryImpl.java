@@ -3,7 +3,7 @@ package com.exadel.team3.backend.dao.impl;
 import java.time.LocalDateTime;
 import java.util.List;
 
-import com.exadel.team3.backend.dao.projections.TestItemProjection;
+import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.aggregation.Aggregation;
@@ -12,6 +12,8 @@ import org.springframework.data.mongodb.core.aggregation.TypedAggregation;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.stereotype.Repository;
 
+import com.exadel.team3.backend.dao.projections.RatingProjection;
+import com.exadel.team3.backend.dao.projections.TestItemProjection;
 import com.exadel.team3.backend.dao.AssignableRepositoryAggregation;
 import com.exadel.team3.backend.entities.Test;
 import com.exadel.team3.backend.dao.TestRepositoryAggregation;
@@ -25,7 +27,7 @@ public class TestRepositoryImpl
     private MongoTemplate mongoTemplate;
 
     @Override
-    protected Class getEntityClass() {
+    protected Class<Test> getEntityClass() {
         return Test.class;
     }
 
@@ -49,5 +51,16 @@ public class TestRepositoryImpl
                 "tests",
                 TestItemProjection.class
         ).getMappedResults();
+    }
+
+
+    @Override
+    public List<RatingProjection> collectRatingBySum(List<ObjectId> topicIds, int limit) {
+        return null;
+    }
+
+    @Override
+    public List<RatingProjection> collectRatingByAverage(List<ObjectId> topicIds, int limit) {
+        return null;
     }
 }

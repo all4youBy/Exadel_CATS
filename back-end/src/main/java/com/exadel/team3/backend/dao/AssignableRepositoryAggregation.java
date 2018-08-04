@@ -1,8 +1,8 @@
 package com.exadel.team3.backend.dao;
 
-import com.exadel.team3.backend.dao.projections.RatingProjection;
-
 import java.util.List;
+
+import com.exadel.team3.backend.dao.projections.RatingProjection;
 
 public interface AssignableRepositoryAggregation {
     List<RatingProjection> collectRatingBySum(int limit);

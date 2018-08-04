@@ -1,5 +1,6 @@
 package com.exadel.team3.backend.services;
 
+import com.exadel.team3.backend.dto.UserRatingDTO;
 import com.exadel.team3.backend.entities.Solution;
 import org.bson.types.ObjectId;
 
@@ -31,4 +32,8 @@ public interface SolutionService extends AssignableService<Solution> {
     InputStream getFile(Solution solution, String filename) throws ServiceException;
 
     Solution submit(Solution solution) throws ServiceException;
+
+    List<UserRatingDTO> getTopRatingBySum(ObjectId taskId);
+    List<UserRatingDTO> getTopRatingByAverage(ObjectId taskId);
+
 }

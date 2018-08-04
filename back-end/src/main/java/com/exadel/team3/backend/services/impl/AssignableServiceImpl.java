@@ -1,11 +1,10 @@
 package com.exadel.team3.backend.services.impl;
 
 import java.util.*;
-import java.util.function.Function;
+import java.util.function.Supplier;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import java.time.LocalDateTime;
-import java.util.stream.StreamSupport;
 
 import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,12 +24,13 @@ public abstract class AssignableServiceImpl<T extends Assignable>
         implements AssignableService<T> {
     @Autowired
     private UserRepository userRepository;
+    @Value("${cats.statistics.topRatingListSize:10}")
+    private int topRatingListSize;
 
     @Override
     protected abstract AssignableRepository<T> getRepository();
 
-    @Value("${cats.statistics.topRatingListSize:10}")
-    private int topRatingListSize;
+    protected int getTopRatingListSize() {return topRatingListSize;}
 
     @Override
     public List<T> getAssignedItems(String assignedTo, String assignedBy) {
@@ -118,19 +118,23 @@ public abstract class AssignableServiceImpl<T extends Assignable>
     @Override
     public List<UserRatingDTO> getTopRatingBySum() {
         return getTopRating(
-                ((AssignableRepositoryAggregation)getRepository())::collectRatingBySum
+                () ->
+                ((AssignableRepositoryAggregation)getRepository())
+                        .collectRatingBySum(topRatingListSize)
         );
     }
 
     @Override
     public List<UserRatingDTO> getTopRatingByAverage() {
         return getTopRating(
-                ((AssignableRepositoryAggregation)getRepository())::collectRatingByAverage
+                () ->
+                ((AssignableRepositoryAggregation)getRepository())
+                        .collectRatingByAverage(topRatingListSize)
         );
     }
 
-    private List<UserRatingDTO> getTopRating(Function<Integer, List<RatingProjection>> collectorFunc) {
-        return collectorFunc.apply(topRatingListSize)
+    protected List<UserRatingDTO> getTopRating(Supplier<List<RatingProjection>> collector) {
+        return collector.get()
                 .stream()
                 .map(
                     projection ->
