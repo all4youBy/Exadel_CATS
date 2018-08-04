@@ -138,6 +138,16 @@ public class SolutionServiceImpl
         return updateItem(solution);
     }
 
+    @Override
+    public Solution deleteFiles(@NonNull Solution solution) throws ServiceException {
+        List<String> fileNames = solution.getFiles();
+        for (String fileName : fileNames) {
+            fileStorage.delete(fileName, solution.getId());
+        }
+        solution.setFiles(new ArrayList<>());
+        return solution;
+    }
+
     private static boolean isValidFileName(@NonNull String fileName) {
          return fileName.lastIndexOf(".") > 0
                  && fileName.substring(fileName.lastIndexOf(".")+1).equalsIgnoreCase("java");
