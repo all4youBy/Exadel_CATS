@@ -28,6 +28,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
+import java.util.Arrays;
 import java.util.List;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
@@ -175,7 +176,9 @@ public class TestController {
     }
 
     @PutMapping(value = "/submit-manual",produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<?> submitManualAnswerCheck(TestItemDTO checkItemDto) {
+    public ResponseEntity<?> submitManualAnswerCheck(@RequestBody TestItemDTO checkItemDto) {
+
+        Arrays.asList(checkItemDto.getTestId(),checkItemDto.getQuestionId()).forEach(System.out::println);
         testService.submitManualAnswerCheck(checkItemDto);
         return ResponseEntity.ok(HttpStatus.OK);
     }
