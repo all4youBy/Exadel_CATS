@@ -40,17 +40,11 @@ public class FileStorageImpl implements FileStorage {
 
     @Override
     public ObjectId save(@NonNull InputStream stream, @NonNull String filename, ObjectId associatedId) {
-        MongoCursor<GridFSFile> previouslyStored;
         GridFSUploadOptions uploadOptions = new GridFSUploadOptions();
         if (associatedId != null) {
             uploadOptions.metadata(new Document("assocId", new BsonObjectId(associatedId)));
-            previouslyStored = getGridFSFileIterable(filename, associatedId).iterator();
-        } else {
-            previouslyStored = getGridFSFileIterable(filename).iterator();
         }
-        while (previouslyStored.hasNext()) {
-            getGridFsBucket().delete(previouslyStored.next().getObjectId());
-        }
+        delete(filename, associatedId);
         return getGridFsBucket().uploadFromStream(filename, stream, uploadOptions);
     }
 
@@ -72,6 +66,24 @@ public class FileStorageImpl implements FileStorage {
         GridFSFile result = getGridFSFileIterable(filename).first();
         if (result == null) throw new FileNotFoundException("File \"" + filename + "\" not found");
         return read(result.getObjectId());
+    }
+
+    @Override
+    public void delete(@NonNull String filename) {
+        delete (filename, null);
+    }
+
+    @Override
+    public void delete(@NonNull String filename, ObjectId associatedId) {
+        MongoCursor<GridFSFile> previouslyStored;
+        if (associatedId != null) {
+            previouslyStored = getGridFSFileIterable(filename, associatedId).iterator();
+        } else {
+            previouslyStored = getGridFSFileIterable(filename).iterator();
+        }
+        while (previouslyStored.hasNext()) {
+            getGridFsBucket().delete(previouslyStored.next().getObjectId());
+        }
     }
 
     @Override
