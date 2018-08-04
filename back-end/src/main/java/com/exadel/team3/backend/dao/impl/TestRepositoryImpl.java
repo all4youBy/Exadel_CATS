@@ -3,6 +3,7 @@ package com.exadel.team3.backend.dao.impl;
 import java.time.LocalDateTime;
 import java.util.List;
 
+import com.exadel.team3.backend.dao.projections.TestItemProjection;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.aggregation.Aggregation;

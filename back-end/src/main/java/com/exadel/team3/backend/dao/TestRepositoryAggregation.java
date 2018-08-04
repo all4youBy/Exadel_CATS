@@ -1,6 +1,6 @@
 package com.exadel.team3.backend.dao;
 
-import com.exadel.team3.backend.dao.impl.TestItemProjection;
+import com.exadel.team3.backend.dao.projections.TestItemProjection;
 import java.util.List;
 
 public interface TestRepositoryAggregation {
