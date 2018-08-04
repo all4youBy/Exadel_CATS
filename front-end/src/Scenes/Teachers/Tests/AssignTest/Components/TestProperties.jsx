@@ -85,8 +85,8 @@ class TestProperties extends React.Component {
         assignedBy: teacher,
         title: nameTest,
         questionsCount: +countQuestionsTest,
-        start: new Date(getStart.toString()),
-        deadline: new Date(getDeadline.toString()),
+        start: new Date(getStart),
+        deadline: new Date(getDeadline),
         topicsId: tagsTest,
       };
       if (this.validateTest(test)) {
@@ -98,7 +98,7 @@ class TestProperties extends React.Component {
           case 'GROUPS': {
             test.group = receiver;
             this.setState(() => ({ error: false }));
-            handleCreateTest({ test }, '/for-group');
+            handleCreateTest(test, '/for-group');
             break;
           }
           default: {

@@ -12,6 +12,7 @@ class GlobalHeader extends React.PureComponent {
   static propTypes = {
     history: PropTypes.string.isRequired,
     userType: PropTypes.string.isRequired,
+    user: PropTypes.arrayOf().isRequired,
   };
 
   onClickLogOut() {
@@ -21,15 +22,19 @@ class GlobalHeader extends React.PureComponent {
   }
 
   render() {
-    const { userType } = this.props;
+    const { userType, user } = this.props;
+    console.log(user);
     const logOut = !(userType === 'GUEST') ? (
-      <Link
-        to="/login"
-        onClick={this.onClickLogOut}
-        className="button-exit"
-        type="dashed"
-      >Выйти
-      </Link>
+      <div className="username">
+        <p className="text-logo">{user.firstName} {user.lastName} |</p>
+        <Link
+          to="/login"
+          onClick={this.onClickLogOut}
+          className="button-exit"
+          type="dashed"
+        > Выйти
+        </Link>
+      </div>
     ) : <div/>;
 
     return (
