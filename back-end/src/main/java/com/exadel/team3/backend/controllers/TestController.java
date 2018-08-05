@@ -104,11 +104,12 @@ public class TestController {
         if(!validateUser(teacher,group))
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(new JSONAnswerDTO(String.format("No rights to set test for %s.",group)));
 
-        List<Test> testsForGroup = testService.generateTestsForGroup(request.getGroup(),
+        List<Test> testsForGroup = testService.generateTestsForGroup(
+                                                      request.getGroup(),
                                                       request.getTitle(),
                                                       request.getStart(),
                                                       request.getDeadline(),
-                                                      request.getTopicsId(),
+                                                      request.getTopicIds(),
                                                       request.getQuestionsCount(),
                                                       request.getAssignedBy());
 
