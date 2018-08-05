@@ -15,7 +15,7 @@ import {
   getMyGroups,
   listGroup,
   nameGroup,
-  renameGroup,
+  renameGroup, renameNameGroup,
 } from '../Services/Actions/actions';
 import Loading from '../../../../../Components/Loading';
 import { receiveTest } from '../../../Tests/AssignTest/Services/Actions/actions';
@@ -71,7 +71,6 @@ class TableGroupsList extends React.PureComponent {
         if (text === groupEdit) {
           return (
             <div><Input
-              autosize
               maxLength={40}
               name="newName"
               type="text"
@@ -188,6 +187,7 @@ const mapDispatchToProps = dispatch => ({
   },
   onEdit: (last, next, id) => {
     dispatch(renameGroup({ oldGroup: last, newGroup: next, usersId: [id] }));
+    dispatch(renameNameGroup({ lastName: last, nextName: next }));
   },
 });
 

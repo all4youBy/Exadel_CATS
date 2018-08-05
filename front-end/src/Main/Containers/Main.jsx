@@ -163,6 +163,7 @@ class Main extends React.Component {
             </div>
             <div className="switch-div">
               <Switch>
+                <Route exact path="/groups/:groupName" component={PageGroupStudentsList}/>
                 <Route exact path="/accessrequestlist" component={AccessRequestList}/>
                 <Route exact path="/addquestion" component={AddQuestion}/>
                 {this.renderCommonRoutes().map(item => (
