@@ -3,8 +3,6 @@ package com.exadel.team3.backend.dao.impl;
 import java.util.List;
 
 import com.exadel.team3.backend.dao.projections.RatingProjection;
-import org.bson.Document;
-import org.bson.types.ObjectId;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.mongodb.core.aggregation.*;
 import org.springframework.lang.NonNull;
@@ -65,29 +63,24 @@ public abstract class AssignableRepositoryImpl<T extends Assignable>
             @NonNull GroupOperation groupingOperation,
             int limit
     ) {
-        AggregationOperation lookupOperation =
-                LookupOperation.newLookup()
-                        .from("users")
-                        .localField("_id")
-                        .foreignField("_id")
-                        .as("user");
-
-
-        AggregationOperation projectionOperation =
-                Aggregation.project("user._id", "user.firstName", "user.lastName", "rating");
-
-        return mongoTemplate.aggregate(
+        AggregationResults<RatingProjection> results =
+            mongoTemplate.aggregate(
                 TypedAggregation.newAggregation(
                         matchOperation,
                         groupingOperation,
-                        lookupOperation,
-                        projectionOperation,
+                        LookupOperation.newLookup()
+                                .from("users")
+                                .localField("_id")
+                                .foreignField("_id")
+                                .as("user"),
+                        Aggregation.project("user._id", "user.firstName", "user.lastName", "rating"),
                         Aggregation.sort(Sort.Direction.DESC, "rating"),
                         Aggregation.limit(limit > 0 ? limit : 1)
                 ),
                 getEntityClass().getSimpleName().toLowerCase() + "s",
                 RatingProjection.class
-        ).getMappedResults();
+            );
+        return results.getMappedResults();
     }
 
 }

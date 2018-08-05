@@ -6,6 +6,8 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import java.time.LocalDateTime;
 
+import com.exadel.team3.backend.dao.projections.TopicProjection;
+import com.exadel.team3.backend.dto.TestPostDTO;
 import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -19,6 +21,9 @@ import com.exadel.team3.backend.services.AssignableService;
 import com.exadel.team3.backend.dao.AssignableRepositoryAggregation;
 import com.exadel.team3.backend.dao.projections.RatingProjection;
 import com.exadel.team3.backend.dto.UserRatingDTO;
+import org.springframework.util.CollectionUtils;
+import org.springframework.util.StringUtils;
+
 public abstract class AssignableServiceImpl<T extends Assignable>
         extends CrudServiceImpl<T, ObjectId>
         implements AssignableService<T> {
@@ -33,16 +38,35 @@ public abstract class AssignableServiceImpl<T extends Assignable>
     protected int getTopRatingListSize() {return topRatingListSize;}
 
     @Override
-    public List<T> getAssignedItems(String assignedTo, String assignedBy) {
+    public List<T> getAssignedItems(@NonNull String assignedTo, @NonNull String assignedBy) {
         return getRepository().findByAssignedToAndAssignedByOrderByStartDesc(assignedTo, assignedBy);
     }
 
     @Override
-    public List<T> getAssignedItems(String assignedTo) {
+    public List<TestPostDTO> getAssignedItemsWithTopics(@NonNull String assignedTo) {
+        return ((AssignableRepositoryAggregation)getRepository()).findByAssignedToWithTopics(assignedTo)
+                .stream()
+                .map(
+                        projection ->
+                        new TestPostDTO(
+                                projection.getId().toString(),
+                                projection.getText(),
+                                projection.getStart(),
+                                projection.getDeadline(),
+                                !CollectionUtils.isEmpty(projection.getTopics())
+                                    ? projection.getTopics().stream().map(TopicProjection::getText).collect(Collectors.toList())
+                                    : null
+                        )
+                )
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<T> getAssignedItems(@NonNull String assignedTo) {
         return getRepository().findByAssignedToOrderByStartDesc(assignedTo);
     }
     @Override
-    public List<T> getAssignedItemsFinished(String assignedTo) {
+    public List<T> getAssignedItemsFinished(@NonNull String assignedTo) {
         return getRepository().findByAssignedToAndDeadlineBeforeOrderByDeadlineDesc(
                 assignedTo,
                 LocalDateTime.now()
@@ -50,7 +74,7 @@ public abstract class AssignableServiceImpl<T extends Assignable>
     }
 
     @Override
-    public List<T> getAssignedItemsUnfinished(String assignedTo) {
+    public List<T> getAssignedItemsUnfinished(@NonNull String assignedTo) {
         return getRepository().findByAssignedToAndDeadlineAfterOrderByStartDesc(
                 assignedTo,
                 LocalDateTime.now()
@@ -136,6 +160,10 @@ public abstract class AssignableServiceImpl<T extends Assignable>
     protected List<UserRatingDTO> getTopRating(Supplier<List<RatingProjection>> collector) {
         return collector.get()
                 .stream()
+                .filter(
+                        projection ->
+                        !StringUtils.isEmpty(projection.getFirstName()) && !StringUtils.isEmpty(projection.getLastName())
+                )
                 .map(
                     projection ->
                     new UserRatingDTO(
