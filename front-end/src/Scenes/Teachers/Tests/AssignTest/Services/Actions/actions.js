@@ -7,7 +7,7 @@ export function createTest(data, url) {
   return API.post(`tests${url}`, data, ['create_test', () => {
     message.success('Тест успешно назначен');
     if (url !== '') {
-      history.push('/allgroups');
+      history.push('/mygroups');
     }
   }, () => {
     message.error('Не удалось назначить тест');

@@ -111,7 +111,7 @@ class UserTask extends React.Component {
       deadline = formatDate(date);
     }
     let deleteFiles = <div/>;
-    if (taskInfo.solution && taskInfo.solution.files.length) {
+    if (taskInfo.solution && taskInfo.solution.files && taskInfo.solution.files.length) {
       const fileNames = taskInfo.solution.files.map(element => (<div>{element}</div>));
       deleteFiles = (
         <div>

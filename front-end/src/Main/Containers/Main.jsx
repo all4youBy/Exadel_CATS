@@ -27,9 +27,10 @@ import PageCheckTest from '../../Scenes/Teachers/Tests/CheckTest/Containers/Page
 import AddQuestion from '../../Scenes/Teachers/Tests/AddQuestion/Containers/AddQuestion';
 import AddTaskPage from '../../Scenes/Teachers/Tasks/AddTask/Containers/AddTaskPage';
 import Loading from '../../Components/Loading';
-import PageAssignTask from '../../Scenes/Teachers/Tasks/AssignTask/Containers/PageAssignTask';
+// import PageAssignTask from '../../Scenes/Teachers/Tasks/AssignTask/Containers/PageAssignTask';
 import TrainingTestPage from '../../Scenes/Users/TestList/TrainingTest/Containers/TrainingTestPage';
 import AllGroups from '../../Scenes/Teachers/GroupsList/AllGroups/Containers/AllGroups';
+import TaskProperties from '../../Scenes/Teachers/Tasks/AssignTask/Components/TaskProperties';
 
 class Main extends React.Component {
   static propTypes = {
@@ -98,12 +99,7 @@ class Main extends React.Component {
       {
         key: '/assigntask/:groupName',
         url: '/assigntask/:groupName',
-        component: PageAssignTask,
-      },
-      {
-        key: '/allgroups',
-        url: '/allgroups',
-        component: AllGroups,
+        component: TaskProperties,
       },
     ];
   }
@@ -171,6 +167,7 @@ class Main extends React.Component {
               <Switch>
                 <Route exact path="/accessrequestlist" component={AccessRequestList}/>
                 <Route exact path="/addquestion" component={AddQuestion}/>
+                <Route exact path="/allgroups" component={AllGroups}/>
                 {this.renderCommonRoutes().map(item => (
                   <Route
                     key={item.key}
