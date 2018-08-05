@@ -1,30 +1,29 @@
 /* eslint-disable no-unused-vars,spaced-comment */
 import React from 'react';
-import { Form, Input, Button, DatePicker, TimePicker, InputNumber } from 'antd';
+import { Form, Input, Button, DatePicker, Select } from 'antd';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-import TreeWithTags from '../../../../../Components/TreeWithTags';
-
+import './TaskProperties.scss';
 import {
-  addTaskTag, createTask,
-  deleteTaskTag,
-  fetchTopics,
+  createTask, fetchTasksAssign,
 } from '../Services/Actions/actions';
+// import Loading from '../../../../../Components/Loading';
+
+const { Option } = Select;
+
 
 const { TextArea } = Input;
 const { RangePicker } = DatePicker;
 
 class TaskProperties extends React.Component {
   static propTypes = {
-    tags: PropTypes.arrayOf(PropTypes.any).isRequired,
-    handleDeleteTaskTag: PropTypes.func.isRequired,
-    handleAddTaskTag: PropTypes.func.isRequired,
     handleCreateTask: PropTypes.func.isRequired,
-    getTopics: PropTypes.func.isRequired,
-    topics: PropTypes.arrayOf(PropTypes.any).isRequired,
     teacher: PropTypes.string.isRequired,
     type: PropTypes.string.isRequired,
     receiver: PropTypes.string.isRequired,
+    tasks: PropTypes.arrayOf(PropTypes.objectOf).isRequired,
+    handleReceiveTasks: PropTypes.func.isRequired,
+    groupName: PropTypes.string.isRequired,
   };
 
   state = {
@@ -32,7 +31,13 @@ class TaskProperties extends React.Component {
     getStart: '',
     getDeadline: '',
     error: false,
+    taskInfo: {},
   };
+
+  componentDidMount() {
+    const { handleReceiveTasks } = this.props;
+    handleReceiveTasks();
+  }
 
   onChangeData = (value, dateString) => {
     this.setState(() => ({
@@ -44,6 +49,19 @@ class TaskProperties extends React.Component {
   onOk = (value) => {
   };
 
+  setSelectTask = (index) => {
+    const { tasks } = this.props;
+    const obj = {
+      taskId: tasks[index].id,
+      taskTopics: tasks[index].topics,
+      title: tasks[index].title,
+    };
+    console.log(obj, 7839);
+    this.setState({
+      taskInfo: obj,
+    });
+  };
+
   setField = (event) => {
     const { name } = event.target;
     const { value } = event.target;
@@ -53,8 +71,7 @@ class TaskProperties extends React.Component {
   };
 
   validateTest = (task) => {
-    if (task.nameTest !== '' && task.getStart !== ''
-      && task.getDeadline !== '' && task.topicsId.length) {
+    if (task.getStart !== '' && task.getDeadline !== '') {
       return true;
     }
     return false;
@@ -62,39 +79,31 @@ class TaskProperties extends React.Component {
 
   render() {
     const {
-      handleAddTaskTag, handleDeleteTaskTag, receiver, tags, handleCreateTask,
-      topics, getTopics, teacher, type,
+      receiver, handleCreateTask, teacher, type, tasks, groupName,
     } = this.props;
     const {
-      nameTest, getStart, getDeadline, error,
+      nameTest, getStart, getDeadline, error, taskInfo,
     } = this.state;
     const handleSubmit = () => {
-      let tagsTask = [];
-      if (tags.length) {
-        const tagsArray = [];
-        tags.forEach((element) => {
-          tagsArray.push(element.id);
-        });
-        tagsTask = tagsArray;
-      } else {
-        tagsTask = tags;
-      }
       const task = {
         assignedBy: teacher,
         title: nameTest,
         start: getStart,
         deadline: getDeadline,
-        topicsId: tagsTask,
+        topicsId: taskInfo.taskTopics,
       };
       if (this.validateTest(task)) {
         switch (type) {
           case 'STUDENT': {
-            task.email = receiver;
+            task.assignedTo = receiver;
             break;
           }
           case 'GROUPS': {
-            task.assignedTo = receiver;
+            task.assignedTo = groupName;
+            task.id = taskInfo.taskId;
+            task.title = taskInfo.title;
             this.setState(() => ({ error: false }));
+            console.log(task, 783);
             handleCreateTask(task, '/assign-task-for-group');
             break;
           }
@@ -106,34 +115,41 @@ class TaskProperties extends React.Component {
         this.setState(() => ({ error: true }));
       }
     };
+    const children = [];
+    if (tasks.length && !children.length) {
+      let task = null;
+      for (let i = 0; i < tasks.length; i += 1) {
+        task = tasks[i];
+        children.push(
+          <Option
+            key={i}
+            value={i}
+          >
+            {task.title} Автор: {task.firstName} {task.lastName}
+          </Option>,
+        );
+      }
+    }
     const errorInput = error ? <div className="error-input">Введите все данные!</div> : <div/>;
 
     return (
       <div className="test-properties-content">
         <div className="header">Назначение задачи</div>
-        <div>Назначается: {receiver}</div>
+        <div>Назначается: {groupName}</div>
         <div className="name-form-item">
-          <TextArea
-            name="nameTest"
-            type="text"
-            className="input-task-name"
-            placeholder="Введите название теста"
-            autosize
-            onBlur={this.setField}
-          />
-          <div className="tags-test-properties">
-            <TreeWithTags
-              tags={tags}
-              deleteTag={handleDeleteTaskTag}
-              addTag={handleAddTaskTag}
-              valid={handleCreateTask}
-              topics={topics}
-              getTopics={getTopics}
-            />
+          <div className="tasks-list-select">
+            <Select
+              showSearch="true"
+              style={{ width: '100%' }}
+              defaultValue="Выберите задачу"
+              onChange={this.setSelectTask}
+            >
+              {children}
+            </Select>
           </div>
           <div className="parent-form">
             <div className="form-item">
-              <div>Выберите дату и время открытия и закрытия условия задачи:</div>
+              <div>Выберите дату и время открытия и закрытия задачи:</div>
               <div className="input-data">
                 <RangePicker
                   showTime={{ format: 'HH:mm' }}
@@ -158,18 +174,16 @@ class TaskProperties extends React.Component {
   }
 }
 
-function mapStateToProps(state) {
+function mapStateToProps(state, ownProps) {
   return {
-    tags: state.taskInformation.tags,
     test: state,
-    students: state.taskInformation.students,
+    tasks: state.taskInformation.tasks,
     data: state.taskInformation.data,
     error: state.taskInformation.error,
-    groups: state.allGroups.groups,
-    topics: state.taskInformation.topics,
     teacher: state.logInInformation.user.email,
     receiver: state.taskInformation.receiver,
     type: state.taskInformation.type,
+    groupName: ownProps.match.params.groupName,
   };
 }
 
@@ -177,14 +191,8 @@ const mapDispatchToProps = dispatch => ({
   handleCreateTask: (task, url) => {
     dispatch(createTask(task, url));
   },
-  handleAddTaskTag: (tag) => {
-    dispatch(addTaskTag(tag));
-  },
-  handleDeleteTaskTag: (tag) => {
-    dispatch(deleteTaskTag(tag));
-  },
-  getTopics: () => {
-    dispatch(fetchTopics());
+  handleReceiveTasks: () => {
+    dispatch(fetchTasksAssign());
   },
 });
 

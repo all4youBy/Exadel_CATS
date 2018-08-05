@@ -158,11 +158,11 @@ class TableGroupsList extends React.PureComponent {
 
 function mapStateToProps(state) {
   return {
-    groups: state.allGroups.groups,
-    groupEdit: state.allGroups.groupEdit,
-    error: state.allGroups.error,
+    groups: state.myGroups.groups,
+    groupEdit: state.myGroups.groupEdit,
+    error: state.myGroups.error,
     user: state.logInInformation.user.email,
-    emptyList: state.allGroups.emptyList,
+    emptyList: state.myGroups.emptyList,
   };
 }
 
