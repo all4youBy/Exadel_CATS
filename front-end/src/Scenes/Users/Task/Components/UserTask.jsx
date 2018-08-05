@@ -1,7 +1,9 @@
+/* eslint-disable react/no-did-update-set-state */
 import React from 'react';
 import './UserTask.scss';
-import { Upload, Button, Icon, Tag } from 'antd';
+import { Upload, Button, Icon, Tag, message } from 'antd';
 import PropTypes from 'prop-types';
+import { history } from '../../../../Services/ConfigureStore';
 import requestLoginInformation from '../../../../Services/loginService';
 import Loading from '../../../../Components/Loading';
 
@@ -17,6 +19,7 @@ class UserTask extends React.Component {
     taskInfo: PropTypes.arrayOf.isRequired,
     getAddSolution: PropTypes.func.isRequired,
     response: PropTypes.string.isRequired,
+    deleteSolution: PropTypes.func.isRequired,
   };
 
   state = {
@@ -27,6 +30,15 @@ class UserTask extends React.Component {
   componentDidMount() {
     const { getTaskInformation, taskId } = this.props;
     getTaskInformation(requestLoginInformation().email, taskId);
+  }
+
+  componentDidUpdate() {
+    const { response } = this.props;
+    if (response.solution) {
+      this.setState(({ uploading: true }));
+      message.success(`Решение добавлено. Ваша отметка: ${response.solution.mark}`);
+      history.push('/assignedtasks');
+    }
   }
 
   handleUpload = () => {
@@ -47,8 +59,13 @@ class UserTask extends React.Component {
     });
   };
 
+  handleDeleteSolution = () => {
+    const { deleteSolution, taskInfo } = this.props;
+    deleteSolution(taskInfo.solution.id);
+  };
+
   render() {
-    const { uploading } = this.state;
+    let { uploading } = this.state;
     const { fileList: files } = this.state;
     const props = {
       action: '//jsonplaceholder.typicode.com/posts/',
@@ -93,6 +110,27 @@ class UserTask extends React.Component {
       const date = new Date(taskInfo.solution.deadline);
       deadline = formatDate(date);
     }
+    let deleteFiles = <div/>;
+    if (taskInfo.solution && taskInfo.solution.files && taskInfo.solution.files.length) {
+      const fileNames = taskInfo.solution.files.map(element => (<div>{element}</div>));
+      deleteFiles = (
+        <div>
+          <span className="text-delete-file">Удалите раннее загруженные файлы,
+      чтобы добавить новое решение:
+          </span>
+          {fileNames}
+          <Button
+            className="button-table-with-border"
+            type="primary"
+            onClick={this.handleDeleteSolution}
+          >Удалить
+          </Button>
+        </div>
+      );
+    }
+    if (response) {
+      uploading = false;
+    }
     let container = taskInfo.solution ? (
       <div>
         <div className="task-title">
@@ -102,7 +140,7 @@ class UserTask extends React.Component {
         </div>
         <div className="tags">{tags}</div>
         <div className="task-text-border">
-          <div className="task-text">Tекст задачи</div>
+          <div className="task-text">{taskInfo.text}</div>
         </div>
         <div className="parent-buttons">
           <Upload {...props}>
@@ -113,6 +151,7 @@ class UserTask extends React.Component {
               <Icon type="upload"/> Выбрать файл
             </Button>
           </Upload>
+          {deleteFiles}
           <Button
             className="upload-button"
             type="primary"

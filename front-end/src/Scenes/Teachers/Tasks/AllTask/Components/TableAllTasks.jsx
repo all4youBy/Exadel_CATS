@@ -3,59 +3,8 @@ import './TableAllTasks.scss';
 import PropTypes from 'prop-types';
 import { Table, Tag } from 'antd';
 import ButtonEditTask from './ButtonEditTask';
-import ButtonAssignTask from '../../../../../Components/ButtonAssignTask';
-import ButtonDeleteStudent from '../../../GroupsList/GroupStudentsList/Components/ButtonDeleteStudent';
 import Loading from '../../../../../Components/Loading';
-
-
-const columns = [{
-  title: 'Дата сдачи',
-  dataIndex: 'day',
-  key: 'dat',
-  width: 70,
-  className: 'column-break-point',
-  render: (text, record) => (
-    <div className="all-tasks-time">
-      <div className="all-tasks-date-day">{record.day}</div>
-      <div className="all-tasks-date-month">{record.month}</div>
-      <div className="all-tasks-date-year">{record.year}</div>
-    </div>
-  ),
-}, {
-  title: 'Название',
-  dataIndex: 'taskName',
-  key: 'taskName',
-  width: 250,
-  className: 'column-break-point',
-  render: (text, record) => (
-    <div className="all-tasks-title">
-      <div className="all-tasks-title-text">{record.taskName}</div>
-      <div className="all-tasks-author">{record.author}</div>
-    </div>),
-}, {
-  title: 'Тема',
-  dataIndex: 'theme',
-  key: 'theme',
-  width: 800,
-  className: 'column-break-point',
-}, {
-  title: ' ',
-  dataIndex: 'button',
-  key: 'button',
-  width: 100,
-  className: 'column-break-point',
-  render: () => (
-    <div className="all-tasks-group-button">
-      <div className="parent-button-edit-task"><ButtonEditTask/></div>
-      <div className="parent-button-assign-task"><ButtonAssignTask/></div>
-      <div className="parent-button-delete-student"><ButtonDeleteStudent/></div>
-    </div>
-  ),
-}];
-
-// let tags = ['aaaa', 'ssss', 'ffff'];
-
-// tags = tags.map(element => <Tag color="blue">{element}</Tag>);
+import requestLoginInformation from '../../../../../Services/loginService';
 
 class TableAllTasks extends React.PureComponent {
   static propTypes = {
@@ -96,6 +45,55 @@ class TableAllTasks extends React.PureComponent {
       'Декабрь',
     ];
 
+
+    const columns = [{
+      title: 'Дата сдачи',
+      dataIndex: 'day',
+      key: 'dat',
+      width: 70,
+      className: 'column-break-point',
+      render: (text, record) => (
+        <div className="all-tasks-time">
+          <div className="all-tasks-date-day">{record.day}</div>
+          <div className="all-tasks-date-month">{record.month}</div>
+          <div className="all-tasks-date-year">{record.year}</div>
+        </div>
+      ),
+    }, {
+      title: 'Название',
+      dataIndex: 'taskName',
+      key: 'taskName',
+      width: 250,
+      className: 'column-break-point',
+      render: (text, record) => (
+        <div className="all-tasks-title">
+          <div className="all-tasks-title-text">{record.taskName}</div>
+          <div className="all-tasks-author">{record.author}</div>
+        </div>),
+    }, {
+      title: 'Тема',
+      dataIndex: 'theme',
+      key: 'theme',
+      width: 800,
+      className: 'column-break-point',
+    }, {
+      title: ' ',
+      dataIndex: 'button',
+      key: 'button',
+      width: 100,
+      className: 'column-break-point',
+      render: (text) => {
+        if (requestLoginInformation().email === text) {
+          return (
+            <div className="all-tasks-group-button">
+              <div className="parent-button-edit-task"><ButtonEditTask/></div>
+            </div>
+          );
+        }
+        return <div/>;
+      },
+    }];
+
     for (let i = 0; i < tasks.length; i += 1) {
       const date = new Date(tasks[i].id.date);
       let tags = [];
@@ -106,21 +104,24 @@ class TableAllTasks extends React.PureComponent {
       } else {
         tags = tasks[i].topics.map(element => (<Tag color="blue">{element}</Tag>));
       }
-      let day = date.getDay();
-      if (day.toString() <= 9) {
-        day = `0${day}`;
-      }
 
+      console.log(date.getDay(), 2);
       data.push({
         key: `${i}`,
         author: `${tasks[i].firstName} ${tasks[i].lastName}`,
         theme: tags,
         taskName: tasks[i].title,
-        day: date.getDay(),
+        day: date.getDate(),
         month: arrMonth[date.getMonth()],
         year: date.getFullYear(),
+        button: tasks[i].email,
+        formDate: date,
       });
     }
+
+    data.sort((a, b) => (
+      b.formDate - a.formDate
+    ));
     const content = tasks.length ? (
       <Table
         {...{
@@ -134,7 +135,6 @@ class TableAllTasks extends React.PureComponent {
         columns={columns}
         dataSource={data}
       />) : <Loading/>;
-    console.log(tasks, 78754);
     return (
       <div>
         {content}

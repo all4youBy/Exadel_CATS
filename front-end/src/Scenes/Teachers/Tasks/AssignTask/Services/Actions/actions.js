@@ -1,46 +1,27 @@
+import { message } from 'antd';
 import * as types from './types';
+import { history } from '../../../../../../Services/ConfigureStore';
 import API from '../../../../../../Services/API';
 
-export function addTestTag(tag) {
+export function createTask(data, url) {
+  return API.post(`task${url}`, data, ['create_task', () => {
+    message.success('Задача успешно назначена');
+    if (url !== '') {
+      history.push('/mygroups');
+    }
+  }, () => {
+    message.error('Не удалось назначить задачу');
+  }]);
+}
+
+export function receiveTask(group, data) {
   return {
-    type: types.ADD_ASSIGN_TASK_TAG,
-    payload: tag,
+    type: types.RECEIVE_TASK,
+    payload: group,
+    typeData: data,
   };
 }
 
-export function deleteTestTag(tag) {
-  return {
-    type: types.DELETE_ASSIGN_TASK_TAG,
-    payload: tag,
-  };
-}
-
-export function addStudentToList(student) {
-  return {
-    type: types.ADD_STUDENT_TO_LIST_TASK,
-    payload: student,
-  };
-}
-
-export function deleteStudentFromList(student) {
-  return {
-    type: types.DELETE_STUDENT_FROM_LIST_TASK,
-    payload: student,
-  };
-}
-
-export function fetchStudentListForTask() {
-  return (API.get('users/students', 'students_list_for_task', 'Не удалось загрузить список студентов'));
-}
-
-export function groupsListForTask(userId) {
-  return (API.get(`users/groups/${userId}`, 'groupsList', 'Не удалось загрузить список групп'));
-}
-
-export function fetchTopics() {
-  return (API.get('topics', 'topics_assign_task', 'Не удалось загрузить темы'));
-}
-
-export function postAssignTask(data) {
-  return (API.post('/', data, 'post_assign_task', 'Не удалось назначить задачу'));
+export function fetchTasksAssign() {
+  return (API.get('task/tasks', 'all_tasks_assign', 'Не удалось загрузить список задач'));
 }

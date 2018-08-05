@@ -1,3 +1,4 @@
+/* eslint-disable spaced-comment */
 import React from 'react';
 import 'antd/dist/antd.css';
 import { Link } from 'react-router-dom';
@@ -7,7 +8,7 @@ import PropTypes from 'prop-types';
 import ButtonAssignTest from '../../../../../Components/ButtonAssignTest';
 import ButtonAssignTask from '../../../../../Components/ButtonAssignTask';
 import ButtonDeleteStudent from './ButtonDeleteStudent';
-import ButtonAddStudent from './ButtonAddStudent';
+// import ButtonAddStudent from './ButtonAddStudent';
 import Loading from '../../../../../Components/Loading';
 
 class TableGroupStudents extends React.Component {
@@ -35,7 +36,7 @@ class TableGroupStudents extends React.Component {
   }
 
   render() {
-    const { students, handleStudentAdd, handleStudentDelete, error } = this.props;
+    const { students, handleStudentDelete, error } = this.props;
     const { bordered, loading, pagination, size, title, showHeader } = this.state;
     if (error) {
       message.error(error);
@@ -112,7 +113,7 @@ class TableGroupStudents extends React.Component {
       return (
         <div className="parent-button-add-students-blank-page">
           <div className="block-button-add-students-blank-page">
-            <ButtonAddStudent onStudentAdd={handleStudentAdd}/>
+            {/*<ButtonAddStudent onStudentAdd={handleStudentAdd}/>*/}
           </div>
         </div>
       );
@@ -142,7 +143,7 @@ class TableGroupStudents extends React.Component {
           dataSource={data}
           scroll={{ x: 1500 }}
         />
-        <ButtonAddStudent onStudentAdd={handleStudentAdd}/>
+        {/*<ButtonAddStudent onStudentAdd={handleStudentAdd}/>*/}
       </div>
     );
   }

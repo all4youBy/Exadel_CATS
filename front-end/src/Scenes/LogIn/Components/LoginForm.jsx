@@ -74,7 +74,6 @@ class LoginForm extends React.Component {
           <Button type="primary" htmlType="submit" className="login-form-button">
             Войти
           </Button>
-          <a className="login-forgot" href="/">Забыли пароль?</a>
           <Link to="/registration">Зарегистрироваться!</Link>
         </FormItem>
       </Form>

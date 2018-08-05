@@ -13,7 +13,7 @@ import PageHeader from '../../Components/GlobalHeader';
 import PageFooter from '../../Components/GlobalFooter';
 import AllTask from '../../Scenes/Teachers/Tasks/AllTask';
 import PagePassedTasks from '../../Scenes/Users/Tasks/PassedTasks';
-import AllGroups from '../../Scenes/Teachers/GroupsList/Groups';
+import MyGroups from '../../Scenes/Teachers/GroupsList/Groups';
 import Materials from '../../Scenes/Teachers/Materials';
 import RegistrationPage from '../../Scenes/Registration';
 import AccessRequestList from '../../Scenes/Admin/AccessRequestList';
@@ -27,12 +27,15 @@ import PageCheckTest from '../../Scenes/Teachers/Tests/CheckTest/Containers/Page
 import AddQuestion from '../../Scenes/Teachers/Tests/AddQuestion/Containers/AddQuestion';
 import AddTaskPage from '../../Scenes/Teachers/Tasks/AddTask/Containers/AddTaskPage';
 import Loading from '../../Components/Loading';
-import PageAssignTask from '../../Scenes/Teachers/Tasks/AssignTask/Containers/PageAssignTask';
+// import PageAssignTask from '../../Scenes/Teachers/Tasks/AssignTask/Containers/PageAssignTask';
 import TrainingTestPage from '../../Scenes/Users/TestList/TrainingTest/Containers/TrainingTestPage';
+import AllGroups from '../../Scenes/Teachers/GroupsList/AllGroups/Containers/AllGroups';
+import TaskProperties from '../../Scenes/Teachers/Tasks/AssignTask/Components/TaskProperties';
 
 class Main extends React.Component {
   static propTypes = {
     userType: PropTypes.shape().isRequired,
+    user: PropTypes.objectOf(PropTypes.any).isRequired,
   };
 
   renderCommonRoutes() {
@@ -43,9 +46,9 @@ class Main extends React.Component {
         component: PageGroupStudentsList,
       },
       {
-        key: 'allgroups',
-        url: '/allgroups',
-        component: AllGroups,
+        key: 'mygroups',
+        url: '/mygroups',
+        component: MyGroups,
       },
       {
         key: 'alltasks',
@@ -72,26 +75,31 @@ class Main extends React.Component {
         url: '/checktest',
         component: PageCheckTest,
       },
-      {
-        key: 'assigntask',
-        url: '/assigntask',
-        component: PageAssignTask,
-      },
+      // {
+      //   key: 'assigntask',
+      //   url: '/assigntask',
+      //   component: PageAssignTask,
+      // },
       {
         key: 'creategroup',
         url: '/creategroup',
         component: CreateGroupPage,
       },
-      {
-        key: 'assigntests',
-        url: '/assigntests',
-        component: PageAssignTest,
-      },
+      // {
+      //   key: 'assigntests',
+      //   url: '/assigntests',
+      //   component: PageAssignTest,
+      // },
       {
 
         key: '/assigntest/:groupName',
         url: '/assigntest/:groupName',
         component: PageAssignTest,
+      },
+      {
+        key: '/assigntask/:groupName',
+        url: '/assigntask/:groupName',
+        component: TaskProperties,
       },
     ];
   }
@@ -157,8 +165,10 @@ class Main extends React.Component {
             </div>
             <div className="switch-div">
               <Switch>
+                <Route exact path="/groups/:groupName" component={PageGroupStudentsList}/>
                 <Route exact path="/accessrequestlist" component={AccessRequestList}/>
                 <Route exact path="/addquestion" component={AddQuestion}/>
+                <Route exact path="/allgroups" component={AllGroups}/>
                 {this.renderCommonRoutes().map(item => (
                   <Route
                     key={item.key}
@@ -188,10 +198,10 @@ class Main extends React.Component {
   }
 
   render() {
-    const { userType: { logInInformation: { user: { role } } } } = this.props;
+    const { userType: { logInInformation: { user: { role } } }, user } = this.props;
     return (
       <div className="main-content">
-        <PageHeader userType={role} history=""/>
+        <PageHeader userType={role} user={user} history=""/>
         {this.renderSwitch()}
         <PageFooter/>
       </div>
@@ -204,6 +214,7 @@ function mapStateToProps(state) {
     isReady: state.isReady,
     isAuth: state.isAuth,
     userType: state,
+    user: state.logInInformation.user,
   };
 }
 
