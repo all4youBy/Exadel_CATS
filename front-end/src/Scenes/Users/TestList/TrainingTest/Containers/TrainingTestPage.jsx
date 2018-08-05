@@ -18,12 +18,13 @@ class TrainingTestPage extends React.PureComponent {
   };
 
   handleRequestTest = () => {
-    const { topic, getTrainingTest,
+    const { topic: topicId, getTrainingTest,
       userType: { logInInformation: { user: { email } } } } = this.props;
     const data = {
-      topic,
+      topicId,
       email,
     };
+    console.log(data);
     getTrainingTest(data);
   };
 

@@ -1,63 +1,71 @@
 import React from 'react';
-import { List, Button, Tag } from 'antd';
+import { List, Button } from 'antd';
 import './ListCheckTests.scss';
-import Link from 'react-router-dom/es/Link';
-
-let tags = ['aaaa', 'ssss', 'ffff'];
-
-tags = tags.map(element => <Tag color="blue">{element}</Tag>);
-
-const listData = [];
-for (let i = 0; i < 15; i += 1) {
-  listData.push({
-    href: 'http://ant.design',
-    title: `Тест ${i}`,
-    avatar: 'https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png',
-    name: 'Плюшкин Иван Васильевич',
-  });
-}
+import PropTypes from 'prop-types';
+import Loading from '../../../../../Components/Loading';
 
 class ListCheckTests extends React.Component {
-  render() {
-    return (
-      <List
-        className="list-check-tests"
-        size="large"
-        pagination={{
-          pageSize: 5,
-        }}
-        dataSource={listData}
-        renderItem={item => (
-          <List.Item
-            key={item.title}
-            className="check-test-list"
-          >
-            <List.Item.Meta
-              title={<a href={item.href}>{item.title}</a>}
-              description={(
+  static propTypes = {
+    questionList: PropTypes.arrayOf(PropTypes.object).isRequired,
+    submitManualCheck: PropTypes.func.isRequired,
+  };
 
-                <div className="description">
-                  <div>{tags}</div>
-                  <div className="student-information">{item.name}</div>
-                  <Button className="button-check-test-list" icon="form">
-                    <Link className="link-check-test-list" to="/checktest"> Проверить </Link>
-                  </Button>
-                </div>
-              )}
-              className="test-description"
-            />
-            <div className="test-information">
-              <div>
-                Количество вопросов: 10
-              </div>
-              <div>
-                Время выполнения: 10:00
-              </div>
-            </div>
-          </List.Item>
-        )}
-      />
-    );
+  handleSubmitCheck = (item, answer) => {
+    const { submitManualCheck } = this.props;
+    const data = {
+      status: answer,
+      testId: item.testId,
+      questionId: item.questionId,
+      answer: item.answer,
+    };
+    console.log(data);
+    submitManualCheck(data);
+  };
+
+  render() {
+    const { questionList } = this.props;
+    console.log(questionList);
+    return questionList.length
+      ? (
+        <List
+          className="list-check-tests"
+          size="large"
+          pagination={{
+            pageSize: 10,
+          }}
+          dataSource={questionList}
+          renderItem={item => (
+            <List.Item
+              key={item.testId}
+              className="check-test-list"
+            >
+              <List.Item.Meta
+                title={item.text}
+                description={(
+                  <div>{item.answer}
+                    <div className="description">
+                      <Button
+                        className="button-answer-right"
+                        size="large"
+                        onClick={() => this.handleSubmitCheck(item, 'ANSWERED_RIGHT')}
+                        icon="check-circle"
+                      >Верно
+                      </Button>
+                      <Button
+                        className="button-answer-wrong"
+                        size="large"
+                        onClick={() => this.handleSubmitCheck(item, 'ANSWERED_WRONG')}
+                        icon="close-circle"
+                      >Неверно
+                      </Button>
+                    </div>
+                  </div>
+                )}
+                className="test-description"
+              />
+            </List.Item>
+          )}
+        />) : <Loading/>;
   }
 }
 
