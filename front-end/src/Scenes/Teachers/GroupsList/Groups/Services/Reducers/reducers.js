@@ -21,7 +21,22 @@ const myGroups = (state = initialState, action) => {
         emptyList: false,
       };
 
-    case types.EDIT_GROUP: {
+    // case types.ERROR_RENAME_GROUP: {
+    //   console.log(action.payload);
+    //   const newGroup = state.groups;
+    //   newGroup.forEach((element, index) => {
+    //     if (element === action.payload.lastName) {
+    //       state.groups[index] = action.payload.nextName;
+    //     }
+    //   });
+    //   return {
+    //     ...state,
+    //     groups: state.groups,
+    //     groupEdit: '',
+    //   };
+    // }
+
+    case types.RECEIVE_RENAME_GROUP: {
       console.log(action.payload);
       const newGroup = state.groups;
       newGroup.forEach((element, index) => {
@@ -29,14 +44,12 @@ const myGroups = (state = initialState, action) => {
           state.groups[index] = action.payload.nextName;
         }
       });
-      console.log(state.groups);
       return {
         ...state,
         groups: state.groups,
         groupEdit: '',
       };
     }
-
     case types.NAME_GROUP:
       return {
         ...state,
