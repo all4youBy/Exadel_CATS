@@ -86,13 +86,14 @@ public class SolutionServiceImpl
     @Override
     public Solution storeFile(@NonNull Solution solution,
                               @NonNull MultipartFile file) throws ServiceException {
-        solution.setFiles(new ArrayList<>());
         try (InputStream is = file.getInputStream()) {
-            solution = storeFile(solution, is, file.getName());
+            solution = storeFile(solution, is, file.getOriginalFilename());
         } catch (IOException e) {
             throw new ServiceException(String.format("Could not store file %s for solution %s",
                     file.getName(), solution.getId()), e);
         }
+
+
         return solution;
     }
 
@@ -105,6 +106,7 @@ public class SolutionServiceImpl
                 if (fileId != null) {
                     if (solution.getFiles() != null) {
                         solution.getFiles().add(filename);
+                        solution.setFiles(solution.getFiles().stream().distinct().collect(Collectors.toList()));
                     } else {
                         solution.setFiles(Collections.singletonList(filename));
                     }
@@ -134,6 +136,16 @@ public class SolutionServiceImpl
         }
         solution.setMark(solutionChecker.check(solution));
         return updateItem(solution);
+    }
+
+    @Override
+    public Solution deleteFiles(@NonNull Solution solution) throws ServiceException {
+        List<String> fileNames = solution.getFiles();
+        for (String fileName : fileNames) {
+            fileStorage.delete(fileName, solution.getId());
+        }
+        solution.setFiles(new ArrayList<>());
+        return solution;
     }
 
     private static boolean isValidFileName(@NonNull String fileName) {

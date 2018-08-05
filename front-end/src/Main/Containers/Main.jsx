@@ -33,6 +33,7 @@ import TrainingTestPage from '../../Scenes/Users/TestList/TrainingTest/Container
 class Main extends React.Component {
   static propTypes = {
     userType: PropTypes.shape().isRequired,
+    user: PropTypes.objectOf(PropTypes.any).isRequired,
   };
 
   renderCommonRoutes() {
@@ -72,26 +73,31 @@ class Main extends React.Component {
         url: '/checktest',
         component: PageCheckTest,
       },
-      {
-        key: 'assigntask',
-        url: '/assigntask',
-        component: PageAssignTask,
-      },
+      // {
+      //   key: 'assigntask',
+      //   url: '/assigntask',
+      //   component: PageAssignTask,
+      // },
       {
         key: 'creategroup',
         url: '/creategroup',
         component: CreateGroupPage,
       },
-      {
-        key: 'assigntests',
-        url: '/assigntests',
-        component: PageAssignTest,
-      },
+      // {
+      //   key: 'assigntests',
+      //   url: '/assigntests',
+      //   component: PageAssignTest,
+      // },
       {
 
         key: '/assigntest/:groupName',
         url: '/assigntest/:groupName',
         component: PageAssignTest,
+      },
+      {
+        key: '/assigntask/:groupName',
+        url: '/assigntask/:groupName',
+        component: PageAssignTask,
       },
     ];
   }
@@ -188,10 +194,10 @@ class Main extends React.Component {
   }
 
   render() {
-    const { userType: { logInInformation: { user: { role } } } } = this.props;
+    const { userType: { logInInformation: { user: { role } } }, user } = this.props;
     return (
       <div className="main-content">
-        <PageHeader userType={role} history=""/>
+        <PageHeader userType={role} user={user} history=""/>
         {this.renderSwitch()}
         <PageFooter/>
       </div>
@@ -204,6 +210,7 @@ function mapStateToProps(state) {
     isReady: state.isReady,
     isAuth: state.isAuth,
     userType: state,
+    user: state.logInInformation.user,
   };
 }
 

@@ -10,17 +10,14 @@ import org.springframework.lang.NonNull;
 
 import com.exadel.team3.backend.dto.TopicDTO;
 import com.exadel.team3.backend.entities.Topic;
+import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
 
+@Component
 public class TopicDTOMapper {
-    private static TopicService topicService;
     @Autowired
-    TopicService topService;
-    @PostConstruct
-    public void init() {
-        TopicDTOMapper.topicService = topService;
-    }
+    TopicService topicService;
 
     public static List<TopicDTO> transform(@NonNull List<Topic> topics) {
         TopicDTO root = new TopicDTO(null, null);
@@ -50,11 +47,13 @@ public class TopicDTOMapper {
         }
     }
 
-    public static List<String> transformInToList(List<ObjectId> topicsId) {
+    public List<String> transformInToList(List<ObjectId> topicsId) {
         List<String> topics = new ArrayList<>();
-        if (topicsId != null) {
+        if (topicsId != null && topicsId.size() != 0) {
             for (ObjectId objectId : topicsId) {
-                topics.add(topicService.getItem(objectId).getText());
+                Topic topic = topicService.getItem(objectId);
+                String string = topic.getText();
+                topics.add(string);
             }
         }
         return topics;

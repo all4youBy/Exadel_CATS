@@ -1,13 +1,13 @@
 package com.exadel.team3.backend.dao;
 
-import com.exadel.team3.backend.entities.Assignable;
-import org.bson.types.ObjectId;
-import org.springframework.data.mongodb.repository.MongoRepository;
-import org.springframework.stereotype.Repository;
-
 import java.time.LocalDateTime;
 import java.util.Collection;
 import java.util.List;
+
+import org.bson.types.ObjectId;
+import org.springframework.data.mongodb.repository.MongoRepository;
+
+import com.exadel.team3.backend.entities.Assignable;
 
 public interface AssignableRepository<T extends Assignable>
         extends MongoRepository<T, ObjectId> {

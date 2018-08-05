@@ -30,7 +30,7 @@ class PageAssignTest extends React.PureComponent {
     groupName: PropTypes.string.isRequired,
     getUsersFromGroup: PropTypes.func.isRequired,
     getTopics: PropTypes.func.isRequired,
-    topics: PropTypes.arrayOf(PropTypes.string).isRequired,
+    topics: PropTypes.arrayOf(PropTypes.any).isRequired,
     teacher: PropTypes.string.isRequired,
     type: PropTypes.string.isRequired,
     receiver: PropTypes.string.isRequired,
@@ -85,8 +85,8 @@ function mapStateToProps(state, ownProps) {
 }
 
 const mapDispatchToProps = dispatch => ({
-  handleCreateTest: (test) => {
-    dispatch(createTest(test));
+  handleCreateTest: (test, url) => {
+    dispatch(createTest(test, url));
   },
   handleAddTestTag: (tag) => {
     dispatch(addTestTag(tag));

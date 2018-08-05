@@ -48,7 +48,7 @@ export const TEACHER_GENERAL_MENU_DATA = [{
   text: 'Группы',
   subsections: [{
     id: '1',
-    text: 'Все группы',
+    text: 'Мои группы',
     link: '/allgroups',
   }, {
     id: '2',
@@ -112,7 +112,7 @@ export const ADMIN_GENERAL_MENU_DATA = [{
   text: 'Группы',
   subsections: [{
     id: '2',
-    text: 'Все группы',
+    text: 'Mои группы',
     link: '/allgroups',
   }, {
     id: '3',
@@ -129,10 +129,6 @@ export const ADMIN_GENERAL_MENU_DATA = [{
     link: '/alltasks',
   }, {
     id: '5',
-    text: 'Назначить задачу',
-    link: '/assigntask',
-  }, {
-    id: '6',
     text: 'Добавить задачу',
     link: '/addtask',
   }],
@@ -140,17 +136,14 @@ export const ADMIN_GENERAL_MENU_DATA = [{
   key: 'sub3',
   type: 'profile',
   text: 'Тесты',
-  subsections: [{
-    id: '7',
-    text: 'Назначить тесты',
-    link: '/assigntests',
-  }, {
-    id: '8',
-    text: 'Добавить вопрос',
-    link: '/addquestion',
-  }],
+  subsections: [
+    {
+      id: '6',
+      text: 'Добавить вопрос',
+      link: '/addquestion',
+    }],
 }, {
-  key: '9',
+  key: '7',
   type: 'folder',
   text: 'Материалы',
   subsections: [],
@@ -160,16 +153,16 @@ export const ADMIN_GENERAL_MENU_DATA = [{
   type: 'area-chart',
   text: 'Статистика',
   subsections: [{
-    id: '10',
+    id: '8',
     text: 'Задачи',
     link: '/',
   }, {
-    id: '11',
+    id: '9',
     text: 'Тесты',
     link: '/',
   }],
 }, {
-  key: '12',
+  key: '10',
   type: 'clock-circle-o',
   text: 'История',
   subsections: [],

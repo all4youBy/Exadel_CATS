@@ -2,6 +2,7 @@ package com.exadel.team3.backend.dao.impl;
 
 import java.io.FileNotFoundException;
 import java.io.InputStream;
+import java.util.stream.Stream;
 
 import org.bson.BsonObjectId;
 import org.bson.Document;
@@ -11,6 +12,8 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Component;
 
+import com.mongodb.client.MongoCursor;
+import com.mongodb.client.gridfs.GridFSFindIterable;
 import com.mongodb.MongoClient;
 import com.mongodb.client.gridfs.GridFSBucket;
 import com.mongodb.client.gridfs.GridFSBuckets;
@@ -41,6 +44,7 @@ public class FileStorageImpl implements FileStorage {
         if (associatedId != null) {
             uploadOptions.metadata(new Document("assocId", new BsonObjectId(associatedId)));
         }
+        delete(filename, associatedId);
         return getGridFsBucket().uploadFromStream(filename, stream, uploadOptions);
     }
 
@@ -52,19 +56,34 @@ public class FileStorageImpl implements FileStorage {
     @Override
     public InputStream read(@NonNull String filename,
                             @NonNull ObjectId associatedId) throws FileNotFoundException {
-        GridFSFile result = getGridFsBucket().find(Filters.and(
-                Filters.eq("filename", filename),
-                Filters.eq("metadata.assocId", associatedId.toString())
-        )).first();
+        GridFSFile result = getGridFSFileIterable(filename, associatedId).first();
         if (result == null) throw new FileNotFoundException("File \"" + filename + "\" not found");
         return read(result.getObjectId());
     }
 
     @Override
     public InputStream read(@NonNull String filename) throws FileNotFoundException {
-        GridFSFile result = getGridFsBucket().find(Filters.eq("filename", filename)).first();
+        GridFSFile result = getGridFSFileIterable(filename).first();
         if (result == null) throw new FileNotFoundException("File \"" + filename + "\" not found");
         return read(result.getObjectId());
+    }
+
+    @Override
+    public void delete(@NonNull String filename) {
+        delete (filename, null);
+    }
+
+    @Override
+    public void delete(@NonNull String filename, ObjectId associatedId) {
+        MongoCursor<GridFSFile> previouslyStored;
+        if (associatedId != null) {
+            previouslyStored = getGridFSFileIterable(filename, associatedId).iterator();
+        } else {
+            previouslyStored = getGridFSFileIterable(filename).iterator();
+        }
+        while (previouslyStored.hasNext()) {
+            getGridFsBucket().delete(previouslyStored.next().getObjectId());
+        }
     }
 
     @Override
@@ -72,11 +91,22 @@ public class FileStorageImpl implements FileStorage {
         getGridFsBucket().drop();
     }
 
+
+
     private GridFSBucket getGridFsBucket() {
         if (bucket != null) return bucket;
         return bucket = GridFSBuckets.create(
                 mongoClient.getDatabase(databaseName),
                 "storage"
         );
+    }
+    private GridFSFindIterable getGridFSFileIterable(String filename, ObjectId associatedId) {
+        return getGridFsBucket().find(Filters.and(
+                Filters.eq("filename", filename),
+                Filters.eq("metadata.assocId", associatedId)
+        ));
+    }
+    private GridFSFindIterable getGridFSFileIterable(String filename) {
+        return getGridFsBucket().find(Filters.eq("filename", filename));
     }
 }
