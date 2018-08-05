@@ -1,6 +1,6 @@
-import AllGroups from './Containers/AllGroups';
+import MyGroups from './Containers/MyGroups';
 
 
 export {};
 
-export default AllGroups;
+export default MyGroups;

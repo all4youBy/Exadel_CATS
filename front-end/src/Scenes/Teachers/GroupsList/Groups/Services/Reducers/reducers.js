@@ -8,7 +8,7 @@ const initialState = {
   groupEdit: '',
 };
 
-const allGroups = (state = initialState, action) => {
+const myGroups = (state = initialState, action) => {
   switch (action.type) {
     case types.RECEIVE_GROUPSLIST:
       return { ...state, groups: action.payload, emptyList: false };
@@ -102,4 +102,4 @@ const allGroups = (state = initialState, action) => {
   }
 };
 
-export default allGroups;
+export default myGroups;

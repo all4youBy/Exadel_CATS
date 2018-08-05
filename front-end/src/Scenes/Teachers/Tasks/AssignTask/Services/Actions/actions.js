@@ -7,25 +7,11 @@ export function createTask(data, url) {
   return API.post(`task${url}`, data, ['create_task', () => {
     message.success('Задача успешно назначена');
     if (url !== '') {
-      history.push('/allgroups');
+      history.push('/mygroups');
     }
   }, () => {
     message.error('Не удалось назначить задачу');
   }]);
-}
-
-export function addTaskTag(tag) {
-  return {
-    type: types.ADD_ASSIGN_TASK_TAG,
-    payload: tag,
-  };
-}
-
-export function deleteTaskTag(tag) {
-  return {
-    type: types.DELETE_ASSIGN_TASK_TAG,
-    payload: tag,
-  };
 }
 
 export function receiveTask(group, data) {
@@ -36,7 +22,6 @@ export function receiveTask(group, data) {
   };
 }
 
-
-export function fetchTopics() {
-  return (API.get('topics', 'topics_assign_task', 'Не удалось загрузить темы'));
+export function fetchTasksAssign() {
+  return (API.get('task/tasks', 'all_tasks_assign', 'Не удалось загрузить список задач'));
 }
