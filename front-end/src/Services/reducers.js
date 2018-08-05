@@ -21,6 +21,7 @@ import trainingTest from '../Scenes/Users/TestList/TrainingTest/Services/Reducer
 import userAssignedTasks from '../Scenes/Users/Tasks/AssignedTasks/Services/Reducers/reducers';
 import userAssignedTests from '../Scenes/Users/TestList/AssignedTestList/Services/Reducers/reducers';
 import allGroups from '../Scenes/Teachers/GroupsList/AllGroups/Services/Reducers/reducers';
+import viewTask from '../Scenes/Teachers/Tasks/ViewTask/Services/Reducers/reducers';
 
 
 const reducers = combineReducers({
@@ -45,6 +46,7 @@ const reducers = combineReducers({
   userAssignedTests,
   trainingTest,
   myGroups,
+  viewTask,
 });
 
 export default reducers;

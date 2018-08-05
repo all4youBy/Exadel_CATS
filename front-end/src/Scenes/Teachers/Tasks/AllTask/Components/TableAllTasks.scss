@@ -8,10 +8,17 @@
   background-color: #f7f8f0;
 }
 
+
 .all-tasks-title {
   display: flex;
   font-size: 15px;
   flex-direction: column;
+  .link-name-group {
+    color: rgba(0, 0, 0, 0.65);
+  }
+  .link-name-group:hover {
+    color: #d9d9d9;
+  }
 }
 
 .all-tasks-author {
