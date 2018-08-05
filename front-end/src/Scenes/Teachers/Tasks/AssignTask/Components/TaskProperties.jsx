@@ -125,7 +125,7 @@ class TaskProperties extends React.Component {
             key={i}
             value={i}
           >
-            {task.title} Автор: {task.firstName} {task.lastName}
+            {task.title} <i>автор: {task.firstName} {task.lastName}</i>
           </Option>,
         );
       }
