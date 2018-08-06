@@ -15,6 +15,7 @@ import org.bson.types.ObjectId;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
@@ -62,7 +63,7 @@ public class TaskController {
     public ResponseEntity<?> deleteSolution(@PathVariable(value = "id") String id){
         Solution solution = solutionService.getItem(new ObjectId(id));
         solutionService.updateItem(solutionService.deleteFiles(solution));
-        return new ResponseEntity<>(HttpStatus.OK);
+        return ResponseEntity.status(HttpStatus.OK).body(new StringAnswerDTO("Solution deleted"));
     }
 
     @PostMapping("/add-solution/{id}")
@@ -70,15 +71,18 @@ public class TaskController {
         Solution solution = solutionService.getItem(new ObjectId(id));
         solution = solutionService.storeFile(solution, file);
         solutionService.updateItem(solution);
-        return new ResponseEntity<>(HttpStatus.OK);
+        return ResponseEntity.status(HttpStatus.OK).body(new StringAnswerDTO("Solution added"));
     }
 
-    @PostMapping("/compile-solution/{id}")
+    @PostMapping(value = "/compile-solution/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> addFilesInSolution(@PathVariable(value = "id") String id) {
         Solution solution = solutionService.getItem(new ObjectId(id));
         solution = solutionService.submit(solution);
-
-        return new ResponseEntity<>(solution, HttpStatus.OK);
+        SolutionJsonDTO solutionJsonDTO = new SolutionJsonDTO(
+                solution.getId(), new ObjectId(id), solution.getAssignedTo(),
+                solution.getFiles(), solution.getAssignedBy(), solution.getStart(),
+                solution.getDeadline(), solution.getMark());
+        return new ResponseEntity<>(solutionJsonDTO, HttpStatus.OK);
     }
 
     @PostMapping("/assign-task-for-group")
@@ -90,6 +94,7 @@ public class TaskController {
                 taskRequest.getStart(),
                 taskRequest.getDeadline(),
                 taskRequest.getAssignedBy());
+
         if(taskForGroup == null) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new StringAnswerDTO("Can't assign task for group."));
         }
@@ -137,6 +142,12 @@ public class TaskController {
     //TODO Максим напишет аннотацию. Доступ имеет админ, учитель и только один ученик
     public List<SolutionDTO> getUsersUnfinishedSolutions(@PathVariable(value = "userId") String userId) {
         return solutionDTOMapper.convertToDTO(solutionService.getAssignedItemsUnfinished(userId));
+    }
+
+    @GetMapping("/users-tasks/{userId}")
+    //TODO Максим напишет аннотацию. Доступ имеет админ, учитель и только один ученик
+    public List<SolutionDTO> getUsersSolutions(@PathVariable(value = "userId") String userId) {
+        return solutionDTOMapper.convertToDTO(solutionService.getAssignedItems(userId));
     }
 
     @GetMapping("/testing-sets/{taskId}")

@@ -138,11 +138,6 @@ public class SolutionServiceImpl
 
 
         CountDownLatch latch = new CountDownLatch(1);
-        try {
-            latch.await();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
 
         new Thread(() -> {
             solutionChecker.check(solution);
@@ -152,7 +147,11 @@ public class SolutionServiceImpl
             }
             latch.countDown();
         }).start();
-
+        try {
+            latch.await();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
         return updateItem(solution);
     }
 
