@@ -25,6 +25,7 @@ import userAuthorizedData from '../Scenes/Users/Profile/Services/reducers/reduce
 import trainingTest from '../Scenes/Users/TestList/TrainingTest/Services/Reducers/reducers';
 import userAssignedTasks from '../Scenes/Users/Tasks/AssignedTasks/Services/Reducers/reducers';
 import userAssignedTests from '../Scenes/Users/TestList/AssignedTestList/Services/Reducers/reducers';
+import checkQuestions from '../Scenes/Teachers/Tests/ListCheckTests/Services/Reducers/reducers';
 import allGroups from '../Scenes/Teachers/GroupsList/AllGroups/Services/Reducers/reducers';
 import viewTask from '../Scenes/Teachers/Tasks/ViewTask/Services/Reducers/reducers';
 import allQuestions from '../Scenes/Teachers/Questions/AllQuestions/Services/Reducers/reducers';
@@ -61,6 +62,7 @@ const reducers = combineReducers({
   viewTask,
   allQuestions,
   userPassedTasks,
+  checkQuestions,
 });
 
 export default reducers;

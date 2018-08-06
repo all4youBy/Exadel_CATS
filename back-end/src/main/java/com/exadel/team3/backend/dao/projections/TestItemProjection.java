@@ -1,4 +1,4 @@
-package com.exadel.team3.backend.dao.impl;
+package com.exadel.team3.backend.dao.projections;
 
 import com.exadel.team3.backend.entities.TestItemStatus;
 import lombok.Data;

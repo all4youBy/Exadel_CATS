@@ -3,9 +3,9 @@ package com.exadel.team3.backend.services.impl;
 import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.*;
+import java.util.function.BiFunction;
 import java.util.stream.Collectors;
 
-import com.exadel.team3.backend.dao.*;
 import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -14,8 +14,11 @@ import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
-import com.exadel.team3.backend.dto.TestItemDTO;
+import com.exadel.team3.backend.dao.*;
 import com.exadel.team3.backend.entities.*;
+import com.exadel.team3.backend.dao.projections.RatingProjection;
+import com.exadel.team3.backend.dto.TestItemDTO;
+import com.exadel.team3.backend.dto.UserRatingDTO;
 import com.exadel.team3.backend.services.ServiceException;
 import com.exadel.team3.backend.services.TestItemPicker;
 import com.exadel.team3.backend.services.TestService;
@@ -258,8 +261,6 @@ public class TestServiceImpl
         return test;
     }
 
-
-
     @Override
     public Test submitManualAnswerCheck(@NonNull TestItemDTO checkedItem) throws ServiceException{
         Optional<Test> updatedTest = testRepository.findById(checkedItem.getTestId());
@@ -285,6 +286,15 @@ public class TestServiceImpl
         }
     }
 
+    @Override
+    public List<UserRatingDTO> getTopRatingBySum(@NonNull ObjectId topicId) {
+        return getTopRating(testRepository::collectRatingBySum, topicId);
+    }
+
+    @Override
+    public List<UserRatingDTO> getTopRatingByAverage(@NonNull ObjectId topicId) {
+        return getTopRating(testRepository::collectRatingByAverage, topicId);
+    }
 
     @Override
     public List<TestItemDTO> getAnswersForManualCheck(@NonNull String assignedBy) {
@@ -300,10 +310,36 @@ public class TestServiceImpl
         .collect(Collectors.toList());
     }
 
+    private List<UserRatingDTO> getTopRating(
+            BiFunction<List<ObjectId>, Integer, List<RatingProjection>> collector,
+            ObjectId topicId
+    ) {
+        return collector.apply(
+                        topicRepository.getTopicTree(topicId)
+                                .stream()
+                                .map(Topic::getId)
+                                .distinct()
+                                .collect(Collectors.toList()),
+                        getTopRatingListSize()
+                )
+                .stream()
+                .filter(
+                        projection ->
+                                !StringUtils.isEmpty(projection.getFirstName()) &&
+                                !StringUtils.isEmpty(projection.getLastName())
+                )
+                .map(
+                        projection ->
+                                new UserRatingDTO(
+                                        projection.getFirstName(),
+                                        projection.getLastName(),
+                                        projection.getRating())
+                )
+                .collect(Collectors.toList());
+    }
+
     private static boolean getTestIsSubmittable(Test test) {
         return test.getStart().isBefore(LocalDateTime.now())
                 && test.getDeadline().isAfter(LocalDateTime.now());
     }
-
-
 }

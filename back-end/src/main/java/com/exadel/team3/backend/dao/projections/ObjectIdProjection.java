@@ -1,4 +1,4 @@
-package com.exadel.team3.backend.dao;
+package com.exadel.team3.backend.dao.projections;
 
 import org.bson.types.ObjectId;
 

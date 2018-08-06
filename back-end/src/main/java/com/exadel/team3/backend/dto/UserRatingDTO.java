@@ -14,5 +14,4 @@ public class UserRatingDTO {
     private String lastName;
 
     private int rating;
-
 }
