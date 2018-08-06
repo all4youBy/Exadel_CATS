@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 import React from 'react';
 import './ButtonAssignTest.scss';
 import { Button, Tooltip } from 'antd';
@@ -8,12 +9,14 @@ class ButtonAssignTest extends React.Component {
   static propTypes = {
     groupName: PropTypes.string.isRequired,
     addGroup: PropTypes.func.isRequired,
+    addStudent: PropTypes.func.isRequired,
   };
 
   handleAddGroup = () => {
-    const { groupName, addGroup } = this.props;
+    const { groupName, addGroup, addStudent } = this.props;
+    console.log(groupName);
     history.push(`/assigntest/${groupName}`);
-    addGroup(groupName);
+    // addGroup(groupName);
   };
 
   render() {

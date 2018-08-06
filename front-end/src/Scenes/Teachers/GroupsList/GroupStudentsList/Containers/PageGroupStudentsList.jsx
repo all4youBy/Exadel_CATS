@@ -4,15 +4,17 @@ import PropTypes from 'prop-types';
 import TableGroupStudents from '../Components/TableGroupStudents';
 import './PageGroupStudentsList.scss';
 import { addStudent, deleteStudent, fetchStudentsGroup } from '../Services/Actions/actions';
+import { receiveTest } from '../../../Tests/AssignTest/Services/Actions/actions';
 
 class PageGroupStudentsList extends React.PureComponent {
   static propTypes = {
     getGroup: PropTypes.func.isRequired,
     groupName: PropTypes.string.isRequired,
-    students: PropTypes.objectOf.isRequired,
+    students: PropTypes.objectOf(PropTypes.any).isRequired,
     handleStudentAdd: PropTypes.func.isRequired,
     handleStudentDelete: PropTypes.func.isRequired,
     error: PropTypes.string.isRequired,
+    addStudentTest: PropTypes.func.isRequired,
   };
 
   render() {
@@ -22,7 +24,7 @@ class PageGroupStudentsList extends React.PureComponent {
       handleStudentAdd,
       handleStudentDelete,
       getGroup,
-      error,
+      error, addStudentTest,
     } = this.props;
     return (
       <TableGroupStudents
@@ -32,6 +34,7 @@ class PageGroupStudentsList extends React.PureComponent {
         handleStudentDelete={handleStudentDelete}
         getGroup={getGroup}
         error={error}
+        addStudentTest={addStudentTest}
       />
     );
   }
@@ -55,6 +58,9 @@ const mapDispatchToProps = dispatch => ({
   },
   getGroup: (groupName) => {
     dispatch(fetchStudentsGroup(groupName));
+  },
+  addStudentTest: (student) => {
+    dispatch(receiveTest(student, 'STUDENT'));
   },
 });
 

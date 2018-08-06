@@ -152,7 +152,7 @@ class Main extends React.Component {
                     component={item.component}
                   />
                 ))}
-                <Redirect to="/"/>
+                <Redirect to="/mygroups"/>
               </Switch>
             </div>
           </div>
@@ -193,7 +193,15 @@ class Main extends React.Component {
           </div>
         );
       default:
-        return 'foo';
+        return (
+          <div className="main-body-container-unlogged">
+            <Switch>
+              <Route exact path="/" component={LogIn}/>
+              <Route exact path="/registration" component={RegistrationPage}/>
+              <Redirect to="/"/>
+            </Switch>
+          </div>
+        );
     }
   }
 

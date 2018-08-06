@@ -7,10 +7,8 @@ export function addStudent(student) {
   };
 }
 
-export function deleteStudent(number) {
-  return {
-    type: types.DELETE_STUDENT, payload: number,
-  };
+export function deleteStudent(student) {
+  return (API.deleteRequest('users', student, 'delete_student', 'Не удалось удалить студента'));
 }
 
 export function fetchStudentsGroup(groupName) {
