@@ -29,7 +29,7 @@ public class TaskDTOMapper {
             User user = userService.getItem(task.getAuthor());
             TaskForTeachersDTO taskForTeachersDTO = new TaskForTeachersDTO(task.getId(), task.getTitle(),
                     topicDTOMapper.transformInToList(task.getTopicIds()),
-                    task.getAuthor(), user.getFirstName(), user.getLastName());
+                    task.getAuthor(), user.getFirstName(), user.getLastName(), task.getId().getDate().toString());
             tasksForUserDTO.add(taskForTeachersDTO);
         }
 
