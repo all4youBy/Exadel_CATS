@@ -23,11 +23,15 @@ class Test extends React.PureComponent {
 
   state = {
     answers: [],
+    dataOfEnd: '',
   };
 
   componentDidMount() {
-    const { getTestData, testId } = this.props;
+    const { getTestData, testId, testData } = this.props;
     getTestData(testId);
+    this.setState({
+      dataOfEnd: testData.deadline,
+    });
   }
 
   handleSubmitTest = () => {
@@ -37,7 +41,8 @@ class Test extends React.PureComponent {
 
   render() {
     const { testData, error, history, submitQuestion, testId } = this.props;
-    const { answers } = this.state;
+    const { answers, dataOfEnd } = this.state;
+    const dataForProps = testData ? testData.deadline : null;
     if (error) {
       history.push('/');
     }
@@ -99,7 +104,9 @@ class Test extends React.PureComponent {
     }) : <Loading/>;
     return (
       <div className="test">
-        <TestNameAndThemes/>
+        <TestNameAndThemes
+          deadline={dataOfEnd}
+        />
         {test}
         <Button
           className="button-table-with-border"

@@ -9,7 +9,7 @@ import ButtonEditGroup from './ButtonEditGroup';
 import ButtonAssignTask from '../../../../../Components/ButtonAssignTask';
 import ButtonDeleteGroup from './ButtonDeleteGroup';
 import ButtonAssignTest from '../../../../../Components/ButtonAssignTest';
-// import InputSearch from './InputSearch';
+import InputSearch from './InputSearch';
 import {
   deleteGroup,
   getMyGroups,
@@ -38,6 +38,7 @@ class TableGroupsList extends React.PureComponent {
   state = {
     groups: [],
     getListUsers: false,
+    inputFilter: '',
   };
 
   static getDerivedStateFromProps(nextProps, nextState) {
@@ -50,8 +51,16 @@ class TableGroupsList extends React.PureComponent {
     };
   }
 
+  filterList = (value) => {
+    console.log(value);
+    this.setState({
+      inputFilter: value,
+    });
+  }
+
+
   render() {
-    const { getListUsers, groups } = this.state;
+    const { getListUsers, groups, inputFilter } = this.state;
     const {
       emptyList, handleGroupDelete, upDate, addGroupTask,
       addGroupTest, groupEdit, onGroupEdit, onEdit, user, getGroup,
@@ -143,13 +152,16 @@ class TableGroupsList extends React.PureComponent {
     }
     columns[0].title = <div className="header">Список моих групп</div>;
     // <InputSearch/>
+    const newData = data.filter(elem => elem.name
+      .toLowerCase().indexOf(inputFilter.toLowerCase()) !== -1);
+    columns[0].title = <InputSearch filterList={this.filterList}/>;
     const stateData = emptyList && getListUsers ? (<Loading/>)
       : <div className="empty-list">Список групп пуст</div>;
     const table = data.length ? (
       <Table
         className="table-groups"
         columns={columns}
-        dataSource={data}
+        dataSource={newData}
       />) : (<Loading/>);
     const addList = groups.length ? table : stateData;
     return (

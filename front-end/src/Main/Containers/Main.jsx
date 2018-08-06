@@ -33,11 +33,14 @@ import AllGroups from '../../Scenes/Teachers/GroupsList/AllGroups/Containers/All
 import TaskProperties from '../../Scenes/Teachers/Tasks/AssignTask/Components/TaskProperties';
 import ViewTaskPage from '../../Scenes/Teachers/Tasks/ViewTask/Containers/ViewTaskPage';
 import AllQuestionsPage from '../../Scenes/Teachers/Questions/AllQuestions/Containers/AllQuestionsPage';
+import Profile from '../../Scenes/Users/Profile';
+
 
 class Main extends React.Component {
   static propTypes = {
     userType: PropTypes.shape().isRequired,
     user: PropTypes.objectOf(PropTypes.any).isRequired,
+    email: PropTypes.string,
   };
 
   renderCommonRoutes() {
@@ -118,12 +121,16 @@ class Main extends React.Component {
 
   renderSwitch() {
     const { userType: { logInInformation: { user: { role } } } } = this.props;
+    const { email } = this.props;
     switch (role) {
       case 'STUDENT':
         return (
           <div className="main-body-container">
             <div className="general-menu">
-              <GeneralMenu userType={role}/>
+              <GeneralMenu
+                userType={role}
+                email={email}
+              />
             </div>
             <div className="switch-div">
               <Switch>
@@ -138,6 +145,7 @@ class Main extends React.Component {
                 <Route exact path="/trainingtest" component={TrainingTestPage}/>
                 <Route exact path="/assignedtests" component={PageAssignedTestList}/>
                 <Route exact path="/assignedtasks/:taskId" component={UserTaskPage}/>
+                <Route exact path="/profile/:email" component={Profile}/>
                 <Redirect to="/"/>
               </Switch>
             </div>
@@ -235,7 +243,12 @@ function mapStateToProps(state) {
     isAuth: state.isAuth,
     userType: state,
     user: state.logInInformation.user,
+    email: state.logInInformation.user.email,
   };
 }
+
+Main.defaultProps = {
+  email: '',
+};
 
 export default withRouter(connect(mapStateToProps)(Main));
