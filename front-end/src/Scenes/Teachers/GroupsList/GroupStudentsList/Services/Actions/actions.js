@@ -16,3 +16,10 @@ export function fetchStudentsGroup(groupName) {
     'students_by_group',
     'Не удалось загрузить список студентов'));
 }
+export function assignedTasks(userId) {
+  return (API.get(
+    `task/users-tasks/${userId}`,
+    'assigned_tasks',
+    'Не удалось загрузить список задач',
+  ));
+}

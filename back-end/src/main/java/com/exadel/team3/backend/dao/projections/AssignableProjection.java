@@ -15,4 +15,5 @@ public class AssignableProjection {
     private final LocalDateTime start;
     private final LocalDateTime deadline;
     private final List<TopicProjection> topics;
+    private final Integer mark;
 }

@@ -16,7 +16,6 @@ import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 public class Solution implements Assignable {
     @Id
     @JsonSerialize(using = ToStringSerializer.class)
-    @Setter(AccessLevel.NONE)
     private ObjectId id;
 
     @NonNull

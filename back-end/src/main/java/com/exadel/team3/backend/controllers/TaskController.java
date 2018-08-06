@@ -2,10 +2,7 @@ package com.exadel.team3.backend.controllers;
 
 import com.exadel.team3.backend.controllers.requests.AddTaskRequest;
 import com.exadel.team3.backend.controllers.requests.TaskRequest;
-import com.exadel.team3.backend.dto.SolutionDTO;
-import com.exadel.team3.backend.dto.StringAnswerDTO;
-import com.exadel.team3.backend.dto.TaskDTO;
-import com.exadel.team3.backend.dto.TaskForTeachersDTO;
+import com.exadel.team3.backend.dto.*;
 import com.exadel.team3.backend.dto.mappers.SolutionDTOMapper;
 import com.exadel.team3.backend.dto.mappers.TaskDTOMapper;
 import com.exadel.team3.backend.dto.mappers.TopicDTOMapper;
@@ -18,6 +15,7 @@ import org.bson.types.ObjectId;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
@@ -65,7 +63,7 @@ public class TaskController {
     public ResponseEntity<?> deleteSolution(@PathVariable(value = "id") String id){
         Solution solution = solutionService.getItem(new ObjectId(id));
         solutionService.updateItem(solutionService.deleteFiles(solution));
-        return new ResponseEntity<>(HttpStatus.OK);
+        return ResponseEntity.status(HttpStatus.OK).body(new StringAnswerDTO("Solution deleted"));
     }
 
     @PostMapping("/add-solution/{id}")
@@ -73,14 +71,13 @@ public class TaskController {
         Solution solution = solutionService.getItem(new ObjectId(id));
         solution = solutionService.storeFile(solution, file);
         solutionService.updateItem(solution);
-        return new ResponseEntity<>(HttpStatus.OK);
+        return ResponseEntity.status(HttpStatus.OK).body(new StringAnswerDTO("Solution added"));
     }
 
-    @PostMapping("/compile-solution/{id}")
+    @PostMapping(value = "/compile-solution/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> addFilesInSolution(@PathVariable(value = "id") String id) {
         Solution solution = solutionService.getItem(new ObjectId(id));
         solution = solutionService.submit(solution);
-
         return new ResponseEntity<>(solution, HttpStatus.OK);
     }
 
@@ -93,6 +90,7 @@ public class TaskController {
                 taskRequest.getStart(),
                 taskRequest.getDeadline(),
                 taskRequest.getAssignedBy());
+
         if(taskForGroup == null) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new StringAnswerDTO("Can't assign task for group."));
         }
@@ -105,6 +103,13 @@ public class TaskController {
     public List<TaskForTeachersDTO> getTasks() {
         List<Task> tasks = taskService.getItems();
         return taskDTOMapper.convertToTaskForTeachersDTO(tasks);
+    }
+
+    @GetMapping("/tasks/{teachersId}")
+    @PreAuthorize("hasAnyRole('ADMIN','TEACHER')")
+    public List<SolutionForTeachersTDO> getUsersTasks(@PathVariable(value = "teachersId") String teachersId) {
+        List<Solution> solutions = solutionService.getAssignedItemsByAssigner(teachersId);
+        return solutionDTOMapper.convertToSolutionForTeachersTDO(solutions);
     }
 
     @PostMapping("/assign-task-for-user")
@@ -121,6 +126,18 @@ public class TaskController {
         }
 
         return new ResponseEntity<>(solutionForUser, HttpStatus.OK);
+    }
+
+    @GetMapping("/users-finished-tasks/{userId}")
+    //TODO Максим напишет аннотацию. Доступ имеет админ, учитель и только один ученик
+    public List<SolutionDTO> getUsersFinishedSolutions(@PathVariable(value = "userId") String userId) {
+        return solutionDTOMapper.convertToDTO(solutionService.getAssignedItemsFinished(userId));
+    }
+
+    @GetMapping("/users-unfinished-tasks/{userId}")
+    //TODO Максим напишет аннотацию. Доступ имеет админ, учитель и только один ученик
+    public List<SolutionDTO> getUsersUnfinishedSolutions(@PathVariable(value = "userId") String userId) {
+        return solutionDTOMapper.convertToDTO(solutionService.getAssignedItemsUnfinished(userId));
     }
 
     @GetMapping("/users-tasks/{userId}")

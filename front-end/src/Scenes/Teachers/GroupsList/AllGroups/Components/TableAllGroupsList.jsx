@@ -13,6 +13,8 @@ import { deleteGroup, getAllGroups } from '../Services/Actions/actions';
 import Loading from '../../../../../Components/Loading';
 import { receiveTest } from '../../../Tests/AssignTest/Services/Actions/actions';
 import { receiveTask } from '../../../Tasks/AssignTask/Services/Actions/actions';
+import { getNameGroup } from '../../Groups/Services/Actions/actions';
+import InputSearch from './InputSearch';
 
 class TableAllGroupsList extends React.PureComponent {
   static propTypes = {
@@ -22,11 +24,13 @@ class TableAllGroupsList extends React.PureComponent {
     addGroupTest: PropTypes.func.isRequired,
     addGroupTask: PropTypes.func.isRequired,
     userStatus: PropTypes.string.isRequired,
+    getGroup: PropTypes.func.isRequired,
   };
 
   state = {
     groups: [],
     getListUsers: false,
+    inputFilter: '',
   };
 
   static getDerivedStateFromProps(nextProps, nextState) {
@@ -39,9 +43,18 @@ class TableAllGroupsList extends React.PureComponent {
     };
   }
 
+  filterList = (value) => {
+    console.log(value);
+    this.setState({
+      inputFilter: value,
+    });
+  };
+
   render() {
+    const { getListUsers, groups, inputFilter } = this.state;
     const { groups } = this.state;
     const {
+      emptyList, handleGroupDelete, upDate, addGroupTask, getGroup,
       handleGroupDelete, upDate, addGroupTask,
       addGroupTest, userStatus,
     } = this.props;
@@ -51,7 +64,11 @@ class TableAllGroupsList extends React.PureComponent {
       key: 'name',
       width: 1000,
       render(text) {
-        const nameGroup = (<Link className="link-name-group" to={`/groups/${text}`}>{text}</Link>);
+        const getMyGroup = (name) => {
+          getGroup(name);
+        };
+        const nameGroup = (
+          <Link onClick={() => getMyGroup(text)} className="link-name-group" to={`/groups/${text}`}>{text}</Link>);
         return (
           <div>{nameGroup}</div>);
       },
@@ -98,6 +115,23 @@ class TableAllGroupsList extends React.PureComponent {
         name: groups[i],
       });
     }
+    const newData = data.filter(elem => elem.name
+      .toLowerCase().indexOf(inputFilter.toLowerCase()) !== -1);
+    columns[0].title = (
+      <div><InputSearch filterList={this.filterList}/>
+        <div className="header">Список групп</div>
+      </div>
+    );
+    const stateData = emptyList && getListUsers ? (<Loading/>)
+      : <div className="empty-list">Список групп пуст</div>;
+    const table = data.length ? (
+      <Table
+        className="table-groups"
+        columns={columns}
+        dataSource={newData}
+      />) : (<Loading/>
+    );
+    const addList = groups.length ? table : stateData;
     columns[0].title = <div className="header">Список групп</div>;
     // <InputSearch/>
     let container = null;
@@ -135,6 +169,9 @@ function mapStateToProps(state) {
 const mapDispatchToProps = dispatch => ({
   handleGroupDelete: (obj) => {
     dispatch(deleteGroup(obj));
+  },
+  getGroup: (group) => {
+    dispatch(getNameGroup(group));
   },
   getGroups: (userId) => {
     dispatch(getAllGroups(userId));

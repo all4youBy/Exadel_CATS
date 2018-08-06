@@ -6,6 +6,7 @@ import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.Collections;
 import java.util.List;
+import java.util.concurrent.CountDownLatch;
 import java.util.stream.Collectors;
 
 import com.exadel.team3.backend.dao.*;
@@ -28,8 +29,6 @@ public class SolutionServiceImpl
         extends AssignableServiceImpl<Solution>
         implements SolutionService
 {
-    @Autowired
-    private TaskRepository taskRepository;
 
     @Autowired
     private SolutionRepository solutionRepository;
@@ -141,11 +140,27 @@ public class SolutionServiceImpl
 
 
     @Override
-    public Solution submit(@NonNull Solution solution) throws ServiceException{
+    public Solution submit(@NonNull Solution solution) throws ServiceException {
         if (solution.getDeadline().isBefore(LocalDateTime.now())) {
             throw new ServiceException("The solution is pass the deadline");
         }
-        solution.setMark(solutionChecker.check(solution));
+
+
+        CountDownLatch latch = new CountDownLatch(1);
+
+        new Thread(() -> {
+            solutionChecker.check(solution);
+            int mark = solutionChecker.check(solution);
+            if (mark > solution.getMark()) {
+                solution.setMark(mark);
+            }
+            latch.countDown();
+        }).start();
+        try {
+            latch.await();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
         return updateItem(solution);
     }
 
