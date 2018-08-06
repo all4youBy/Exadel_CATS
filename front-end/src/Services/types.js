@@ -3,7 +3,6 @@ export const USER_GENERAL_MENU_DATA = [{
   type: 'user',
   text: 'Личный кабинет',
   subsections: [],
-  link: '/',
 }, {
   key: 'sub1',
   type: 'file',
