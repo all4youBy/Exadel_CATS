@@ -1,4 +1,4 @@
-/* eslint-disable spaced-comment,no-unused-vars */
+/* eslint-disable spaced-comment,no-unused-vars,no-plusplus */
 import React from 'react';
 import 'antd/dist/antd.css';
 import { Link } from 'react-router-dom';
@@ -17,6 +17,7 @@ class TableGroupStudents extends React.Component {
   static propTypes = {
     getGroup: PropTypes.func.isRequired,
     students: PropTypes.objectOf(PropTypes.any).isRequired,
+    assignedTasks: PropTypes.objectOf(PropTypes.any).isRequired,
     handleStudentAdd: PropTypes.func.isRequired,
     handleStudentDelete: PropTypes.func.isRequired,
     groupName: PropTypes.string.isRequired,
@@ -32,18 +33,30 @@ class TableGroupStudents extends React.Component {
     size: 'middle',
     title: undefined,
     showHeader: true,
+    load: false,
+    assignedTasks: [],
   };
 
   componentDidMount() {
-    const { getGroup, groupName } = this.props;
+    const { getGroup, groupName, getAssignedTasks, students } = this.props;
+    const { load } = this.state;
     getGroup(groupName);
+    getAssignedTasks(students);
+    if (!load) {
+      this.setState(() => ({
+        load: true,
+      }));
+    }
     // console.log(students);
   }
 
   render() {
-    const { students, handleStudentDelete, error, addStudentTest,
-      groupName, getAssignedTasks } = this.props;
-    const { bordered, loading, pagination, size, title, showHeader } = this.state;
+    const {
+      students, handleStudentDelete, error, addStudentTest,
+      groupName, getAssignedTasks,
+    } = this.props;
+    const { bordered, loading, pagination, size, title,
+      showHeader, assignedTasks, load } = this.state;
     if (error) {
       message.error(error);
       return <Loading/>;
@@ -75,11 +88,9 @@ class TableGroupStudents extends React.Component {
       key: 'countTasks',
       width: 70,
       fixed: 'right',
-      render(text, record) {
-        return (
-          <Link to={`/groupstudentslist/personaltasks/${record.key}`}>{text}</Link>
-        );
-      },
+      render: (text, record) => (
+        <Link to={`/groupstudentslist/personaltasks/${record.key}`}>{record.countTasks}</Link>
+      ),
     }, {
       title: 'Личные тесты',
       dataIndex: 'countTests',
@@ -131,15 +142,20 @@ class TableGroupStudents extends React.Component {
     }
     const data = [];
     for (let i = 0; i < students.length; i += 1) {
+      if (!load) {
+        getAssignedTasks(students);
+        this.setState(() => ({
+          load: true,
+        }));
+      }
+      console.log(assignedTasks[3], 'lll');
       data.push({
         number: `${i + 1}.`,
         firstName: students[i].firstName,
         lastName: students[i].lastName,
-        email: students[i].email,
+        countTasks: assignedTasks[i] ? assignedTasks[i].length : null,
       });
     }
-    getAssignedTasks(students);
-    console.log(students, data, data.length);
     const table = students.length ? (
       <Table
         {...{

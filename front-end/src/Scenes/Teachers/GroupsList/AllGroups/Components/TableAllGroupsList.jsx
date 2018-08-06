@@ -13,6 +13,8 @@ import { deleteGroup, getAllGroups } from '../Services/Actions/actions';
 import Loading from '../../../../../Components/Loading';
 import { receiveTest } from '../../../Tests/AssignTest/Services/Actions/actions';
 import { receiveTask } from '../../../Tasks/AssignTask/Services/Actions/actions';
+import { getNameGroup } from '../../Groups/Services/Actions/actions';
+import InputSearch from './InputSearch';
 
 class TableAllGroupsList extends React.PureComponent {
   static propTypes = {
@@ -22,6 +24,7 @@ class TableAllGroupsList extends React.PureComponent {
     addGroupTest: PropTypes.func.isRequired,
     addGroupTask: PropTypes.func.isRequired,
     userStatus: PropTypes.string.isRequired,
+    getGroup: PropTypes.func.isRequired,
   };
 
   state = {
@@ -42,7 +45,7 @@ class TableAllGroupsList extends React.PureComponent {
   render() {
     const { getListUsers, groups } = this.state;
     const {
-      emptyList, handleGroupDelete, upDate, addGroupTask,
+      emptyList, handleGroupDelete, upDate, addGroupTask, getGroup,
       addGroupTest, userStatus,
     } = this.props;
     const columns = [{
@@ -51,7 +54,10 @@ class TableAllGroupsList extends React.PureComponent {
       key: 'name',
       width: 1000,
       render(text) {
-        const nameGroup = (<Link className="link-name-group" to={`/groups/${text}`}>{text}</Link>);
+        const getMyGroup = (name) => {
+          getGroup(name);
+        };
+        const nameGroup = (<Link onClick={() => getMyGroup(text)} className="link-name-group" to={`/groups/${text}`}>{text}</Link>);
         return (
           <div>{nameGroup}</div>);
       },
@@ -98,7 +104,7 @@ class TableAllGroupsList extends React.PureComponent {
         name: groups[i],
       });
     }
-    columns[0].title = <div className="header">Список групп</div>;
+    columns[0].title = <div><InputSearch/><div className="header">Список групп</div></div>;
     // <InputSearch/>
     const stateData = emptyList && getListUsers ? (<Loading/>)
       : <div className="empty-list">Список групп пуст</div>;
@@ -130,6 +136,9 @@ function mapStateToProps(state) {
 const mapDispatchToProps = dispatch => ({
   handleGroupDelete: (obj) => {
     dispatch(deleteGroup(obj));
+  },
+  getGroup: (group) => {
+    dispatch(getNameGroup(group));
   },
   getGroups: (userId) => {
     dispatch(getAllGroups(userId));

@@ -20,6 +20,7 @@ import {
 import Loading from '../../../../../Components/Loading';
 import { receiveTest } from '../../../Tests/AssignTest/Services/Actions/actions';
 import { receiveTask } from '../../../Tasks/AssignTask/Services/Actions/actions';
+import InputSearch from '../../AllGroups/Components/InputSearch';
 
 class TableGroupsList extends React.PureComponent {
   static propTypes = {
@@ -141,7 +142,7 @@ class TableGroupsList extends React.PureComponent {
         name: groups[i],
       });
     }
-    columns[0].title = <div className="header">Список моих групп</div>;
+    columns[0].title = <div><InputSearch/><div className="header">Список моих групп</div></div>;
     // <InputSearch/>
     const stateData = emptyList && getListUsers ? (<Loading/>)
       : <div className="empty-list">Список групп пуст</div>;

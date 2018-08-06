@@ -70,7 +70,6 @@ const mapDispatchToProps = dispatch => ({
     dispatch(receiveTest(student, 'STUDENT'));
   },
   getAssignedTasks: (users) => {
-    console.log(users);
     for (let item = 0; item < users.length; item++) {
       console.log(users[item].email);
       dispatch(assignedTasks(users[item].email));
