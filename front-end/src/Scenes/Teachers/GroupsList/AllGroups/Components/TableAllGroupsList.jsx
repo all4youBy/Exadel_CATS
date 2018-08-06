@@ -30,6 +30,7 @@ class TableAllGroupsList extends React.PureComponent {
   state = {
     groups: [],
     getListUsers: false,
+    inputFilter: '',
   };
 
   static getDerivedStateFromProps(nextProps, nextState) {
@@ -42,8 +43,15 @@ class TableAllGroupsList extends React.PureComponent {
     };
   }
 
+  filterList = (value) => {
+    console.log(value);
+    this.setState({
+      inputFilter: value,
+    });
+  };
+
   render() {
-    const { getListUsers, groups } = this.state;
+    const { getListUsers, groups, inputFilter } = this.state;
     const {
       emptyList, handleGroupDelete, upDate, addGroupTask, getGroup,
       addGroupTest, userStatus,
@@ -57,7 +65,8 @@ class TableAllGroupsList extends React.PureComponent {
         const getMyGroup = (name) => {
           getGroup(name);
         };
-        const nameGroup = (<Link onClick={() => getMyGroup(text)} className="link-name-group" to={`/groups/${text}`}>{text}</Link>);
+        const nameGroup = (
+          <Link onClick={() => getMyGroup(text)} className="link-name-group" to={`/groups/${text}`}>{text}</Link>);
         return (
           <div>{nameGroup}</div>);
       },
@@ -104,15 +113,20 @@ class TableAllGroupsList extends React.PureComponent {
         name: groups[i],
       });
     }
-    columns[0].title = <div><InputSearch/><div className="header">Список групп</div></div>;
-    // <InputSearch/>
+    const newData = data.filter(elem => elem.name
+      .toLowerCase().indexOf(inputFilter.toLowerCase()) !== -1);
+    columns[0].title = (
+      <div><InputSearch filterList={this.filterList}/>
+        <div className="header">Список групп</div>
+      </div>
+    );
     const stateData = emptyList && getListUsers ? (<Loading/>)
       : <div className="empty-list">Список групп пуст</div>;
     const table = data.length ? (
       <Table
         className="table-groups"
         columns={columns}
-        dataSource={data}
+        dataSource={newData}
       />) : (<Loading/>
     );
     const addList = groups.length ? table : stateData;

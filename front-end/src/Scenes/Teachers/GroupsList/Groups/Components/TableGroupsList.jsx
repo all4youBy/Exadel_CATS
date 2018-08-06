@@ -9,7 +9,6 @@ import ButtonEditGroup from './ButtonEditGroup';
 import ButtonAssignTask from '../../../../../Components/ButtonAssignTask';
 import ButtonDeleteGroup from './ButtonDeleteGroup';
 import ButtonAssignTest from '../../../../../Components/ButtonAssignTest';
-import InputSearch from './InputSearch';
 import {
   deleteGroup,
   getMyGroups,
@@ -57,7 +56,7 @@ class TableGroupsList extends React.PureComponent {
     this.setState({
       inputFilter: value,
     });
-  }
+  };
 
 
   render() {
@@ -151,11 +150,10 @@ class TableGroupsList extends React.PureComponent {
         name: groups[i],
       });
     }
-    columns[0].title = <div><InputSearch/><div className="header">Список моих групп</div></div>;
-    // <InputSearch/>
     const newData = data.filter(elem => elem.name
       .toLowerCase().indexOf(inputFilter.toLowerCase()) !== -1);
-    columns[0].title = <InputSearch filterList={this.filterList}/>;
+    columns[0].title = <div><InputSearch filterList={this.filterList}/><div className="header">Список моих групп</div></div>;
+    // <InputSearch/>
     const stateData = emptyList && getListUsers ? (<Loading/>)
       : <div className="empty-list">Список групп пуст</div>;
     const table = data.length ? (
