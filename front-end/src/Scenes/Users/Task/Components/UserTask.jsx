@@ -62,6 +62,8 @@ class UserTask extends React.Component {
   handleDeleteSolution = () => {
     const { deleteSolution, taskInfo } = this.props;
     deleteSolution(taskInfo.solution.id);
+    const element = document.querySelector('.delete-files');
+    element.classList.add('hide');
   };
 
   render() {
@@ -116,7 +118,7 @@ class UserTask extends React.Component {
     if (taskInfo.solution && taskInfo.solution.files && taskInfo.solution.files.length) {
       const fileNames = taskInfo.solution.files.map(element => (<div>{element}</div>));
       deleteFiles = (
-        <div>
+        <div className="delete-files">
           <span className="text-delete-file">Удалите раннее загруженные файлы,
       чтобы добавить новое решение:
           </span>

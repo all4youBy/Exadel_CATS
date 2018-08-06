@@ -71,7 +71,7 @@ class TaskProperties extends React.Component {
   };
 
   validateTask = (task) => {
-    if (task.deadline !== '' && task.title !== '' && task.start !== '') {
+    if (task.deadline !== '' && task.start !== '') {
       return true;
     }
     return false;
@@ -90,7 +90,7 @@ class TaskProperties extends React.Component {
         title: nameTest,
         start: getStart,
         deadline: getDeadline,
-        topicsId: taskInfo.taskTopics,
+        // topicsId: taskInfo.taskTopics,
       };
       switch (type) {
         case 'STUDENT': {
@@ -100,7 +100,7 @@ class TaskProperties extends React.Component {
         case 'GROUPS': {
           task.assignedTo = groupName;
           task.id = taskInfo.taskId;
-          task.title = taskInfo.title;
+          // task.title = taskInfo.title;
           this.setState(() => ({ error: false }));
           if (this.validateTask(task)) {
             handleCreateTask(task, '/assign-task-for-group');
