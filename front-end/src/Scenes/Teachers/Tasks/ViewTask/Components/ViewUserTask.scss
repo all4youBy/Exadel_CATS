@@ -1,0 +1,51 @@
+.contain-view-user-sets {
+  margin-top: 30px;
+  .parent-view-user-set {
+    display: flex;
+    width: 100%;
+    margin-top: 10px;
+    justify-content: center;
+    margin-bottom: 15px;
+  }
+  .sets-description-input {
+    margin-right: 20px;
+    margin-left: 20px;
+  }
+  .sets-description {
+    display: flex;
+    justify-content: center;
+  }
+  .view-user-level-data {
+    width: 100px;
+  }
+  .view-user-input-data {
+    width: 270px;
+    margin-right: 35px;
+    text-align: left;
+    margin-left: 25px;
+  }
+  .view-user-output-data {
+    width: 270px;
+    text-align: left;
+  }
+  .input-left {
+    text-align: left;
+    margin-left: 10px;
+  }
+  .view-user-input {
+    width: 270px;
+    margin-right: 35px;
+    margin-left: 25px;
+  }
+  .view-user-output {
+    width: 270px;
+  }
+
+  .view-user-level {
+    width: 100px;
+  }
+  .border-sets {
+    border: 1px solid rgb(217, 217, 217);
+    border-radius: 4px;
+  }
+}

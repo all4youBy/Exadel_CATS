@@ -23,14 +23,16 @@ import PageAssignedTasks from '../../Scenes/Users/Tasks/AssignedTasks';
 import PageAssignTest from '../../Scenes/Teachers/Tests/AssignTest';
 import CreateGroupPage from '../../Scenes/Teachers/GroupsList/GroupCreation';
 import PageListCheckTests from '../../Scenes/Teachers/Tests/ListCheckTests';
-import PageCheckTest from '../../Scenes/Teachers/Tests/CheckTest/Containers/PageCheckTest';
-import AddQuestion from '../../Scenes/Teachers/Tests/AddQuestion/Containers/AddQuestion';
-import AddTaskPage from '../../Scenes/Teachers/Tasks/AddTask/Containers/AddTaskPage';
+import PageCheckTest from '../../Scenes/Teachers/Tests/CheckTest';
+import AddQuestion from '../../Scenes/Teachers/Tests/AddQuestion';
+import AddTaskPage from '../../Scenes/Teachers/Tasks/AddTask';
 import Loading from '../../Components/Loading';
 // import PageAssignTask from '../../Scenes/Teachers/Tasks/AssignTask/Containers/PageAssignTask';
 import TrainingTestPage from '../../Scenes/Users/TestList/TrainingTest/Containers/TrainingTestPage';
 import AllGroups from '../../Scenes/Teachers/GroupsList/AllGroups/Containers/AllGroups';
 import TaskProperties from '../../Scenes/Teachers/Tasks/AssignTask/Components/TaskProperties';
+import ViewTaskPage from '../../Scenes/Teachers/Tasks/ViewTask/Containers/ViewTaskPage';
+import AllQuestionsPage from '../../Scenes/Teachers/Questions/AllQuestions/Containers/AllQuestionsPage';
 
 class Main extends React.Component {
   static propTypes = {
@@ -100,6 +102,16 @@ class Main extends React.Component {
         key: '/assigntask/:groupName',
         url: '/assigntask/:groupName',
         component: TaskProperties,
+      },
+      {
+        key: '/viewtask/:taskId',
+        url: '/viewtask/:taskId',
+        component: ViewTaskPage,
+      },
+      {
+        key: '/questions',
+        url: '/questions',
+        component: AllQuestionsPage,
       },
     ];
   }
