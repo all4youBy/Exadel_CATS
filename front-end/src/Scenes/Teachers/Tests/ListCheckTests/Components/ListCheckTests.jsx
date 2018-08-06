@@ -8,10 +8,11 @@ class ListCheckTests extends React.Component {
   static propTypes = {
     questionList: PropTypes.arrayOf(PropTypes.object).isRequired,
     submitManualCheck: PropTypes.func.isRequired,
+    delItem: PropTypes.func.isRequired,
   };
 
   handleSubmitCheck = (item, answer) => {
-    const { submitManualCheck } = this.props;
+    const { submitManualCheck, delItem } = this.props;
     const data = {
       status: answer,
       testId: item.testId,
@@ -20,13 +21,17 @@ class ListCheckTests extends React.Component {
     };
     console.log(data);
     submitManualCheck(data);
+    delItem(item);
   };
 
   render() {
     const { questionList } = this.props;
     console.log(questionList);
-    return questionList.length
-      ? (
+    let list;
+    if (!questionList) {
+      list = <Loading/>;
+    } else if (questionList.length) {
+      list = (
         <List
           className="list-check-tests"
           size="large"
@@ -40,7 +45,7 @@ class ListCheckTests extends React.Component {
               className="check-test-list"
             >
               <List.Item.Meta
-                title={item.text}
+                title={item.questionText}
                 description={(
                   <div>{item.answer}
                     <div className="description">
@@ -65,7 +70,11 @@ class ListCheckTests extends React.Component {
               />
             </List.Item>
           )}
-        />) : <Loading/>;
+        />);
+    } else {
+      list = <p>Нет ответов на проверку.</p>;
+    }
+    return list;
   }
 }
 

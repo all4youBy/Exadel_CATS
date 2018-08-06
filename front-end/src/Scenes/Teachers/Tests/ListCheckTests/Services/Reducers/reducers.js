@@ -1,7 +1,7 @@
 import * as types from '../Actions/types';
 
 const initialState = {
-  questionList: [],
+  questionList: null,
 };
 
 const checkQuestions = (state = initialState, action) => {
@@ -9,7 +9,13 @@ const checkQuestions = (state = initialState, action) => {
     case types.RECEIVE_QUESTIONS_TO_CHECK: {
       return {
         ...state,
-        questionList: [...state.questionList, ...action.payload],
+        questionList: [...action.payload],
+      };
+    }
+    case types.DELETE_MANUAL_ANSWER: {
+      return {
+        ...state,
+        questionList: state.questionList.filter(item => item !== action.payload),
       };
     }
     default: {

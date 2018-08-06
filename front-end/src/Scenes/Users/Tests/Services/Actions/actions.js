@@ -20,8 +20,13 @@ export function postTestAnswer(data) {
 
 export function postTest(testId) {
   return (API.post('tests/submit-test', testId, ['post_test', (item) => {
-    message.success(`Тест пройден! Оценка ${item}`);
-    history.push('/passedtestlist');
+    if (!Number.isNaN(parseInt(item.text, 10))) {
+      message.success(`Тест пройден! Оценка ${item.text}`);
+      history.push('/passedtestlist');
+    } else {
+      message.success('Тест пройден! Ожидайте проверки учителем.');
+      history.push('/passedtestlist');
+    }
   }, () => {
     message.error('Ошибка!');
   }], 'Не удалось отправить тест'));
