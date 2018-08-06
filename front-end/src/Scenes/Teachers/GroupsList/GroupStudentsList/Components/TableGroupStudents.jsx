@@ -3,13 +3,15 @@ import React from 'react';
 import 'antd/dist/antd.css';
 import { Link } from 'react-router-dom';
 import './TableGroupStudents.scss';
-import { message, Table } from 'antd';
+import { message, Radio, Table } from 'antd';
 import PropTypes from 'prop-types';
 import ButtonAssignTest from '../../../../../Components/ButtonAssignTest';
 import ButtonAssignTask from '../../../../../Components/ButtonAssignTask';
 import ButtonDeleteStudent from './ButtonDeleteStudent';
 // import ButtonAddStudent from './ButtonAddStudent';
 import Loading from '../../../../../Components/Loading';
+
+const { Group } = Radio;
 
 class TableGroupStudents extends React.Component {
   static propTypes = {
@@ -59,13 +61,7 @@ class TableGroupStudents extends React.Component {
       render: (text, record) => (
         <div>{record.lastName} {record.firstName}</div>
       ),
-    },
-      /*{
-      title: 'Тест1',
-      dataIndex: 'test',
-      key: 'test1',
-      width: 150,
-    },*/ {
+    }, {
       title: 'Тест2',
       dataIndex: 'test',
       key: 'test2',
@@ -106,7 +102,7 @@ class TableGroupStudents extends React.Component {
             />
             </div>
             <div className="parent-button-assign-task"><ButtonAssignTask
-                // addGroup={addGroupTask}
+              // addGroup={addGroupTask}
               groupName={record.name}
             />
             </div>
@@ -138,7 +134,8 @@ class TableGroupStudents extends React.Component {
         lastName: students[i].lastName,
         email: students[i].email,
       });
-    }console.log(students, data, data.length);
+    }
+    console.log(students, data, data.length);
     const table = students.length ? (
       <Table
         {...{
@@ -157,7 +154,13 @@ class TableGroupStudents extends React.Component {
       : <div className="empty-list">В этой группе нет студентов</div>;
     return (
       <div className="student-row">
-        <div className="group-name-list"><span>{groupName}</span></div>
+        <div>
+          <div className="group-name-list"><span>{groupName}</span></div>
+          <Group className="radio-buttons" onChange={this.onChangeAnswer}>
+            <Radio value="TASKS">Задачи</Radio>
+            <Radio value="TESTS">Тесты</Radio>
+          </Group>
+        </div>
         {table}
         {/*<ButtonAddStudent onStudentAdd={handleStudentAdd}/>*/}
       </div>
