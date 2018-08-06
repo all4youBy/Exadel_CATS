@@ -5,7 +5,10 @@ import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { Button, Input } from 'antd';
 import InputOutputSet from './InputOutputSet';
-import { addInOutSet, addTaskTag, deleteTaskTag, fetchTopics, fetchAddTask } from '../Services/Actions/actions';
+import {
+  addInOutSet, addTaskTag, deleteTaskTag,
+  fetchTopics, fetchAddTask, clearTags, deleteInOutSet,
+} from '../Services/Actions/actions';
 import TreeWithTags from '../../../../../Components/TreeWithTags';
 import requestLoginInformation from '../../../../../Services/loginService';
 
@@ -22,12 +25,15 @@ class AddTask extends React.PureComponent {
     getTopics: PropTypes.func.isRequired,
     topics: PropTypes.string.isRequired,
     postAddTask: PropTypes.func.isRequired,
+    setClearTags: PropTypes.func.isRequired,
+    deleteSet: PropTypes.func.isRequired,
   };
 
   state = {
     nameTask: '',
     textTask: '',
     testSets: [],
+    error: false,
   };
 
   setField = (event) => {
@@ -68,15 +74,24 @@ class AddTask extends React.PureComponent {
     });
   };
 
+  validateTask = (task) => {
+    if (task.title !== '' && task.text !== '' && task.topicIds.length
+      && task.testingSets.length && task.type !== '') {
+      return true;
+    }
+    return false;
+  };
+
   render() {
     const {
       addTag, deleteTag, tags, addElem, testSet, topics,
-      getTopics, postAddTask,
+      getTopics, postAddTask, deleteSet,
     } = this.props;
-    const { nameTask, textTask, testSets } = this.state;
+    const { nameTask, textTask, testSets, error } = this.state;
     let tagsTask = [];
     const handleSubmit = (e) => {
       e.preventDefault();
+      const { setClearTags } = this.props;
       if (tags.length) {
         const tagsArray = [];
         tags.forEach((element) => {
@@ -101,8 +116,20 @@ class AddTask extends React.PureComponent {
         testingSets: tests,
         type: 'PASS_ALL',
       };
-      postAddTask(obj);
+      if (this.validateTask(obj)) {
+        postAddTask(obj);
+        setClearTags();
+        this.setState(({
+          testSets: [],
+        }));
+      } else {
+        this.setState(({
+          error: true,
+        }));
+      }
     };
+    const errorInput = error ? <div className="error-input">Введите все данные!</div> : <div/>;
+
     return (
       <div className="add-task-container">
         <TextArea
@@ -132,8 +159,10 @@ class AddTask extends React.PureComponent {
           addElem={addElem}
           testSet={testSet}
           testSets={testSets}
+          deleteSet={deleteSet}
           setTestSets={this.setTestSets}
         />
+        <div className="error-input-parent">{errorInput}</div>
         <Button
           type="primary"
           className="button-table-with-border task-upload-button"
@@ -168,6 +197,12 @@ const mapDispatchToProps = dispatch => ({
   },
   postAddTask: (data) => {
     dispatch(fetchAddTask(data));
+  },
+  setClearTags: () => {
+    dispatch(clearTags());
+  },
+  deleteSet: (id) => {
+    dispatch(deleteInOutSet(id));
   },
 });
 

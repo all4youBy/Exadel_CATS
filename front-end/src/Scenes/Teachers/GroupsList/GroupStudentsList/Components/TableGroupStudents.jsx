@@ -3,7 +3,7 @@ import React from 'react';
 import 'antd/dist/antd.css';
 import { Link } from 'react-router-dom';
 import './TableGroupStudents.scss';
-import { message, Table } from 'antd';
+import { message, Radio, Table } from 'antd';
 import PropTypes from 'prop-types';
 import ButtonAssignTest from '../../../../../Components/ButtonAssignTest';
 import ButtonAssignTask from '../../../../../Components/ButtonAssignTask';
@@ -11,14 +11,17 @@ import ButtonDeleteStudent from './ButtonDeleteStudent';
 // import ButtonAddStudent from './ButtonAddStudent';
 import Loading from '../../../../../Components/Loading';
 
+const { Group } = Radio;
+
 class TableGroupStudents extends React.Component {
   static propTypes = {
     getGroup: PropTypes.func.isRequired,
-    students: PropTypes.objectOf.isRequired,
+    students: PropTypes.objectOf(PropTypes.any).isRequired,
     handleStudentAdd: PropTypes.func.isRequired,
     handleStudentDelete: PropTypes.func.isRequired,
     groupName: PropTypes.string.isRequired,
     error: PropTypes.string.isRequired,
+    addStudentTest: PropTypes.func.isRequired,
   };
 
   state = {
@@ -36,7 +39,7 @@ class TableGroupStudents extends React.Component {
   }
 
   render() {
-    const { students, handleStudentDelete, error } = this.props;
+    const { students, handleStudentDelete, error, addStudentTest, groupName } = this.props;
     const { bordered, loading, pagination, size, title, showHeader } = this.state;
     if (error) {
       message.error(error);
@@ -56,23 +59,18 @@ class TableGroupStudents extends React.Component {
       width: 250,
       fixed: 'left',
       render: (text, record) => (
-        <div>{record.firstName} {record.lastName}</div>
+        <div>{record.lastName} {record.firstName}</div>
       ),
-    }, {
-      title: 'Тест1',
-      dataIndex: 'test',
-      key: 'test1',
-      width: 150,
     }, {
       title: 'Тест2',
       dataIndex: 'test',
       key: 'test2',
       /* width должна отсутствовать в последней колонке скрола */
     }, {
-      title: 'Кол. личных заданий',
+      title: 'Личные задачи',
       dataIndex: 'countTasks',
       key: 'countTasks',
-      width: 100,
+      width: 70,
       fixed: 'right',
       render(text, record) {
         return (
@@ -80,10 +78,10 @@ class TableGroupStudents extends React.Component {
         );
       },
     }, {
-      title: 'Кол. личных тестов',
+      title: 'Личные тесты',
       dataIndex: 'countTests',
       key: 'countTests',
-      width: 100,
+      width: 70,
       fixed: 'right',
       render(text, record) {
         return (
@@ -97,13 +95,23 @@ class TableGroupStudents extends React.Component {
       fixed: 'right',
       render(record) {
         return (
-          <div className="buttons-group-table">
-            <div className="parent-button-assign-test"><ButtonAssignTest/></div>
-            <div className="parent-button-assign-task"><ButtonAssignTask/></div>
-            <div className="parent-button-delete-student"><ButtonDeleteStudent
-              onStudentDelete={handleStudentDelete}
-              data={record.number}
+          <div className="buttons-table">
+            <div className="parent-button-assign-test"><ButtonAssignTest
+              addStudent={addStudentTest}
+              groupName={record.email}
             />
+            </div>
+            <div className="parent-button-assign-task"><ButtonAssignTask
+              // addGroup={addGroupTask}
+              groupName={record.name}
+            />
+            </div>
+            <div className="parent-button-delete-group">
+              <ButtonDeleteStudent
+                onStudentDelete={handleStudentDelete}
+                groupName={groupName}
+                student={record.email}
+              />
             </div>
           </div>
         );
@@ -122,27 +130,38 @@ class TableGroupStudents extends React.Component {
     for (let i = 0; i < students.length; i += 1) {
       data.push({
         number: `${i + 1}.`,
-        lastName: students[i].lastName,
         firstName: students[i].firstName,
+        lastName: students[i].lastName,
+        email: students[i].email,
       });
     }
-
+    console.log(students, data, data.length);
+    const table = students.length ? (
+      <Table
+        {...{
+          bordered,
+          loading,
+          pagination,
+          size,
+          title,
+          showHeader,
+        }}
+        dataSource={data}
+        columns={columns}
+        className="student-row"
+        scroll={{ x: 1300 }}
+      />)
+      : <div className="empty-list">В этой группе нет студентов</div>;
     return (
-      <div>
-        <Table
-          rowClassName="student-row"
-          {...{
-            bordered,
-            loading,
-            pagination,
-            size,
-            title,
-            showHeader,
-          }}
-          columns={columns}
-          dataSource={data}
-          scroll={{ x: 1500 }}
-        />
+      <div className="student-row">
+        <div>
+          <div className="group-name-list"><span>{groupName}</span></div>
+          <Group className="radio-buttons" onChange={this.onChangeAnswer}>
+            <Radio value="TASKS">Задачи</Radio>
+            <Radio value="TESTS">Тесты</Radio>
+          </Group>
+        </div>
+        {table}
         {/*<ButtonAddStudent onStudentAdd={handleStudentAdd}/>*/}
       </div>
     );

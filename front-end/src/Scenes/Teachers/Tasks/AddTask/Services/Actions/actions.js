@@ -9,6 +9,13 @@ export function addInOutSet() {
   };
 }
 
+export function deleteInOutSet(id) {
+  return {
+    type: types.DELETE_IN_OUT_SET,
+    payload: id,
+  };
+}
+
 export function addTaskTag(tag) {
   return {
     type: types.ADD_TASK_TAG,
@@ -33,4 +40,10 @@ export function fetchAddTask(data) {
   }, () => {
     message.error('Не удалось добавить задачу');
   }]);
+}
+
+export function clearTags() {
+  return {
+    type: types.CLEAR_TAGS_ADD_TASK,
+  };
 }

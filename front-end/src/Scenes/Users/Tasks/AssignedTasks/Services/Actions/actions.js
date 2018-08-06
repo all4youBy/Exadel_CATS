@@ -6,7 +6,7 @@ export function fetchGroupsListForTest() {
 
 export function fetchAssignedTasks(userId) {
   return (API.get(
-    `task/users-tasks/${userId}`,
+    `task/users-unfinished-tasks/${userId}`,
     'user_assigned_tasks',
     'Не удалось загрузить список задач',
   ));

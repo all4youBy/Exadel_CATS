@@ -1,6 +1,6 @@
 // import { message } from 'antd';
 import API from '../../../../../../Services/API';
-import { RECEIVE_RENAME_GROUP, NAME_GROUP, RECEIVE_GROUPSLIST } from './types';
+import { RECEIVE_RENAME_GROUP, NAME_GROUP, RECEIVE_GROUPSLIST, GET_NAME_GROUP } from './types';
 
 export function deleteGroup(data) {
   return (API.deleteRequest('users/groups', data, 'deleteGroup', 'Не удалось удалить группу'));
@@ -32,6 +32,12 @@ export function renameNameGroup(data) {
 export function nameGroup(group) {
   return {
     type: NAME_GROUP,
+    payload: group,
+  };
+}
+export function getNameGroup(group) {
+  return {
+    type: GET_NAME_GROUP,
     payload: group,
   };
 }

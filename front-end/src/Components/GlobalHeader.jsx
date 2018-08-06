@@ -23,19 +23,19 @@ class GlobalHeader extends React.PureComponent {
 
   render() {
     const { userType, user } = this.props;
-    const logOut = !(userType === 'GUEST') ? (
+    const logOut = !(userType === 'GUEST' || userType === undefined) ? (
       <div className="username">
         <div className="username"><Icon type="user" className="user"/>
           <span className="name-username">{user.firstName} {user.lastName}</span>
         </div>
         <div className="exit-block">
-          <Icon type="logout" className="logout"/>
           <Link
             to="/login"
             onClick={this.onClickLogOut}
             className="button-exit"
             type="dashed"
           >
+            <Icon type="logout" className="logout"/>
             Выйти
           </Link>
         </div>

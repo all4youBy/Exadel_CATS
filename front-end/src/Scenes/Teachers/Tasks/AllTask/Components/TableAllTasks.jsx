@@ -1,6 +1,7 @@
 import React from 'react';
 import './TableAllTasks.scss';
 import PropTypes from 'prop-types';
+import { Link } from 'react-router-dom';
 import { Table, Tag } from 'antd';
 import ButtonEditTask from './ButtonEditTask';
 import Loading from '../../../../../Components/Loading';
@@ -65,11 +66,14 @@ class TableAllTasks extends React.PureComponent {
       key: 'taskName',
       width: 250,
       className: 'column-break-point',
-      render: (text, record) => (
-        <div className="all-tasks-title">
-          <div className="all-tasks-title-text">{record.taskName}</div>
-          <div className="all-tasks-author">{record.author}</div>
-        </div>),
+      render: (text, record) => {
+        const link = `/viewtask/${record.id}`;
+        return (
+          <div className="all-tasks-title">
+            <Link className="link-name-group" to={link}>{record.taskName}</Link>
+            <div className="all-tasks-author">{record.author}</div>
+          </div>);
+      },
     }, {
       title: 'Тема',
       dataIndex: 'theme',
@@ -105,7 +109,6 @@ class TableAllTasks extends React.PureComponent {
         tags = tasks[i].topics.map(element => (<Tag color="blue">{element}</Tag>));
       }
 
-      console.log(date.getDay(), 2);
       data.push({
         key: `${i}`,
         author: `${tasks[i].firstName} ${tasks[i].lastName}`,
@@ -116,6 +119,7 @@ class TableAllTasks extends React.PureComponent {
         year: date.getFullYear(),
         button: tasks[i].email,
         formDate: date,
+        id: tasks[i].id,
       });
     }
 

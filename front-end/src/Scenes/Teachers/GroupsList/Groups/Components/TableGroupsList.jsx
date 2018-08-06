@@ -9,13 +9,13 @@ import ButtonEditGroup from './ButtonEditGroup';
 import ButtonAssignTask from '../../../../../Components/ButtonAssignTask';
 import ButtonDeleteGroup from './ButtonDeleteGroup';
 import ButtonAssignTest from '../../../../../Components/ButtonAssignTest';
-// import InputSearch from './InputSearch';
+import InputSearch from './InputSearch';
 import {
   deleteGroup,
   getMyGroups,
   listGroup,
   nameGroup,
-  renameGroup, renameNameGroup,
+  renameGroup, renameNameGroup, getNameGroup,
 } from '../Services/Actions/actions';
 import Loading from '../../../../../Components/Loading';
 import { receiveTest } from '../../../Tests/AssignTest/Services/Actions/actions';
@@ -32,11 +32,13 @@ class TableGroupsList extends React.PureComponent {
     onGroupEdit: PropTypes.func.isRequired,
     onEdit: PropTypes.func.isRequired,
     user: PropTypes.string.isRequired,
+    getGroup: PropTypes.func.isRequired,
   };
 
   state = {
     groups: [],
     getListUsers: false,
+    inputFilter: '',
   };
 
   static getDerivedStateFromProps(nextProps, nextState) {
@@ -49,11 +51,19 @@ class TableGroupsList extends React.PureComponent {
     };
   }
 
+  filterList = (value) => {
+    console.log(value);
+    this.setState({
+      inputFilter: value,
+    });
+  }
+
+
   render() {
-    const { getListUsers, groups } = this.state;
+    const { getListUsers, groups, inputFilter } = this.state;
     const {
       emptyList, handleGroupDelete, upDate, addGroupTask,
-      addGroupTest, groupEdit, onGroupEdit, onEdit, user,
+      addGroupTest, groupEdit, onGroupEdit, onEdit, user, getGroup,
     } = this.props;
     const columns = [{
       title: ' ',
@@ -63,6 +73,9 @@ class TableGroupsList extends React.PureComponent {
       render(text, record) {
         const editName = (name) => {
           onEdit(record.name, name, user);
+        };
+        const getMyGroup = (name) => {
+          getGroup(name);
         };
         const setField = (event) => {
           const { value } = event.target;
@@ -90,7 +103,8 @@ class TableGroupsList extends React.PureComponent {
             </div>);
         }
         return (
-          <div><Link className="link-name-group" to={`/groups/${text}`}>{text}</Link></div>);
+          <div><Link onClick={() => getMyGroup(text)} className="link-name-group" to={`/groups/${text}`}>{text}</Link>
+          </div>);
       },
     }, {
       title: ' ',
@@ -138,13 +152,16 @@ class TableGroupsList extends React.PureComponent {
     }
     columns[0].title = <div className="header">Список моих групп</div>;
     // <InputSearch/>
+    const newData = data.filter(elem => elem.name
+      .toLowerCase().indexOf(inputFilter.toLowerCase()) !== -1);
+    columns[0].title = <InputSearch filterList={this.filterList}/>;
     const stateData = emptyList && getListUsers ? (<Loading/>)
       : <div className="empty-list">Список групп пуст</div>;
     const table = data.length ? (
       <Table
         className="table-groups"
         columns={columns}
-        dataSource={data}
+        dataSource={newData}
       />) : (<Loading/>);
     const addList = groups.length ? table : stateData;
     return (
@@ -171,6 +188,9 @@ const mapDispatchToProps = dispatch => ({
   },
   getGroups: (userId) => {
     dispatch(getMyGroups(userId));
+  },
+  getGroup: (group) => {
+    dispatch(getNameGroup(group));
   },
   upDate: (groups, group) => {
     const newList = groups.filter(el => el !== group);

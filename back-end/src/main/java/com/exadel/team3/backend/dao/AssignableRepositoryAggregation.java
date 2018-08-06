@@ -1,10 +1,12 @@
 package com.exadel.team3.backend.dao;
 
-import com.exadel.team3.backend.dao.impl.RatingProjectionImpl;
-
 import java.util.List;
 
+import com.exadel.team3.backend.dao.projections.AssignableProjection;
+import com.exadel.team3.backend.dao.projections.RatingProjection;
+
 public interface AssignableRepositoryAggregation {
-    List<RatingProjectionImpl> collectRatingBySum(int limit);
-    List<RatingProjectionImpl> collectRatingByAverage(int limit);
+    List<AssignableProjection> findByAssignedToWithTopics(String assignedTo);
+    List<RatingProjection> collectRatingBySum(int limit);
+    List<RatingProjection> collectRatingByAverage(int limit);
 }

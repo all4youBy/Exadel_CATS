@@ -3,7 +3,6 @@ export const USER_GENERAL_MENU_DATA = [{
   type: 'user',
   text: 'Личный кабинет',
   subsections: [],
-  link: '/',
 }, {
   key: 'sub1',
   type: 'file',
@@ -74,10 +73,14 @@ export const TEACHER_GENERAL_MENU_DATA = [{
   text: 'Тесты',
   subsections: [{
     id: '5',
-    text: 'Проверить тесты',
+    text: 'Проверить ответы',
     link: '/checktests',
   }, {
     id: '6',
+    text: 'Все вопросы',
+    link: '/questions',
+  }, {
+    id: '7',
     text: 'Добавить вопрос',
     link: '/addquestion',
   }],
@@ -86,15 +89,15 @@ export const TEACHER_GENERAL_MENU_DATA = [{
   type: 'folder',
   text: 'Материалы',
   subsections: [{
-    id: '7',
+    id: '8',
     text: 'Все материалы',
     link: '/materials',
   }, {
-    id: '8',
+    id: '9',
     text: 'Мои материалы',
     link: '/materials',
   }, {
-    id: '9',
+    id: '10',
     text: 'Добавить материал',
     link: '/',
   }],
@@ -143,11 +146,19 @@ export const ADMIN_GENERAL_MENU_DATA = [{
   subsections: [
     {
       id: '7',
+      text: 'Проверить тесты',
+      link: '/checktests',
+    }, {
+      id: '8',
+      text: 'Все вопросы',
+      link: '/questions',
+    }, {
+      id: '9',
       text: 'Добавить вопрос',
       link: '/addquestion',
     }],
 }, {
-  key: '8',
+  key: '10',
   type: 'folder',
   text: 'Материалы',
   subsections: [],
@@ -157,16 +168,16 @@ export const ADMIN_GENERAL_MENU_DATA = [{
   type: 'area-chart',
   text: 'Статистика',
   subsections: [{
-    id: '9',
+    id: '11',
     text: 'Задачи',
     link: '/',
   }, {
-    id: '10',
+    id: '12',
     text: 'Тесты',
     link: '/',
   }],
 }, {
-  key: '11',
+  key: '13',
   type: 'clock-circle-o',
   text: 'История',
   subsections: [],

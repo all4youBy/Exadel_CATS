@@ -50,7 +50,7 @@
     width: 60px;
   }
   .task-upload-button {
-    margin: 20px;
+    margin: 30px;
   }
   .tree-with-tags {
     width: 90%;
@@ -58,5 +58,8 @@
   }
 }
 
-
+.error-input-parent {
+  justify-content: center;
+  display: flex;
+}
 

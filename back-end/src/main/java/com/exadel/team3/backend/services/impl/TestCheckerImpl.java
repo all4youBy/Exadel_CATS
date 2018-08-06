@@ -13,7 +13,7 @@ import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
-import com.exadel.team3.backend.dao.ObjectIdProjection;
+import com.exadel.team3.backend.dao.projections.ObjectIdProjection;
 import com.exadel.team3.backend.dao.QuestionRepository;
 import com.exadel.team3.backend.entities.*;
 import com.exadel.team3.backend.services.ServiceException;

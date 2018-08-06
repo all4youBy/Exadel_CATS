@@ -70,8 +70,8 @@ class TaskProperties extends React.Component {
     });
   };
 
-  validateTest = (task) => {
-    if (task.getStart !== '' && task.getDeadline !== '') {
+  validateTask = (task) => {
+    if (task.deadline !== '' && task.title !== '' && task.start !== '') {
       return true;
     }
     return false;
@@ -92,27 +92,26 @@ class TaskProperties extends React.Component {
         deadline: getDeadline,
         topicsId: taskInfo.taskTopics,
       };
-      if (this.validateTest(task)) {
-        switch (type) {
-          case 'STUDENT': {
-            task.assignedTo = receiver;
-            break;
-          }
-          case 'GROUPS': {
-            task.assignedTo = groupName;
-            task.id = taskInfo.taskId;
-            task.title = taskInfo.title;
-            this.setState(() => ({ error: false }));
-            console.log(task, 783);
-            handleCreateTask(task, '/assign-task-for-group');
-            break;
-          }
-          default: {
-            this.setState(() => ({ error: false }));
-          }
+      switch (type) {
+        case 'STUDENT': {
+          task.assignedTo = receiver;
+          break;
         }
-      } else {
-        this.setState(() => ({ error: true }));
+        case 'GROUPS': {
+          task.assignedTo = groupName;
+          task.id = taskInfo.taskId;
+          task.title = taskInfo.title;
+          this.setState(() => ({ error: false }));
+          if (this.validateTask(task)) {
+            handleCreateTask(task, '/assign-task-for-group');
+          } else {
+            this.setState(({ error: true }));
+          }
+          break;
+        }
+        default: {
+          this.setState(() => ({ error: false }));
+        }
       }
     };
     const children = [];
@@ -162,7 +161,7 @@ class TaskProperties extends React.Component {
             </div>
           </div>
         </div>
-        {errorInput}
+        <div className="error-input-parent">{errorInput}</div>
         <Button
           className="button-table-with-border button-assign"
           type="primary"

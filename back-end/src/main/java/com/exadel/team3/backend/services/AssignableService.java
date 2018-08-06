@@ -1,5 +1,6 @@
 package com.exadel.team3.backend.services;
 
+import com.exadel.team3.backend.dto.AssignableDTO;
 import com.exadel.team3.backend.dto.UserRatingDTO;
 import com.exadel.team3.backend.entities.Assignable;
 import org.bson.types.ObjectId;
@@ -23,6 +24,8 @@ public interface AssignableService<T extends Assignable> extends CrudService<T, 
 
     List<T> getAssignedItemsToGroupUnfinished(String assignedToGroup);
     List<T> getAssignedItemsToGroupUnfinished(Collection<String> assignedToIds);
+
+    List<AssignableDTO> getAssignedItemsWithTopics(String assignedTo);
 
     List<UserRatingDTO> getTopRatingBySum();
     List<UserRatingDTO> getTopRatingByAverage();

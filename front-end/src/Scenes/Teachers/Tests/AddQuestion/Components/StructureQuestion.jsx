@@ -345,7 +345,7 @@ class QuestionForm extends React.PureComponent {
           <div className="add-task-container"/>
         </div>
         {elem}
-        {errorInput}
+        <div className="error-input-parent">{errorInput}</div>
         {addQuestion}
         <FormItem className="add-question">
           <Button

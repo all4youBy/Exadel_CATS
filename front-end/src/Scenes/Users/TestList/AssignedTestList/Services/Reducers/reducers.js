@@ -1,7 +1,7 @@
 import * as types from '../Actions/types';
 
 const initialState = {
-  tests: [],
+  tests: null,
   error: '',
 };
 

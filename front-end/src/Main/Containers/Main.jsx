@@ -23,19 +23,24 @@ import PageAssignedTasks from '../../Scenes/Users/Tasks/AssignedTasks';
 import PageAssignTest from '../../Scenes/Teachers/Tests/AssignTest';
 import CreateGroupPage from '../../Scenes/Teachers/GroupsList/GroupCreation';
 import PageListCheckTests from '../../Scenes/Teachers/Tests/ListCheckTests';
-import PageCheckTest from '../../Scenes/Teachers/Tests/CheckTest/Containers/PageCheckTest';
-import AddQuestion from '../../Scenes/Teachers/Tests/AddQuestion/Containers/AddQuestion';
-import AddTaskPage from '../../Scenes/Teachers/Tasks/AddTask/Containers/AddTaskPage';
+import PageCheckTest from '../../Scenes/Teachers/Tests/CheckTest';
+import AddQuestion from '../../Scenes/Teachers/Tests/AddQuestion';
+import AddTaskPage from '../../Scenes/Teachers/Tasks/AddTask';
 import Loading from '../../Components/Loading';
 // import PageAssignTask from '../../Scenes/Teachers/Tasks/AssignTask/Containers/PageAssignTask';
 import TrainingTestPage from '../../Scenes/Users/TestList/TrainingTest/Containers/TrainingTestPage';
 import AllGroups from '../../Scenes/Teachers/GroupsList/AllGroups/Containers/AllGroups';
 import TaskProperties from '../../Scenes/Teachers/Tasks/AssignTask/Components/TaskProperties';
+import ViewTaskPage from '../../Scenes/Teachers/Tasks/ViewTask/Containers/ViewTaskPage';
+import AllQuestionsPage from '../../Scenes/Teachers/Questions/AllQuestions/Containers/AllQuestionsPage';
+import Profile from '../../Scenes/Users/Profile';
+
 
 class Main extends React.Component {
   static propTypes = {
     userType: PropTypes.shape().isRequired,
     user: PropTypes.objectOf(PropTypes.any).isRequired,
+    email: PropTypes.string,
   };
 
   renderCommonRoutes() {
@@ -101,17 +106,31 @@ class Main extends React.Component {
         url: '/assigntask/:groupName',
         component: TaskProperties,
       },
+      {
+        key: '/viewtask/:taskId',
+        url: '/viewtask/:taskId',
+        component: ViewTaskPage,
+      },
+      {
+        key: '/questions',
+        url: '/questions',
+        component: AllQuestionsPage,
+      },
     ];
   }
 
   renderSwitch() {
     const { userType: { logInInformation: { user: { role } } } } = this.props;
+    const { email } = this.props;
     switch (role) {
       case 'STUDENT':
         return (
           <div className="main-body-container">
             <div className="general-menu">
-              <GeneralMenu userType={role}/>
+              <GeneralMenu
+                userType={role}
+                email={email}
+              />
             </div>
             <div className="switch-div">
               <Switch>
@@ -126,6 +145,7 @@ class Main extends React.Component {
                 <Route exact path="/trainingtest" component={TrainingTestPage}/>
                 <Route exact path="/assignedtests" component={PageAssignedTestList}/>
                 <Route exact path="/assignedtasks/:taskId" component={UserTaskPage}/>
+                <Route exact path="/profile/:email" component={Profile}/>
                 <Redirect to="/"/>
               </Switch>
             </div>
@@ -152,7 +172,7 @@ class Main extends React.Component {
                     component={item.component}
                   />
                 ))}
-                <Redirect to="/"/>
+                <Redirect to="/mygroups"/>
               </Switch>
             </div>
           </div>
@@ -193,7 +213,15 @@ class Main extends React.Component {
           </div>
         );
       default:
-        return 'foo';
+        return (
+          <div className="main-body-container-unlogged">
+            <Switch>
+              <Route exact path="/" component={LogIn}/>
+              <Route exact path="/registration" component={RegistrationPage}/>
+              <Redirect to="/"/>
+            </Switch>
+          </div>
+        );
     }
   }
 
@@ -215,7 +243,12 @@ function mapStateToProps(state) {
     isAuth: state.isAuth,
     userType: state,
     user: state.logInInformation.user,
+    email: state.logInInformation.user.email,
   };
 }
+
+Main.defaultProps = {
+  email: '',
+};
 
 export default withRouter(connect(mapStateToProps)(Main));

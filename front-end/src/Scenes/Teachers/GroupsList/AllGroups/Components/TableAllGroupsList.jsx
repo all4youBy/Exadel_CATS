@@ -98,7 +98,7 @@ class TableAllGroupsList extends React.PureComponent {
         name: groups[i],
       });
     }
-    columns[0].title = <div className="header">Список моих групп</div>;
+    columns[0].title = <div className="header">Список групп</div>;
     // <InputSearch/>
     const stateData = emptyList && getListUsers ? (<Loading/>)
       : <div className="empty-list">Список групп пуст</div>;

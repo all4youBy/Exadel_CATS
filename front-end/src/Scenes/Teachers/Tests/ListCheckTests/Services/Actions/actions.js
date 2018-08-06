@@ -1,22 +1,26 @@
 import * as types from './types';
+// import { message } from 'antd/lib/index';
+import API from '../../../../../../Services/API';
 
-export function createTest(test) {
-  return {
-    type: types.CREATE_TEST,
-    payload: test,
-  };
+export function fetchQuestionsToCheck(email) {
+  return API.get(`tests/answers-for-manual-check/${email}`, ['questions_to_check', (item) => {
+    console.log(item);
+  }, () => {
+    console.log('error');
+  }], 'Не удалось загрузить список вопросов');
 }
 
-export function addTestTag(tag) {
-  return {
-    type: types.ADD_TEST_TAG,
-    payload: tag[tag.length - 1],
-  };
+export function putManualCheck(data) {
+  return API.put('tests/submit-manual', data, ['manual_check', (item) => {
+    console.log(item);
+  }, () => {
+    console.log('error');
+  }], 'Не удалось загрузить список вопросов');
 }
 
-export function deleteTestTag(tag) {
+export function deleteItem(answer) {
   return {
-    type: types.DELETE_TEST_TAG,
-    payload: tag,
+    type: types.DELETE_MANUAL_ANSWER,
+    payload: answer,
   };
 }

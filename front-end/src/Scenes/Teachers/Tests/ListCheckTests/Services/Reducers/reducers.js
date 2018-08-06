@@ -1,33 +1,21 @@
 import * as types from '../Actions/types';
 
 const initialState = {
-  tags: [],
+  questionList: null,
 };
 
-const testInformation = (state = initialState, action) => {
+const checkQuestions = (state = initialState, action) => {
   switch (action.type) {
-    case types.CREATE_TEST: {
+    case types.RECEIVE_QUESTIONS_TO_CHECK: {
       return {
         ...state,
-        ...action.payload,
+        questionList: [...action.payload],
       };
     }
-    case types.ADD_TEST_TAG: {
-      if (state.tags.includes(action.payload) || action.payload.length === 0) {
-        return state;
-      }
+    case types.DELETE_MANUAL_ANSWER: {
       return {
         ...state,
-        tags: [
-          ...state.tags,
-          action.payload,
-        ],
-      };
-    }
-    case types.DELETE_TEST_TAG: {
-      return {
-        ...state,
-        tags: state.tags.filter(tag => tag !== action.payload),
+        questionList: state.questionList.filter(item => item !== action.payload),
       };
     }
     default: {
@@ -36,4 +24,4 @@ const testInformation = (state = initialState, action) => {
   }
 };
 
-export default testInformation;
+export default checkQuestions;

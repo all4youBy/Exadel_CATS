@@ -28,7 +28,7 @@ export function fetchGroupsList() {
 export function postGroup(data) {
   return (API.post('users', data, ['postgroup', () => {
     message.success('Группа успешно создана');
-    history.push('/allgroups');
+    history.push('/mygroups');
   }, () => {
     message.error('Не удалось создать группу');
   }], 'Не удалось создать группу'));

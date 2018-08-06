@@ -80,12 +80,14 @@ class TableAssignedTasks extends React.PureComponent {
     }
 
     const tags = [];
-
-    tasks.forEach((element) => {
-      element.topics.forEach((item, index) => {
-        tags[index] = <Tag color="blue">{item}</Tag>;
+    if (tasks) {
+      tasks.forEach((element) => {
+        element.topics.forEach((item, index) => {
+          tags[index] = <Tag color="blue">{item}</Tag>;
+        });
       });
-    });
+    }
+
     // tags = tags.map(element => <Tag color="blue">{element}</Tag>);
     function formatDate(date) {
       let dd = date.getDate();
@@ -101,38 +103,48 @@ class TableAssignedTasks extends React.PureComponent {
     }
 
     const data = [];
-    for (let i = 0; i < tasks.length; i += 1) {
-      if (tasks[i].solution.mark === null) {
-        tasks[i].solution.mark = '-----';
+    if (tasks) {
+      for (let i = 0; i < tasks.length; i += 1) {
+        if (tasks[i].solution.mark === null) {
+          tasks[i].solution.mark = '-----';
+        }
+        const deadline = new Date(tasks[i].solution.deadline);
+        data.push({
+          key: `${i}`,
+          name: tasks[i].title,
+          theme: tags,
+          mark: tasks[i].solution.mark,
+          author: tasks[i].solution.assignedBy,
+          date: formatDate(deadline),
+          result: `${i}`,
+          comment: 'Комметарий',
+          taskId: tasks[i].solution.taskId,
+        });
       }
-      const deadline = new Date(tasks[i].solution.deadline);
-      data.push({
-        key: `${i}`,
-        name: tasks[i].title,
-        theme: tags,
-        mark: tasks[i].solution.mark,
-        author: tasks[i].solution.assignedBy,
-        date: formatDate(deadline),
-        result: `${i}`,
-        comment: 'Комметарий',
-        taskId: tasks[i].solution.taskId,
-      });
     }
-    const container = tasks.length ? (
-      <Table
-        {...{
-          bordered,
-          loading,
-          pagination,
-          size,
-          title,
-          showHeader,
-        }}
-        columns={columns}
-        dataSource={data}
-        rowClassName={() => 'abc'}
-      />) : <Loading/>;
-
+    let container = null;
+    if (tasks) {
+      if (tasks.length) {
+        container = (
+          <Table
+            {...{
+              bordered,
+              loading,
+              pagination,
+              size,
+              title,
+              showHeader,
+            }}
+            columns={columns}
+            dataSource={data}
+            rowClassName={() => 'abc'}
+          />);
+      } else {
+        container = (<div className="empty-list">Список пуст</div>);
+      }
+    } else {
+      container = <Loading/>;
+    }
     return (
       <div>
         {container}

@@ -4,6 +4,7 @@ import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import com.exadel.team3.backend.dao.projections.StringIdProjection;
 import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Repository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,10 +33,10 @@ public class UserRepositoryImpl implements UserRepositoryQueries {
                     Aggregation.sort(Sort.Direction.ASC,"groups")
                 ),
                 "users",
-                StringIdProjectionImpl.class
+                StringIdProjection.class
         ).getMappedResults()
                 .stream()
-                .map(StringIdProjectionImpl::getId)
+                .map(StringIdProjection::getId)
                 .collect(Collectors.toList());
     }
 
@@ -48,10 +49,10 @@ public class UserRepositoryImpl implements UserRepositoryQueries {
                         Aggregation.group("institution")
                 ),
                 "users",
-                StringIdProjectionImpl.class
+                StringIdProjection.class
         ).getMappedResults()
                 .stream()
-                .map(StringIdProjectionImpl::getId).collect(Collectors.toList());
+                .map(StringIdProjection::getId).collect(Collectors.toList());
     }
 
     @Override
