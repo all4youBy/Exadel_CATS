@@ -29,8 +29,6 @@ public class SolutionServiceImpl
         extends AssignableServiceImpl<Solution>
         implements SolutionService
 {
-    @Autowired
-    private TaskRepository taskRepository;
 
     @Autowired
     private SolutionRepository solutionRepository;
