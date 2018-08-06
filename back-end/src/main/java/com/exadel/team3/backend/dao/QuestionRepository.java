@@ -1,9 +1,9 @@
 package com.exadel.team3.backend.dao;
 
+import com.exadel.team3.backend.dao.projections.ObjectIdProjection;
 import com.exadel.team3.backend.entities.Question;
 import com.exadel.team3.backend.entities.QuestionComplexity;
 import org.bson.types.ObjectId;
-import org.springframework.stereotype.Repository;
 
 import java.util.Collection;
 import java.util.List;
