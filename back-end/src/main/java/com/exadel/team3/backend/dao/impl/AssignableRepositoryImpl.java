@@ -2,7 +2,6 @@ package com.exadel.team3.backend.dao.impl;
 
 import java.util.List;
 
-import com.exadel.team3.backend.dao.projections.RatingProjection;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.mongodb.core.aggregation.*;
 import org.springframework.lang.NonNull;
@@ -11,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
 
+import com.exadel.team3.backend.dao.projections.RatingProjection;
 import com.exadel.team3.backend.dao.AssignableRepositoryAggregation;
 import com.exadel.team3.backend.entities.Assignable;
 

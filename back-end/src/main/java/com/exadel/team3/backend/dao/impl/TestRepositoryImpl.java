@@ -91,16 +91,16 @@ public class TestRepositoryImpl
 
 
     @Override
-    public List<RatingProjection> collectRatingBySum(@NonNull ObjectId topicId, int limit) {
-        return collectRating(getBySumGroupingOperation(), topicId, limit);
+    public List<RatingProjection> collectRatingBySum(@NonNull List<ObjectId> topicIds, int limit) {
+        return collectRating(getBySumGroupingOperation(), topicIds, limit);
     }
 
     @Override
-    public List<RatingProjection> collectRatingByAverage(@NonNull ObjectId topicId, int limit) {
-        return collectRating(getByAverageGroupingOperation(), topicId, limit);
+    public List<RatingProjection> collectRatingByAverage(@NonNull List<ObjectId> topicIds, int limit) {
+        return collectRating(getByAverageGroupingOperation(), topicIds, limit);
     }
 
-    private List<RatingProjection> collectRating(GroupOperation groupingOperation, ObjectId topicId, int limit) {
+    private List<RatingProjection> collectRating(GroupOperation groupingOperation, List<ObjectId> topicIds, int limit) {
         AggregationResults<RatingProjection> results =
                 mongoTemplate.aggregate(
                         newAggregation(
@@ -111,10 +111,13 @@ public class TestRepositoryImpl
                                         .localField("items.questionId")
                                         .foreignField("_id")
                                         .as("question"),
-                                project("assignedTo", "question.topicIds", "mark"),
+                                project("_id", "assignedTo", "question.topicIds", "mark"),
                                 unwind("topicIds"),
-                                unwind("topicIds"),
-                                match(Criteria.where("topicIds").is(topicId)),
+//                                unwind("topicIds"),
+                                match(Criteria.where("topicIds").in(topicIds)),
+                                group("_id")
+                                        .first("assignedTo").as("assignedTo")
+                                        .first("mark").as("mark"),
                                 groupingOperation,
                                 newLookup()
                                         .from("users")
