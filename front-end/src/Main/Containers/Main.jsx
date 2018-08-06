@@ -72,26 +72,31 @@ class Main extends React.Component {
         url: '/checktest',
         component: PageCheckTest,
       },
-      {
-        key: 'assigntask',
-        url: '/assigntask',
-        component: PageAssignTask,
-      },
+      // {
+      //   key: 'assigntask',
+      //   url: '/assigntask',
+      //   component: PageAssignTask,
+      // },
       {
         key: 'creategroup',
         url: '/creategroup',
         component: CreateGroupPage,
       },
-      {
-        key: 'assigntests',
-        url: '/assigntests',
-        component: PageAssignTest,
-      },
+      // {
+      //   key: 'assigntests',
+      //   url: '/assigntests',
+      //   component: PageAssignTest,
+      // },
       {
 
         key: '/assigntest/:groupName',
         url: '/assigntest/:groupName',
         component: PageAssignTest,
+      },
+      {
+        key: '/assigntask/:groupName',
+        url: '/assigntask/:groupName',
+        component: PageAssignTask,
       },
     ];
   }
