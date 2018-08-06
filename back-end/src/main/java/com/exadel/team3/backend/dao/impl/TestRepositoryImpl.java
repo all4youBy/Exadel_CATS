@@ -49,7 +49,7 @@ public class TestRepositoryImpl
                         .localField("items.questionId")
                         .foreignField("_id")
                         .as("question"),
-                project("_id", "title", "start", "deadline", "question.topicIds"),
+                project("_id", "title", "start", "deadline", "question.topicIds", "mark"),
                 unwind("topicIds", true),
                 unwind("topicIds", true),
                 newLookup()
@@ -62,8 +62,9 @@ public class TestRepositoryImpl
                         .first("title").as("text")
                         .first("start").as("start")
                         .first("deadline").as("deadline")
+                        .first("mark").as("mark")
                         .addToSet("topic").as("topics"),
-                sort(Sort.Direction.DESC, "start")
+                sort(Sort.Direction.DESC, "deadline", "start")
             ),
             "tests",
             AssignableProjection.class
