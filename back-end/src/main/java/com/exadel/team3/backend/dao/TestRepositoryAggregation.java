@@ -9,6 +9,6 @@ import com.exadel.team3.backend.dao.projections.TestItemProjection;
 
 public interface TestRepositoryAggregation {
     List<TestItemProjection> findNeedingManualCheck(String assignedById);
-    List<RatingProjection> collectRatingBySum(List<ObjectId> topicIds, int limit);
-    List<RatingProjection> collectRatingByAverage(List<ObjectId> topicIds, int limit);
+    List<RatingProjection> collectRatingBySum(ObjectId topicId, int limit);
+    List<RatingProjection> collectRatingByAverage(ObjectId topicId, int limit);
 }

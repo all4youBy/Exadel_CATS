@@ -3,12 +3,15 @@ package com.exadel.team3.backend.dao.impl;
 import java.time.LocalDateTime;
 import java.util.List;
 
-import lombok.NonNull;
 import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.mongodb.core.MongoTemplate;
+import org.springframework.data.mongodb.core.aggregation.Aggregation;
+import org.springframework.data.mongodb.core.aggregation.AggregationResults;
+import org.springframework.data.mongodb.core.aggregation.GroupOperation;
 import org.springframework.data.mongodb.core.query.Criteria;
+import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Repository;
 
 import static org.springframework.data.mongodb.core.aggregation.Aggregation.*;
@@ -88,12 +91,43 @@ public class TestRepositoryImpl
 
 
     @Override
-    public List<RatingProjection> collectRatingBySum(List<ObjectId> topicIds, int limit) {
-        return null;
+    public List<RatingProjection> collectRatingBySum(@NonNull ObjectId topicId, int limit) {
+        return collectRating(getBySumGroupingOperation(), topicId, limit);
     }
 
     @Override
-    public List<RatingProjection> collectRatingByAverage(List<ObjectId> topicIds, int limit) {
-        return null;
+    public List<RatingProjection> collectRatingByAverage(@NonNull ObjectId topicId, int limit) {
+        return collectRating(getByAverageGroupingOperation(), topicId, limit);
+    }
+
+    private List<RatingProjection> collectRating(GroupOperation groupingOperation, ObjectId topicId, int limit) {
+        AggregationResults<RatingProjection> results =
+                mongoTemplate.aggregate(
+                        newAggregation(
+                                getMatchOperation(),
+                                unwind("items"),
+                                newLookup()
+                                        .from("questions")
+                                        .localField("items.questionId")
+                                        .foreignField("_id")
+                                        .as("question"),
+                                project("assignedTo", "question.topicIds", "mark"),
+                                unwind("topicIds"),
+                                unwind("topicIds"),
+                                match(Criteria.where("topicIds").is(topicId)),
+                                groupingOperation,
+                                newLookup()
+                                        .from("users")
+                                        .localField("_id")
+                                        .foreignField("_id")
+                                        .as("user"),
+                                project("user._id", "user.firstName", "user.lastName", "rating"),
+                                sort(Sort.Direction.DESC, "rating"),
+                                limit(limit > 0 ? limit : 1)
+                        ),
+                        "tests",
+                        RatingProjection.class
+                );
+        return results.getMappedResults();
     }
 }

@@ -42,7 +42,7 @@ public abstract class AssignableRepositoryImpl<T extends Assignable>
     }
 
 
-    private MatchOperation getMatchOperation() {
+    MatchOperation getMatchOperation() {
         return Aggregation.match(Criteria.where("mark").ne(null));
     }
     GroupOperation getBySumGroupingOperation() {
