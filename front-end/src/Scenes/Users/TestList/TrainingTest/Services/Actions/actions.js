@@ -17,3 +17,7 @@ export function addTopic(tag) {
     payload: tag,
   };
 }
+
+export function fetchTopics() {
+  return (API.get('topics', 'topics_training_test', 'Не удалось загрузить темы'));
+}

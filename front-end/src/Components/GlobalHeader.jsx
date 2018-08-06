@@ -29,13 +29,13 @@ class GlobalHeader extends React.PureComponent {
           <span className="name-username">{user.firstName} {user.lastName}</span>
         </div>
         <div className="exit-block">
-          <Icon type="logout" className="logout"/>
           <Link
             to="/login"
             onClick={this.onClickLogOut}
             className="button-exit"
             type="dashed"
           >
+            <Icon type="logout" className="logout"/>
             Выйти
           </Link>
         </div>
