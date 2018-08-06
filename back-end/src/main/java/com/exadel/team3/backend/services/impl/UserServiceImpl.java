@@ -1,5 +1,6 @@
 package com.exadel.team3.backend.services.impl;
 
+import java.time.LocalDateTime;
 import java.util.Collection;
 import java.util.List;
 
@@ -25,6 +26,12 @@ public class UserServiceImpl
     @Override
     protected MongoRepository<User, String> getRepository() {
         return userRepository;
+    }
+
+    @Override
+    public User addItem(User item) {
+        item.setRegistrationDate(LocalDateTime.now());
+        return super.addItem(item);
     }
 
     @Override

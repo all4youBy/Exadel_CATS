@@ -117,6 +117,7 @@ const API = {
     const url = `${urlServer}${path}`;
     return (dispatch, getState) => {
       dispatch(isLoading(true));
+      console.log(JSON.stringify(data), 41234324123);
       const token = API.getTokenFromStore(getState());
       API.sendRequest(token, url, {
         method: 'PUT',
@@ -124,6 +125,21 @@ const API = {
       })
         .then(response => response.json())
         .then(items => dispatch(getData(receiveAction, items)))
+        .catch(() => dispatch(errorProject(receiveAction, errorMessage)));
+    };
+  },
+  registratePost(receiveAction, data, errorMessage) {
+    const url = 'https://exadelcats.herokuapp.com/registration';
+    return (dispatch) => {
+      fetch(url, {
+        method: 'POST',
+        mode: 'cors',
+        headers: {
+          'Content-Type': 'application/json; charset=utf-8',
+        },
+        body: JSON.stringify(data),
+      })
+        .then(response => response.text())
         .catch(() => dispatch(errorProject(receiveAction, errorMessage)));
     };
   },

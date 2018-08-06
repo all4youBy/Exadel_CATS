@@ -50,8 +50,8 @@ public class TopicDTOMapper {
     public List<String> transformInToList(List<ObjectId> topicsId) {
         List<String> topics = new ArrayList<>();
         if (topicsId != null && topicsId.size() != 0) {
-            for (ObjectId objectId : topicsId) {
-                Topic topic = topicService.getItem(objectId);
+            Iterable<Topic> topicList = topicService.getItems(topicsId);
+            for (Topic topic : topicList) {
                 String string = topic.getText();
                 topics.add(string);
             }

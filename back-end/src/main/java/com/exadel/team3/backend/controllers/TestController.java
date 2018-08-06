@@ -3,7 +3,7 @@ package com.exadel.team3.backend.controllers;
 import com.exadel.team3.backend.dto.ObjectIdDTO;
 import com.exadel.team3.backend.dto.JSONAnswerDTO;
 import com.exadel.team3.backend.dto.TestItemDTO;
-import com.exadel.team3.backend.dto.TestPostDTO;
+import com.exadel.team3.backend.dto.AssignableDTO;
 import com.exadel.team3.backend.dto.mappers.TestDTOMapper;
 import com.exadel.team3.backend.entities.Test;
 import com.exadel.team3.backend.controllers.requests.TestForGroupRequest;
@@ -31,7 +31,6 @@ import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.List;
 import java.util.logging.Logger;
-import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/tests")
@@ -121,12 +120,15 @@ public class TestController {
 
     @GetMapping("/user-tests/{userId}")
     public ResponseEntity<?> getTestsAssignedToUser(@PathVariable(value = "userId") String userId){
+/*
         List<Test> userTests = testService.getAssignedItems(userId);
         if(userTests == null)
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new JSONAnswerDTO("Can't get list of tests, user:" + userId));
 
-        List<TestPostDTO> testPostDTO = userTests.stream().map(this::convertToTestPostDTO).collect(Collectors.toList());
-        return new ResponseEntity<>(testPostDTO,HttpStatus.OK);
+        List<AssignableDTO> testPostDTO = userTests.stream().map(this::convertToTestPostDTO).collect(Collectors.toList());
+*/
+        List<AssignableDTO> testDTOs = testService.getAssignedItemsWithTopics(userId);
+        return new ResponseEntity<>(testDTOs, HttpStatus.OK);
     }
 
     @GetMapping("/answers-for-manual-check/{email}")
@@ -193,8 +195,10 @@ public class TestController {
         return user.getGroups().contains(group);
     }
 
-    private TestPostDTO convertToTestPostDTO(Test test){
-        return mapper.map(test,TestPostDTO.class);
+/*
+    private AssignableDTO convertToTestPostDTO(Test test){
+        return mapper.map(test,AssignableDTO.class);
     }
+*/
 }
 

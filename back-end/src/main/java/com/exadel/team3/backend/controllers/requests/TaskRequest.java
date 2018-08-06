@@ -17,16 +17,12 @@ public class TaskRequest {
     @NonNull
     private ObjectId id;
 
-    @NonNull
-    private String title;
-
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm")
     private LocalDateTime start;
 
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm")
     private LocalDateTime deadline;
 
-    private Collection<ObjectId> topicsId;
     @NonNull
     private String assignedBy;
 }

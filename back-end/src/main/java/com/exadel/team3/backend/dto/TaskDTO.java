@@ -14,7 +14,7 @@ import java.util.List;
 @AllArgsConstructor
 public class TaskDTO {
     @NonNull
-    Solution solution;
+    private Solution solution;
 
     @NonNull
     private String title;

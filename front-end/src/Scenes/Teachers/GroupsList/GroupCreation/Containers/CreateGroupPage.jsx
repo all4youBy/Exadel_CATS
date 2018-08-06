@@ -94,7 +94,7 @@ class CreateGroupPage extends React.PureComponent {
           />
           <CurrentGroupList className="current-group-list" students={students} delStudent={delStudent}/>
         </div>
-        {errorInput}
+        <div className="error-input-parent">{errorInput}</div>
         <Button
           onClick={this.handleGroupData}
           size="small"

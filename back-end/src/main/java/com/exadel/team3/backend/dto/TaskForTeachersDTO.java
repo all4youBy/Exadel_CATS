@@ -1,6 +1,8 @@
 package com.exadel.team3.backend.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NonNull;
@@ -12,6 +14,7 @@ import java.util.List;
 @AllArgsConstructor
 public class TaskForTeachersDTO {
     @NonNull
+    @JsonSerialize(using = ToStringSerializer.class)
     private ObjectId id;
 
     @NonNull
@@ -27,4 +30,7 @@ public class TaskForTeachersDTO {
 
     @NonNull
     private String lastName;
+
+    private String dateCreation;
+
 }

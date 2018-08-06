@@ -1,7 +1,7 @@
 [
   {
     "type":"SINGLE_VARIANT",
-    "text":"Инкапсуляция &ldash; это:",
+    "text":"Инкапсуляция &ndash; это:",
     "complexity":"LEVEL_1",
     "author":"vasya@mail.ru",
     "variants":[

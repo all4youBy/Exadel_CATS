@@ -11,14 +11,16 @@ const { SubMenu } = Menu;
 class GeneralMenu extends React.PureComponent {
   static propTypes = {
     userType: PropTypes.string.isRequired,
+    email: PropTypes.string.isRequired,
   };
 
   render() {
     let data;
-    const { userType } = this.props;
+    const { userType, email } = this.props;
     switch (userType) {
       case 'STUDENT': {
         data = types.USER_GENERAL_MENU_DATA;
+        data[0].link = `/profile/${email}`;
         break;
       }
       case 'TEACHER': {

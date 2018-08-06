@@ -5,8 +5,7 @@ import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { Button } from 'antd';
 import SectionTree from '../../../../../Components/SectionTree';
-import { fetchTopics } from '../../../../Teachers/Tasks/AssignTask/Services/Actions/actions';
-import { addTopic, fetchTrainingTest } from '../Services/Actions/actions';
+import { addTopic, fetchTrainingTest, fetchTopics } from '../Services/Actions/actions';
 
 class TrainingTestPage extends React.PureComponent {
   static propTypes = {
@@ -18,12 +17,13 @@ class TrainingTestPage extends React.PureComponent {
   };
 
   handleRequestTest = () => {
-    const { topic, getTrainingTest,
+    const { topic: topicId, getTrainingTest,
       userType: { logInInformation: { user: { email } } } } = this.props;
     const data = {
-      topic,
+      topicId,
       email,
     };
+    console.log(data);
     getTrainingTest(data);
   };
 
@@ -45,7 +45,7 @@ class TrainingTestPage extends React.PureComponent {
 
 function mapStateToProps(state) {
   return {
-    topics: state.taskInformation.topics,
+    topics: state.trainingTest.topics,
     topic: state.trainingTest.topic,
     userType: state,
   };

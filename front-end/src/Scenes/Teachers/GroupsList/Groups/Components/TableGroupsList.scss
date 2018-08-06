@@ -5,11 +5,10 @@
   .link-name-group {
     color: rgba(0, 0, 0, 0.65);
   }
-
-  .link-name-group:hover{
-    color: #04233d;
+  .link-name-group:hover {
+    color: #1890ff;
   }
-  .empty-list{
+  .empty-list {
     line-height: 50px;
     text-align: center;
     border-color: #222222;
@@ -26,7 +25,15 @@
   .parent-button-delete-group {
     margin-left: 15px;
   }
-  .header{
+  .header {
     text-align: center;
+  }
+  .edit-name-group {
+    width: 310px;
+    height: 25px;
+  }
+  .button-edit{
+    margin-left: 5px;
+    border: none;
   }
 }

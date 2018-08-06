@@ -7,14 +7,19 @@ export function addStudent(student) {
   };
 }
 
-export function deleteStudent(number) {
-  return {
-    type: types.DELETE_STUDENT, payload: number,
-  };
+export function deleteStudent(student) {
+  return (API.deleteRequest('users', student, 'delete_student', 'Не удалось удалить студента'));
 }
 
 export function fetchStudentsGroup(groupName) {
   return (API.get(`users/find-by-group?group=${groupName}`,
     'students_by_group',
     'Не удалось загрузить список студентов'));
+}
+export function assignedTasks(userId) {
+  return (API.get(
+    `task/users-tasks/${userId}`,
+    'assigned_tasks',
+    'Не удалось загрузить список задач',
+  ));
 }
