@@ -7,13 +7,10 @@ import com.exadel.team3.backend.security.SecurityUtils;
 import com.exadel.team3.backend.security.annotations.AdminAccess;
 import com.exadel.team3.backend.security.annotations.AdminAndTeacherAccess;
 import com.exadel.team3.backend.security.annotations.UserAccess;
-import com.exadel.team3.backend.security.annotations.UserAndTeacherAccess;
-import com.exadel.team3.backend.services.AssignableService;
+
 import com.exadel.team3.backend.services.SolutionService;
 import com.exadel.team3.backend.services.TestService;
 import com.exadel.team3.backend.services.UserService;
-import net.bytebuddy.utility.RandomString;
-import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -25,7 +22,6 @@ import java.security.Principal;
 import java.util.Collection;
 import java.util.List;
 import java.util.function.Function;
-
 @RestController
 @RequestMapping("/users")
 public class UserController {
@@ -42,15 +38,6 @@ public class UserController {
     @Autowired
     private TestService testService;
 
-
-    private <T,R> ResponseEntity<?> getResponse(T condition,Function<T,List<R>> resolver){
-        List<R> items = resolver.apply(condition);
-
-        return items == null? ResponseEntity.status(HttpStatus.NO_CONTENT).body(new JSONAnswerDTO(String.format("No finished items assigned to%s",condition))):
-                ResponseEntity.ok().body(items);
-
-    }
-
     @GetMapping(value = "/find-by-group")
     @AdminAndTeacherAccess
     public List<User> getUsers(@RequestParam(value = "group") String group){
@@ -66,15 +53,10 @@ public class UserController {
                 ResponseEntity.ok().body(groups);
     }
 
-    @GetMapping("/assigned-solutions/{assignedTo}")
+    @GetMapping(value = "/assigned-solutions/{assignedTo}",produces = MediaType.APPLICATION_JSON_VALUE)
     @PreAuthorize("hasRole('ADMIN') or #assignedTo==authentication.name")
     public ResponseEntity<?> getAssignedSolutions(@PathVariable String assignedTo){
         return getResponse(assignedTo,solutionService::getAssignedItems);
-    }
-
-    @GetMapping("/assigned-tests/{assignedTo}")
-    public ResponseEntity<?> getAssignedTests(@PathVariable String assignedTo){
-        return getResponse(assignedTo,testService::getAssignedItems);
     }
 
     @GetMapping(value = "/assigned-solutions-finished/{assignedTo}",produces = MediaType.APPLICATION_JSON_VALUE)
@@ -87,7 +69,41 @@ public class UserController {
         return getResponse(assignedTo,solutionService::getAssignedItemsUnfinished);
     }
 
-    @GetMapping("groups/{email}")
+    @GetMapping(value = "/assigned-tests/{assignedTo}",produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> getAssignedTests(@PathVariable String assignedTo){
+        return getResponse(assignedTo,testService::getAssignedItems);
+    }
+    @GetMapping(value = "/assigned-tests-finished/{assignedTo}",produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> getAssignedTestsFinished(@PathVariable String assignedTo){
+        return getResponse(assignedTo,testService::getAssignedItemsFinished);
+    }
+
+    @GetMapping("/assigned-tests-unfinished/{assignedTo}")
+    public ResponseEntity<?> getAssignedTestsUnfinished(@PathVariable String assignedTo){
+        return getResponse(assignedTo,testService::getAssignedItemsUnfinished);
+    }
+
+    @GetMapping(value = "/assigned-tests-group/{assignedToGroup}",produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> getAssignedTestsToGroup(@PathVariable String assignedToGroup){
+        return getResponse(assignedToGroup,testService::getAssignedItemsToGroup);
+    }
+
+    @GetMapping(value = "/assigned-tests-group-finished",produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> getAssignedTestsToGroupFinished(@PathVariable String assignedToGroup){
+        return getResponse(assignedToGroup,testService::getAssignedItemsToGroupFinished);
+    }
+
+    @GetMapping(value = "/assigned-tests-group-unfinished",produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> getAssignedTestsToGroupUnfinished(@PathVariable String assignedToGroup){
+        return getResponse(assignedToGroup,testService::getAssignedItemsToGroupUnfinished);
+    }
+
+//    @GetMapping("/assigned-tests-")
+//    public ResponseEntity<?> getAssignedItemsWithTopics(String assignedTo){
+//        return getResponse(assignedTo,testService::getAssignedItems)
+//    }
+
+    @GetMapping("/groups/{email}")
     public ResponseEntity<?> getUserGroups(@PathVariable String email){
         User user = userService.getItem(email);
         Collection<String> groups = user.getGroups();
@@ -164,6 +180,7 @@ public class UserController {
         return userService.getItem(email);
     }
 
+
     @PutMapping(
             value = "/update-rights",
             consumes = MediaType.APPLICATION_JSON_VALUE,
@@ -198,6 +215,22 @@ public class UserController {
         return ResponseEntity.ok(user);
     }
 
+    @PutMapping("/groups/delete-user-from-group")
+    @AdminAndTeacherAccess
+    public ResponseEntity<?> deleteUserFromGroup(@RequestBody DeleteUserFromGroupRequest request) {
+        User user = userService.getItem(request.getUserId());
+
+        if(user == null)
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new JSONAnswerDTO(String.format("Can't find user %s",request.getUserId())));
+
+        if (user.getGroups().remove(request.getGroup())) {
+            userService.updateItem(user);
+            return ResponseEntity.ok().body(new JSONAnswerDTO(String.format("User %s successfully deleted from %s", request.getUserId(), request.getGroup())));
+        }
+
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new JSONAnswerDTO(String.format("User wasn't deleted from group %s. Check group name and try again.",request.getGroup())));
+    }
+
     @DeleteMapping
     @AdminAccess
     public void deleteUser(@RequestBody User user){
@@ -209,6 +242,13 @@ public class UserController {
     public ResponseEntity<?> assignGroup(@RequestBody AssignGroupRequest request, Principal principal) {
         userService.assignGroup(request.getEmails(),principal.getName(), request.getGroupId());
         return ResponseEntity.ok(HttpStatus.OK);
+    }
+
+    private <T,R> ResponseEntity<?> getResponse(T condition,Function<T,List<R>> resolver){
+        List<R> items = resolver.apply(condition);
+
+        return items == null? ResponseEntity.status(HttpStatus.NO_CONTENT).body(new JSONAnswerDTO(String.format("Can't find items assigned to %s",condition))):
+                ResponseEntity.ok().body(items);
     }
 
 }

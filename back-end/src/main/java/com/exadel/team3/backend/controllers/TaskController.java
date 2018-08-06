@@ -48,9 +48,9 @@ public class TaskController {
         Task task = mapper.map(addTask, Task.class);
         Task t = taskService.addItem(task);
         if (t == null) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new StringAnswerDTO("Can't add task"));
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new JSONAnswerDTO("Can't add task"));
         }
-        return ResponseEntity.status(HttpStatus.CREATED).body(new StringAnswerDTO("Task added"));
+        return ResponseEntity.status(HttpStatus.CREATED).body(new JSONAnswerDTO("Task added"));
     }
 
     @GetMapping("/{taskId}")
@@ -63,7 +63,7 @@ public class TaskController {
     public ResponseEntity<?> deleteSolution(@PathVariable(value = "id") String id){
         Solution solution = solutionService.getItem(new ObjectId(id));
         solutionService.updateItem(solutionService.deleteFiles(solution));
-        return ResponseEntity.status(HttpStatus.OK).body(new StringAnswerDTO("Solution deleted"));
+        return ResponseEntity.status(HttpStatus.OK).body(new JSONAnswerDTO("Solution deleted"));
     }
 
     @PostMapping("/add-solution/{id}")
@@ -71,7 +71,7 @@ public class TaskController {
         Solution solution = solutionService.getItem(new ObjectId(id));
         solution = solutionService.storeFile(solution, file);
         solutionService.updateItem(solution);
-        return ResponseEntity.status(HttpStatus.OK).body(new StringAnswerDTO("Solution added"));
+        return ResponseEntity.status(HttpStatus.OK).body(new JSONAnswerDTO("Solution added"));
     }
 
     @PostMapping(value = "/compile-solution/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
@@ -92,7 +92,7 @@ public class TaskController {
                 taskRequest.getAssignedBy());
 
         if(taskForGroup == null) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new StringAnswerDTO("Can't assign task for group."));
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new JSONAnswerDTO("Can't assign task for group."));
         }
 
         return new ResponseEntity<>(taskForGroup, HttpStatus.OK);
@@ -122,7 +122,7 @@ public class TaskController {
                 taskRequest.getDeadline(),
                 taskRequest.getAssignedBy());
         if(solutionForUser == null) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new StringAnswerDTO("Can't assign task for user."));
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new JSONAnswerDTO("Can't assign task for user."));
         }
 
         return new ResponseEntity<>(solutionForUser, HttpStatus.OK);
@@ -177,7 +177,7 @@ public class TaskController {
             taskService.updateItem(task);
             return new ResponseEntity<>(taskTestingSets, HttpStatus.OK);
         } else {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new StringAnswerDTO("Can't add tasks set."));
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new JSONAnswerDTO("Can't add tasks set."));
         }
 
     }

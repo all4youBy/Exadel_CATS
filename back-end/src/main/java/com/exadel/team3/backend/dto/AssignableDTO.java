@@ -15,10 +15,10 @@ public class AssignableDTO {
 
     private String title;
 
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-dd-MM  HH:mm:ss")
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd  HH:mm:ss")
     private LocalDateTime start;
 
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-dd-MM  HH:mm:ss")
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd  HH:mm:ss")
     private LocalDateTime deadline;
 
     private List<String> topics;
