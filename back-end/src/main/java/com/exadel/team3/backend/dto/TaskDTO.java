@@ -14,7 +14,8 @@ import java.util.List;
 @AllArgsConstructor
 public class TaskDTO {
     @NonNull
-    Solution solution;
+    @JsonSerialize(using = ToStringSerializer.class)
+    private Solution solution;
 
     @NonNull
     private String title;

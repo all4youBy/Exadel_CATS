@@ -5,7 +5,7 @@ import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { Button } from 'antd';
 import SectionTree from '../../../../../Components/SectionTree';
-import { fetchTopics } from '../../../../Teachers/Tasks/AssignTask/Services/Actions/actions';
+import { fetchTopics } from '../../../../Teachers/Tests/AssignTest/Services/Actions/actions';
 import { addTopic, fetchTrainingTest } from '../Services/Actions/actions';
 
 class TrainingTestPage extends React.PureComponent {

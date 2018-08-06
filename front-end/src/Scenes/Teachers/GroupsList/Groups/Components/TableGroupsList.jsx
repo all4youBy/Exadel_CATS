@@ -15,7 +15,7 @@ import {
   getMyGroups,
   listGroup,
   nameGroup,
-  renameGroup,
+  renameGroup, renameNameGroup, getNameGroup,
 } from '../Services/Actions/actions';
 import Loading from '../../../../../Components/Loading';
 import { receiveTest } from '../../../Tests/AssignTest/Services/Actions/actions';
@@ -32,6 +32,7 @@ class TableGroupsList extends React.PureComponent {
     onGroupEdit: PropTypes.func.isRequired,
     onEdit: PropTypes.func.isRequired,
     user: PropTypes.string.isRequired,
+    getGroup: PropTypes.func.isRequired,
   };
 
   state = {
@@ -53,7 +54,7 @@ class TableGroupsList extends React.PureComponent {
     const { getListUsers, groups } = this.state;
     const {
       emptyList, handleGroupDelete, upDate, addGroupTask,
-      addGroupTest, groupEdit, onGroupEdit, onEdit, user,
+      addGroupTest, groupEdit, onGroupEdit, onEdit, user, getGroup,
     } = this.props;
     const columns = [{
       title: ' ',
@@ -64,6 +65,9 @@ class TableGroupsList extends React.PureComponent {
         const editName = (name) => {
           onEdit(record.name, name, user);
         };
+        const getMyGroup = (name) => {
+          getGroup(name);
+        };
         const setField = (event) => {
           const { value } = event.target;
           text = value;
@@ -71,7 +75,6 @@ class TableGroupsList extends React.PureComponent {
         if (text === groupEdit) {
           return (
             <div><Input
-              autosize
               maxLength={40}
               name="newName"
               type="text"
@@ -91,7 +94,8 @@ class TableGroupsList extends React.PureComponent {
             </div>);
         }
         return (
-          <div><Link className="link-name-group" to={`/groups/${text}`}>{text}</Link></div>);
+          <div><Link onClick={() => getMyGroup(text)} className="link-name-group" to={`/groups/${text}`}>{text}</Link>
+          </div>);
       },
     }, {
       title: ' ',
@@ -158,11 +162,11 @@ class TableGroupsList extends React.PureComponent {
 
 function mapStateToProps(state) {
   return {
-    groups: state.allGroups.groups,
-    groupEdit: state.allGroups.groupEdit,
-    error: state.allGroups.error,
+    groups: state.myGroups.groups,
+    groupEdit: state.myGroups.groupEdit,
+    error: state.myGroups.error,
     user: state.logInInformation.user.email,
-    emptyList: state.allGroups.emptyList,
+    emptyList: state.myGroups.emptyList,
   };
 }
 
@@ -172,6 +176,9 @@ const mapDispatchToProps = dispatch => ({
   },
   getGroups: (userId) => {
     dispatch(getMyGroups(userId));
+  },
+  getGroup: (group) => {
+    dispatch(getNameGroup(group));
   },
   upDate: (groups, group) => {
     const newList = groups.filter(el => el !== group);
@@ -188,6 +195,7 @@ const mapDispatchToProps = dispatch => ({
   },
   onEdit: (last, next, id) => {
     dispatch(renameGroup({ oldGroup: last, newGroup: next, usersId: [id] }));
+    dispatch(renameNameGroup({ lastName: last, nextName: next }));
   },
 });
 
