@@ -27,6 +27,13 @@ class LoginForm extends React.Component {
     };
   }
 
+  // hideIncorrectData = (event) => {
+  //   console.log(event.target.getElementsByClassName('.error-input'));
+  //   if (event.target.getElementsByClassName('.error-input')) {
+  //     event.target.getElementsByClassName('.error-input').add('hide');
+  //   }
+  // };
+
   handleSubmit = (e) => {
     e.preventDefault();
     const { form, onLogIn, sendLogInData } = this.props;
@@ -42,7 +49,11 @@ class LoginForm extends React.Component {
 
   render() {
     const { form: { getFieldDecorator }, login } = this.props;
-    const errorLogIn = !login ? <div/> : <div className="error-input">Пароль или почта введены неправильно!</div>;
+    const errorLogIn = !login ? <div/>
+      : (
+        <div className="parent-error-input">
+          <div className="error-input">Пароль или почта введены неправильно!</div>
+        </div>);
     return (
       <Form onSubmit={this.handleSubmit} className="login-form">
         <FormItem className="form-item">
@@ -50,6 +61,7 @@ class LoginForm extends React.Component {
             rules: [{ required: true, message: 'Введите имя пользователя!' }],
           })(
             <Input
+              // onBlur={this.hideIncorrectData}
               ref={this.getUsername}
               type="text"
               prefix={<Icon type="user" style={{ color: 'rgba(0,0,0,.25)' }}/>}
@@ -63,6 +75,7 @@ class LoginForm extends React.Component {
           })(
             <Input
               ref={this.getPassword}
+              // onBlur={this.hideIncorrectData}
               prefix={<Icon type="lock" style={{ color: 'rgba(0,0,0,.25)' }}/>}
               type="password"
               placeholder="Пароль..."
@@ -71,10 +84,10 @@ class LoginForm extends React.Component {
         </FormItem>
         {errorLogIn}
         <FormItem className="login">
-          <Button type="primary" htmlType="submit" className="login-form-button">
+          <Button type="primary" htmlType="submit" className="button-table-with-border login-form-button">
             Войти
           </Button>
-          <Link to="/registration">Зарегистрироваться!</Link>
+          <Link to="/registration" className="registration-text">Зарегистрироваться!</Link>
         </FormItem>
       </Form>
     );

@@ -13,7 +13,7 @@ const allTasks = (state = initialState, action) => {
         tasks: [...action.payload],
       };
     }
-    case types.ERROR_STUDENTS_LIST_FOR_TASK:
+    case types.ERROR_ALL_TASKS:
       return {
         ...state,
         error: action.payload,
