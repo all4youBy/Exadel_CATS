@@ -12,6 +12,7 @@ const initialState = {
   users: '',
   topics: [],
   type: 'GROUPS',
+  receiver: '',
 };
 
 const testInformation = (state = initialState, action) => {
