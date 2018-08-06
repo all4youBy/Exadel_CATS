@@ -119,12 +119,15 @@ public class TestController {
 
     @GetMapping("/user-tests/{userId}")
     public ResponseEntity<?> getTestsAssignedToUser(@PathVariable(value = "userId") String userId){
+/*
         List<Test> userTests = testService.getAssignedItems(userId);
         if(userTests == null)
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new StringAnswerDTO("Can't get list of tests, user:" + userId));
 
         List<TestPostDTO> testPostDTO = userTests.stream().map(this::convertToTestPostDTO).collect(Collectors.toList());
-        return new ResponseEntity<>(testPostDTO,HttpStatus.OK);
+*/
+        List<TestPostDTO> testPostDTOs = testService.getAssignedItemsWithTopics(userId);
+        return new ResponseEntity<>(testPostDTOs, HttpStatus.OK);
     }
 
     @GetMapping("/answers-for-manual-check/{email}")
@@ -189,8 +192,10 @@ public class TestController {
         return user.getGroups().contains(group);
     }
 
+/*
     private TestPostDTO convertToTestPostDTO(Test test){
         return mapper.map(test,TestPostDTO.class);
     }
+*/
 }
 

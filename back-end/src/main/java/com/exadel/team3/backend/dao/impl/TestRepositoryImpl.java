@@ -6,6 +6,7 @@ import java.util.List;
 import lombok.NonNull;
 import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.stereotype.Repository;
@@ -58,7 +59,8 @@ public class TestRepositoryImpl
                         .first("title").as("text")
                         .first("start").as("start")
                         .first("deadline").as("deadline")
-                        .addToSet("topic").as("topics")
+                        .addToSet("topic").as("topics"),
+                sort(Sort.Direction.DESC, "start")
             ),
             "tests",
             AssignableProjection.class
