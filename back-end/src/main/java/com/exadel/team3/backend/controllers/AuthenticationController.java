@@ -2,8 +2,10 @@ package com.exadel.team3.backend.controllers;
 
 import com.exadel.team3.backend.controllers.requests.RegistrationRequest;
 import com.exadel.team3.backend.dto.AuthenticateDTO;
+import com.exadel.team3.backend.dto.StringAnswerDTO;
 import com.exadel.team3.backend.entities.User;
 import com.exadel.team3.backend.entities.UserAffiliation;
+import com.exadel.team3.backend.entities.UserRole;
 import com.exadel.team3.backend.security.AuthenticatedUser;
 import com.exadel.team3.backend.controllers.requests.AuthenticationRequest;
 import com.exadel.team3.backend.security.SecurityUtils;
@@ -58,7 +60,6 @@ public class AuthenticationController {
 
     @PostMapping(value = "/registration",produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> signUpUser(@RequestBody RegistrationRequest request){
-
         String[] userPassInfo = securityUtils.generateUserPassword();
         System.out.println(userPassInfo[0]);
         UserAffiliation userAffiliation = new UserAffiliation(
@@ -66,13 +67,19 @@ public class AuthenticationController {
                 request.getFaculty(),
                 request.getYearTermination(),
                 "",
-                request.getPrimarySkill());
+                request.getPrimarySkill(),
+                request.getJob());
+
+        UserRole userRole = request.getUserRole();
+
+        if(userRole.equals(UserRole.TEACHER) || userRole.equals(UserRole.ADMIN))
+            userRole = UserRole.TEACHER_UNCONFIRMED;
 
         User user = new User(
                 request.getEmail(),
                 request.getFirstName(),
                 request.getSecondName(),
-                request.getUserRole(),
+                userRole,
                 userPassInfo[1]);
 
         user.setAffiliation(userAffiliation);
@@ -83,7 +90,7 @@ public class AuthenticationController {
         replaceMap.put("&password", userPassInfo[0]);
         mailSender.send(MailTypes.SEND_LOGIN_AND_PASS, request.getEmail(), replaceMap);
 
-        return ResponseEntity.status(HttpStatus.OK).body("User created.");
+        return ResponseEntity.status(HttpStatus.OK).body(new StringAnswerDTO("User created."));
     }
 
     private void authenticate(String email, String password){

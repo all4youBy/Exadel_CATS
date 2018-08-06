@@ -13,7 +13,7 @@ class ButtonAssignTask extends React.Component {
 
   handleAddGroup = () => {
     const { groupName, addGroup } = this.props;
-    history.push(`/assigntest/${groupName}`);
+    history.push(`/assigntask/${groupName}`);
     addGroup(groupName);
   };
 

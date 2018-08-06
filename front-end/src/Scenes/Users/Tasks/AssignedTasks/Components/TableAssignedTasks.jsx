@@ -5,23 +5,6 @@ import { Link } from 'react-router-dom';
 import ButtonPassTask from './ButtonPassTask';
 import requestLoginInformation from '../../../../../Services/loginService';
 import Loading from '../../../../../Components/Loading';
-// import Loading from '../../../../../Components/Loading';
-
-// let tags = ['aaaa', 'ssss', 'ffff'];
-//
-// tags = tags.map(element => <Tag color="blue">{element}</Tag>);
-
-// const data = [];
-// for (let i = 1; i <= 20; i += 1) {
-//   data.push({
-//     key: `${i}`,
-//     name: `Задача ${i}`,
-//     theme: tags,
-//     author: `Автор ${i}`,
-//     deadline: `${i}.${i}.200${i}`,
-//   });
-// }
-
 
 class TableAssignedTasks extends React.PureComponent {
   static propTypes = {
@@ -73,8 +56,8 @@ class TableAssignedTasks extends React.PureComponent {
       className: 'column-break-point',
     }, {
       title: 'Дата сдачи',
-      dataIndex: 'deadline',
-      key: 'deadline',
+      dataIndex: 'date',
+      key: 'date',
       width: 500,
       className: 'column-break-point',
     }, {
@@ -92,52 +75,76 @@ class TableAssignedTasks extends React.PureComponent {
         <ButtonPassTask taskId={record.taskId}/>
       ),
     }];
-    console.log(tasks);
     if (error) {
       return <div/>;
     }
 
     const tags = [];
-
-    tasks.forEach((element) => {
-      element.topics.forEach((item, index) => {
-        tags[index] = <Tag color="blue">{item}</Tag>;
-      });
-    });
-    // tags = tags.map(element => <Tag color="blue">{element}</Tag>);
-
-    const data = [];
-    for (let i = 0; i < tasks.length; i += 1) {
-      if (tasks[i].solution.mark === null) {
-        tasks[i].solution.mark = '-----';
-      }
-      data.push({
-        key: `${i}`,
-        name: tasks[i].title,
-        theme: tags,
-        mark: tasks[i].solution.mark,
-        author: tasks[i].solution.assignedBy,
-        date: new Date(tasks[i].solution.deadline),
-        result: `${i}`,
-        comment: 'Комметарий',
-        taskId: tasks[i].solution.taskId,
+    if (tasks) {
+      tasks.forEach((element) => {
+        element.topics.forEach((item, index) => {
+          tags[index] = <Tag color="blue">{item}</Tag>;
+        });
       });
     }
-    const container = tasks.length ? (
-      <Table
-        {...{
-          bordered,
-          loading,
-          pagination,
-          size,
-          title,
-          showHeader,
-        }}
-        columns={columns}
-        dataSource={data}
-        rowClassName={() => 'abc'}
-      />) : <Loading/>;
 
+    // tags = tags.map(element => <Tag color="blue">{element}</Tag>);
+    function formatDate(date) {
+      let dd = date.getDate();
+      if (dd < 10) dd = `0${dd}`;
+
+      let mm = date.getMonth() + 1;
+      if (mm < 10) mm = `0${mm}`;
+
+      let yy = date.getFullYear() % 100;
+      if (yy < 10) yy = `0${yy}`;
+
+      return `${dd}.${mm}.${yy}`;
+    }
+
+    const data = [];
+    if (tasks) {
+      for (let i = 0; i < tasks.length; i += 1) {
+        if (tasks[i].solution.mark === null) {
+          tasks[i].solution.mark = '-----';
+        }
+        const deadline = new Date(tasks[i].solution.deadline);
+        data.push({
+          key: `${i}`,
+          name: tasks[i].title,
+          theme: tags,
+          mark: tasks[i].solution.mark,
+          author: tasks[i].solution.assignedBy,
+          date: formatDate(deadline),
+          result: `${i}`,
+          comment: 'Комметарий',
+          taskId: tasks[i].solution.taskId,
+        });
+      }
+    }
+    let container = null;
+    if (tasks) {
+      if (tasks.length) {
+        container = (
+          <Table
+            {...{
+              bordered,
+              loading,
+              pagination,
+              size,
+              title,
+              showHeader,
+            }}
+            columns={columns}
+            dataSource={data}
+            rowClassName={() => 'abc'}
+          />);
+      } else {
+        container = (<div className="empty-list">Список пуст</div>);
+      }
+    } else {
+      container = <Loading/>;
+    }
     return (
       <div>
         {container}

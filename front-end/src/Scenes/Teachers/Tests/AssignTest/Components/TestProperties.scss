@@ -21,22 +21,28 @@
     //margin-top: 15px;
     height: 20px;
     width: 90%;
-    margin-bottom: 5px;
+    margin-bottom: 15px;
 
   }
   .name-form-item {
-    width: 95%;
-    margin-bottom: 10px;
+    width: 100%;
+    margin: 10px 0 0 30px;
   }
-  .input-count-questions {
-    width: 13%;
+  .time {
+    margin-left: 10px;
+  }
+  .input-count-questions, .input-data {
+    margin-left: 10px;
+    width: 55px;
+    align-items: center;
+    //margin-bottom: 5px;
   }
   .parent-form {
     display: flex;
-    flex-direction: row;
+    flex-direction: column;
     justify-content: space-between;
     margin-top: 35px;
-    width: 90%;
+    width:100%;
     text-align: left;
   }
   .input-task-tags {
@@ -44,6 +50,9 @@
   }
   .form-item {
     margin-bottom: 10px;
+    display:  flex;
+    flex-direction: row;
+    width: 100%;
   }
   .form-item-tree-with-tags {
     margin-left: 100px;
@@ -51,9 +60,6 @@
   }
   .count-questions-input {
     width: 20%;
-  }
-  .left-group-form-items {
-    width: 50%;
   }
   .right-group-form-items {
     width: 50%;
@@ -94,6 +100,7 @@
     margin-top: 10px;
   }
   .button-assign {
-    margin-top: 20px;
+    margin-top: 30px;
+    margin-bottom: 20px;
   }
 }

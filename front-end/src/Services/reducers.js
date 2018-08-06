@@ -12,7 +12,7 @@ import createGroup from '../Scenes/Teachers/GroupsList/GroupCreation/Services/Re
 import requestsUsers from '../Scenes/Admin/AccessRequestList/Services/Reducers/reducers';
 import addQuestion from '../Scenes/Teachers/Tests/AddQuestion/Services/Reducers/reducers';
 import testInformation from '../Scenes/Teachers/Tests/AssignTest/Services/Reducers/reducers';
-import allGroups from '../Scenes/Teachers/GroupsList/Groups/Services/Reducers/reducers';
+import myGroups from '../Scenes/Teachers/GroupsList/Groups/Services/Reducers/reducers';
 import completeTest from '../Scenes/Users/Tests/Services/Reducers/reducers';
 import taskInformation from '../Scenes/Teachers/Tasks/AssignTask/Services/Reducers/reducers';
 import passTask from '../Scenes/Users/Task/Services/Reducers/reducers';
@@ -25,6 +25,10 @@ import userAuthorizedData from '../Scenes/Users/Profile/Services/reducers/reduce
 import trainingTest from '../Scenes/Users/TestList/TrainingTest/Services/Reducers/reducers';
 import userAssignedTasks from '../Scenes/Users/Tasks/AssignedTasks/Services/Reducers/reducers';
 import userAssignedTests from '../Scenes/Users/TestList/AssignedTestList/Services/Reducers/reducers';
+import allGroups from '../Scenes/Teachers/GroupsList/AllGroups/Services/Reducers/reducers';
+import viewTask from '../Scenes/Teachers/Tasks/ViewTask/Services/Reducers/reducers';
+import allQuestions from '../Scenes/Teachers/Questions/AllQuestions/Services/Reducers/reducers';
+import userPassedTasks from '../Scenes/Users/Tasks/PassedTasks/Services/Reducers/reducers';
 
 
 const reducers = combineReducers({
@@ -53,6 +57,10 @@ const reducers = combineReducers({
   userAssignedTasks,
   userAssignedTests,
   trainingTest,
+  myGroups,
+  viewTask,
+  allQuestions,
+  userPassedTasks,
 });
 
 export default reducers;

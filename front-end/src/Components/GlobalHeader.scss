@@ -25,12 +25,28 @@
     width: 50px;
     height: 50px;
   }
-  .button-exit {
+  .button-exit, .name-username {
     font-family: 'LuganskyV';
     display: flex;
     float: right;
     color: #fff;
     border-color: #04233d;
   }
-
+  .name-username{
+    margin-right: 20px;
+  }
+  .username, .exit-block {
+    display: flex;
+    align-items: center;
+    width: auto;
+  }
+  .button-exit:hover {
+    color: #a6ddfd;
+  }
+  .user, .logout {
+    font-size: 20px;
+    color: white;
+    height: 20px;
+    margin-right: 3px;
+  }
 }

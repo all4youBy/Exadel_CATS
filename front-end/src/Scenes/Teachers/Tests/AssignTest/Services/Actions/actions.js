@@ -1,13 +1,17 @@
+import { message } from 'antd';
 import * as types from './types';
+import { history } from '../../../../../../Services/ConfigureStore';
 import API from '../../../../../../Services/API';
 
-export function createTest(test) {
-  // return {
-  //   type: types.CREATE_TEST,
-  //   payload: test,
-  // };
-  console.log(test);
-  return API.post('/tests', test, 'create_test');
+export function createTest(data, url) {
+  return API.post(`tests${url}`, data, ['create_test', () => {
+    message.success('Тест успешно назначен');
+    if (url !== '') {
+      history.push('/mygroups');
+    }
+  }, () => {
+    message.error('Не удалось назначить тест');
+  }]);
 }
 
 export function addTestTag(tag) {

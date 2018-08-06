@@ -1,6 +1,6 @@
 import React from 'react';
-import { Layout } from 'antd/lib/index';
 import { Link } from 'react-router-dom';
+import { Layout, Icon } from 'antd';
 import PropTypes from 'prop-types';
 import logo from './kittywithoutbackground.png';
 import './GlobalHeader.scss';
@@ -12,6 +12,7 @@ class GlobalHeader extends React.PureComponent {
   static propTypes = {
     history: PropTypes.string.isRequired,
     userType: PropTypes.string.isRequired,
+    user: PropTypes.objectOf(PropTypes.any).isRequired,
   };
 
   onClickLogOut() {
@@ -21,15 +22,24 @@ class GlobalHeader extends React.PureComponent {
   }
 
   render() {
-    const { userType } = this.props;
-    const logOut = !(userType === 'GUEST') ? (
-      <Link
-        to="/login"
-        onClick={this.onClickLogOut}
-        className="button-exit"
-        type="dashed"
-      >Выйти
-      </Link>
+    const { userType, user } = this.props;
+    const logOut = !(userType === 'GUEST' || userType === undefined) ? (
+      <div className="username">
+        <div className="username"><Icon type="user" className="user"/>
+          <span className="name-username">{user.firstName} {user.lastName}</span>
+        </div>
+        <div className="exit-block">
+          <Icon type="logout" className="logout"/>
+          <Link
+            to="/login"
+            onClick={this.onClickLogOut}
+            className="button-exit"
+            type="dashed"
+          >
+            Выйти
+          </Link>
+        </div>
+      </div>
     ) : <div/>;
 
     return (
