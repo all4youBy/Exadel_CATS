@@ -18,7 +18,7 @@ public class TestPostDTO {
 
     @Setter
     @Getter
-    @JsonFormat(shape = JsonFormat.Shape.STRING,pattern = "yyyy-dd-MM  HH:mm:ss")
+    @JsonFormat(shape = JsonFormat.Shape.STRING,pattern = "yyyy-MM-dd  HH:mm")
     private LocalDateTime start;
 
     @Setter
@@ -27,6 +27,6 @@ public class TestPostDTO {
 
     @Setter
     @Getter
-    @JsonFormat(shape = JsonFormat.Shape.STRING,pattern = "yyyy-dd-MM  HH:mm:ss")
+    @JsonFormat(shape = JsonFormat.Shape.STRING,pattern = "yyyy-MM-dd  HH:mm")
     private LocalDateTime deadline;
 }

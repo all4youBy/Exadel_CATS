@@ -2,16 +2,17 @@ package com.exadel.team3.backend.controllers;
 
 import com.exadel.team3.backend.controllers.requests.*;
 import com.exadel.team3.backend.dto.JSONAnswerDTO;
-import com.exadel.team3.backend.entities.Solution;
-import com.exadel.team3.backend.entities.User;
-import com.exadel.team3.backend.entities.UserRole;
+import com.exadel.team3.backend.entities.*;
 import com.exadel.team3.backend.security.SecurityUtils;
 import com.exadel.team3.backend.security.annotations.AdminAccess;
 import com.exadel.team3.backend.security.annotations.AdminAndTeacherAccess;
 import com.exadel.team3.backend.security.annotations.UserAccess;
 import com.exadel.team3.backend.security.annotations.UserAndTeacherAccess;
+import com.exadel.team3.backend.services.AssignableService;
 import com.exadel.team3.backend.services.SolutionService;
+import com.exadel.team3.backend.services.TestService;
 import com.exadel.team3.backend.services.UserService;
+import net.bytebuddy.utility.RandomString;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -23,6 +24,7 @@ import org.springframework.web.bind.annotation.*;
 import java.security.Principal;
 import java.util.Collection;
 import java.util.List;
+import java.util.function.Function;
 
 @RestController
 @RequestMapping("/users")
@@ -38,7 +40,16 @@ public class UserController {
     private SecurityUtils securityUtils;
 
     @Autowired
-    private ModelMapper mapper;
+    private TestService testService;
+
+
+    private <T,R> ResponseEntity<?> getResponse(T condition,Function<T,List<R>> resolver){
+        List<R> items = resolver.apply(condition);
+
+        return items == null? ResponseEntity.status(HttpStatus.NO_CONTENT).body(new JSONAnswerDTO(String.format("No finished items assigned to%s",condition))):
+                ResponseEntity.ok().body(items);
+
+    }
 
     @GetMapping(value = "/find-by-group")
     @AdminAndTeacherAccess
@@ -50,39 +61,31 @@ public class UserController {
     @AdminAndTeacherAccess
     public ResponseEntity<?> getGroups(){
         List<String> groups = userService.getGroups();
-
         return groups == null?
                 ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new JSONAnswerDTO("Can't get groups.")):
                 ResponseEntity.ok().body(groups);
     }
 
-    @GetMapping("/assigned-items/{assignedTo}")
+    @GetMapping("/assigned-solutions/{assignedTo}")
     @PreAuthorize("hasRole('ADMIN') or #assignedTo==authentication.name")
-    public ResponseEntity<?> getAssignedItems(@PathVariable String assignedTo,
-                                              @RequestParam(value = "assigned_by",required = false) String assignedBy){
-        List<Solution> solutions = solutionService.getAssignedItems(assignedTo);
-
-        return solutions == null?
-                ResponseEntity.status(HttpStatus.NOT_FOUND).body(new JSONAnswerDTO(String.format("Can't find items assigned to%s",assignedTo)))
-                :ResponseEntity.ok().body(solutions);
-
+    public ResponseEntity<?> getAssignedSolutions(@PathVariable String assignedTo){
+        return getResponse(assignedTo,solutionService::getAssignedItems);
     }
 
-    @GetMapping(value = "/assigned-items-finished/{assignedTo}",produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<?> getAssignedItemsFinished(@PathVariable String assignedTo){
-        List<Solution> items = solutionService.getAssignedItemsFinished(assignedTo);
-
-        return items == null?
-                ResponseEntity.status(HttpStatus.NO_CONTENT).body(new JSONAnswerDTO(String.format("No finished items assigned to%s",assignedTo))):
-                ResponseEntity.ok().body(items);
+    @GetMapping("/assigned-tests/{assignedTo}")
+    public ResponseEntity<?> getAssignedTests(@PathVariable String assignedTo){
+        return getResponse(assignedTo,testService::getAssignedItems);
     }
 
-//    @GetMapping(value = "/assigned-items-unfinished/{assignedTo}",produces = MediaType.APPLICATION_JSON_VALUE)
-//    public ResponseEntity<?> getAssignedItemsUnfinished(@PathVariable String assignedTo){
-//        List<Solution> items = solutionService.getAssignedItemsUnfinished(assignedTo);
-//
-////        return items == null?
-//    }
+    @GetMapping(value = "/assigned-solutions-finished/{assignedTo}",produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> getAssignedSolutionsFinished(@PathVariable String assignedTo){
+        return getResponse(assignedTo, solutionService::getAssignedItemsFinished);
+    }
+
+    @GetMapping(value = "/assigned-solutions-unfinished/{assignedTo}",produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> getAssignedSolutionsUnfinished(@PathVariable String assignedTo){
+        return getResponse(assignedTo,solutionService::getAssignedItemsUnfinished);
+    }
 
     @GetMapping("groups/{email}")
     public ResponseEntity<?> getUserGroups(@PathVariable String email){
