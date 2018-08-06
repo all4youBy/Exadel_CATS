@@ -1,15 +1,10 @@
-import * as types from './types';
+import API from '../../../../Services/API';
 
-export function registrateStudent(student) {
-  return {
-    type: types.REGISTRATION_OF_STUDENT,
-    payload: student,
-  };
+export function reqRegistrateStudent(user) {
+  return API.registratePost('registrated_student', user, 'Регистрация не произошла');
 }
 
-export function registrateTeacher(teacher) {
-  return {
-    type: types.REGISTRATION_OF_TEACHER,
-    payload: teacher,
-  };
+
+export function reqRegistrateTeacher(user) {
+  return API.registratePost('registrated_teacher', user, 'Регистрация не произошла');
 }

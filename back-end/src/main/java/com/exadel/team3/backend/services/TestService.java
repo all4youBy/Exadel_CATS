@@ -1,11 +1,13 @@
 package com.exadel.team3.backend.services;
 
-import com.exadel.team3.backend.dto.TestItemDTO;
-import org.bson.types.ObjectId;
-
 import java.time.LocalDateTime;
 import java.util.Collection;
 import java.util.List;
+
+import org.bson.types.ObjectId;
+
+import com.exadel.team3.backend.dto.TestItemDTO;
+import com.exadel.team3.backend.dto.UserRatingDTO;
 
 import com.exadel.team3.backend.entities.Test;
 
@@ -37,4 +39,8 @@ public interface TestService extends AssignableService<Test> {
     Test submitManualAnswerCheck(TestItemDTO checkedItem) throws ServiceException;
 
     List<TestItemDTO> getAnswersForManualCheck(String assignedBy) throws ServiceException;
+
+    List<UserRatingDTO> getTopRatingBySum(ObjectId topicId);
+    List<UserRatingDTO> getTopRatingByAverage(ObjectId topicId);
+
 }

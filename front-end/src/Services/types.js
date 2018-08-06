@@ -3,7 +3,6 @@ export const USER_GENERAL_MENU_DATA = [{
   type: 'user',
   text: 'Личный кабинет',
   subsections: [],
-  link: '/',
 }, {
   key: 'sub1',
   type: 'file',
@@ -74,7 +73,7 @@ export const TEACHER_GENERAL_MENU_DATA = [{
   text: 'Тесты',
   subsections: [{
     id: '5',
-    text: 'Проверить тесты',
+    text: 'Проверить ответы',
     link: '/checktests',
   }, {
     id: '6',

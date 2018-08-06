@@ -1,0 +1,22 @@
+.information-user {
+  width: 50%;
+  margin-top: 10px;
+  text-align: center;
+  margin-bottom: 20px;
+  float: left;
+
+  .login-form-button {
+    width: 100%;
+  }
+
+  .button-password {
+    width: 50%;
+    background-color: #04233d;
+    border-color: #04233d;
+    color: #fff;
+    margin-left: 25%;
+    margin-right: 25%;
+    margin-bottom: 20px;
+  }
+}
+

@@ -1,43 +1,16 @@
 import React from 'react';
-import { Form, Input, Switch, Select, Button } from 'antd';
+import { Form, Input, Switch, Button, message } from 'antd';
 import { connect } from 'react-redux';
 import './RegistrationForm.scss';
 import PropTypes from 'prop-types';
-import { registrateStudent, registrateTeacher } from '../Services/Actions/actions';
-
+import { reqRegistrateStudent, reqRegistrateTeacher } from '../Services/Actions/actions';
+import { history } from '../../../Services/ConfigureStore';
+// import {
+// getPrimarySkills, getFaculties, getInstitutions }
+// from '../../../Components/Forms/Services/Actions/actions';
+import { StudentInputs, TeacherInputs, formItemLayout, tailFormItemLayout } from '../../../Components/Forms';
 
 const { Item: FormItem } = Form;
-const { Option } = Select;
-
-const institutions = [];
-
-const primarySkills = [];
-
-const faculties = {};
-
-const formItemLayout = {
-  labelCol: {
-    xs: { span: 24 },
-    sm: { span: 8 },
-  },
-  wrapperCol: {
-    xs: { span: 24 },
-    sm: { span: 16 },
-  },
-};
-
-const tailFormItemLayout = {
-  wrapperCol: {
-    xs: {
-      span: 24,
-      offset: 0,
-    },
-    sm: {
-      span: 16,
-      offset: 8,
-    },
-  },
-};
 
 class RegistrationForm extends React.Component {
   state = {
@@ -53,29 +26,32 @@ class RegistrationForm extends React.Component {
     yearTermination: 0,
   };
 
+  componentDidMount() {
+    // getPrimarySkills();
+    // getFaculties();
+    // getInstitutions();
+  }
+
   setTextField = (event) => {
     const field = event.target.name;
     const targetValue = event.target.value;
-    this.setState(prevState => ({
-      [field]: prevState[field].replace(
-        prevState[field],
-        targetValue || '',
-      ),
-    }));
+    this.setState({
+      [field]: targetValue || '',
+    });
   };
 
   setYearTermination = (event) => {
     const { value } = event.target;
-    this.setState(prevState => ({
-      yearTermination: prevState.yearTermination - prevState.yearTermination + value,
-    }));
+    this.setState({
+      yearTermination: Number(value),
+    });
   };
 
   setSelectField = (event, name) => {
     const field = name;
-    this.setState(prevState => ({
-      [field]: prevState[field] - prevState[field] + event,
-    }));
+    this.setState({
+      [field]: event,
+    });
   };
 
   changeSwitch = () => this.setState(prevState => ({ teacher: !prevState.teacher }));
@@ -93,7 +69,12 @@ class RegistrationForm extends React.Component {
       primarySkill,
       yearTermination,
     } = this.state;
-    const { form, registrationTeacher, registrationStudent } = this.props;
+    const { form,
+      registrateStudent,
+      registrateTeacher,
+      institutions,
+      faculties,
+      primarySkills } = this.props;
     const { getFieldDecorator } = form;
 
 
@@ -105,7 +86,7 @@ class RegistrationForm extends React.Component {
         institution: selectedInstitutionTeacher !== -1 ? institutions[selectedInstitutionTeacher].name : '',
         job: inputtedJob,
         primarySkill,
-        password: '',
+        role: 'TEACHER',
       }
       : {
         email,
@@ -115,12 +96,12 @@ class RegistrationForm extends React.Component {
         faculty,
         yearTermination,
         primarySkill,
-        password: '',
+        role: 'STUDENT',
       });
 
     const switchRegistration = () => (teacher
-      ? registrationTeacher(getUser())
-      : registrationStudent(getUser())
+      ? registrateTeacher(getUser())
+      : registrateStudent(getUser())
     );
 
     const handleSubmit = (e) => {
@@ -128,168 +109,32 @@ class RegistrationForm extends React.Component {
       form.validateFieldsAndScroll((err) => {
         if (!err) {
           switchRegistration();
+          message.success('Вам пришел на почту пароль! Регистрация выполнена успешна');
+          setTimeout(history.push.bind(null, '/login'), 5000);
         }
       });
     };
 
-    const institutionOptions = institutions.map(inst => (
-      <Option value={inst.id} key={inst.id}>
-        {inst.name}
-      </Option>
-    ));
-
-    const primarySkillsOptions = primarySkills.map(skill => (
-      <Option value={skill} key={skill}>
-        {skill}
-      </Option>
-    ));
-
-    const facultiesOptions = idInstitution !== -1 ? faculties[
-      institutions[idInstitution].id].map(elem => (
-        <Option value={elem} key={elem}>
-          {elem}
-        </Option>
-    )) : [];
-
-    const inputForTeachers = (
-      <FormItem>
-        <FormItem {...formItemLayout} label="Место работы">
-          {getFieldDecorator('job', {
-            rules: [
-              {
-                required: teacher && !(selectedInstitutionTeacher !== -1
-                  || inputtedJob.length !== 0),
-                message: 'Пожалуйста, выберите место работы и/или учебное заведение!',
-              },
-            ],
-          })(
-            <Input
-              name="inputtedJob"
-              onBlur={this.setTextField}
-              placeholder="Введите место работы и/или учебное заведение"
-            />,
-          )}
-        </FormItem>
-        <FormItem {...formItemLayout} label="Учебное заведение">
-          {getFieldDecorator('institutionTeacher', {
-            rules: [
-              {
-                required: teacher && !(selectedInstitutionTeacher !== -1
-                  || inputtedJob.length !== 0),
-                message: 'Пожалуйста, выберите учебное заведение!',
-              },
-            ],
-          })(
-            <Select
-              placeholder="Выберите учебное заведение"
-              onChange={value => this.setSelectField(value, 'selectedInstitutionTeacher')}
-            >
-              {institutionOptions}
-            </Select>,
-          )}
-        </FormItem>
-
-        <FormItem {...formItemLayout} label="Primary skill">
-          {getFieldDecorator('primarySkillTeacher', {
-            rules: [
-              {
-                required: teacher,
-                message: 'Пожалуйста, выберите ваш primary skill!',
-              },
-            ],
-          })(
-            <Select
-              onChange={value => this.setSelectField(value, 'primarySkill')}
-              placeholder="Выберите ваш primary skill"
-            >
-              {primarySkillsOptions}
-            </Select>,
-          )}
-        </FormItem>
-      </FormItem>
-    );
-
-    const inputsForStudents = (
-      <FormItem>
-        <FormItem {...formItemLayout} label="Учебное заведение">
-          {getFieldDecorator('institution', {
-            rules: [
-              {
-                required: !teacher,
-                message: 'Пожалуйста, выберите учебное заведение!',
-              },
-            ],
-          })(
-            <Select
-              placeholder="Выберите учебное заведение"
-              onChange={value => this.setSelectField(value, 'idInstitution')}
-            >
-              {institutionOptions}
-            </Select>,
-          )}
-        </FormItem>
-        <FormItem {...formItemLayout} label="Факультет">
-          {getFieldDecorator('faculty', {
-            rules: [
-              {
-                required: !teacher,
-                message: 'Пожалуйста, выберите факультет!',
-              },
-            ],
-          })(
-            <Select
-              placeholder="Выберите ваш факультет"
-              onChange={value => this.setSelectField(value, 'faculty')}
-            >
-              {facultiesOptions}
-            </Select>,
-          )}
-        </FormItem>
-        <FormItem {...formItemLayout} label="Год окончания">
-          {getFieldDecorator('yearTermination', {
-            rules: [
-              {
-                required: !teacher,
-                message: 'Пожалуйста, введите год окончания университета!',
-              },
-              {
-                pattern: /[2-9]\d\d\d/,
-                message: 'Вы можете ввести год из 4 цифр, начиная с 2000 года.',
-              },
-              {
-                max: 4,
-                message: 'Введите 4 цифры',
-              },
-
-            ],
-          })(
-            <Input
-              name="yearTermination"
-              onBlur={this.setYearTermination}
-            />,
-          )
-          }
-        </FormItem>
-        <FormItem {...formItemLayout} label="Primary skill">
-          {getFieldDecorator('primarySkillStudent', {
-            rules: [
-              {
-                required: !teacher,
-                message: 'Пожалуйста, выберите ваш primary skill!',
-              },
-            ],
-          })(
-            <Select
-              onChange={value => this.setSelectField(value, 'primarySkill')}
-              placeholder="Выберите ваш primary skill"
-            >
-              {primarySkillsOptions}
-            </Select>,
-          )}
-        </FormItem>
-      </FormItem>
-    );
-    const inputs = teacher ? inputForTeachers : inputsForStudents;
+    const inputs = teacher
+      ? (
+        <TeacherInputs
+          institutions={institutions}
+          primarySkills={primarySkills}
+          setTextField={this.setTextField}
+          setSelectField={this.setSelectField}
+          form={form}
+        />
+      )
+      : (
+        <StudentInputs
+          institutions={institutions}
+          faculties={faculties}
+          primarySkills={primarySkills}
+          setSelectField={this.setSelectField}
+          setYearTermination={this.setYearTermination}
+          form={form}
+        />
+      );
 
     return (
       <Form className="form-class">
@@ -383,21 +228,25 @@ class RegistrationForm extends React.Component {
 
 RegistrationForm.propTypes = {
   form: PropTypes.shape().isRequired,
-  registrationTeacher: PropTypes.func.isRequired,
-  registrationStudent: PropTypes.func.isRequired,
+  registrateStudent: PropTypes.func.isRequired,
+  registrateTeacher: PropTypes.func.isRequired,
+  institutions: PropTypes.arrayOf(PropTypes.shape()).isRequired,
+  faculties: PropTypes.shape().isRequired,
+  primarySkills: PropTypes.arrayOf(PropTypes.string).isRequired,
 };
 
 const mapStateToProps = state => ({
-  students: state.students,
-  teachers: state.teachers,
+  institutions: state.institutions,
+  faculties: state.faculties,
+  primarySkills: state.primarySkills,
 });
 
 const mapDispatchToProps = dispatch => ({
-  registrationStudent: (student) => {
-    dispatch(registrateStudent(student));
+  registrateStudent: (student) => {
+    dispatch(reqRegistrateStudent(student));
   },
-  registrationTeacher: (teacher) => {
-    dispatch(registrateTeacher(teacher));
+  registrateTeacher: (teacher) => {
+    dispatch(reqRegistrateTeacher(teacher));
   },
 });
 
