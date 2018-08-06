@@ -116,6 +116,11 @@ class Main extends React.Component {
         url: '/questions',
         component: AllQuestionsPage,
       },
+      {
+        key: '/checktests',
+        url: '/checktests',
+        component: PageListCheckTests,
+      },
     ];
   }
 

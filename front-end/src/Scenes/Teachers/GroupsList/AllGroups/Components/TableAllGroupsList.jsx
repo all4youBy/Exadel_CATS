@@ -18,7 +18,7 @@ class TableAllGroupsList extends React.PureComponent {
   static propTypes = {
     handleGroupDelete: PropTypes.func.isRequired,
     upDate: PropTypes.func.isRequired,
-    emptyList: PropTypes.bool.isRequired,
+    // emptyList: PropTypes.bool.isRequired,
     addGroupTest: PropTypes.func.isRequired,
     addGroupTask: PropTypes.func.isRequired,
     userStatus: PropTypes.string.isRequired,
@@ -40,9 +40,9 @@ class TableAllGroupsList extends React.PureComponent {
   }
 
   render() {
-    const { getListUsers, groups } = this.state;
+    const { groups } = this.state;
     const {
-      emptyList, handleGroupDelete, upDate, addGroupTask,
+      handleGroupDelete, upDate, addGroupTask,
       addGroupTest, userStatus,
     } = this.props;
     const columns = [{
@@ -100,19 +100,24 @@ class TableAllGroupsList extends React.PureComponent {
     }
     columns[0].title = <div className="header">Список групп</div>;
     // <InputSearch/>
-    const stateData = emptyList && getListUsers ? (<Loading/>)
-      : <div className="empty-list">Список групп пуст</div>;
-    const table = data.length ? (
-      <Table
-        className="table-groups"
-        columns={columns}
-        dataSource={data}
-      />) : (<Loading/>
-    );
-    const addList = groups.length ? table : stateData;
+    let container = null;
+    if (groups) {
+      if (groups.length) {
+        container = (
+          <Table
+            className="table-groups"
+            columns={columns}
+            dataSource={data}
+          />);
+      } else {
+        container = (<div className="empty-list">Список пуст</div>);
+      }
+    } else {
+      container = <Loading/>;
+    }
     return (
       <div className="groups-list">
-        {addList}
+        {container}
       </div>
     );
   }

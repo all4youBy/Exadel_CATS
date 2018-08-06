@@ -6,10 +6,10 @@ import './TableGroupStudents.scss';
 import { message, Radio, Table } from 'antd';
 import PropTypes from 'prop-types';
 import ButtonAssignTest from '../../../../../Components/ButtonAssignTest';
-import ButtonAssignTask from '../../../../../Components/ButtonAssignTask';
 import ButtonDeleteStudent from './ButtonDeleteStudent';
 // import ButtonAddStudent from './ButtonAddStudent';
 import Loading from '../../../../../Components/Loading';
+import ButtonAssignTaskForUser from './ButtonAssignTaskForUser';
 
 const { Group } = Radio;
 
@@ -94,6 +94,10 @@ class TableGroupStudents extends React.Component {
       width: 100,
       fixed: 'right',
       render(record) {
+        const userData = {
+          name: `${record.firstName} ${record.lastName}`,
+          email: record.email,
+        };
         return (
           <div className="buttons-table">
             <div className="parent-button-assign-test"><ButtonAssignTest
@@ -101,9 +105,9 @@ class TableGroupStudents extends React.Component {
               groupName={record.email}
             />
             </div>
-            <div className="parent-button-assign-task"><ButtonAssignTask
+            <div className="parent-button-assign-task"><ButtonAssignTaskForUser
               // addGroup={addGroupTask}
-              groupName={record.name}
+              userData={userData}
             />
             </div>
             <div className="parent-button-delete-group">

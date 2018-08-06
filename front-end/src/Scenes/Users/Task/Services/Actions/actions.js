@@ -2,6 +2,8 @@ import { message } from 'antd';
 import API from '../../../../../Services/API';
 import { history } from '../../../../../Services/ConfigureStore';
 
+// import { history } from '../../../../../Services/ConfigureStore';
+
 export function postUploadFiles(data, id) {
   return (API.postUploadFiles(`task/add-solution/${id}`, data, 'post_upload_files'));
 }
@@ -15,11 +17,11 @@ export function fetchTaskInformation(usersLogin, taskId) {
 }
 
 export function postAddSolution(data, id) {
-  return (API.post(`task/compile-solution/${id}`, data, ['post_add_task_solution', (response) => {
-    message.success(`Решение добавленно. Ваша отметка: ${response.solution.mark}`);
+  return (API.post(`task/compile-solution/${id}`, data, ['post_add_task_solution', () => {
+    message.success('Ваше решение получено');
     history.push('/assignedtasks');
   }, () => {
-    message.error('Не удалось добавить решение');
+    message.error('Не удалось отправить решение');
   }]));
 }
 

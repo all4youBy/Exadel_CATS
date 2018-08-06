@@ -94,7 +94,14 @@ class TaskProperties extends React.Component {
       };
       switch (type) {
         case 'STUDENT': {
-          task.assignedTo = receiver;
+          task.assignedTo = groupName;
+          task.id = taskInfo.taskId;
+          this.setState(() => ({ error: false }));
+          if (this.validateTask(task)) {
+            handleCreateTask(task, '/assign-task-for-user');
+          } else {
+            this.setState(({ error: true }));
+          }
           break;
         }
         case 'GROUPS': {
