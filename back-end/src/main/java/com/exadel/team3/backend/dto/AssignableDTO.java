@@ -9,7 +9,7 @@ import lombok.*;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class TestPostDTO {
+public class AssignableDTO {
 
     private String testId;
 

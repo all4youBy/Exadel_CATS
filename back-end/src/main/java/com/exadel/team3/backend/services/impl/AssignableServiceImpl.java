@@ -7,7 +7,7 @@ import java.util.stream.Stream;
 import java.time.LocalDateTime;
 
 import com.exadel.team3.backend.dao.projections.TopicProjection;
-import com.exadel.team3.backend.dto.TestPostDTO;
+import com.exadel.team3.backend.dto.AssignableDTO;
 import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -43,18 +43,22 @@ public abstract class AssignableServiceImpl<T extends Assignable>
     }
 
     @Override
-    public List<TestPostDTO> getAssignedItemsWithTopics(@NonNull String assignedTo) {
+    public List<AssignableDTO> getAssignedItemsWithTopics(@NonNull String assignedTo) {
         return ((AssignableRepositoryAggregation)getRepository()).findByAssignedToWithTopics(assignedTo)
                 .stream()
                 .map(
                         projection ->
-                        new TestPostDTO(
+                        new AssignableDTO(
                                 projection.getId().toString(),
                                 projection.getText(),
                                 projection.getStart(),
                                 projection.getDeadline(),
                                 !CollectionUtils.isEmpty(projection.getTopics())
-                                    ? projection.getTopics().stream().map(TopicProjection::getText).collect(Collectors.toList())
+                                    ? projection.getTopics()
+                                        .stream()
+                                        .map(TopicProjection::getText)
+                                        .sorted()
+                                        .collect(Collectors.toList())
                                     : null
                         )
                 )
