@@ -1,4 +1,4 @@
-/* eslint-disable spaced-comment */
+/* eslint-disable spaced-comment,no-unused-vars */
 import React from 'react';
 import 'antd/dist/antd.css';
 import { Link } from 'react-router-dom';
@@ -20,6 +20,7 @@ class TableGroupStudents extends React.Component {
     groupName: PropTypes.string.isRequired,
     error: PropTypes.string.isRequired,
     addStudentTest: PropTypes.func.isRequired,
+    getAssignedTasks: PropTypes.func.isRequired,
   };
 
   state = {
@@ -34,10 +35,12 @@ class TableGroupStudents extends React.Component {
   componentDidMount() {
     const { getGroup, groupName } = this.props;
     getGroup(groupName);
+    // console.log(students);
   }
 
   render() {
-    const { students, handleStudentDelete, error, addStudentTest, groupName } = this.props;
+    const { students, handleStudentDelete, error, addStudentTest,
+      groupName, getAssignedTasks } = this.props;
     const { bordered, loading, pagination, size, title, showHeader } = this.state;
     if (error) {
       message.error(error);
@@ -138,7 +141,9 @@ class TableGroupStudents extends React.Component {
         lastName: students[i].lastName,
         email: students[i].email,
       });
-    }console.log(students, data, data.length);
+    }
+    console.log(students, data, data.length);
+    getAssignedTasks(students);
     const table = students.length ? (
       <Table
         {...{

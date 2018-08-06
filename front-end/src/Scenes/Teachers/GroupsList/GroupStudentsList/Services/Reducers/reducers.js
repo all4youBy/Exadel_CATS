@@ -2,6 +2,7 @@ import * as types from '../Actions/types';
 
 const initialState = {
   group: [],
+  assignedTasks: [],
   groupName: '',
 };
 
@@ -12,6 +13,15 @@ const groupStudentsList = (state = initialState, action) => {
         ...state,
         groupName: action.payload,
       };
+
+    case types.RECEIVE_ASSIGNED_TASKS: {
+      const tasks = [...state.assignedTasks];
+      tasks.push(action.payload);
+      return {
+        ...state,
+        assignedTasks: tasks,
+      };
+    }
 
     case types.ADD_STUDENT: {
       const lastNumber = state.group.length ? +state.group[state.group.length - 1].number + 1 : 1;
