@@ -78,11 +78,7 @@ public class TaskController {
     public ResponseEntity<?> addFilesInSolution(@PathVariable(value = "id") String id) {
         Solution solution = solutionService.getItem(new ObjectId(id));
         solution = solutionService.submit(solution);
-        SolutionJsonDTO solutionJsonDTO = new SolutionJsonDTO(
-                solution.getId(), new ObjectId(id), solution.getAssignedTo(),
-                solution.getFiles(), solution.getAssignedBy(), solution.getStart(),
-                solution.getDeadline(), solution.getMark());
-        return new ResponseEntity<>(solutionJsonDTO, HttpStatus.OK);
+        return new ResponseEntity<>(solution, HttpStatus.OK);
     }
 
     @PostMapping("/assign-task-for-group")
