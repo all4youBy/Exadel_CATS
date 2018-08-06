@@ -14,10 +14,7 @@ class InputOutputSet extends React.PureComponent {
     addElem: PropTypes.func.isRequired,
     testSets: PropTypes.arrayOf(PropTypes.object).isRequired,
     setTestSets: PropTypes.func.isRequired,
-  };
-
-  state = {
-    arraySets: [],
+    deleteSet: PropTypes.func.isRequired,
   };
 
   setField = (event) => {
@@ -63,29 +60,24 @@ class InputOutputSet extends React.PureComponent {
   };
 
   deleteSet = (id) => {
-    const { arraySets } = this.state;
-    arraySets.splice(id, 1);
-    this.setState(({
-      [arraySets]: arraySets,
-    }));
+    const { deleteSet } = this.props;
+    deleteSet(id);
   };
 
   render() {
     const options = [];
     const { testSet, addElem } = this.props;
-    const { arraySets } = this.state;
-    console.log(arraySets);
     for (let index = 0; index <= 10; index += 1) {
       options.push(<Option value={index}>{index}</Option>);
     }
     const elem = (testSet || []).map((item, i) => (
-      <div className="set-container" onBlur={this.setField} id={i}>
+      <div className="set-container" onBlur={this.setField} id={item.key}>
         <span className="set-num">Сет {i + 1}</span>
         <Select
           defaultValue="0"
           name="level"
           className="select-add-task"
-          onBlur={this.setSelectionValue.bind(this, i)}
+          onBlur={this.setSelectionValue.bind(this, item.key)}
         >
           {options}
         </Select>
@@ -106,7 +98,7 @@ class InputOutputSet extends React.PureComponent {
           onBlur={this.setField}
         />
         <Button
-          onClick={this.deleteSet.bind(this, i)}
+          onClick={this.deleteSet.bind(this, item.key)}
           shape="circle"
           icon="close"
           className="button-table"

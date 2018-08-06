@@ -2,28 +2,44 @@
   display: flex;
   align-self: center;
   width: 310px;
-  .login-form a {
-    color: #04233d !important;
-  }
 
+  .registration-text {
+    color: #04233d;
+  }
+  .registration-text:hover {
+    color: #1890ff;
+  }
   .form-item {
     width: auto;
     margin-bottom: 10px;
     text-align: center;
   }
-
+  .hide {
+    display: none;
+  }
   .login-form-button {
-    background-color: #04233d !important;
-    border-color: #04233d !important;
     width: 100%;
+    margin-top: 20px;
   }
 
   .login {
     text-align: center;
   }
 
-  .error-input {
+  .parent-error-input {
+    display: flex;
+    justify-content: center;
     text-align: center;
-    color: red;
   }
+}
+
+.error-input {
+  color: red;
+  position: absolute;
+}
+
+.parent-error-input {
+  display: flex;
+  justify-content: center;
+  text-align: center;
 }

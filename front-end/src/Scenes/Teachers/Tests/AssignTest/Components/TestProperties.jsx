@@ -159,7 +159,7 @@ class TestProperties extends React.Component {
             </div>
           </div>
         </div>
-        {errorInput}
+        <div className="parent-error-input">{errorInput}</div>
         <Button
           className="button-table-with-border button-assign"
           type="primary"

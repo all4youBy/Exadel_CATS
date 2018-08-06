@@ -1,19 +1,19 @@
 import * as types from '../Actions/types';
 
 const initialState = {
-  tasks: null,
+  questions: [],
   error: '',
 };
 
-const userAssignedTasks = (state = initialState, action) => {
+const allQuestions = (state = initialState, action) => {
   switch (action.type) {
-    case types.RECEIVE_USER_ASSIGNED_TASKS: {
+    case types.RECEIVE_ALL_QUESTIONS: {
       return {
         ...state,
-        tasks: [...action.payload],
+        questions: [...action.payload],
       };
     }
-    case types.ERROR_USER_ASSIGNED_TASKS:
+    case types.ERROR_ALL_QUESTIONS:
       return {
         ...state,
         error: action.payload,
@@ -24,4 +24,4 @@ const userAssignedTasks = (state = initialState, action) => {
   }
 };
 
-export default userAssignedTasks;
+export default allQuestions;

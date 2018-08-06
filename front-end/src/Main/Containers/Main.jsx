@@ -32,6 +32,7 @@ import TrainingTestPage from '../../Scenes/Users/TestList/TrainingTest/Container
 import AllGroups from '../../Scenes/Teachers/GroupsList/AllGroups/Containers/AllGroups';
 import TaskProperties from '../../Scenes/Teachers/Tasks/AssignTask/Components/TaskProperties';
 import ViewTaskPage from '../../Scenes/Teachers/Tasks/ViewTask/Containers/ViewTaskPage';
+import AllQuestionsPage from '../../Scenes/Teachers/Questions/AllQuestions/Containers/AllQuestionsPage';
 
 class Main extends React.Component {
   static propTypes = {
@@ -106,6 +107,11 @@ class Main extends React.Component {
         key: '/viewtask/:taskId',
         url: '/viewtask/:taskId',
         component: ViewTaskPage,
+      },
+      {
+        key: '/questions',
+        url: '/questions',
+        component: AllQuestionsPage,
       },
     ];
   }
@@ -199,7 +205,15 @@ class Main extends React.Component {
           </div>
         );
       default:
-        return 'foo';
+        return (
+          <div className="main-body-container-unlogged">
+            <Switch>
+              <Route exact path="/" component={LogIn}/>
+              <Route exact path="/registration" component={RegistrationPage}/>
+              <Redirect to="/"/>
+            </Switch>
+          </div>
+        );
     }
   }
 

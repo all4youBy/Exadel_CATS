@@ -13,11 +13,7 @@ class ViewUserTask extends React.Component {
     getTaskInformation: PropTypes.func.isRequired,
     taskId: PropTypes.string.isRequired,
     taskInfo: PropTypes.arrayOf.isRequired,
-    response: PropTypes.string.isRequired,
-  };
-
-  state = {
-    uploading: false,
+    // response: PropTypes.string.isRequired,
   };
 
   componentDidMount() {
@@ -26,46 +22,44 @@ class ViewUserTask extends React.Component {
   }
 
   render() {
-    let { uploading } = this.state;
-
-    function formatDate(date) {
-      let dd = date.getDate();
-      if (dd < 10) dd = `0${dd}`;
-
-      let mm = date.getMonth() + 1;
-      if (mm < 10) mm = `0${mm}`;
-
-      let yy = date.getFullYear() % 100;
-      if (yy < 10) yy = `0${yy}`;
-
-      return `${dd}.${mm}.${yy}`;
-    }
-
-    const { taskInfo, response, error } = this.props;
-    let deadline = null;
-    let tags = ['sas', 'sss', 'pos'];
-    tags = tags.map(element => <Tag color="blue">{element}</Tag>);
-    if (taskInfo.solution) {
-      const date = new Date(taskInfo.solution.deadline);
-      deadline = formatDate(date);
+    const { taskInfo, error } = this.props;
+    let tags = [];
+    if (taskInfo && taskInfo.topicIds) {
+      tags = taskInfo.topicIds.map(element => <Tag color="blue">{element}</Tag>);
     }
     if (error) {
       message.error(error);
     }
-    if (response) {
-      uploading = false;
+
+    let sets = [];
+    if (taskInfo && taskInfo.testingSets) {
+      sets = taskInfo.testingSets.map(element => (
+        <div className="parent-view-user-set">
+          <div className="view-user-level-data">{element.difficultyLevel}</div>
+          <div className="border-sets view-user-input-data"><span className="input-left">{element.input}</span></div>
+          <div className="border-sets view-user-output-data"><span className="input-left">{element.output}</span></div>
+        </div>
+      ));
     }
-    console.log(uploading);
-    const container = taskInfo.solution ? (
+
+    const container = taskInfo ? (
       <div>
         <div className="task-title">
           <div className="text-task-title">{taskInfo.title}</div>
-          <div className="author-task-title"> Автор: {taskInfo.solution.assignedBy}</div>
-          <div>Дата сдачи: {deadline} </div>
+          <div className="author-task-title"> Автор: {taskInfo.author}</div>
         </div>
         <div className="tags">{tags}</div>
         <div className="task-text-border">
           <div className="task-text">{taskInfo.text}</div>
+        </div>
+        <div className="contain-view-user-sets">
+          <div className="sets-description">
+            <span className="view-user-level">Сложность</span>
+            <span className="view-user-input">Входные данные</span>
+            <span className="view-user-output">Выходные данные</span>
+            <span className="view-user-space"/>
+          </div>
+          {sets}
         </div>
       </div>) : <Loading/>;
     return (

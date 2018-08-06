@@ -3,9 +3,7 @@ import { connect } from 'react-redux';
 import './AllTask.scss';
 import PropTypes from 'prop-types';
 import TableAllTasks from '../Components/TableAllTasks';
-import {
-  fetchTasks,
-} from '../Services/Actions/actions';
+import fetchTasks from '../Services/Actions/actions';
 
 
 class AllTask extends React.Component {

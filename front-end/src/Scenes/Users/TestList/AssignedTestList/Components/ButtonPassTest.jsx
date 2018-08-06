@@ -11,7 +11,6 @@ class ButtonPassTest extends React.Component {
 
   render() {
     const { testId } = this.props;
-    console.log(testId, 9787);
     const link = `/test/${testId}`;
     return (
       <Button className="button-table-with-border" type="primary">
