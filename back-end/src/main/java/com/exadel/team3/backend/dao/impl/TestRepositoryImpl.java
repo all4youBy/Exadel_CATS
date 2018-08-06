@@ -7,7 +7,6 @@ import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.mongodb.core.MongoTemplate;
-import org.springframework.data.mongodb.core.aggregation.Aggregation;
 import org.springframework.data.mongodb.core.aggregation.AggregationResults;
 import org.springframework.data.mongodb.core.aggregation.GroupOperation;
 import org.springframework.data.mongodb.core.query.Criteria;
@@ -26,8 +25,9 @@ import com.exadel.team3.backend.dao.projections.AssignableProjection;
 
 @Repository
 public class TestRepositoryImpl
-        extends AssignableRepositoryImpl<Test>
-        implements AssignableRepositoryAggregation, TestRepositoryAggregation {
+        extends     AssignableRepositoryImpl<Test>
+        implements  AssignableRepositoryAggregation,
+                    TestRepositoryAggregation {
 
     @Autowired
     private MongoTemplate mongoTemplate;
@@ -134,4 +134,5 @@ public class TestRepositoryImpl
                 );
         return results.getMappedResults();
     }
+
 }

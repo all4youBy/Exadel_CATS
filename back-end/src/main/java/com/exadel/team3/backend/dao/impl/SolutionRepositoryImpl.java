@@ -3,6 +3,7 @@ package com.exadel.team3.backend.dao.impl;
 import java.util.List;
 
 import org.bson.types.ObjectId;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.mongodb.core.MongoTemplate;
@@ -25,7 +26,8 @@ import com.exadel.team3.backend.entities.Solution;
 @Repository
 public class SolutionRepositoryImpl
         extends AssignableRepositoryImpl<Solution>
-        implements AssignableRepositoryAggregation, SolutionRepositoryAggregation {
+        implements  AssignableRepositoryAggregation,
+                    SolutionRepositoryAggregation {
 
     @Autowired
     private MongoTemplate mongoTemplate;
@@ -84,4 +86,5 @@ public class SolutionRepositoryImpl
                 AssignableProjection.class
         ).getMappedResults();
     }
+
 }

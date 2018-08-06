@@ -1,9 +1,12 @@
 package com.exadel.team3.backend.dao.impl;
 
+import java.time.LocalDateTime;
 import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import com.exadel.team3.backend.dao.ActivityQueries;
+import com.exadel.team3.backend.dao.projections.ActivityProjection;
 import com.exadel.team3.backend.dao.projections.StringIdProjection;
 import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Repository;
@@ -19,7 +22,7 @@ import com.exadel.team3.backend.dao.UserRepositoryQueries;
 import com.exadel.team3.backend.entities.User;
 
 @Repository
-public class UserRepositoryImpl implements UserRepositoryQueries {
+public class UserRepositoryImpl implements UserRepositoryQueries, ActivityQueries {
     @Autowired
     MongoTemplate mongoTemplate;
 
@@ -71,5 +74,23 @@ public class UserRepositoryImpl implements UserRepositoryQueries {
         );
         Update update = new Update().pull("groups", groupName);
         mongoTemplate.updateMulti(updateQuery, update, User.class);
+    }
+
+    @Override
+    public List<ActivityProjection> findRecentActivities(@NonNull LocalDateTime after, @NonNull LocalDateTime now) {
+        return mongoTemplate.find(
+                new Query(Criteria.where("registrationDate").gt(after)),
+                User.class
+        )
+        .stream()
+        .map(user -> new ActivityProjection(
+                user.getEmail(),
+                user.getFirstName(),
+                user.getLastName(),
+                null,
+                user.getRegistrationDate(),
+                null)
+        )
+        .collect(Collectors.toList());
     }
 }

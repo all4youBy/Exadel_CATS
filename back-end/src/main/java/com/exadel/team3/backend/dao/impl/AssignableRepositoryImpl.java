@@ -1,5 +1,6 @@
 package com.exadel.team3.backend.dao.impl;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 import org.springframework.data.domain.Sort;
@@ -10,13 +11,19 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
 
+import static org.springframework.data.mongodb.core.aggregation.Aggregation.*;
+import static org.springframework.data.mongodb.core.aggregation.LookupOperation.newLookup;
+
+
 import com.exadel.team3.backend.dao.projections.RatingProjection;
 import com.exadel.team3.backend.dao.AssignableRepositoryAggregation;
 import com.exadel.team3.backend.entities.Assignable;
+import com.exadel.team3.backend.dao.ActivityQueries;
+import com.exadel.team3.backend.dao.projections.ActivityProjection;
 
 @Repository
 public abstract class AssignableRepositoryImpl<T extends Assignable>
-        implements AssignableRepositoryAggregation {
+        implements AssignableRepositoryAggregation, ActivityQueries {
 
     @Autowired
     MongoTemplate mongoTemplate;
@@ -41,19 +48,47 @@ public abstract class AssignableRepositoryImpl<T extends Assignable>
         );
     }
 
+    @Override
+    public List<ActivityProjection> findRecentActivities(@NonNull LocalDateTime after, @NonNull LocalDateTime now) {
+        return mongoTemplate.aggregate(
+                TypedAggregation.newAggregation(
+                    match(
+                            new Criteria().orOperator(
+                                    Criteria.where("start").gt(after),
+                                    new Criteria().andOperator(
+                                            Criteria.where("deadline").gt(after),
+                                            Criteria.where("deadline").lt(now)
+                                    )
+                            )
+                    ),
+                    newLookup()
+                            .from("users")
+                            .localField("assignedTo")
+                            .foreignField("_id")
+                            .as("user"),
+                    project("user._id",
+                            "user.firstName",
+                            "user.lastName",
+                            "start",
+                            "deadline"
+                    )
+                ),
+                getEntityClass().getSimpleName().toLowerCase() + "s",
+                ActivityProjection.class
+        ).getMappedResults();
+    }
+
 
     MatchOperation getMatchOperation() {
-        return Aggregation.match(Criteria.where("mark").ne(null));
+        return match(Criteria.where("mark").ne(null));
     }
     GroupOperation getBySumGroupingOperation() {
-        return Aggregation
-                .group("assignedTo")
+        return group("assignedTo")
                 .sum("mark")
                 .as("rating");
     }
     GroupOperation getByAverageGroupingOperation() {
-        return Aggregation
-                .group("assignedTo")
+        return group("assignedTo")
                 .avg("mark")
                 .as("rating");
     }
@@ -82,5 +117,6 @@ public abstract class AssignableRepositoryImpl<T extends Assignable>
             );
         return results.getMappedResults();
     }
+
 
 }
