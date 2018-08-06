@@ -68,6 +68,22 @@ public class UserController {
 
     }
 
+    @GetMapping(value = "/assigned-items-finished/{assignedTo}",produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> getAssignedItemsFinished(@PathVariable String assignedTo){
+        List<Solution> items = solutionService.getAssignedItemsFinished(assignedTo);
+
+        return items == null?
+                ResponseEntity.status(HttpStatus.NO_CONTENT).body(new JSONAnswerDTO(String.format("No finished items assigned to%s",assignedTo))):
+                ResponseEntity.ok().body(items);
+    }
+
+//    @GetMapping(value = "/assigned-items-unfinished/{assignedTo}",produces = MediaType.APPLICATION_JSON_VALUE)
+//    public ResponseEntity<?> getAssignedItemsUnfinished(@PathVariable String assignedTo){
+//        List<Solution> items = solutionService.getAssignedItemsUnfinished(assignedTo);
+//
+////        return items == null?
+//    }
+
     @GetMapping("groups/{email}")
     public ResponseEntity<?> getUserGroups(@PathVariable String email){
         User user = userService.getItem(email);
@@ -109,7 +125,7 @@ public class UserController {
     }
 
     @DeleteMapping(value = "/groups", produces = MediaType.APPLICATION_JSON_VALUE)
-    @AdminAccess
+    @AdminAndTeacherAccess
     public ResponseEntity<?> deleteGroup(@RequestBody RemoveGroupRequest request,Principal principal){
         userService.removeGroup(request.getUserId(),principal.getName(),request.getGroup());
         return ResponseEntity.ok(String.format("Group %s removed.",request.getGroup()));
@@ -130,6 +146,7 @@ public class UserController {
     @GetMapping("/teachers")
     @AdminAccess
     public List<User> getAllTeachers(){
+
         return userService.getByRole(UserRole.TEACHER);
     }
 
@@ -139,7 +156,7 @@ public class UserController {
     }
 
     @GetMapping("/{email}")
-    @UserAndTeacherAccess
+    @PreAuthorize("hasRole('ADMIN') or #email==authentication.name")
     public User getUser(@PathVariable(value = "email") String email){
         return userService.getItem(email);
     }
@@ -190,6 +207,5 @@ public class UserController {
         userService.assignGroup(request.getEmails(),principal.getName(), request.getGroupId());
         return ResponseEntity.ok(HttpStatus.OK);
     }
-
 
 }

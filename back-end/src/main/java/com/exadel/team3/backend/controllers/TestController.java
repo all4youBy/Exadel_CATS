@@ -81,7 +81,7 @@ public class TestController {
        if(test == null)
            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new JSONAnswerDTO("Can't generate test."));
 
-       return ResponseEntity.ok().body(test.getId().toString());
+       return ResponseEntity.ok().body(new JSONAnswerDTO(test.getId().toString()));
     }
 
     @PostMapping(value = "/training",produces = MediaType.APPLICATION_JSON_VALUE)
@@ -160,8 +160,8 @@ public class TestController {
         Test test = testService.getItem(testId);
 
         return test.getAssignedBy() == null?
-                ResponseEntity.ok().body(test.getMark()):
-                ResponseEntity.ok("Test submit.");
+                ResponseEntity.ok().body(new JSONAnswerDTO(test.getMark().toString())):
+                ResponseEntity.ok().body(new JSONAnswerDTO("Test submit."));
     }
 
     @PostMapping(value = "/submit-question",produces = MediaType.APPLICATION_JSON_VALUE)

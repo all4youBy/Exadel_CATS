@@ -33,12 +33,12 @@ public class StatisticController {
         return testService.getTopRatingByAverage();
     }
 
-    @GetMapping(value = "/tasks")
+    @GetMapping(value = "/tasks",produces = MediaType.APPLICATION_JSON_VALUE)
     public List<UserRatingDTO> getTopRatingBySumTask(){
         return solutionService.getTopRatingBySum();
     }
 
-    @GetMapping(value = "/tasks/average")
+    @GetMapping(value = "/tasks/average",produces = MediaType.APPLICATION_JSON_VALUE)
     public List<UserRatingDTO> getTopRatingByAverageTask(){
         return solutionService.getTopRatingByAverage();
     }
