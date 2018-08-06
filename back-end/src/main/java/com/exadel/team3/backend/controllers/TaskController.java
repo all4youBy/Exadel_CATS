@@ -2,10 +2,7 @@ package com.exadel.team3.backend.controllers;
 
 import com.exadel.team3.backend.controllers.requests.AddTaskRequest;
 import com.exadel.team3.backend.controllers.requests.TaskRequest;
-import com.exadel.team3.backend.dto.SolutionDTO;
-import com.exadel.team3.backend.dto.StringAnswerDTO;
-import com.exadel.team3.backend.dto.TaskDTO;
-import com.exadel.team3.backend.dto.TaskForTeachersDTO;
+import com.exadel.team3.backend.dto.*;
 import com.exadel.team3.backend.dto.mappers.SolutionDTOMapper;
 import com.exadel.team3.backend.dto.mappers.TaskDTOMapper;
 import com.exadel.team3.backend.dto.mappers.TopicDTOMapper;
@@ -107,6 +104,13 @@ public class TaskController {
         return taskDTOMapper.convertToTaskForTeachersDTO(tasks);
     }
 
+    @GetMapping("/tasks/{teachersId}")
+    @PreAuthorize("hasAnyRole('ADMIN','TEACHER')")
+    public List<SolutionForTeachersTDO> getUsersTasks(@PathVariable(value = "teachersId") String teachersId) {
+        List<Solution> solutions = solutionService.getAssignedItemsByAssigner(teachersId);
+        return solutionDTOMapper.convertToSolutionForTeachersTDO(solutions);
+    }
+
     @PostMapping("/assign-task-for-user")
     @PreAuthorize("hasAnyRole('ADMIN','TEACHER')")
     public ResponseEntity<?> assignTaskForUser(@RequestBody TaskRequest taskRequest) {
@@ -123,10 +127,16 @@ public class TaskController {
         return new ResponseEntity<>(solutionForUser, HttpStatus.OK);
     }
 
-    @GetMapping("/users-tasks/{userId}")
+    @GetMapping("/users-finished-tasks/{userId}")
     //TODO Максим напишет аннотацию. Доступ имеет админ, учитель и только один ученик
-    public List<SolutionDTO> getUsersSolutions(@PathVariable(value = "userId") String userId) {
-        return solutionDTOMapper.convertToDTO(solutionService.getAssignedItems(userId));
+    public List<SolutionDTO> getUsersFinishedSolutions(@PathVariable(value = "userId") String userId) {
+        return solutionDTOMapper.convertToDTO(solutionService.getAssignedItemsFinished(userId));
+    }
+
+    @GetMapping("/users-unfinished-tasks/{userId}")
+    //TODO Максим напишет аннотацию. Доступ имеет админ, учитель и только один ученик
+    public List<SolutionDTO> getUsersUnfinishedSolutions(@PathVariable(value = "userId") String userId) {
+        return solutionDTOMapper.convertToDTO(solutionService.getAssignedItemsUnfinished(userId));
     }
 
     @GetMapping("/testing-sets/{taskId}")

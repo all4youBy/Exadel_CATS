@@ -12,7 +12,6 @@ import java.util.List;
 @AllArgsConstructor
 public class SolutionDTO {
     @NonNull
-    @JsonSerialize(using = ToStringSerializer.class)
     private Solution solution;
 
     @NonNull
