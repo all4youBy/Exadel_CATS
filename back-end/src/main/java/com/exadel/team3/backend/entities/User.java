@@ -12,6 +12,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.Field;
 import org.springframework.util.StringUtils;
 
+import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -46,4 +47,6 @@ public class User {
     public boolean isEmailConfirmed() {
         return StringUtils.isEmpty(emailConfirmationCode);
     }
+
+    private LocalDateTime registrationDate;
 }

@@ -63,7 +63,7 @@ public class SolutionRepositoryImpl
                                 .localField("taskId")
                                 .foreignField("_id")
                                 .as("task"),
-                        project("_id", "start", "deadline", "task.text", "task.topicIds"),
+                        project("_id", "start", "deadline", "task.text", "task.topicIds", "mark"),
                         unwind("topicIds", true),
                         unwind("topicIds", true),
                         newLookup()
@@ -76,8 +76,9 @@ public class SolutionRepositoryImpl
                                 .first("text").as("text")
                                 .first("start").as("start")
                                 .first("deadline").as("deadline")
+                                .first("mark").as("mark")
                                 .addToSet("topic").as("topics"),
-                        sort(Sort.Direction.DESC, "start")
+                        sort(Sort.Direction.DESC, "deadline", "start")
                 ),
                 "solutions",
                 AssignableProjection.class

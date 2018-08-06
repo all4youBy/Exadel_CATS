@@ -22,4 +22,6 @@ public class AssignableDTO {
     private LocalDateTime deadline;
 
     private List<String> topics;
+
+    private Integer mark;
 }
