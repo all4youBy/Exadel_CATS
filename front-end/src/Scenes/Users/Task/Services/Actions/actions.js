@@ -3,7 +3,7 @@ import API from '../../../../../Services/API';
 import { history } from '../../../../../Services/ConfigureStore';
 
 export function postUploadFiles(data, id) {
-  return (API.postUploadFiles(`task/add-solution/${id}`, data, 'post_upload_files', 'Не удалось загрузить файлы'));
+  return (API.postUploadFiles(`task/add-solution/${id}`, data, 'post_upload_files'));
 }
 
 export function fetchTaskInformation(usersLogin, taskId) {
@@ -20,7 +20,7 @@ export function postAddSolution(data, id) {
     history.push('/assignedtasks');
   }, () => {
     message.error('Не удалось добавить решение');
-  }], 'Не удалось добавить решение'));
+  }]));
 }
 
 
