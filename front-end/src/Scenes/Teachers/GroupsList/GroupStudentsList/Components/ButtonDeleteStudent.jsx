@@ -1,32 +1,43 @@
+/* eslint-disable no-unused-vars */
 import React from 'react';
-import 'antd/dist/antd.css';
-import './ButtonDeleteStudent.scss';
-import { Button } from 'antd';
+import { Button, Tooltip } from 'antd';
 import PropTypes from 'prop-types';
+import requestLoginInformation from '../../../../../Services/loginService';
 
-class ButtonDeleteStudent extends React.PureComponent {
+class ButtonDeleteGroup extends React.Component {
   static propTypes = {
     onStudentDelete: PropTypes.func.isRequired,
-    data: PropTypes.string.isRequired,
+    student: PropTypes.string.isRequired,
+    upDate: PropTypes.func.isRequired,
+    groups: PropTypes.arrayOf(PropTypes.string).isRequired,
+    groupName: PropTypes.string.isRequired,
   };
 
-  handleStudentDelete(e) {
-    const { onStudentDelete, data } = this.props;
+  handleStudentDelete = (e) => {
+    const { onStudentDelete, student, upDate, groups, groupName } = this.props;
+    const object = {
+      group: groupName,
+      usersId: [student],
+    };
+    console.log(object);
+    onStudentDelete(object);
+    // upDate(groups, data);
     e.preventDefault();
-    onStudentDelete(data);
-  }
+  };
 
   render() {
     return (
-      <Button
-        onClick={e => this.handleStudentDelete(e)}
-        shape="circle"
-        icon="close"
-        className="button-table"
-        size="small"
-      />
+      <Tooltip placement="top" title="Удалить">
+        <Button
+          onClick={this.handleStudentDelete}
+          shape="circle"
+          icon="close"
+          className="button-table"
+          size="small"
+        />
+      </Tooltip>
     );
   }
 }
 
-export default ButtonDeleteStudent;
+export default ButtonDeleteGroup;

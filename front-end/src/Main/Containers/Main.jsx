@@ -164,7 +164,7 @@ class Main extends React.Component {
                     component={item.component}
                   />
                 ))}
-                <Redirect to="/"/>
+                <Redirect to="/mygroups"/>
               </Switch>
             </div>
           </div>
