@@ -1,12 +1,13 @@
 package com.exadel.team3.backend.services.impl;
 
 import java.util.*;
-import java.util.function.Function;
+import java.util.function.Supplier;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import java.time.LocalDateTime;
-import java.util.stream.StreamSupport;
 
+import com.exadel.team3.backend.dao.projections.TopicProjection;
+import com.exadel.team3.backend.dto.AssignableDTO;
 import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -18,31 +19,58 @@ import com.exadel.team3.backend.entities.Assignable;
 import com.exadel.team3.backend.entities.User;
 import com.exadel.team3.backend.services.AssignableService;
 import com.exadel.team3.backend.dao.AssignableRepositoryAggregation;
-import com.exadel.team3.backend.dao.impl.RatingProjectionImpl;
+import com.exadel.team3.backend.dao.projections.RatingProjection;
 import com.exadel.team3.backend.dto.UserRatingDTO;
+import org.springframework.util.CollectionUtils;
+import org.springframework.util.StringUtils;
+
 public abstract class AssignableServiceImpl<T extends Assignable>
         extends CrudServiceImpl<T, ObjectId>
         implements AssignableService<T> {
     @Autowired
     private UserRepository userRepository;
-
-    @Override
-    protected abstract AssignableRepository<T> getRepository();
-
     @Value("${cats.statistics.topRatingListSize:10}")
     private int topRatingListSize;
 
     @Override
-    public List<T> getAssignedItems(String assignedTo, String assignedBy) {
+    protected abstract AssignableRepository<T> getRepository();
+
+    protected int getTopRatingListSize() {return topRatingListSize;}
+
+    @Override
+    public List<T> getAssignedItems(@NonNull String assignedTo, @NonNull String assignedBy) {
         return getRepository().findByAssignedToAndAssignedByOrderByStartDesc(assignedTo, assignedBy);
     }
 
     @Override
-    public List<T> getAssignedItems(String assignedTo) {
+    public List<AssignableDTO> getAssignedItemsWithTopics(@NonNull String assignedTo) {
+        return ((AssignableRepositoryAggregation)getRepository()).findByAssignedToWithTopics(assignedTo)
+                .stream()
+                .map(
+                        projection ->
+                        new AssignableDTO(
+                                projection.getId().toString(),
+                                projection.getText(),
+                                projection.getStart(),
+                                projection.getDeadline(),
+                                !CollectionUtils.isEmpty(projection.getTopics())
+                                    ? projection.getTopics()
+                                        .stream()
+                                        .map(TopicProjection::getText)
+                                        .sorted()
+                                        .collect(Collectors.toList())
+                                    : null
+                        )
+                )
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<T> getAssignedItems(@NonNull String assignedTo) {
         return getRepository().findByAssignedToOrderByStartDesc(assignedTo);
     }
     @Override
-    public List<T> getAssignedItemsFinished(String assignedTo) {
+    public List<T> getAssignedItemsFinished(@NonNull String assignedTo) {
         return getRepository().findByAssignedToAndDeadlineBeforeOrderByDeadlineDesc(
                 assignedTo,
                 LocalDateTime.now()
@@ -50,7 +78,7 @@ public abstract class AssignableServiceImpl<T extends Assignable>
     }
 
     @Override
-    public List<T> getAssignedItemsUnfinished(String assignedTo) {
+    public List<T> getAssignedItemsUnfinished(@NonNull String assignedTo) {
         return getRepository().findByAssignedToAndDeadlineAfterOrderByStartDesc(
                 assignedTo,
                 LocalDateTime.now()
@@ -118,30 +146,36 @@ public abstract class AssignableServiceImpl<T extends Assignable>
     @Override
     public List<UserRatingDTO> getTopRatingBySum() {
         return getTopRating(
-                ((AssignableRepositoryAggregation)getRepository())::collectRatingBySum
+                () ->
+                ((AssignableRepositoryAggregation)getRepository())
+                        .collectRatingBySum(topRatingListSize)
         );
     }
 
     @Override
     public List<UserRatingDTO> getTopRatingByAverage() {
         return getTopRating(
-                ((AssignableRepositoryAggregation)getRepository())::collectRatingByAverage
+                () ->
+                ((AssignableRepositoryAggregation)getRepository())
+                        .collectRatingByAverage(topRatingListSize)
         );
     }
 
-    private List<UserRatingDTO> getTopRating(Function<Integer, List<RatingProjectionImpl>> collectorFunc) {
-        Map<String, Integer> userIdsRatings =
-                        collectorFunc.apply(topRatingListSize)
-                        .stream()
-                        .collect(Collectors.toMap(
-                                RatingProjectionImpl::getId,
-                                RatingProjectionImpl::getRating
-                        ));
-
-        return StreamSupport
-                .stream(userRepository.findAllById(userIdsRatings.keySet()).spliterator(),false)
-                .map(user -> new UserRatingDTO(user.getFirstName(), user.getLastName(), userIdsRatings.get(user.getEmail())))
-                .sorted(Comparator.comparingInt(UserRatingDTO::getRating).reversed())
+    protected List<UserRatingDTO> getTopRating(Supplier<List<RatingProjection>> collector) {
+        return collector.get()
+                .stream()
+                .filter(
+                        projection ->
+                        !StringUtils.isEmpty(projection.getFirstName()) && !StringUtils.isEmpty(projection.getLastName())
+                )
+                .map(
+                    projection ->
+                    new UserRatingDTO(
+                            projection.getFirstName(),
+                            projection.getLastName(),
+                            projection.getRating()
+                    )
+                )
                 .collect(Collectors.toList());
     }
 

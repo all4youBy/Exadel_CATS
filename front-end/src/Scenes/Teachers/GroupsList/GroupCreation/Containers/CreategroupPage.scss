@@ -3,11 +3,6 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  .error-input {
-    text-align: center;
-    color: red;
-    margin-top: 20px;
-  }
   .group-name-input {
     text-align: center;
     width: 95%;
@@ -35,11 +30,12 @@
     display: flex;
     flex-direction: row;
     width: 95%;
+    margin-bottom: 10px;
     justify-content: space-between;
   }
 
   .create-group-button {
-    margin: 20px;
+    margin: 30px;
     height: 32px;
     background-color: #04233d;
     color: #fff;

@@ -2,9 +2,9 @@ import * as types from '../Actions/types';
 
 const initialState = [];
 
-const registrationStudentReducer = (state = initialState, action) => {
+const studentReducer = (state = initialState, action) => {
   switch (action.type) {
-    case types.REGISTRATION_OF_STUDENT: {
+    case types.RECEIVE_REGISTRATED_STUDENT: {
       return [
         ...state,
         action.payload,
@@ -16,4 +16,4 @@ const registrationStudentReducer = (state = initialState, action) => {
   }
 };
 
-export default registrationStudentReducer;
+export default studentReducer;

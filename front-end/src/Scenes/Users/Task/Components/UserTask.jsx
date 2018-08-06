@@ -104,8 +104,10 @@ class UserTask extends React.Component {
     const { fileList } = this.state;
     const { taskInfo, response } = this.props;
     let deadline = null;
-    let tags = ['sas', 'sss', 'pos'];
-    tags = tags.map(element => <Tag color="blue">{element}</Tag>);
+    let tags = [];
+    if (taskInfo && taskInfo.topicIds) {
+      tags = taskInfo.topicIds.map(element => <Tag color="blue">{element}</Tag>);
+    }
     if (taskInfo.solution) {
       const date = new Date(taskInfo.solution.deadline);
       deadline = formatDate(date);

@@ -4,12 +4,12 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.time.Duration;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
 import com.exadel.team3.backend.dao.*;
+import com.exadel.team3.backend.dto.UserRatingDTO;
 import com.exadel.team3.backend.services.ServiceException;
 import com.exadel.team3.backend.services.SolutionChecker;
 import org.bson.types.ObjectId;
@@ -118,6 +118,17 @@ public class SolutionServiceImpl
     }
 
     @Override
+    public Solution deleteFiles(@NonNull Solution solution) throws ServiceException {
+        if (solution.getFiles() != null) {
+            solution.getFiles().forEach(
+                    filename -> fileStorage.delete(filename, solution.getId())
+            );
+        }
+        solution.setFiles(null);
+        return solutionRepository.save(solution);
+    }
+
+    @Override
     public InputStream getFile(@NonNull Solution solution,
                                @NonNull String filename) throws ServiceException{
         try {
@@ -139,13 +150,25 @@ public class SolutionServiceImpl
     }
 
     @Override
-    public Solution deleteFiles(@NonNull Solution solution) throws ServiceException {
-        List<String> fileNames = solution.getFiles();
-        for (String fileName : fileNames) {
-            fileStorage.delete(fileName, solution.getId());
-        }
-        solution.setFiles(new ArrayList<>());
-        return solution;
+    public List<UserRatingDTO> getTopRatingBySum(@NonNull ObjectId taskId) {
+        return getTopRating(
+                () -> ((SolutionRepositoryAggregation)solutionRepository)
+                        .collectRatingBySum(
+                                taskId,
+                                getTopRatingListSize()
+                        )
+        );
+    }
+
+    @Override
+    public List<UserRatingDTO> getTopRatingByAverage(@NonNull ObjectId taskId) {
+        return getTopRating(
+                () -> ((SolutionRepositoryAggregation)solutionRepository)
+                        .collectRatingByAverage(
+                                taskId,
+                                getTopRatingListSize()
+                        )
+        );
     }
 
     private static boolean isValidFileName(@NonNull String fileName) {
