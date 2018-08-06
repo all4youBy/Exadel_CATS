@@ -7,9 +7,15 @@ import { addStudentTopByActivity, addStudentTopByTask, addStudentTopBySum } from
 import './Top.scss';
 
 class Top extends React.Component {
+  componentDidMount() {
+    const { addTopTask, addTopSum, addTopActivity } = this.props;
+    addTopSum();
+    addTopTask();
+    addTopActivity();
+  }
+
   render() {
     const { topBySum, topByTask, topByActivity } = this.props;
-
 
     return (
       <Carousel autoplay effect="fade" className="top-general">
@@ -40,6 +46,9 @@ Top.propTypes = {
   topBySum: PropTypes.arrayOf(PropTypes.shape()).isRequired,
   topByTask: PropTypes.arrayOf(PropTypes.shape()).isRequired,
   topByActivity: PropTypes.arrayOf(PropTypes.shape()).isRequired,
+  addTopTask: PropTypes.func.isRequired,
+  addTopSum: PropTypes.func.isRequired,
+  addTopActivity: PropTypes.func.isRequired,
 };
 
 const mapStateToProps = state => ({

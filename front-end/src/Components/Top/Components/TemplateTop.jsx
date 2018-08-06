@@ -5,12 +5,19 @@ import './TemplateTop.scss';
 class TemplateTop extends React.PureComponent {
   render() {
     const { listUsers, nameTop, nameTheFirstColumn, nameTheSecondColumn } = this.props;
-    const formedTable = (listUsers || []).map(element => (
-      <tr key={element.id}>
-        <td>{element.name}</td>
-        <td>{element.score}</td>
-      </tr>
-    ));
+    const formedTable = (listUsers || []).map((element) => {
+      if (element) {
+        element.id = element.firstName + element.lastName + nameTop;
+        return (
+          <tr key={element.id}>
+            <td>{`${element.firstName || ''} ${element.lastName || ''}`}</td>
+            <td>{element.rating}</td>
+          </tr>
+        );
+      }
+      return (<tr/>);
+    });
+
     return (
       <div align="center" className="tepmplate-top">
         <h4>{nameTop}</h4>

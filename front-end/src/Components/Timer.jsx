@@ -10,15 +10,15 @@ export default class Timer extends React.Component {
     minutes: 0,
     seconds: 0,
     generalSeconds: 0,
+    idInterval: 0,
   };
 
   componentDidMount() {
     const { endDate } = this.props;
     this.setState({
-      generalSeconds: (endDate - new Date()) / 1000,
+      generalSeconds: (new Date(endDate) - new Date()) / 1000,
     });
-
-    setInterval(() => {
+    const idInterval = setInterval(() => {
       this.setState((prevState) => {
         let newMinutes = prevState.generalSeconds / 60;
         let newHours = newMinutes / 60;
@@ -34,6 +34,14 @@ export default class Timer extends React.Component {
         };
       });
     }, 1000);
+    this.setState({
+      idInterval,
+    });
+  }
+
+  componentUnmount() {
+    const { idInterval } = this.state;
+    clearInterval(idInterval);
   }
 
   render() {
@@ -51,5 +59,5 @@ export default class Timer extends React.Component {
 }
 
 Timer.propTypes = {
-  endDate: PropTypes.shape().isRequired,
+  endDate: PropTypes.string.isRequired,
 };

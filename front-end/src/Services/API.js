@@ -117,6 +117,7 @@ const API = {
     const url = `${urlServer}${path}`;
     return (dispatch, getState) => {
       dispatch(isLoading(true));
+      console.log(JSON.stringify(data), 41234324123);
       const token = API.getTokenFromStore(getState());
       API.sendRequest(token, url, {
         method: 'PUT',

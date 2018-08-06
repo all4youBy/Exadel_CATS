@@ -22,10 +22,10 @@ export function editUserWithoutPassword(user) {
     lastName: user.secondName,
     userAffiliation: {
       faculty: user.faculty,
-      graduationYear: user.yearTermination,
-      institution: user.institution,
-      placeOfWork: user.job,
-      primarySkill: user.primarySkill,
+      graduationYear: user.yearTermination || 0,
+      institution: user.institution || '',
+      placeOfWork: user.job || '',
+      primarySkill: user.primarySkill || '',
       specialization: '',
     },
   }, 'EDIT_USER', 'Не получилось изменить информацию'));
