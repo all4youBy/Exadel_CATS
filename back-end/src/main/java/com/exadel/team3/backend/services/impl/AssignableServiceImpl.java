@@ -49,20 +49,6 @@ public abstract class AssignableServiceImpl<T extends Assignable>
     }
 
     @Override
-    public List<AssignableDTO> getAssignedItemsWithTopicsFinished(String assignedTo) {
-        return getAssignedItemsWithTopicsStream(assignedTo)
-                .filter(projection -> projection.getDeadline().isBefore(LocalDateTime.now()))
-                .collect(Collectors.toList());
-    }
-
-    @Override
-    public List<AssignableDTO> getAssignedItemsWithTopicsUnfinished(String assignedTo) {
-        return getAssignedItemsWithTopicsStream(assignedTo)
-                .filter(projection -> projection.getDeadline().isAfter(LocalDateTime.now()))
-                .collect(Collectors.toList());
-    }
-
-    @Override
     public List<T> getAssignedItems(@NonNull String assignedTo) {
         return getRepository().findByAssignedToOrderByStartDesc(assignedTo);
     }
