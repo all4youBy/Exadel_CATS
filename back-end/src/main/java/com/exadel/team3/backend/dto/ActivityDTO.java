@@ -1,18 +1,20 @@
 package com.exadel.team3.backend.dto;
 
-import lombok.Data;
-
 import java.time.LocalDateTime;
 
+import lombok.AllArgsConstructor;
+import lombok.Data;
+
 @Data
-
+@AllArgsConstructor
 public class ActivityDTO {
-    private final LocalDateTime time;
+    private LocalDateTime time;
 
-    private final ActivityType type;
+    private ActivityType type;
 
     private String firstName;
 
     private String lastName;
 
+    private String text;
 }

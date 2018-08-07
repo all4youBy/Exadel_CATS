@@ -179,7 +179,7 @@ export const ADMIN_GENERAL_MENU_DATA = [{
 }, {
   key: '13',
   type: 'clock-circle-o',
-  text: 'История',
+  text: 'Активность',
   subsections: [],
-  link: '/',
+  link: '/activity',
 }];

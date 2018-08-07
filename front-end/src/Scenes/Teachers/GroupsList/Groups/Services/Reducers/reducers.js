@@ -2,7 +2,7 @@
 import * as types from '../Actions/types';
 
 const initialState = {
-  groups: [],
+  groups: null,
   error: '',
   emptyList: true,
   groupEdit: '',

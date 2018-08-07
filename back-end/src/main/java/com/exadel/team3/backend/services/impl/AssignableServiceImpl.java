@@ -8,6 +8,7 @@ import java.time.LocalDateTime;
 
 import com.exadel.team3.backend.dao.projections.TopicProjection;
 import com.exadel.team3.backend.dto.AssignableDTO;
+import org.apache.tomcat.jni.Local;
 import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -44,24 +45,20 @@ public abstract class AssignableServiceImpl<T extends Assignable>
 
     @Override
     public List<AssignableDTO> getAssignedItemsWithTopics(@NonNull String assignedTo) {
-        return ((AssignableRepositoryAggregation)getRepository()).findByAssignedToWithTopics(assignedTo)
-                .stream()
-                .map(
-                        projection ->
-                        new AssignableDTO(
-                                projection.getId().toString(),
-                                projection.getText(),
-                                projection.getStart(),
-                                projection.getDeadline(),
-                                !CollectionUtils.isEmpty(projection.getTopics())
-                                    ? projection.getTopics()
-                                        .stream()
-                                        .map(TopicProjection::getText)
-                                        .sorted()
-                                        .collect(Collectors.toList())
-                                    : null
-                        )
-                )
+        return getAssignedItemsWithTopicsStream(assignedTo).collect(Collectors.toList());
+    }
+
+    @Override
+    public List<AssignableDTO> getAssignedItemsWithTopicsFinished(String assignedTo) {
+        return getAssignedItemsWithTopicsStream(assignedTo)
+                .filter(projection -> projection.getDeadline().isBefore(LocalDateTime.now()))
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<AssignableDTO> getAssignedItemsWithTopicsUnfinished(String assignedTo) {
+        return getAssignedItemsWithTopicsStream(assignedTo)
+                .filter(projection -> projection.getDeadline().isAfter(LocalDateTime.now()))
                 .collect(Collectors.toList());
     }
 
@@ -147,8 +144,8 @@ public abstract class AssignableServiceImpl<T extends Assignable>
     public List<UserRatingDTO> getTopRatingBySum() {
         return getTopRating(
                 () ->
-                ((AssignableRepositoryAggregation)getRepository())
-                        .collectRatingBySum(topRatingListSize)
+                        ((AssignableRepositoryAggregation)getRepository())
+                                .collectRatingBySum(topRatingListSize)
         );
     }
 
@@ -156,9 +153,31 @@ public abstract class AssignableServiceImpl<T extends Assignable>
     public List<UserRatingDTO> getTopRatingByAverage() {
         return getTopRating(
                 () ->
-                ((AssignableRepositoryAggregation)getRepository())
-                        .collectRatingByAverage(topRatingListSize)
+                        ((AssignableRepositoryAggregation)getRepository())
+                                .collectRatingByAverage(topRatingListSize)
         );
+    }
+
+    private Stream<AssignableDTO> getAssignedItemsWithTopicsStream(String assignedTo) {
+        return ((AssignableRepositoryAggregation)getRepository()).findByAssignedToWithTopics(assignedTo)
+                .stream()
+                .map(
+                        projection ->
+                                new AssignableDTO(
+                                        projection.getId().toString(),
+                                        projection.getText(),
+                                        projection.getStart(),
+                                        projection.getDeadline(),
+                                        !CollectionUtils.isEmpty(projection.getTopics())
+                                                ? projection.getTopics()
+                                                .stream()
+                                                .map(TopicProjection::getText)
+                                                .sorted()
+                                                .collect(Collectors.toList())
+                                                : null,
+                                        projection.getMark()
+                                )
+                );
     }
 
     protected List<UserRatingDTO> getTopRating(Supplier<List<RatingProjection>> collector) {
@@ -166,15 +185,15 @@ public abstract class AssignableServiceImpl<T extends Assignable>
                 .stream()
                 .filter(
                         projection ->
-                        !StringUtils.isEmpty(projection.getFirstName()) && !StringUtils.isEmpty(projection.getLastName())
+                                !StringUtils.isEmpty(projection.getFirstName()) && !StringUtils.isEmpty(projection.getLastName())
                 )
                 .map(
-                    projection ->
-                    new UserRatingDTO(
-                            projection.getFirstName(),
-                            projection.getLastName(),
-                            projection.getRating()
-                    )
+                        projection ->
+                                new UserRatingDTO(
+                                        projection.getFirstName(),
+                                        projection.getLastName(),
+                                        projection.getRating()
+                                )
                 )
                 .collect(Collectors.toList());
     }

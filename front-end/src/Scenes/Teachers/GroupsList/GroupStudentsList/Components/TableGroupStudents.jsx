@@ -6,10 +6,11 @@ import './TableGroupStudents.scss';
 import { message, Radio, Table } from 'antd';
 import PropTypes from 'prop-types';
 import ButtonAssignTest from '../../../../../Components/ButtonAssignTest';
-import ButtonAssignTask from '../../../../../Components/ButtonAssignTask';
 import ButtonDeleteStudent from './ButtonDeleteStudent';
 // import ButtonAddStudent from './ButtonAddStudent';
 import Loading from '../../../../../Components/Loading';
+import ButtonAssignTaskForUser from './ButtonAssignTaskForUser';
+import ButtonAssignTestForUser from './ButtonAssignTestForUser';
 
 const { Group } = Radio;
 
@@ -23,7 +24,7 @@ class TableGroupStudents extends React.Component {
     groupName: PropTypes.string.isRequired,
     error: PropTypes.string.isRequired,
     addStudentTest: PropTypes.func.isRequired,
-    getAssignedTasks: PropTypes.func.isRequired,
+    addStudentTask: PropTypes.func.isRequired,
   };
 
   state = {
@@ -38,37 +39,20 @@ class TableGroupStudents extends React.Component {
   };
 
   componentDidMount() {
-    const { getGroup, groupName, getAssignedTasks, students } = this.props;
+    const { getGroup, groupName } = this.props;
     const { load } = this.state;
-    // getAssignedTasks(students);
     getGroup(groupName);
-    // console.log(students);
+    if (!load) {
+      this.setState(() => ({
+        load: true,
+      }));
+    }
   }
-
-  // static getDerivedStateFromProps(nextProps, nextState) {
-  //   if (!nextProps.students.length) {
-  //     nextProps.getGroup(nextProps.groupName);
-  //   }
-  //   if ((nextProps.students.length && !nextState.load
-  //     /* !== nextState.groups &&
-  //       nextProps.emptyList && !nextState.getListUsers*/
-  //   )) {
-  //     console.log('kkkkkkk');
-  //     nextProps.getAssignedTasks(nextProps.students);
-  //     return {
-  //       assignedTasks: nextProps.assignedTasks,
-  //       load: true,
-  //     };
-  //   }
-  //   return {
-  //     showHeader: true,
-  //   };
-  // }
 
   render() {
     const {
       students, handleStudentDelete, error, addStudentTest,
-      groupName, getAssignedTasks,
+      groupName, addStudentTask,
     } = this.props;
     const {
       bordered, loading, pagination, size, title,
@@ -100,21 +84,45 @@ class TableGroupStudents extends React.Component {
       key: 'test2',
       /* width должна отсутствовать в последней колонке скрола */
     }, {
+      title: 'Личные задачи',
+      dataIndex: 'countTasks',
+      key: 'countTasks',
+      width: 70,
+      fixed: 'right',
+      render: (text, record) => (
+        <Link to={`/groupstudentslist/personaltasks/${record.key}`}>{record.countTasks}</Link>
+      ),
+    }, {
+      title: 'Личные тесты',
+      dataIndex: 'countTests',
+      key: 'countTests',
+      width: 70,
+      fixed: 'right',
+      render(text, record) {
+        return (
+          <Link to={`/groupstudentslist/personaltests/${record.key}`}>{text}</Link>
+        );
+      },
+    }, {
       title: '',
       key: 'buttons',
       width: 100,
       fixed: 'right',
       render(record) {
+        const obj = {
+          email: record.email.toString(),
+          name: `${record.firstName} ${record.lastName}`,
+        };
         return (
           <div className="buttons-table">
-            <div className="parent-button-assign-test"><ButtonAssignTest
+            <div className="parent-button-assign-test"><ButtonAssignTestForUser
               addStudent={addStudentTest}
-              groupName={record}
+              groupName={obj}
             />
             </div>
-            <div className="parent-button-assign-task"><ButtonAssignTask
-              // addGroup={addGroupTask}
-              groupName={record.name}
+            <div className="parent-button-assign-task"><ButtonAssignTaskForUser
+              addStudentTask={addStudentTask}
+              groupName={obj}
             />
             </div>
             <div className="parent-button-delete-group">
@@ -128,7 +136,7 @@ class TableGroupStudents extends React.Component {
         );
       },
     }];
-    if (students.length === 0) {
+    if (students && students.length === 0) {
       return (
         <div className="parent-button-add-students-blank-page">
           <div className="block-button-add-students-blank-page">
@@ -138,33 +146,46 @@ class TableGroupStudents extends React.Component {
       );
     }
     const data = [];
-    for (let i = 0; i < students.length; i += 1) {
-      // if (assignedTasks[students.length - 1]) {
-        console.log(assignedTasks[students.length - 1], 675);
+    if (students) {
+      for (let i = 0; i < students.length; i += 1) {
+        if (!load) {
+          this.setState(() => ({
+            load: true,
+          }));
+        }
         data.push({
           number: `${i + 1}.`,
           firstName: students[i].firstName,
           lastName: students[i].lastName,
+          countTasks: assignedTasks[i] ? assignedTasks[i].length : null,
           email: students[i].email,
         });
-      // }
+      }
     }
-    const table = students.length ? (
-        <Table
-          {...{
-            bordered,
-            loading,
-            pagination,
-            size,
-            title,
-            showHeader,
-          }}
-          dataSource={data}
-          columns={columns}
-          className="student-row"
-          scroll={{ x: 1300 }}
-        />)
-      : <div className="empty-list">В этой группе нет студентов</div>;
+    let container = null;
+    if (students) {
+      if (students.length) {
+        container = (
+          <Table
+            {...{
+              bordered,
+              loading,
+              pagination,
+              size,
+              title,
+              showHeader,
+            }}
+            dataSource={data}
+            columns={columns}
+            className="student-row"
+            scroll={{ x: 1300 }}
+          />);
+      } else {
+        container = (<div className="empty-list">Список пуст</div>);
+      }
+    } else {
+      container = <Loading/>;
+    }
     return (
       <div className="student-row">
         <div>
@@ -174,7 +195,7 @@ class TableGroupStudents extends React.Component {
             <Radio value="TESTS">Тесты</Radio>
           </Group>
         </div>
-        {table}
+        {container}
         {/*<ButtonAddStudent onStudentAdd={handleStudentAdd}/>*/}
       </div>
     );
