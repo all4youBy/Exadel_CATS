@@ -109,6 +109,7 @@ public class TaskController {
     @PreAuthorize("hasAnyRole('ADMIN','TEACHER')")
     public List<SolutionForTeachersTDO> getUsersTasks(@PathVariable(value = "teachersId") String teachersId) {
         List<Solution> solutions = solutionService.getAssignedItemsByAssigner(teachersId);
+
         return solutionDTOMapper.convertToSolutionForTeachersTDO(solutions);
     }
 
@@ -138,6 +139,12 @@ public class TaskController {
     //TODO Максим напишет аннотацию. Доступ имеет админ, учитель и только один ученик
     public List<SolutionDTO> getUsersUnfinishedSolutions(@PathVariable(value = "userId") String userId) {
         return solutionDTOMapper.convertToDTO(solutionService.getAssignedItemsUnfinished(userId));
+    }
+
+    @GetMapping("/groups-tasks/{groupsId}")
+    //TODO Максим напишет аннотацию. Доступ имеет админ, учитель и только один ученик
+    public List<SolutionDTO> getGroupsSolutions(@PathVariable(value = "groupsId") String groupsId) {
+        return solutionDTOMapper.convertToDTO(solutionService.getAssignedItemsToGroup(groupsId));
     }
 
     @GetMapping("/users-tasks/{userId}")
