@@ -1,11 +1,10 @@
+/* eslint-disable no-unused-vars */
 import React from 'react';
-import 'antd/dist/antd.css';
-import './ButtonAssignTask.scss';
 import { Button, Tooltip } from 'antd';
 import PropTypes from 'prop-types';
-import { history } from '../Services/ConfigureStore';
+import { history } from '../../../../../Services/ConfigureStore';
 
-class ButtonAssignTask extends React.Component {
+class ButtonAssignTestForUser extends React.Component {
   static propTypes = {
     groupName: PropTypes.string.isRequired,
   };
@@ -13,15 +12,15 @@ class ButtonAssignTask extends React.Component {
   handleAddGroup = () => {
     const { groupName } = this.props;
     localStorage.setItem('userStatusForAssign', JSON.stringify(groupName));
-    history.push(`/assigntask/${groupName}`);
+    history.push(`/assigntest/${groupName.email}`);
   };
 
   render() {
     return (
-      <Tooltip placement="top" title="Назначить задачу">
+      <Tooltip placement="top" title="Назначить тест">
         <Button
           shape="circle"
-          icon="file"
+          icon="profile"
           className="button-table"
           size="small"
           onClick={this.handleAddGroup}
@@ -31,4 +30,4 @@ class ButtonAssignTask extends React.Component {
   }
 }
 
-export default ButtonAssignTask;
+export default ButtonAssignTestForUser;

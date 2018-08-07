@@ -14,7 +14,7 @@ import {
   getMyGroups,
   listGroup,
   nameGroup,
-  renameGroup, renameNameGroup, getNameGroup,
+  renameGroup, renameNameGroup, getNameGroup, getTasksForGroup,
 } from '../Services/Actions/actions';
 import Loading from '../../../../../Components/Loading';
 import { receiveTest } from '../../../Tests/AssignTest/Services/Actions/actions';
@@ -25,7 +25,6 @@ class TableGroupsList extends React.PureComponent {
   static propTypes = {
     handleGroupDelete: PropTypes.func.isRequired,
     upDate: PropTypes.func.isRequired,
-    emptyList: PropTypes.bool.isRequired,
     addGroupTest: PropTypes.func.isRequired,
     addGroupTask: PropTypes.func.isRequired,
     groupEdit: PropTypes.string.isRequired,
@@ -52,7 +51,6 @@ class TableGroupsList extends React.PureComponent {
   }
 
   filterList = (value) => {
-    console.log(value);
     this.setState({
       inputFilter: value,
     });
@@ -60,9 +58,9 @@ class TableGroupsList extends React.PureComponent {
 
 
   render() {
-    const { getListUsers, groups, inputFilter } = this.state;
+    const { groups, inputFilter } = this.state;
     const {
-      emptyList, handleGroupDelete, upDate, addGroupTask,
+      handleGroupDelete, upDate, addGroupTask,
       addGroupTest, groupEdit, onGroupEdit, onEdit, user, getGroup,
     } = this.props;
     const columns = [{
@@ -144,28 +142,40 @@ class TableGroupsList extends React.PureComponent {
     ];
 
     const data = [];
-    for (let i = groups.length - 1; i >= 0; i -= 1) {
-      data.push({
-        key: i,
-        name: groups[i],
-      });
+    if (groups) {
+      for (let i = groups.length - 1; i >= 0; i -= 1) {
+        data.push({
+          key: i,
+          name: groups[i],
+        });
+      }
     }
     const newData = data.filter(elem => elem.name
       .toLowerCase().indexOf(inputFilter.toLowerCase()) !== -1);
-    columns[0].title = <div><InputSearch filterList={this.filterList}/><div className="header">Список моих групп</div></div>;
+    columns[0].title = (
+      <div>
+        <InputSearch filterList={this.filterList}/>
+        <div className="header">Список моих групп</div>
+      </div>);
     // <InputSearch/>
-    const stateData = emptyList && getListUsers ? (<Loading/>)
-      : <div className="empty-list">Список групп пуст</div>;
-    const table = data.length ? (
-      <Table
-        className="table-groups"
-        columns={columns}
-        dataSource={newData}
-      />) : (<Loading/>);
-    const addList = groups.length ? table : stateData;
+    let container = null;
+    if (groups) {
+      if (groups.length) {
+        container = (
+          <Table
+            className="table-groups"
+            columns={columns}
+            dataSource={newData}
+          />);
+      } else {
+        container = (<div className="empty-list">Список пуст</div>);
+      }
+    } else {
+      container = <Loading/>;
+    }
     return (
       <div className="groups-list">
-        {addList}
+        {container}
       </div>
     );
   }
@@ -207,6 +217,9 @@ const mapDispatchToProps = dispatch => ({
   onEdit: (last, next, id) => {
     dispatch(renameGroup({ oldGroup: last, newGroup: next, usersId: [id] }));
     dispatch(renameNameGroup({ lastName: last, nextName: next }));
+  },
+  getTasks: () => {
+    dispatch(getTasksForGroup());
   },
 });
 

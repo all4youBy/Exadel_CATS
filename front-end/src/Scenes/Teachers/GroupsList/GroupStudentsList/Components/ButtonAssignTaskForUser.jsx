@@ -1,11 +1,11 @@
 import React from 'react';
 import 'antd/dist/antd.css';
-import './ButtonAssignTask.scss';
+import '../../../../../Components/ButtonAssignTask.scss';
 import { Button, Tooltip } from 'antd';
 import PropTypes from 'prop-types';
-import { history } from '../Services/ConfigureStore';
+import { history } from '../../../../../Services/ConfigureStore';
 
-class ButtonAssignTask extends React.Component {
+class ButtonAssignTaskForUser extends React.Component {
   static propTypes = {
     groupName: PropTypes.string.isRequired,
   };
@@ -13,7 +13,7 @@ class ButtonAssignTask extends React.Component {
   handleAddGroup = () => {
     const { groupName } = this.props;
     localStorage.setItem('userStatusForAssign', JSON.stringify(groupName));
-    history.push(`/assigntask/${groupName}`);
+    history.push(`/assigntask/${groupName.email}`);
   };
 
   render() {
@@ -31,4 +31,4 @@ class ButtonAssignTask extends React.Component {
   }
 }
 
-export default ButtonAssignTask;
+export default ButtonAssignTaskForUser;

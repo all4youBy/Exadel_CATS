@@ -7,11 +7,6 @@ import ButtonPassTest from './ButtonPassTest';
 import Loading from '../../../../../Components/Loading';
 import requestLoginInformation from '../../../../../Services/loginService';
 
-let tags = ['aaaa', 'ssss', 'ffff'];
-
-tags = tags.map(element => <Tag color="blue">{element}</Tag>);
-
-
 class TableAssignedTests extends React.PureComponent {
   static propTypes = {
     getAssignedTests: PropTypes.func.isRequired,
@@ -54,8 +49,14 @@ class TableAssignedTests extends React.PureComponent {
     }
 
     const data = [];
-    let deadline = null;
     if (tests && tests.length) {
+      let deadline = null;
+      const tags = [];
+      tests.forEach((element) => {
+        for (let index = 0; index < 3; index += 1) {
+          tags[index] = <Tag color="blue">{element.topics[index]}</Tag>;
+        }
+      });
       for (let i = 0; i < 10; i += 1) {
         const date = new Date(tests[i].deadline);
         deadline = formatDate(date);
