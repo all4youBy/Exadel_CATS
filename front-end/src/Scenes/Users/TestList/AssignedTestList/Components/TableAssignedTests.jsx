@@ -56,7 +56,7 @@ class TableAssignedTests extends React.PureComponent {
     const data = [];
     let deadline = null;
     if (tests && tests.length) {
-      for (let i = 0; i < 10; i += 1) {
+      for (let i = 0; i < tests.length; i += 1) {
         const date = new Date(tests[i].deadline);
         deadline = formatDate(date);
         data.push({
