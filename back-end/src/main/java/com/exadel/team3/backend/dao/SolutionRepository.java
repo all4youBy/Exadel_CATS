@@ -5,5 +5,6 @@ import com.exadel.team3.backend.entities.Solution;
 public interface SolutionRepository
         extends AssignableRepository<Solution>,
         AssignableRepositoryAggregation,
-        SolutionRepositoryAggregation {
+        SolutionRepositoryAggregation,
+        ActivityQueries {
 }

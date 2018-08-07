@@ -1,12 +1,16 @@
 package com.exadel.team3.backend.dao.impl;
 
+import java.time.LocalDateTime;
+import java.util.Collection;
 import java.util.List;
 
 import org.bson.types.ObjectId;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.aggregation.Aggregation;
+import org.springframework.data.mongodb.core.aggregation.TypedAggregation;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Repository;
@@ -16,16 +20,19 @@ import static org.springframework.data.mongodb.core.aggregation.Aggregation.grou
 import static org.springframework.data.mongodb.core.aggregation.Aggregation.unwind;
 import static org.springframework.data.mongodb.core.aggregation.LookupOperation.newLookup;
 
+import com.exadel.team3.backend.dao.projections.ActivityProjection;
 import com.exadel.team3.backend.dao.projections.AssignableProjection;
 import com.exadel.team3.backend.dao.AssignableRepositoryAggregation;
 import com.exadel.team3.backend.dao.SolutionRepositoryAggregation;
 import com.exadel.team3.backend.dao.projections.RatingProjection;
 import com.exadel.team3.backend.entities.Solution;
+import org.springframework.util.CollectionUtils;
 
 @Repository
 public class SolutionRepositoryImpl
         extends AssignableRepositoryImpl<Solution>
-        implements AssignableRepositoryAggregation, SolutionRepositoryAggregation {
+        implements  AssignableRepositoryAggregation,
+                    SolutionRepositoryAggregation {
 
     @Autowired
     private MongoTemplate mongoTemplate;
@@ -82,6 +89,55 @@ public class SolutionRepositoryImpl
                 ),
                 "solutions",
                 AssignableProjection.class
+        ).getMappedResults();
+    }
+
+    @Override
+    public List<ActivityProjection> findRecentActivities(@NonNull LocalDateTime after, @NonNull LocalDateTime now) {
+        return findRecentActivities(after, now, null);
+    }
+
+    @Override
+    public List<ActivityProjection> findRecentActivities(
+            @NonNull LocalDateTime after,
+            @NonNull LocalDateTime now,
+            Collection<String> matchingGroups) {
+
+        return mongoTemplate.aggregate(
+                TypedAggregation.newAggregation(
+                        match(
+                                new Criteria().orOperator(
+                                        Criteria.where("start").gt(after),
+                                        new Criteria().andOperator(
+                                                Criteria.where("deadline").gt(after),
+                                                Criteria.where("deadline").lt(now)
+                                        )
+                                )
+                        ),
+                        newLookup()
+                                .from("users")
+                                .localField("assignedTo")
+                                .foreignField("_id")
+                                .as("user"),
+                        !CollectionUtils.isEmpty(matchingGroups)
+                                ? match(Criteria.where("user.groups").in(matchingGroups).and("user.role").is("STUDENT"))
+                                : match(Criteria.where("user._id").exists(true)),
+                        newLookup()
+                                .from("tasks")
+                                .localField("taskId")
+                                .foreignField("_id")
+                                .as("task"),
+                        project("user._id",
+                                "user.firstName",
+                                "user.lastName",
+                                "assignedBy",
+                                "task.text",
+                                "start",
+                                "deadline"
+                        )
+                ),
+                getEntityClass().getSimpleName().toLowerCase() + "s",
+                ActivityProjection.class
         ).getMappedResults();
     }
 }

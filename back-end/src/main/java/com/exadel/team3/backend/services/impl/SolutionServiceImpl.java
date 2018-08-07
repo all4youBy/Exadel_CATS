@@ -5,14 +5,18 @@ import java.io.InputStream;
 import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
-import java.util.concurrent.CountDownLatch;
+import java.util.Map;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 
 import com.exadel.team3.backend.dao.*;
 import com.exadel.team3.backend.dto.UserRatingDTO;
 import com.exadel.team3.backend.services.ServiceException;
 import com.exadel.team3.backend.services.SolutionChecker;
+import com.exadel.team3.backend.services.mail.mail_sender.MailSender;
+import com.exadel.team3.backend.services.mail.mail_types.MailTypes;
 import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -39,6 +43,9 @@ public class SolutionServiceImpl
     @Autowired
     private SolutionChecker solutionChecker;
 
+    @Autowired
+    private MailSender mailSender;
+
     @Override
     protected AssignableRepository<Solution> getRepository() {
         return solutionRepository;
@@ -46,6 +53,9 @@ public class SolutionServiceImpl
 
     @Value("${cats.task.defaultDuration:120}")
     private long defaultTaskDuration;
+
+    @Value("${site}")
+    private String site;
 
     @Override
     public Solution assignSolutionToUser(
@@ -63,6 +73,13 @@ public class SolutionServiceImpl
         newSolution.setStart(start);
         newSolution.setDeadline(deadline);
         newSolution.setAssignedBy(assignedBy);
+
+
+        Map<String, String> map = new HashMap<>();
+        map.put("&task", "задача");
+        map.put("&link", site);
+        mailSender.send(MailTypes.USERS_NOTIFICATION, userId, map);
+
         return addItem(newSolution);
     }
 
@@ -145,22 +162,14 @@ public class SolutionServiceImpl
             throw new ServiceException("The solution is pass the deadline");
         }
 
-
-        CountDownLatch latch = new CountDownLatch(1);
-
-        new Thread(() -> {
-            solutionChecker.check(solution);
-            int mark = solutionChecker.check(solution);
-            if (mark > solution.getMark()) {
-                solution.setMark(mark);
-            }
-            latch.countDown();
-        }).start();
+        Thread thread = new CompileRunThread(solutionChecker, solution);
+        thread.start();
         try {
-            latch.await();
+            thread.join();
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
+
         return updateItem(solution);
     }
 
