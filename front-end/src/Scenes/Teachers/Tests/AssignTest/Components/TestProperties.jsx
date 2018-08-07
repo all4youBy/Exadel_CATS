@@ -84,20 +84,22 @@ class TestProperties extends React.Component {
         assignedBy: teacher,
         title: nameTest,
         questionsCount: +countQuestionsTest,
-        start: getStart,
-        deadline: getDeadline,
       };
       if (this.validateTest(test) && tagsTest && tagsTest.length !== 0) {
         switch (typeof receiverInfo) {
           case 'object': {
             test.email = receiverInfo.email;
-            test.topicIds = tagsTest;
+            test.topics = tagsTest;
+            test.start = getStart;
+            test.deadline = getDeadline;
             handleCreateTest(test, 'tests');
             break;
           }
           case 'string': {
             test.group = receiverInfo;
-            test.topicIds = tagsTest;
+            test.topicsId = tagsTest;
+            test.start = new Date(getStart);
+            test.deadline = new Date(getDeadline);
             this.setState(() => ({ error: false }));
             handleCreateTest(test, 'tests/for-group');
             break;
