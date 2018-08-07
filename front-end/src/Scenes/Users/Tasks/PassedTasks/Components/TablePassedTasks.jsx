@@ -115,7 +115,7 @@ class TablePassedTasks extends React.PureComponent {
       container = <Loading/>;
     }
     return (
-      <div>
+      <div><div className="header-for-table"><span className="header">Пройденные задачи</span></div>
         {container}
       </div>
     );

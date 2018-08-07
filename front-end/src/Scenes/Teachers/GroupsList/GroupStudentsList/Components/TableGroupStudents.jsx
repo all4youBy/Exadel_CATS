@@ -1,4 +1,4 @@
-/* eslint-disable spaced-comment,no-unused-vars,no-plusplus */
+/* eslint-disable spaced-comment,no-unused-vars,no-plusplus,react/jsx-indent,indent */
 import React from 'react';
 import 'antd/dist/antd.css';
 import { Link } from 'react-router-dom';
@@ -40,23 +40,40 @@ class TableGroupStudents extends React.Component {
   componentDidMount() {
     const { getGroup, groupName, getAssignedTasks, students } = this.props;
     const { load } = this.state;
+    // getAssignedTasks(students);
     getGroup(groupName);
-    getAssignedTasks(students);
-    if (!load) {
-      this.setState(() => ({
-        load: true,
-      }));
-    }
     // console.log(students);
   }
+
+  // static getDerivedStateFromProps(nextProps, nextState) {
+  //   if (!nextProps.students.length) {
+  //     nextProps.getGroup(nextProps.groupName);
+  //   }
+  //   if ((nextProps.students.length && !nextState.load
+  //     /* !== nextState.groups &&
+  //       nextProps.emptyList && !nextState.getListUsers*/
+  //   )) {
+  //     console.log('kkkkkkk');
+  //     nextProps.getAssignedTasks(nextProps.students);
+  //     return {
+  //       assignedTasks: nextProps.assignedTasks,
+  //       load: true,
+  //     };
+  //   }
+  //   return {
+  //     showHeader: true,
+  //   };
+  // }
 
   render() {
     const {
       students, handleStudentDelete, error, addStudentTest,
       groupName, getAssignedTasks,
     } = this.props;
-    const { bordered, loading, pagination, size, title,
-      showHeader, assignedTasks, load } = this.state;
+    const {
+      bordered, loading, pagination, size, title,
+      showHeader, assignedTasks, load,
+    } = this.state;
     if (error) {
       message.error(error);
       return <Loading/>;
@@ -83,26 +100,6 @@ class TableGroupStudents extends React.Component {
       key: 'test2',
       /* width должна отсутствовать в последней колонке скрола */
     }, {
-      title: 'Личные задачи',
-      dataIndex: 'countTasks',
-      key: 'countTasks',
-      width: 70,
-      fixed: 'right',
-      render: (text, record) => (
-        <Link to={`/groupstudentslist/personaltasks/${record.key}`}>{record.countTasks}</Link>
-      ),
-    }, {
-      title: 'Личные тесты',
-      dataIndex: 'countTests',
-      key: 'countTests',
-      width: 70,
-      fixed: 'right',
-      render(text, record) {
-        return (
-          <Link to={`/groupstudentslist/personaltests/${record.key}`}>{text}</Link>
-        );
-      },
-    }, {
       title: '',
       key: 'buttons',
       width: 100,
@@ -112,7 +109,7 @@ class TableGroupStudents extends React.Component {
           <div className="buttons-table">
             <div className="parent-button-assign-test"><ButtonAssignTest
               addStudent={addStudentTest}
-              groupName={record.email}
+              groupName={record}
             />
             </div>
             <div className="parent-button-assign-task"><ButtonAssignTask
@@ -142,35 +139,31 @@ class TableGroupStudents extends React.Component {
     }
     const data = [];
     for (let i = 0; i < students.length; i += 1) {
-      if (!load) {
-        getAssignedTasks(students);
-        this.setState(() => ({
-          load: true,
-        }));
-      }
-      console.log(assignedTasks[3], 'lll');
-      data.push({
-        number: `${i + 1}.`,
-        firstName: students[i].firstName,
-        lastName: students[i].lastName,
-        countTasks: assignedTasks[i] ? assignedTasks[i].length : null,
-      });
+      // if (assignedTasks[students.length - 1]) {
+        console.log(assignedTasks[students.length - 1], 675);
+        data.push({
+          number: `${i + 1}.`,
+          firstName: students[i].firstName,
+          lastName: students[i].lastName,
+          email: students[i].email,
+        });
+      // }
     }
     const table = students.length ? (
-      <Table
-        {...{
-          bordered,
-          loading,
-          pagination,
-          size,
-          title,
-          showHeader,
-        }}
-        dataSource={data}
-        columns={columns}
-        className="student-row"
-        scroll={{ x: 1300 }}
-      />)
+        <Table
+          {...{
+            bordered,
+            loading,
+            pagination,
+            size,
+            title,
+            showHeader,
+          }}
+          dataSource={data}
+          columns={columns}
+          className="student-row"
+          scroll={{ x: 1300 }}
+        />)
       : <div className="empty-list">В этой группе нет студентов</div>;
     return (
       <div className="student-row">

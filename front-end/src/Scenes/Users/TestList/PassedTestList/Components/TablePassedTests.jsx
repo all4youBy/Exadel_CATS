@@ -83,16 +83,19 @@ function TablePassedTests() {
   }
 
   return (
-    <Table
-      columns={columns}
-      expandedRowRender={record => (
-        <span className="questions-result">
-          <Badge status={record.description}/><p className="badge-question-result">1 Вопрос</p>
-          <Badge status={record.description}/><p className="badge-question-result">2 Вопрос</p>
-        </span>
-      )}
-      dataSource={data}
-    />
+    <div>
+      <div className="header-for-table"><span className="header">Назначенные тесты</span></div>
+      <Table
+        columns={columns}
+        expandedRowRender={record => (
+          <span className="questions-result">
+            <Badge status={record.description}/><p className="badge-question-result">1 Вопрос</p>
+            <Badge status={record.description}/><p className="badge-question-result">2 Вопрос</p>
+          </span>
+        )}
+        dataSource={data}
+      />
+    </div>
   );
 }
 

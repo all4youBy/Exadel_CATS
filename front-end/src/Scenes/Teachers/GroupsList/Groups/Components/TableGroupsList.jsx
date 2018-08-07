@@ -20,6 +20,7 @@ import Loading from '../../../../../Components/Loading';
 import { receiveTest } from '../../../Tests/AssignTest/Services/Actions/actions';
 import { receiveTask } from '../../../Tasks/AssignTask/Services/Actions/actions';
 import InputSearch from '../../AllGroups/Components/InputSearch';
+import { fetchQuestionsToCheck } from '../../../Tests/ListCheckTests/Services/Actions/actions';
 
 class TableGroupsList extends React.PureComponent {
   static propTypes = {
@@ -33,6 +34,7 @@ class TableGroupsList extends React.PureComponent {
     onEdit: PropTypes.func.isRequired,
     user: PropTypes.string.isRequired,
     getGroup: PropTypes.func.isRequired,
+    getQuestions: PropTypes.func.isRequired,
   };
 
   state = {
@@ -40,6 +42,11 @@ class TableGroupsList extends React.PureComponent {
     getListUsers: false,
     inputFilter: '',
   };
+
+  componentDidMount() {
+    const { getQuestions, user } = this.props;
+    getQuestions(user);
+  }
 
   static getDerivedStateFromProps(nextProps, nextState) {
     if ((nextProps.groups !== nextState.groups && nextProps.emptyList && !nextState.getListUsers)) {
@@ -152,7 +159,11 @@ class TableGroupsList extends React.PureComponent {
     }
     const newData = data.filter(elem => elem.name
       .toLowerCase().indexOf(inputFilter.toLowerCase()) !== -1);
-    columns[0].title = <div><InputSearch filterList={this.filterList}/><div className="header">Список моих групп</div></div>;
+    columns[0].title = (
+      <div><InputSearch filterList={this.filterList}/>
+        <div className="header">Список моих групп</div>
+      </div>
+    );
     // <InputSearch/>
     const stateData = emptyList && getListUsers ? (<Loading/>)
       : <div className="empty-list">Список групп пуст</div>;
@@ -207,6 +218,9 @@ const mapDispatchToProps = dispatch => ({
   onEdit: (last, next, id) => {
     dispatch(renameGroup({ oldGroup: last, newGroup: next, usersId: [id] }));
     dispatch(renameNameGroup({ lastName: last, nextName: next }));
+  },
+  getQuestions: (email) => {
+    dispatch(fetchQuestionsToCheck(email));
   },
 });
 
