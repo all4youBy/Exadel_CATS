@@ -74,22 +74,40 @@ class TablePassedTasks extends React.PureComponent {
     },
     ];
 
-    let tags = ['aaaa', 'ssss', 'ffff'];
+    function formatDate(date) {
+      let dd = date.getDate();
+      if (dd < 10) dd = `0${dd}`;
 
-    tags = tags.map(element => <Tag color="blue">{element}</Tag>);
+      let mm = date.getMonth() + 1;
+      if (mm < 10) mm = `0${mm}`;
 
+      let yy = date.getFullYear() % 100;
+      if (yy < 10) yy = `0${yy}`;
 
+      return `${dd}.${mm}.${yy}`;
+    }
+
+    const tags = [];
     const data = [];
-    for (let i = 1; i <= 10; i += 1) {
-      data.push({
-        key: `${i}`,
-        name: `Задание ${i}`,
-        theme: tags,
-        author: `Автор ${i}`,
-        date: `${i}.${i}.1999`,
-        result: `${i}`,
-        comment: 'Комметарий',
+    if (tasks) {
+      tasks.forEach((element) => {
+        element.topics.forEach((item, index) => {
+          tags[index] = <Tag color="blue">{item}</Tag>;
+        });
       });
+      for (let i = 0; i < tasks.length; i += 1) {
+        const task = tasks[i];
+        const deadline = new Date(tasks[i].solution.deadline);
+        const resultMark = !task.solution.mark ? '---' : task.solution.mark;
+        data.push({
+          key: `${i}`,
+          name: task.title,
+          theme: tags,
+          author: task.solution.assignedBy,
+          date: formatDate(deadline),
+          result: resultMark,
+        });
+      }
     }
     let container = null;
     if (tasks) {

@@ -8,7 +8,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 
 import com.exadel.team3.backend.dao.*;
@@ -162,22 +162,14 @@ public class SolutionServiceImpl
             throw new ServiceException("The solution is pass the deadline");
         }
 
-
-        CountDownLatch latch = new CountDownLatch(1);
-
-        new Thread(() -> {
-            solutionChecker.check(solution);
-            int mark = solutionChecker.check(solution);
-            if (mark > solution.getMark()) {
-                solution.setMark(mark);
-            }
-            latch.countDown();
-        }).start();
+        Thread thread = new CompileRunThread(solutionChecker, solution);
+        thread.start();
         try {
-            latch.await();
+            thread.join();
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
+
         return updateItem(solution);
     }
 
