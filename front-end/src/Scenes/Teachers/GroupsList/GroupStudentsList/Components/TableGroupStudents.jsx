@@ -10,6 +10,7 @@ import ButtonDeleteStudent from './ButtonDeleteStudent';
 // import ButtonAddStudent from './ButtonAddStudent';
 import Loading from '../../../../../Components/Loading';
 import ButtonAssignTaskForUser from './ButtonAssignTaskForUser';
+import ButtonAssignTestForUser from './ButtonAssignTestForUser';
 
 const { Group } = Radio;
 
@@ -23,7 +24,7 @@ class TableGroupStudents extends React.Component {
     groupName: PropTypes.string.isRequired,
     error: PropTypes.string.isRequired,
     addStudentTest: PropTypes.func.isRequired,
-    getAssignedTasks: PropTypes.func.isRequired,
+    addStudentTask: PropTypes.func.isRequired,
   };
 
   state = {
@@ -38,25 +39,25 @@ class TableGroupStudents extends React.Component {
   };
 
   componentDidMount() {
-    const { getGroup, groupName, getAssignedTasks, students } = this.props;
+    const { getGroup, groupName } = this.props;
     const { load } = this.state;
     getGroup(groupName);
-    getAssignedTasks(students);
     if (!load) {
       this.setState(() => ({
         load: true,
       }));
     }
-    // console.log(students);
   }
 
   render() {
     const {
       students, handleStudentDelete, error, addStudentTest,
-      groupName, getAssignedTasks,
+      groupName, addStudentTask,
     } = this.props;
-    const { bordered, loading, pagination, size, title,
-      showHeader, assignedTasks, load } = this.state;
+    const {
+      bordered, loading, pagination, size, title,
+      showHeader, assignedTasks, load,
+    } = this.state;
     if (error) {
       message.error(error);
       return <Loading/>;
@@ -108,20 +109,20 @@ class TableGroupStudents extends React.Component {
       width: 100,
       fixed: 'right',
       render(record) {
-        const userData = {
+        const obj = {
+          email: record.email.toString(),
           name: `${record.firstName} ${record.lastName}`,
-          email: record.email,
         };
         return (
           <div className="buttons-table">
-            <div className="parent-button-assign-test"><ButtonAssignTest
+            <div className="parent-button-assign-test"><ButtonAssignTestForUser
               addStudent={addStudentTest}
-              groupName={record.email}
+              groupName={obj}
             />
             </div>
             <div className="parent-button-assign-task"><ButtonAssignTaskForUser
-              // addGroup={addGroupTask}
-              userData={userData}
+              addStudentTask={addStudentTask}
+              groupName={obj}
             />
             </div>
             <div className="parent-button-delete-group">
@@ -135,7 +136,7 @@ class TableGroupStudents extends React.Component {
         );
       },
     }];
-    if (students.length === 0) {
+    if (students && students.length === 0) {
       return (
         <div className="parent-button-add-students-blank-page">
           <div className="block-button-add-students-blank-page">
@@ -145,37 +146,46 @@ class TableGroupStudents extends React.Component {
       );
     }
     const data = [];
-    for (let i = 0; i < students.length; i += 1) {
-      if (!load) {
-        getAssignedTasks(students);
-        this.setState(() => ({
-          load: true,
-        }));
+    if (students) {
+      for (let i = 0; i < students.length; i += 1) {
+        if (!load) {
+          this.setState(() => ({
+            load: true,
+          }));
+        }
+        data.push({
+          number: `${i + 1}.`,
+          firstName: students[i].firstName,
+          lastName: students[i].lastName,
+          countTasks: assignedTasks[i] ? assignedTasks[i].length : null,
+          email: students[i].email,
+        });
       }
-      console.log(assignedTasks[3], 'lll');
-      data.push({
-        number: `${i + 1}.`,
-        firstName: students[i].firstName,
-        lastName: students[i].lastName,
-        countTasks: assignedTasks[i] ? assignedTasks[i].length : null,
-      });
     }
-    const table = students.length ? (
-      <Table
-        {...{
-          bordered,
-          loading,
-          pagination,
-          size,
-          title,
-          showHeader,
-        }}
-        dataSource={data}
-        columns={columns}
-        className="student-row"
-        scroll={{ x: 1300 }}
-      />)
-      : <div className="empty-list">В этой группе нет студентов</div>;
+    let container = null;
+    if (students) {
+      if (students.length) {
+        container = (
+          <Table
+            {...{
+              bordered,
+              loading,
+              pagination,
+              size,
+              title,
+              showHeader,
+            }}
+            dataSource={data}
+            columns={columns}
+            className="student-row"
+            scroll={{ x: 1300 }}
+          />);
+      } else {
+        container = (<div className="empty-list">Список пуст</div>);
+      }
+    } else {
+      container = <Loading/>;
+    }
     return (
       <div className="student-row">
         <div>
@@ -185,7 +195,7 @@ class TableGroupStudents extends React.Component {
             <Radio value="TESTS">Тесты</Radio>
           </Group>
         </div>
-        {table}
+        {container}
         {/*<ButtonAddStudent onStudentAdd={handleStudentAdd}/>*/}
       </div>
     );

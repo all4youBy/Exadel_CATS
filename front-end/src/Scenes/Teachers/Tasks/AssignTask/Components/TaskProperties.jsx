@@ -1,6 +1,5 @@
-/* eslint-disable no-unused-vars,spaced-comment */
 import React from 'react';
-import { Form, Input, Button, DatePicker, Select } from 'antd';
+import { Form, Button, DatePicker, Select } from 'antd';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import './TaskProperties.scss';
@@ -12,27 +11,26 @@ import {
 const { Option } = Select;
 
 
-const { TextArea } = Input;
 const { RangePicker } = DatePicker;
 
 class TaskProperties extends React.Component {
   static propTypes = {
     handleCreateTask: PropTypes.func.isRequired,
     teacher: PropTypes.string.isRequired,
-    type: PropTypes.string.isRequired,
-    receiver: PropTypes.string.isRequired,
     tasks: PropTypes.arrayOf(PropTypes.objectOf).isRequired,
     handleReceiveTasks: PropTypes.func.isRequired,
-    groupName: PropTypes.string.isRequired,
   };
 
-  state = {
-    nameTest: '',
-    getStart: '',
-    getDeadline: '',
-    error: false,
-    taskInfo: {},
-  };
+  constructor(props) {
+    super(props);
+    this.state = {
+      nameTest: '',
+      getStart: '',
+      getDeadline: '',
+      error: false,
+      taskInfo: '',
+    };
+  }
 
   componentDidMount() {
     const { handleReceiveTasks } = this.props;
@@ -46,8 +44,6 @@ class TaskProperties extends React.Component {
     }));
   };
 
-  onOk = (value) => {
-  };
 
   setSelectTask = (index) => {
     const { tasks } = this.props;
@@ -56,7 +52,6 @@ class TaskProperties extends React.Component {
       taskTopics: tasks[index].topics,
       title: tasks[index].title,
     };
-    console.log(obj, 7839);
     this.setState({
       taskInfo: obj,
     });
@@ -79,23 +74,24 @@ class TaskProperties extends React.Component {
 
   render() {
     const {
-      receiver, handleCreateTask, teacher, type, tasks, groupName,
+      handleCreateTask, teacher, tasks,
     } = this.props;
     const {
       nameTest, getStart, getDeadline, error, taskInfo,
     } = this.state;
+    const receiverInfo = JSON.parse(localStorage.getItem('userStatusForAssign'));
     const handleSubmit = () => {
       const task = {
         assignedBy: teacher,
         title: nameTest,
         start: getStart,
         deadline: getDeadline,
-        // topicsId: taskInfo.taskTopics,
+        id: taskInfo.taskId,
+      // topicsId: taskInfo.taskTopics,
       };
-      switch (type) {
-        case 'STUDENT': {
-          task.assignedTo = groupName;
-          task.id = taskInfo.taskId;
+      switch (typeof receiverInfo) {
+        case 'object': {
+          task.assignedTo = receiverInfo.email;
           this.setState(() => ({ error: false }));
           if (this.validateTask(task)) {
             handleCreateTask(task, '/assign-task-for-user');
@@ -104,10 +100,8 @@ class TaskProperties extends React.Component {
           }
           break;
         }
-        case 'GROUPS': {
-          task.assignedTo = groupName;
-          task.id = taskInfo.taskId;
-          // task.title = taskInfo.title;
+        case 'string': {
+          task.assignedTo = receiverInfo;
           this.setState(() => ({ error: false }));
           if (this.validateTask(task)) {
             handleCreateTask(task, '/assign-task-for-group');
@@ -137,11 +131,11 @@ class TaskProperties extends React.Component {
       }
     }
     const errorInput = error ? <div className="error-input">Введите все данные!</div> : <div/>;
-
+    const name = typeof receiverInfo === 'string' ? receiverInfo : receiverInfo.name;
     return (
       <div className="test-properties-content">
         <div className="header">Назначение задачи</div>
-        <div>Назначается: {groupName}</div>
+        <div>Назначается: {name}</div>
         <div className="name-form-item">
           <div className="tasks-list-select">
             <Select

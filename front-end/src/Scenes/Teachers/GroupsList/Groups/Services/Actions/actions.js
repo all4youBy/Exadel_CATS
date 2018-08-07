@@ -41,3 +41,7 @@ export function getNameGroup(group) {
     payload: group,
   };
 }
+
+export function getTasksForGroup() {
+  return (API.get('users/groups', 'TASKS_FOR_GROUP', 'Не удалось загрузить список групп'));
+}

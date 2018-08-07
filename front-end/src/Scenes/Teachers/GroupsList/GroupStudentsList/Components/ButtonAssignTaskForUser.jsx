@@ -7,13 +7,13 @@ import { history } from '../../../../../Services/ConfigureStore';
 
 class ButtonAssignTaskForUser extends React.Component {
   static propTypes = {
-    userData: PropTypes.string.isRequired,
+    groupName: PropTypes.string.isRequired,
   };
 
   handleAddGroup = () => {
-    const { userData } = this.props;
-    console.log(userData, 78);
-    history.push(`/assigntask/${userData.email}`);
+    const { groupName } = this.props;
+    localStorage.setItem('userStatusForAssign', JSON.stringify(groupName));
+    history.push(`/assigntask/${groupName.email}`);
   };
 
   render() {

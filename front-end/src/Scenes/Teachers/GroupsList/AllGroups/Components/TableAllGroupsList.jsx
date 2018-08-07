@@ -51,11 +51,9 @@ class TableAllGroupsList extends React.PureComponent {
   };
 
   render() {
-    const { getListUsers, groups, inputFilter } = this.state;
-    const { groups } = this.state;
+    const { groups, inputFilter } = this.state;
     const {
-      emptyList, handleGroupDelete, upDate, addGroupTask, getGroup,
-      handleGroupDelete, upDate, addGroupTask,
+      getGroup, handleGroupDelete, upDate, addGroupTask,
       addGroupTest, userStatus,
     } = this.props;
     const columns = [{
@@ -122,18 +120,6 @@ class TableAllGroupsList extends React.PureComponent {
         <div className="header">Список групп</div>
       </div>
     );
-    const stateData = emptyList && getListUsers ? (<Loading/>)
-      : <div className="empty-list">Список групп пуст</div>;
-    const table = data.length ? (
-      <Table
-        className="table-groups"
-        columns={columns}
-        dataSource={newData}
-      />) : (<Loading/>
-    );
-    const addList = groups.length ? table : stateData;
-    columns[0].title = <div className="header">Список групп</div>;
-    // <InputSearch/>
     let container = null;
     if (groups) {
       if (groups.length) {
@@ -141,13 +127,13 @@ class TableAllGroupsList extends React.PureComponent {
           <Table
             className="table-groups"
             columns={columns}
-            dataSource={data}
+            dataSource={newData}
           />);
       } else {
-        container = (<div className="empty-list">Список пуст</div>);
+        container = <Loading/>;
       }
     } else {
-      container = <Loading/>;
+      container = (<div className="empty-list">Список пуст</div>);
     }
     return (
       <div className="groups-list">

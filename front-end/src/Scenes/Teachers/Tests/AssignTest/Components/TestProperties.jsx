@@ -17,8 +17,6 @@ class TestProperties extends React.Component {
     getTopics: PropTypes.func.isRequired,
     topics: PropTypes.arrayOf(PropTypes.any).isRequired,
     teacher: PropTypes.string.isRequired,
-    type: PropTypes.string.isRequired,
-    receiver: PropTypes.string.isRequired,
   };
 
   state = {
@@ -56,7 +54,7 @@ class TestProperties extends React.Component {
 
   validateTest = (test) => {
     if (test.nameTest !== '' && test.getStart !== ''
-      && test.getDeadline !== '' && test.topicsId.length) {
+      && test.getDeadline !== '') {
       return true;
     }
     return false;
@@ -64,12 +62,13 @@ class TestProperties extends React.Component {
 
   render() {
     const {
-      handleAddTestTag, handleDeleteTestTag, receiver, tags, handleCreateTest,
-      topics, getTopics, teacher, type,
+      handleAddTestTag, handleDeleteTestTag, tags, handleCreateTest,
+      topics, getTopics, teacher,
     } = this.props;
     const {
       nameTest, countQuestionsTest, getStart, getDeadline, error,
     } = this.state;
+    const receiverInfo = JSON.parse(localStorage.getItem('userStatusForAssign'));
     const handleSubmit = () => {
       let tagsTest = [];
       if (tags.length) {
@@ -85,20 +84,22 @@ class TestProperties extends React.Component {
         assignedBy: teacher,
         title: nameTest,
         questionsCount: +countQuestionsTest,
-        start: new Date(getStart),
-        deadline: new Date(getDeadline),
-        topicsId: tagsTest,
+        start: getStart,
+        deadline: getDeadline,
       };
-      if (this.validateTest(test)) {
-        switch (type) {
-          case 'STUDENT': {
-            test.email = receiver;
+      if (this.validateTest(test) && tagsTest && tagsTest.length !== 0) {
+        switch (typeof receiverInfo) {
+          case 'object': {
+            test.email = receiverInfo.email;
+            test.topicIds = tagsTest;
+            handleCreateTest(test, 'tests');
             break;
           }
-          case 'GROUPS': {
-            test.group = receiver;
+          case 'string': {
+            test.group = receiverInfo;
+            test.topicIds = tagsTest;
             this.setState(() => ({ error: false }));
-            handleCreateTest(test, '/for-group');
+            handleCreateTest(test, 'tests/for-group');
             break;
           }
           default: {
@@ -110,11 +111,11 @@ class TestProperties extends React.Component {
       }
     };
     const errorInput = error ? <div className="error-input">Введите все данные!</div> : <div/>;
-
+    const name = typeof receiverInfo === 'string' ? receiverInfo : receiverInfo.name;
     return (
       <div className="test-properties-content">
         <div className="header">Назначение теста</div>
-        <div>Назначается: {receiver}</div>
+        <div>Назначается: {name}</div>
         <div className="name-form-item">
           <TextArea
             name="nameTest"
