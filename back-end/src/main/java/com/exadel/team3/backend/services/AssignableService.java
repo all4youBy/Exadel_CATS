@@ -26,6 +26,8 @@ public interface AssignableService<T extends Assignable> extends CrudService<T, 
     List<T> getAssignedItemsToGroupUnfinished(Collection<String> assignedToIds);
 
     List<AssignableDTO> getAssignedItemsWithTopics(String assignedTo);
+    List<AssignableDTO> getAssignedItemsWithTopicsFinished(String assignedTo);
+    List<AssignableDTO> getAssignedItemsWithTopicsUnfinished(String assignedTo);
 
     List<UserRatingDTO> getTopRatingBySum();
     List<UserRatingDTO> getTopRatingByAverage();
