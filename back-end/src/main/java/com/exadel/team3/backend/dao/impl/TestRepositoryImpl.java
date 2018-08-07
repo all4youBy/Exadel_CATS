@@ -1,17 +1,18 @@
 package com.exadel.team3.backend.dao.impl;
 
 import java.time.LocalDateTime;
+import java.util.Collection;
 import java.util.List;
 
 import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.mongodb.core.MongoTemplate;
-import org.springframework.data.mongodb.core.aggregation.AggregationResults;
-import org.springframework.data.mongodb.core.aggregation.GroupOperation;
+import org.springframework.data.mongodb.core.aggregation.*;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Repository;
+import org.springframework.util.CollectionUtils;
 
 import static org.springframework.data.mongodb.core.aggregation.Aggregation.*;
 import static org.springframework.data.mongodb.core.aggregation.LookupOperation.*;
@@ -22,6 +23,7 @@ import com.exadel.team3.backend.dao.AssignableRepositoryAggregation;
 import com.exadel.team3.backend.entities.Test;
 import com.exadel.team3.backend.dao.TestRepositoryAggregation;
 import com.exadel.team3.backend.dao.projections.AssignableProjection;
+import com.exadel.team3.backend.dao.projections.ActivityProjection;
 
 @Repository
 public class TestRepositoryImpl
@@ -135,4 +137,47 @@ public class TestRepositoryImpl
         return results.getMappedResults();
     }
 
+    @Override
+    public List<ActivityProjection> findRecentActivities(
+            @NonNull LocalDateTime after,
+            @NonNull LocalDateTime now) {
+        return findRecentActivities(after, now, null);
+    }
+
+    @Override
+    public List<ActivityProjection> findRecentActivities(
+            @NonNull LocalDateTime after,
+            @NonNull LocalDateTime now,
+            Collection<String> matchingGroups) {
+        return mongoTemplate.aggregate(
+                TypedAggregation.newAggregation(
+                        match(
+                                new Criteria().orOperator(
+                                        Criteria.where("start").gt(after),
+                                        new Criteria().andOperator(
+                                                Criteria.where("deadline").gt(after),
+                                                Criteria.where("deadline").lt(now)
+                                        )
+                                )
+                        ),
+                        newLookup()
+                                .from("users")
+                                .localField("assignedTo")
+                                .foreignField("_id")
+                                .as("user"),
+                        !CollectionUtils.isEmpty(matchingGroups)
+                            ? match(Criteria.where("user.groups").in(matchingGroups).and("user.role").is("STUDENT"))
+                            : match(Criteria.where("user._id").exists(true)),
+                        project("user._id",
+                                "user.firstName",
+                                "user.lastName",
+                                "assignedBy",
+                                "title",
+                                "start",
+                                "deadline"
+                        )
+                ),
+                getEntityClass().getSimpleName().toLowerCase() + "s",
+                ActivityProjection.class
+        ).getMappedResults();    }
 }

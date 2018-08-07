@@ -5,9 +5,6 @@ import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import com.exadel.team3.backend.dao.ActivityQueries;
-import com.exadel.team3.backend.dao.projections.ActivityProjection;
-import com.exadel.team3.backend.dao.projections.StringIdProjection;
 import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Repository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,8 +15,11 @@ import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.data.mongodb.core.query.Update;
 
-import com.exadel.team3.backend.dao.UserRepositoryQueries;
 import com.exadel.team3.backend.entities.User;
+import com.exadel.team3.backend.dao.UserRepositoryQueries;
+import com.exadel.team3.backend.dao.ActivityQueries;
+import com.exadel.team3.backend.dao.projections.ActivityProjection;
+import com.exadel.team3.backend.dao.projections.StringIdProjection;
 
 @Repository
 public class UserRepositoryImpl implements UserRepositoryQueries, ActivityQueries {
@@ -78,19 +78,39 @@ public class UserRepositoryImpl implements UserRepositoryQueries, ActivityQuerie
 
     @Override
     public List<ActivityProjection> findRecentActivities(@NonNull LocalDateTime after, @NonNull LocalDateTime now) {
-        return mongoTemplate.find(
-                new Query(Criteria.where("registrationDate").gt(after)),
-                User.class
-        )
-        .stream()
-        .map(user -> new ActivityProjection(
-                user.getEmail(),
-                user.getFirstName(),
-                user.getLastName(),
-                null,
-                user.getRegistrationDate(),
-                null)
-        )
-        .collect(Collectors.toList());
+        return findRecentActivities(after, now, null);
+    }
+
+    @Override
+    public List<ActivityProjection> findRecentActivities(
+            @NonNull LocalDateTime after,
+            @NonNull LocalDateTime now,
+            Collection<String> matchingGroups) {
+
+        List<User> users;
+        if (matchingGroups != null) {
+            users = mongoTemplate.find(
+                    new Query(Criteria.where("registrationDate").gt(after).and("groups").in(matchingGroups)),
+                    User.class
+            );
+        } else {
+            users = mongoTemplate.find(
+                    new Query(Criteria.where("registrationDate").gt(after)),
+                    User.class
+            );
+        }
+        return users
+                .stream()
+                .map(user -> new ActivityProjection(
+                        user.getEmail(),
+                        user.getFirstName(),
+                        user.getLastName(),
+                        null,
+                        null,
+                        null,
+                        user.getRegistrationDate(),
+                        null)
+                )
+                .collect(Collectors.toList());
     }
 }
