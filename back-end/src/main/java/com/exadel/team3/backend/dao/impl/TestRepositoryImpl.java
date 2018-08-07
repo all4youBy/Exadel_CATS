@@ -174,10 +174,12 @@ public class TestRepositoryImpl
                                 "assignedBy",
                                 "title",
                                 "start",
-                                "deadline"
+                                "deadline",
+                                "mark"
                         )
                 ),
                 getEntityClass().getSimpleName().toLowerCase() + "s",
                 ActivityProjection.class
-        ).getMappedResults();    }
+        ).getMappedResults();
+    }
 }

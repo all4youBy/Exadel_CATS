@@ -79,6 +79,7 @@ public class StatisticsServiceImpl implements StatisticsService {
                                                     ActivityType.USER_REGISTERED,
                                                     ua.getFirstName(),
                                                     ua.getLastName(),
+                                                    null,
                                                     null
                                             )
                             )
@@ -107,7 +108,8 @@ public class StatisticsServiceImpl implements StatisticsService {
                             activity.getLastName(),
                             repository instanceof TestRepository
                                 ? activity.getTitle()
-                                : activity.getText()
+                                : activity.getText(),
+                            null
                     ));
                 }
                 if (activity.getDeadline().isAfter(after) && activity.getDeadline().isBefore(now)) {
@@ -118,7 +120,8 @@ public class StatisticsServiceImpl implements StatisticsService {
                             activity.getLastName(),
                             repository instanceof TestRepository
                                 ? activity.getTitle()
-                                : activity.getText()
+                                : activity.getText(),
+                            activity.getMark()
                     ));
                 }
          }
@@ -131,15 +134,21 @@ public class StatisticsServiceImpl implements StatisticsService {
                         ? ActivityType.CONTROL_TEST_ASSIGNED
                         : ActivityType.TRAINING_TEST_STARTED;
             } else {
-                return (!StringUtils.isEmpty(activity.getAssignedBy()))
-                        ? ActivityType.CONTROL_TEST_SUBMITTED
-                        : ActivityType.TRAINING_TEST_SUBMITTED;
+                if (!StringUtils.isEmpty(activity.getAssignedBy())) {
+                    if (activity.getMark() != null) {
+                        return ActivityType.CONTROL_TEST_SUBMITTED;
+                    } else {
+                        return ActivityType.CONTROL_TEST_CHECK_NEEDED;
+                    }
+                } else {
+                    return ActivityType.TRAINING_TEST_SUBMITTED;
+                }
             }
         } else {
             if (isStart) {
                 return ActivityType.TASK_ASSIGNED;
             } else {
-                return ActivityType.TASK_SUBMITTED;
+                return ActivityType.TASK_FINISHED;
             }
         }
     }

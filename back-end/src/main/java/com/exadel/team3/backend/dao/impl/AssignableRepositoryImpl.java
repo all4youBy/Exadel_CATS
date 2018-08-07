@@ -47,7 +47,7 @@ public abstract class AssignableRepositoryImpl<T extends Assignable>
 
 
     MatchOperation getMatchOperation() {
-        return match(Criteria.where("mark").ne(null));
+        return match(Criteria.where("mark").ne(null).and("deadline").lte(LocalDateTime.now()));
     }
     GroupOperation getBySumGroupingOperation() {
         return group("assignedTo")
