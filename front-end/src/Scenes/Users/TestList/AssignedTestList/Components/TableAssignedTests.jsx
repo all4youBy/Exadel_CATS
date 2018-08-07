@@ -3,7 +3,6 @@ import './TableAssignedTests.scss';
 import { Table, Tag } from 'antd';
 import PropTypes from 'prop-types';
 import ButtonPassTest from './ButtonPassTest';
-// import requestLoginInformation from '../../../../../Services/loginService';
 import Loading from '../../../../../Components/Loading';
 import requestLoginInformation from '../../../../../Services/loginService';
 
@@ -14,7 +13,6 @@ class TableAssignedTests extends React.PureComponent {
     handleStudentAdd: PropTypes.func.isRequired,
     handleStudentDelete: PropTypes.func.isRequired,
     groupName: PropTypes.string.isRequired,
-    error: PropTypes.bool.isRequired,
     tests: PropTypes.arrayOf.isRequired,
   };
 
@@ -121,9 +119,7 @@ class TableAssignedTests extends React.PureComponent {
       container = <Loading/>;
     }
     return (
-      <div>
-        {container}
-      </div>
+      container
     );
   }
 }
