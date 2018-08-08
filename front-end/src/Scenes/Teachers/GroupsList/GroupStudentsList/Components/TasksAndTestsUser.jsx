@@ -3,11 +3,13 @@ import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
 import 'antd/dist/antd.css';
 import './TasksAndTestsUser.scss';
-import { Table, Tag } from 'antd';
+import { Table, Tag, Radio } from 'antd';
 import PropTypes from 'prop-types';
 import Loading from '../../../../../Components/Loading';
 import fetchPassedTasks from '../../../../Users/Tasks/PassedTasks/Services/Actions/actions';
 import fetchPassedTests from '../../../../Users/TestList/PassedTestList/Services/Actions/actions';
+
+const RadioGroup = Radio.Group;
 
 class TasksAndTestsUser extends React.PureComponent {
   static propTypes = {
@@ -28,6 +30,7 @@ class TasksAndTestsUser extends React.PureComponent {
     size: 'middle',
     title: undefined,
     showHeader: true,
+    change: 'TESTS',
   };
 
   componentDidMount() {
@@ -38,7 +41,7 @@ class TasksAndTestsUser extends React.PureComponent {
 
   render() {
     const { tasks, error, tests, lastName, firstName } = this.props;
-    const { bordered, loading, pagination, size, title, showHeader } = this.state;
+    const { bordered, loading, pagination, size, title, showHeader, change } = this.state;
 
 
     function formatDate(date) {
@@ -99,7 +102,7 @@ class TasksAndTestsUser extends React.PureComponent {
           theme: tags,
           author: `Автор ${i}`,
           date: deadline,
-          result: tests[i].mark,
+          result: !tests[i].mark ? '---' : tests[i].mark,
           description: 'success',
         });
       }
@@ -209,12 +212,39 @@ class TasksAndTestsUser extends React.PureComponent {
     } else {
       containerTasks = <Loading/>;
     }
-    console.log(lastName);
+    const onChange = (e) => {
+      console.log('radio checked', e.target.value);
+      this.setState({
+        change: e.target.value,
+      });
+    };
+    let userInformation = '';
+    switch (change) {
+      case 'TESTS': {
+        userInformation = containerTests;
+        break;
+      }
+      case 'TASKS': {
+        userInformation = containerTasks;
+        break;
+      }
+      default: userInformation = containerTests;
+    }
     return (
       <div>
-        <div className="header-for-table"><span className="header">Пройденные тесты и задачи<br/><span className="user-information">{lastName} {firstName}</span></span></div>
-        {containerTests}
-        {containerTasks}
+        <div className="header-for-table">
+          <span className="header-tests-and-tasks">Пройденные тесты и задачи<br/>
+            <span
+              className="user-information"
+            >{lastName} {firstName}
+            </span>
+          </span>
+          <RadioGroup className="tests-tasks" onChange={onChange} value={change} defaultValue="TESTS">
+            <Radio value="TESTS">Тесты</Radio>
+            <Radio value="TASKS">Задачи</Radio>
+          </RadioGroup>
+        </div>
+        {userInformation}
       </div>
     );
   }

@@ -47,10 +47,9 @@ class GeneralMenu extends React.PureComponent {
         );
       }
       const onClickBadgeTests = () => {
+        document.getElementById('badge-test').classList.add('hide');
       };
       const onClickBadgeAnswer = () => {
-        document.getElementById('badge-test').classList.add('hide');
-        document.getElementById('badge-answer').classList.add('hide');
         localStorage.setItem('checkTests', '0');
       };
       const subsections = (element.subsections.map((item) => {
