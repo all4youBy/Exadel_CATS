@@ -53,6 +53,8 @@ public class MaterialsController {
         return ResponseEntity.ok().body(paperDTO);
     }
 
+
+
     @GetMapping("/by-ids")
     public ResponseEntity<?> getMaterialsByIds(@RequestParam(value = "ids") List<ObjectId> ids){
         return ResponseEntity.ok().body(paperService.getItems(ids));

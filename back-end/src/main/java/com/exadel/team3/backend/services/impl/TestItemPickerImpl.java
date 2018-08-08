@@ -29,7 +29,8 @@ class TestItemPickerImpl implements TestItemPicker {
         // complex questions are guaranteed to appear
 
         count -= (trainingOnly ? 0 : 1);
-        int complexLevel4Count = count >= 4 ? count / 4 : 1;
+        if(count < 4) count = 4;
+        int complexLevel4Count =  count / 4;
         count -= complexLevel4Count;
         int complexLevel3Count = count >= 3 ? count / 3 : 1;
         count -= complexLevel3Count;
