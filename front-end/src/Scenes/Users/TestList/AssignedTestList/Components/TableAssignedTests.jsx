@@ -50,8 +50,10 @@ class TableAssignedTests extends React.PureComponent {
     if (tests && tests.length) {
       let deadline = null;
       const tags = [];
+      // let countTopics = null;
       tests.forEach((element) => {
-        for (let index = 0; index < 3; index += 1) {
+        // countTopics = element.topics && element.topics.length < 3 ? element.topics.length : 3;
+        for (let index = 0; index < element.topics.length; index += 1) {
           tags[index] = <Tag color="blue">{element.topics[index]}</Tag>;
         }
       });

@@ -1,11 +1,16 @@
-// import { message } from 'antd';
+import { message } from 'antd';
 import * as types from './types';
 // import { history } from '../../../../../../Services/ConfigureStore';
 import API from '../../../../../../Services/API';
+import { history } from '../../../../../../Services/ConfigureStore';
 
 export function createTest(data, url) {
-  console.log(data, 78304);
-  return API.post(`${url}`, data, 'create_test');
+  return API.post(`${url}`, data, ['create_test', () => {
+    message.success('Тест успешно назначен');
+    history.push('/mygroups');
+  }, () => {
+    message.error('Не удалось назначить тест');
+  }]);
 }
 
 export function addTestTag(tag) {

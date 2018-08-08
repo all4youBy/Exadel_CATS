@@ -12,12 +12,10 @@ class AllTask extends React.Component {
     tasks: PropTypes.arrayOf(PropTypes.object).isRequired,
     error: PropTypes.string.isRequired,
     getTasks: PropTypes.func.isRequired,
-    pageError: PropTypes.func.isRequired,
   };
 
   render() {
-    const { tasks, error, getTasks, pageError } = this.props;
-    pageError(true);
+    const { tasks, error, getTasks } = this.props;
     // history.push('/error');
     return (
       <TableAllTasks tasks={tasks} error={error} getTasks={getTasks}/>

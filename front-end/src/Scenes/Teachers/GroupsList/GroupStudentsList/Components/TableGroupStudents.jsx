@@ -1,11 +1,9 @@
 /* eslint-disable spaced-comment,no-unused-vars,no-plusplus */
 import React from 'react';
 import 'antd/dist/antd.css';
-import { Link } from 'react-router-dom';
 import './TableGroupStudents.scss';
 import { message, Radio, Table } from 'antd';
 import PropTypes from 'prop-types';
-import ButtonAssignTest from '../../../../../Components/ButtonAssignTest';
 import ButtonDeleteStudent from './ButtonDeleteStudent';
 // import ButtonAddStudent from './ButtonAddStudent';
 import Loading from '../../../../../Components/Loading';
@@ -73,16 +71,13 @@ class TableGroupStudents extends React.Component {
       title: 'Студент',
       dataIndex: 'name',
       key: 'name',
-      width: 250,
-      fixed: 'left',
+      width: 800,
       render: (text, record) => (
         <div>{record.lastName} {record.firstName}</div>
       ),
     }, {
       title: '',
       key: 'buttons',
-      width: 100,
-      fixed: 'right',
       render(record) {
         const obj = {
           email: record.email.toString(),
@@ -140,6 +135,7 @@ class TableGroupStudents extends React.Component {
     let container = null;
     if (students) {
       if (students.length) {
+        console.log(columns, 79);
         container = (
           <Table
             {...{
@@ -150,9 +146,8 @@ class TableGroupStudents extends React.Component {
               title,
               showHeader,
             }}
-            dataSource={data}
             columns={columns}
-            className="student-row"
+            dataSource={data}
           />);
       } else {
         container = (<div className="empty-list">Список пуст</div>);
