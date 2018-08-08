@@ -15,7 +15,7 @@ export function postTestAnswer(data) {
 }
 
 export function postTest(testId) {
-  return (API.post('tests/submit-test', testId, ['post_test', (item) => {
+  return (API.post('tests/submit', testId, ['post_test', (item) => {
     if (!Number.isNaN(parseInt(item.text, 10))) {
       message.success(`Тест пройден! Оценка ${item.text}`);
       history.push('/passedtestlist');

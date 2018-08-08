@@ -72,6 +72,12 @@ const addTask = (state = initialState, action) => {
       };
     }
     case types.ADD_TASK_TAG: {
+      if (state.tags.includes(action.payload)) {
+        return { ...state };
+      }
+      if (!action.payload) {
+        return { ...state };
+      }
       return {
         ...state,
         tags: [
@@ -83,7 +89,7 @@ const addTask = (state = initialState, action) => {
     case types.DELETE_TASK_TAG: {
       return {
         ...state,
-        tags: state.tags.filter(tag => tag !== action.payload),
+        tags: state.tags.filter(tag => tag.text !== action.payload),
       };
     }
     default:

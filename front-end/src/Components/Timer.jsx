@@ -1,3 +1,4 @@
+/* eslint-disable react/destructuring-assignment */
 import React from 'react';
 import 'antd/dist/antd.css';
 import './Timer.scss';
@@ -39,7 +40,7 @@ export default class Timer extends React.Component {
     });
   }
 
-  componentUnmount() {
+  componentWillUnmount() {
     const { idInterval } = this.state;
     clearInterval(idInterval);
   }
