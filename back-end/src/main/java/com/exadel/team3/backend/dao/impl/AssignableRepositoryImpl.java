@@ -12,6 +12,7 @@ import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
 
 import static org.springframework.data.mongodb.core.aggregation.Aggregation.*;
+import static org.springframework.data.mongodb.core.aggregation.LookupOperation.newLookup;
 
 import com.exadel.team3.backend.dao.projections.RatingProjection;
 import com.exadel.team3.backend.dao.AssignableRepositoryAggregation;
@@ -43,6 +44,29 @@ public abstract class AssignableRepositoryImpl<T extends Assignable>
                 getByAverageGroupingOperation(),
                 limit
         );
+    }
+
+    @Override
+    public List<RatingProjection> collectRatingByActivity(int limit) {
+        AggregationResults<RatingProjection> results =
+                mongoTemplate.aggregate(
+                        newAggregation(
+                                match(Criteria.where("start").lt(LocalDateTime.now())),
+                                group("assignedTo").count().as("rating"),
+                                newLookup()
+                                        .from("users")
+                                        .localField("_id")
+                                        .foreignField("_id")
+                                        .as("user"),
+                                project("user._id", "user.firstName", "user.lastName", "rating"),
+                                match(Criteria.where("firstName").ne(null).and("lastName").ne(null)),
+                                sort(Sort.Direction.DESC, "rating"),
+                                limit(limit > 0 ? limit : 1)
+                        ),
+                        "tests",
+                        RatingProjection.class
+                );
+        return results.getMappedResults();
     }
 
 

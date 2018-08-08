@@ -11,12 +11,11 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Service;
 
-import com.exadel.team3.backend.dao.ActivityQueries;
+import com.exadel.team3.backend.dao.*;
+import com.exadel.team3.backend.dao.projections.RatingProjection;
+import com.exadel.team3.backend.dto.UserRatingDTO;
 import com.exadel.team3.backend.dao.projections.ActivityProjection;
 import com.exadel.team3.backend.dto.ActivityType;
-import com.exadel.team3.backend.dao.SolutionRepository;
-import com.exadel.team3.backend.dao.UserRepository;
-import com.exadel.team3.backend.dao.TestRepository;
 import com.exadel.team3.backend.dto.ActivityDTO;
 import com.exadel.team3.backend.services.StatisticsService;
 
@@ -28,6 +27,9 @@ public class StatisticsServiceImpl implements StatisticsService {
     private SolutionRepository solutionRepository;
     @Autowired
     private UserRepository userRepository;
+
+    @Value("${cats.statistics.topRatingListSize:10}")
+    private int topRatingListSize;
 
     @Value("${cats.activities.historyDepth:30}")
     private int historyDepth;
@@ -63,6 +65,29 @@ public class StatisticsServiceImpl implements StatisticsService {
                 }
         );
         return activities;
+    }
+
+    @Override
+    public List<UserRatingDTO> getTopRatingByActivities() {
+        Map<String, UserRatingDTO> results = new HashMap<>();
+        List<RatingProjection> ratings;
+
+        for (AssignableRepositoryAggregation repo : Arrays.asList(testRepository, solutionRepository)) {
+            ratings = repo.collectRatingByActivity(topRatingListSize);
+            if (ratings != null)
+                ratings.forEach(
+                        proj -> results.merge(
+                                proj.getId(),
+                                new UserRatingDTO(proj.getFirstName(), proj.getLastName(), proj.getRating()),
+                                (ol, nw) -> {ol.setRating(ol.getRating() + nw.getRating()); return ol;}
+                        )
+                );
+        }
+        return results.values()
+                .stream()
+                .sorted((ol, nw) -> Integer.compare(nw.getRating(), ol.getRating()))
+                .limit(topRatingListSize)
+                .collect(Collectors.toList());
     }
 
     private List<ActivityDTO> getUserActivitiesList(LocalDateTime after, LocalDateTime now, Collection<String> groups) {
