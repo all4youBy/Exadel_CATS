@@ -23,10 +23,8 @@ const API = {
   sendRequestFile(token, url, reqInit) {
     const headers = reqInit.headers ? reqInit.headers : new Headers();
     headers.append('Authorization', `Bearer ${token}`);
-    // headers.append('Content-Type', 'multipart/form-data');
     reqInit.headers = headers;
     reqInit.mode = 'cors';
-    // delete reqInit.headers['Content-Type'];
     return fetch(new Request(url, reqInit));
   },
   login(path, data) {
@@ -60,7 +58,11 @@ const API = {
         method: 'POST',
         body: JSON.stringify(data),
       })
-        .then(response => response.json())
+        .then(response => (
+          response.status === 200
+            ? response.json()
+            : Promise.reject(response.json())
+        ))
         .then(items => dispatch(getData(receiveAction, items)))
         .catch(() => dispatch(errorProject(receiveAction, errorMessage)));
     };
@@ -74,7 +76,11 @@ const API = {
         method: 'POST',
         body: data,
       })
-        .then(response => response.json())
+        .then(response => (
+          response.status === 200
+            ? response.json()
+            : Promise.reject(response.json())
+        ))
         .then(items => dispatch(getData(receiveAction, items)))
         .catch(() => dispatch(errorProject(receiveAction, errorMessage)));
     };
@@ -88,7 +94,11 @@ const API = {
         method: 'DELETE',
         body: JSON.stringify(data),
       })
-        .then(response => response.json())
+        .then(response => (
+          response.status === 200
+            ? response.json()
+            : Promise.reject(response.json())
+        ))
         .then(items => dispatch(getData(receiveAction, items)))
         .catch(() => dispatch(errorProject(receiveAction, errorMessage)));
     };
@@ -108,7 +118,11 @@ const API = {
           // dispatch(isLoading(false));
           return response;
         })
-        .then(response => response.json())
+        .then(response => (
+          response.status === 200
+            ? response.json()
+            : Promise.reject(response.json())
+        ))
         .then(items => dispatch(getData(receiveAction, items)))
         .catch(() => dispatch(errorProject(receiveAction, errorMessage)));
     };
@@ -117,13 +131,16 @@ const API = {
     const url = `${urlServer}${path}`;
     return (dispatch, getState) => {
       dispatch(isLoading(true));
-      console.log(JSON.stringify(data), 41234324123);
       const token = API.getTokenFromStore(getState());
       API.sendRequest(token, url, {
         method: 'PUT',
         body: JSON.stringify(data),
       })
-        .then(response => response.json())
+        .then(response => (
+          response.status === 200
+            ? response.json()
+            : Promise.reject(response.json())
+        ))
         .then(items => dispatch(getData(receiveAction, items)))
         .catch(() => dispatch(errorProject(receiveAction, errorMessage)));
     };

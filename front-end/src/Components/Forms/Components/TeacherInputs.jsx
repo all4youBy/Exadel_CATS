@@ -1,11 +1,13 @@
 import { Input, Select, Form } from 'antd';
 import React from 'react';
 import PropTypes from 'prop-types';
+import { connect } from 'react-redux';
 import {
   formItemLayout,
   createPrimarySkillOptions,
   createInsitutionOptions,
 } from '../parametrs';
+import { getInstitutions, getPrimarySkills } from '../Services/Actions/actions';
 
 const { Item: FormItem } = Form;
 
@@ -13,45 +15,54 @@ function isEqualValues(obj1, obj2) {
   return Object.keys(obj1).every(key => obj2[key] === obj1[key]);
 }
 
-export default class TeacherInputs extends React.Component {
+function isEqualsArrays(arr1, arr2) {
+  return arr1.every((element, i) => element === arr2[i]);
+}
+
+class TeacherInputs extends React.Component {
   state = {
     selectedInstitutionTeacher: -1,
     inputtedJob: '',
     oldUser: {},
+    stateInstitutions: [],
   };
 
   componentDidMount() {
-    const { userData, form, institutions } = this.props;
+    const { userData, form, institutions, getSkills, getUniversities } = this.props;
     const { setFieldsValue } = form;
+    getUniversities();
+    getSkills();
+    const { stateInstitutions } = this.state;
     if (userData !== {}) {
-      const institutionsNames = institutions.map(element => element.name);
+      const institutionsNames = stateInstitutions.map(element => element.name);
       const indexOfEqual = institutionsNames.indexOf(userData.institution);
-      const idInstitution = indexOfEqual !== -1 ? institutions[indexOfEqual].id : null;
+      const idInstitution = indexOfEqual !== -1 ? stateInstitutions[indexOfEqual].id : null;
       this.setState({
         oldUser: {
+          stateInstitutions: institutions,
           job: userData.job,
           primarySkill: userData.primarySkill,
           yearTermination: userData.yearTermination,
         },
       });
-      if (userData !== {}) {
-        setFieldsValue({
-          institutionTeacher: idInstitution,
-        });
+      setFieldsValue({
+        institutionTeacher: idInstitution,
+      });
 
-        setFieldsValue({
-          job: userData.job,
-        });
+      setFieldsValue({
+        job: userData.job,
+      });
 
-        setFieldsValue({
-          primarySkillTeacher: userData.primarySkill,
-        });
-      }
+      setFieldsValue({
+        primarySkillTeacher: userData.primarySkill,
+      });
     }
   }
 
+
   static getDerivedStateFromProps(nextProps, prevState) {
-    if (Object.keys(nextProps.userData).length) {
+    if (Object.keys(nextProps.userData).length
+      || !isEqualsArrays(nextProps.institutions, prevState.stateInstitutions)) {
       const institutionsNames = nextProps.institutions.map(element => element.name);
       const indexOfEqual = institutionsNames.indexOf(nextProps.userData.institution);
       const idInstitution = indexOfEqual !== -1 ? nextProps.institutions[indexOfEqual].id : null;
@@ -70,6 +81,7 @@ export default class TeacherInputs extends React.Component {
         });
 
         return {
+          stateInstitutions: nextProps.institutions,
           selectedInstitutionTeacher: prevState.selectedInstitutionTeacher,
           inputtedJob: prevState.inputtedJob,
           oldUser: {
@@ -125,7 +137,6 @@ export default class TeacherInputs extends React.Component {
             <Input
               name="inputtedJob"
               onBlur={setJob}
-              placeholder="Введите место работы и/или учебное заведение"
             />,
           )}
         </FormItem>
@@ -140,7 +151,6 @@ export default class TeacherInputs extends React.Component {
             ],
           })(
             <Select
-              placeholder="Выберите учебное заведение"
               onChange={setIdInstitution}
             >
               {createInsitutionOptions(institutions)}
@@ -159,7 +169,6 @@ export default class TeacherInputs extends React.Component {
           })(
             <Select
               onChange={value => setSelectField(value, 'primarySkill')}
-              placeholder="Выберите ваш primary skill"
             >
               {createPrimarySkillOptions(primarySkills)}
             </Select>,
@@ -177,8 +186,27 @@ TeacherInputs.propTypes = {
   userData: PropTypes.shape(),
   institutions: PropTypes.arrayOf(PropTypes.shape()).isRequired,
   primarySkills: PropTypes.arrayOf(PropTypes.string).isRequired,
+  getSkills: PropTypes.func.isRequired,
+  getUniversities: PropTypes.func.isRequired,
 };
 
 TeacherInputs.defaultProps = {
   userData: {},
 };
+
+const mapStateToProps = state => ({
+  primarySkills: state.primarySkills,
+  // faculties: state.faculties,
+  institutions: state.institutions,
+});
+
+const mapDispatchToProps = dispatch => ({
+  getSkills: () => {
+    dispatch(getPrimarySkills());
+  },
+  getUniversities: () => {
+    dispatch(getInstitutions());
+  },
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(TeacherInputs);
