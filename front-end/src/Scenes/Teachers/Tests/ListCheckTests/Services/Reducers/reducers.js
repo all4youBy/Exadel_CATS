@@ -1,7 +1,7 @@
 import * as types from '../Actions/types';
 
 const initialState = {
-  questionList: (JSON.parse(localStorage.getItem('checkTests')) > 0) ? JSON.parse(localStorage.getItem('checkTests')) : null,
+  questionList: (+JSON.parse(localStorage.getItem('checkTests')) > 0) ? JSON.parse(localStorage.getItem('checkTests')) : null,
 };
 
 const checkQuestions = (state = initialState, action) => {

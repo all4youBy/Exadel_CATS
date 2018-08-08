@@ -44,6 +44,7 @@ class Main extends React.Component {
     userType: PropTypes.shape().isRequired,
     user: PropTypes.objectOf(PropTypes.any).isRequired,
     email: PropTypes.string,
+    check: PropTypes.number.isRequired,
   };
 
   renderCommonRoutes() {
@@ -129,7 +130,7 @@ class Main extends React.Component {
 
   renderSwitch() {
     const { userType: { logInInformation: { user: { role } } } } = this.props;
-    const { email } = this.props;
+    const { email, check } = this.props;
     switch (role) {
       case 'STUDENT':
         return (
@@ -138,6 +139,7 @@ class Main extends React.Component {
               <GeneralMenu
                 userType={role}
                 email={email}
+                check={check}
               />
             </div>
             <div className="switch-div">
@@ -163,12 +165,13 @@ class Main extends React.Component {
         return (
           <div className="main-body-container">
             <div className="general-menu">
-              <GeneralMenu userType={role}/>
+              <GeneralMenu userType={role} email={email} check={check}/>
             </div>
             <div className="switch-div">
               <Switch>
                 <Route exact path="/profile/:email" component={Profile}/>
                 <Route exact path="/creategroup" component={CreateGroupPage}/>
+                <Route exact path="/studentinformation/:student/:lastname/:firstname" component={TasksAndTestsUser}/>
                 <Route exact path="/checktests" component={PageListCheckTests}/>
                 <Route exact path="/loading" component={Loading}/>
                 <Route exact path="/groups/:groupName" component={PageGroupStudentsList}/>
@@ -190,7 +193,7 @@ class Main extends React.Component {
         return (
           <div className="main-body-container">
             <div className="general-menu">
-              <GeneralMenu userType={role} email={email}/>
+              <GeneralMenu userType={role} email={email} check={check}/>
             </div>
             <div className="switch-div">
               <Switch>
@@ -255,6 +258,7 @@ function mapStateToProps(state) {
     userType: state,
     user: state.logInInformation.user,
     email: state.logInInformation.user.email,
+    check: state.checkQuestions.questionList,
   };
 }
 

@@ -21,6 +21,8 @@ class ListCheckTests extends React.Component {
       answer: item.answer,
     };
     localStorage.setItem('checkTests', `${questionList.length - 1}`);
+    document.getElementById('badge-test').classList.add('hide');
+    document.getElementById('badge-answer').classList.add('hide');
     submitManualCheck(data);
     delItem(item);
   };
