@@ -7,14 +7,14 @@
     width: 100%;
   }
 
-  .input-task-name {
-    border: none;
-    text-align: center;
-    font-size: 20px;
-    margin-top: 10px;
-    margin-bottom: 20px;
-    width: 90%;
-  }
+  //.input-task-name {
+  //  border: none;
+  //  text-align: center;
+  //  font-size: 20px;
+  //  margin-top: 10px;
+  //  margin-bottom: 20px;
+  //  width: 90%;
+  //}
   .input-task-desc {
     width: 90%;
     margin: 5px;
@@ -57,7 +57,13 @@
     margin-top: 25px;
   }
 }
+.input-task-name {
+  text-align: left;
+  height: 20px;
+  width: 90%;
+  margin-bottom: 15px;
 
+}
 .error-input-parent {
   justify-content: center;
   display: flex;

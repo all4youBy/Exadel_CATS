@@ -17,7 +17,7 @@ export default class TreeWithTags extends React.PureComponent {
     const { addTag, deleteTag, tags, topics, getTopics } = this.props;
     return (
       <div>
-        Выберите тему:
+        <div className="choose-tags">Выберите тему:</div>
         <div className="tags-container">
           <SectionTree addTag={addTag} topics={topics} getTopics={getTopics}/>
           <EditableTagGroup tags={tags} deleteTag={deleteTag}/>

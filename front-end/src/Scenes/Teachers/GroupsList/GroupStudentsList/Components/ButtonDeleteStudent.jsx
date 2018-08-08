@@ -15,9 +15,10 @@ class ButtonDeleteGroup extends React.Component {
 
   handleStudentDelete = (e) => {
     const { onStudentDelete, student, upDate, groups, groupName } = this.props;
+    console.log(student);
     const object = {
       group: groupName,
-      usersId: [student],
+      userId: student,
     };
     console.log(object);
     onStudentDelete(object);

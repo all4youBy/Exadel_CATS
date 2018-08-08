@@ -1,13 +1,20 @@
 import * as types from '../Actions/types';
 
 const initialState = {
-  group: null,
+  group: [],
   assignedTasks: [],
   groupName: '',
+  user: '',
 };
 
 const groupStudentsList = (state = initialState, action) => {
   switch (action.type) {
+    case types.GET_USER:
+      return {
+        ...state,
+        user: action.payload,
+      };
+
     case types.GET_NAME_GROUP:
       return {
         ...state,

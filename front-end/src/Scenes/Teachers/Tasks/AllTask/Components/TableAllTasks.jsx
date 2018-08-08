@@ -207,7 +207,7 @@ class TableAllTasks extends React.Component {
         dataSource={newData}
       />) : <Loading/>;
     return (
-      <div>
+      <div><div className="header-for-table"><span className="header-tasks">Список задач</span></div>
         {content}
       </div>
     );
