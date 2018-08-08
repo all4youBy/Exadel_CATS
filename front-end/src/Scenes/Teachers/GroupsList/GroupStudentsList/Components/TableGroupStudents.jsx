@@ -1,4 +1,4 @@
-/* eslint-disable spaced-comment,no-unused-vars,no-plusplus */
+/* eslint-disable spaced-comment,no-unused-vars,no-plusplus,react/jsx-indent,indent */
 import React from 'react';
 import 'antd/dist/antd.css';
 import { Link } from 'react-router-dom';
@@ -25,6 +25,8 @@ class TableGroupStudents extends React.Component {
     error: PropTypes.string.isRequired,
     addStudentTest: PropTypes.func.isRequired,
     addStudentTask: PropTypes.func.isRequired,
+    getUserInformation: PropTypes.func.isRequired,
+    upDate: PropTypes.func.isRequired,
   };
 
   state = {
@@ -49,10 +51,12 @@ class TableGroupStudents extends React.Component {
     }
   }
 
+  compareLastName = (a, b) => (a.lastName.localeCompare(b.lastName));
+
   render() {
     const {
       students, handleStudentDelete, error, addStudentTest,
-      groupName, addStudentTask,
+      groupName, addStudentTask, getUserInformation, upDate,
     } = this.props;
     const {
       bordered, loading, pagination, size, title,
@@ -67,47 +71,30 @@ class TableGroupStudents extends React.Component {
       dataIndex: 'number',
       key: 'number',
       width: 50,
-      fixed: 'left',
       className: 'student-number',
     }, {
       title: 'Студент',
       dataIndex: 'name',
       key: 'name',
-      width: 250,
-      fixed: 'left',
-      render: (text, record) => (
-        <div>{record.lastName} {record.firstName}</div>
-      ),
-    }, {
-      title: 'Тест2',
-      dataIndex: 'test',
-      key: 'test2',
-      /* width должна отсутствовать в последней колонке скрола */
-    }, {
-      title: 'Личные задачи',
-      dataIndex: 'countTasks',
-      key: 'countTasks',
-      width: 70,
-      fixed: 'right',
-      render: (text, record) => (
-        <Link to={`/groupstudentslist/personaltasks/${record.key}`}>{record.countTasks}</Link>
-      ),
-    }, {
-      title: 'Личные тесты',
-      dataIndex: 'countTests',
-      key: 'countTests',
-      width: 70,
-      fixed: 'right',
+      width: 800,
       render(text, record) {
+        const getUserTestsAndTask = (email) => {
+        };
+
         return (
-          <Link to={`/groupstudentslist/personaltests/${record.key}`}>{text}</Link>
+          <div>
+            <Link
+              onClick={() => getUserTestsAndTask(record.email)}
+              className="link-name-student"
+              to={`/studentinformation/${record.email}/${record.lastName}/${record.firstName}`}
+            >{record.lastName} {record.firstName}
+            </Link>
+          </div>
         );
       },
     }, {
       title: '',
       key: 'buttons',
-      width: 100,
-      fixed: 'right',
       render(record) {
         const obj = {
           email: record.email.toString(),
@@ -129,7 +116,9 @@ class TableGroupStudents extends React.Component {
               <ButtonDeleteStudent
                 onStudentDelete={handleStudentDelete}
                 groupName={groupName}
+                upDate={upDate}
                 student={record.email}
+                students={students}
               />
             </div>
           </div>
@@ -147,6 +136,9 @@ class TableGroupStudents extends React.Component {
     }
     const data = [];
     if (students) {
+      const group = students;
+      group.sort(this.compareLastName);
+      console.log(group, 784);
       for (let i = 0; i < students.length; i += 1) {
         if (!load) {
           this.setState(() => ({
@@ -175,10 +167,8 @@ class TableGroupStudents extends React.Component {
               title,
               showHeader,
             }}
-            dataSource={data}
             columns={columns}
-            className="student-row"
-            scroll={{ x: 1300 }}
+            dataSource={data}
           />);
       } else {
         container = (<div className="empty-list">Список пуст</div>);
@@ -188,13 +178,7 @@ class TableGroupStudents extends React.Component {
     }
     return (
       <div className="student-row">
-        <div>
-          <div className="group-name-list"><span>{groupName}</span></div>
-          <Group className="radio-buttons" onChange={this.onChangeAnswer}>
-            <Radio value="TASKS">Задачи</Radio>
-            <Radio value="TESTS">Тесты</Radio>
-          </Group>
-        </div>
+          <div className="group-name-list"><span className="group-name">{groupName}</span></div>
         {container}
         {/*<ButtonAddStudent onStudentAdd={handleStudentAdd}/>*/}
       </div>

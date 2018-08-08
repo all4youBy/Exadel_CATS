@@ -4,22 +4,26 @@ import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import TableGroupStudents from '../Components/TableGroupStudents';
 import './PageGroupStudentsList.scss';
-import { addStudent, deleteStudent, fetchStudentsGroup } from '../Services/Actions/actions';
+import { addStudent, deleteStudent, fetchStudentsGroup, getUser, listStudents } from '../Services/Actions/actions';
 import { receiveTest } from '../../../Tests/AssignTest/Services/Actions/actions';
 // import { fetchAssignedTasks } fr
 // om '../../../../Users/Tasks/AssignedTasks/Services/Actions/actions';
 import { receiveTask } from '../../../Tasks/AssignTask/Services/Actions/actions';
+import fetchPassedTasks from '../../../../Users/Tasks/PassedTasks/Services/Actions/actions';
+import { listGroup } from '../../Groups/Services/Actions/actions';
 
 class PageGroupStudentsList extends React.PureComponent {
   static propTypes = {
     getGroup: PropTypes.func.isRequired,
     groupName: PropTypes.string.isRequired,
-    students: PropTypes.objectOf(PropTypes.any).isRequired,
+    students: PropTypes.arrayOf(PropTypes.string).isRequired,
     assignedTasks: PropTypes.objectOf(PropTypes.any).isRequired,
     handleStudentAdd: PropTypes.func.isRequired,
     handleStudentDelete: PropTypes.func.isRequired,
     error: PropTypes.string.isRequired,
     addStudentTask: PropTypes.func.isRequired,
+    getUserInformation: PropTypes.func.isRequired,
+    upDate: PropTypes.func.isRequired,
   };
 
   render() {
@@ -29,10 +33,11 @@ class PageGroupStudentsList extends React.PureComponent {
       handleStudentAdd,
       handleStudentDelete,
       getGroup,
-      error, addStudentTask, assignedTasks,
+      error, addStudentTask, assignedTasks, getUserInformation, upDate,
     } = this.props;
     return (
       <TableGroupStudents
+        getUserInformation={getUserInformation}
         groupName={groupName}
         students={students}
         handleStudentAdd={handleStudentAdd}
@@ -41,6 +46,7 @@ class PageGroupStudentsList extends React.PureComponent {
         error={error}
         addStudentTask={addStudentTask}
         assignedTasks={assignedTasks}
+        upDate={upDate}
       />
     );
   }
@@ -70,6 +76,13 @@ const mapDispatchToProps = dispatch => ({
   },
   addStudentTask: (group) => {
     dispatch(receiveTask(group, 'STUDENT'));
+  },
+  getUserInformation: (userId) => {
+    dispatch(getUser(userId));
+  },
+  upDate: (students, student) => {
+    const newList = students.filter(el => el.email !== student);
+    dispatch(listStudents(newList));
   },
 });
 

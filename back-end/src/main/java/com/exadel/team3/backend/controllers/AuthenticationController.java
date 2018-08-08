@@ -2,7 +2,7 @@ package com.exadel.team3.backend.controllers;
 
 import com.exadel.team3.backend.controllers.requests.RegistrationRequest;
 import com.exadel.team3.backend.dto.AuthenticateDTO;
-import com.exadel.team3.backend.dto.StringAnswerDTO;
+import com.exadel.team3.backend.dto.JSONAnswerDTO;
 import com.exadel.team3.backend.entities.User;
 import com.exadel.team3.backend.entities.UserAffiliation;
 import com.exadel.team3.backend.entities.UserRole;
@@ -90,7 +90,7 @@ public class AuthenticationController {
         replaceMap.put("&password", userPassInfo[0]);
         mailSender.send(MailTypes.SEND_LOGIN_AND_PASS, request.getEmail(), replaceMap);
 
-        return ResponseEntity.status(HttpStatus.OK).body(new StringAnswerDTO("User created."));
+        return ResponseEntity.status(HttpStatus.OK).body(new JSONAnswerDTO("User created."));
     }
 
     private void authenticate(String email, String password){

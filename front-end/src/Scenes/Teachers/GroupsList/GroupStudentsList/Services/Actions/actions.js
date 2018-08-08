@@ -8,7 +8,7 @@ export function addStudent(student) {
 }
 
 export function deleteStudent(student) {
-  return (API.deleteRequest('users', student, 'delete_student', 'Не удалось удалить студента'));
+  return (API.put('users/groups/delete-user-from-group', student, 'delete_student'));
 }
 
 export function fetchStudentsGroup(groupName) {
@@ -16,10 +16,28 @@ export function fetchStudentsGroup(groupName) {
     'students_by_group',
     'Не удалось загрузить список студентов'));
 }
+
+export function getTasksForGroup(groupName) {
+  return (API.get(`tests/group-tests/${groupName}`,
+    'tasks_info_for_group',
+    'Не удалось загрузить информацию о тестах'));
+}
+
 export function assignedTasks(userId) {
   return (API.get(
     `task/users-tasks/${userId}`,
     'assigned_tasks',
     'Не удалось загрузить список задач',
   ));
+}
+export function getUser(student) {
+  return {
+    type: types.GET_USER, payload: student,
+  };
+}
+export function listStudents(data) {
+  return {
+    type: types.UP_STUDENTS_BY_GROUP,
+    payload: data,
+  };
 }

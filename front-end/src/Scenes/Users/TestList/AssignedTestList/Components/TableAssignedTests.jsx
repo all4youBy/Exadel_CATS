@@ -50,9 +50,13 @@ class TableAssignedTests extends React.PureComponent {
     if (tests && tests.length) {
       let deadline = null;
       const tags = [];
-      tests.forEach((element) => {
-        for (let index = 0; index < 3; index += 1) {
-          tags[index] = <Tag color="blue">{element.topics[index]}</Tag>;
+      tests.forEach((element, i) => {
+        for (let index = 0; index < element.topics.length; index += 1) {
+          if (tags[i]) {
+            tags[i].push(<Tag color="blue">{element.topics[index]}</Tag>);
+          } else {
+            tags[i] = [<Tag color="blue">{element.topics[index]}</Tag>];
+          }
         }
       });
       for (let i = 0; i < tests.length; i += 1) {
@@ -61,7 +65,7 @@ class TableAssignedTests extends React.PureComponent {
         data.push({
           key: tests[i].testId,
           name: tests[i].title,
-          theme: tags,
+          theme: tags[i],
           countQuestions: `${i}`,
           time: deadline,
         });
@@ -119,7 +123,9 @@ class TableAssignedTests extends React.PureComponent {
       container = <Loading/>;
     }
     return (
-      container
+      <div><div className="header-for-table"><span className="header">Назначенные тесты</span></div>
+        {container}
+      </div>
     );
   }
 }

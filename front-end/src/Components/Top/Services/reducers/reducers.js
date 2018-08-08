@@ -11,19 +11,19 @@ const topReducer = (state = initialState, action) => {
     case types.RECEIVE_STUDENT_TOP_BY_SUM: {
       return {
         ...state,
-        topBySum: [...state.topBySum, action.payload],
+        topBySum: action.payload,
       };
     }
     case types.RECEIVE_STUDENT_TOP_BY_TASK: {
       return {
         ...state,
-        topByTask: [...state.topByTask, action.payload],
+        topByTask: action.payload,
       };
     }
     case types.RECEIVE_STUDENT_TOP_BY_ACTIVITY: {
       return {
         ...state,
-        topByActivity: [...state.topByActivity, action.topByActivity],
+        topByActivity: action.payload,
       };
     }
     default: {

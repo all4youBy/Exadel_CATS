@@ -81,10 +81,14 @@ class TableAssignedTasks extends React.PureComponent {
 
     const tags = [];
     if (tasks) {
-      tasks.forEach((element) => {
-        element.topics.forEach((item, index) => {
-          tags[index] = <Tag color="blue">{item}</Tag>;
-        });
+      tasks.forEach((element, i) => {
+        for (let index = 0; index < element.topics.length; index += 1) {
+          if (tags[i]) {
+            tags[i].push(<Tag color="blue">{element.topics[index]}</Tag>);
+          } else {
+            tags[i] = [<Tag color="blue">{element.topics[index]}</Tag>];
+          }
+        }
       });
     }
 
@@ -112,7 +116,7 @@ class TableAssignedTasks extends React.PureComponent {
         data.push({
           key: `${i}`,
           name: tasks[i].title,
-          theme: tags,
+          theme: tags[i],
           mark: tasks[i].solution.mark,
           author: tasks[i].solution.assignedBy,
           date: formatDate(deadline),
@@ -146,7 +150,7 @@ class TableAssignedTasks extends React.PureComponent {
       container = <Loading/>;
     }
     return (
-      <div>
+      <div><div className="header-for-table"><span className="header">Назначенные задачи</span></div>
         {container}
       </div>
     );

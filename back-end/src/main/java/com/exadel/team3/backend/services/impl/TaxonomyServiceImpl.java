@@ -25,6 +25,11 @@ public class TaxonomyServiceImpl
     }
 
     @Override
+    public List<TaxonomyItem> getItemsByKey(@NonNull String key) {
+        return taxonomyRepository.findByKeyOrderByTitle(key);
+    }
+
+    @Override
     protected MongoRepository<TaxonomyItem, String> getRepository() {
         return taxonomyRepository;
     }

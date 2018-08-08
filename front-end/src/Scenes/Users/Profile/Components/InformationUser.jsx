@@ -6,9 +6,7 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { StudentInputs, TeacherInputs, formItemLayout } from '../../../../Components/Forms';
 import { editUserWithoutPassword, editPassword } from '../Services/actions/actions';
-// import { getFaculties,
-// getInstitutions, getPrimarySkills }
-// from '../../../../Components/Forms/Services/Actions/actions';
+
 
 const { Item: FormItem } = Form;
 
@@ -23,12 +21,6 @@ class InformationUser extends React.Component {
     changePassword: false,
     confirmDirty: false,
   };
-
-  componentDidMount() {
-    // getPrimarySkills();
-    // getFaculties();
-    // getInstitutions();
-  }
 
   setYearTermination = (event) => {
     const { value } = event.target;
@@ -186,12 +178,11 @@ class InformationUser extends React.Component {
         if (!err) {
           sendEditingUserWithoutPassword(getUser());
           if (changePassword) {
-            const a = {
+            sendNewPassword({
               oldPassword: form.getFieldValue('oldPassword'),
               newPassword: form.getFieldValue('password'),
               email: userData.email,
-            };
-            sendNewPassword(a);
+            });
           }
         }
       });
