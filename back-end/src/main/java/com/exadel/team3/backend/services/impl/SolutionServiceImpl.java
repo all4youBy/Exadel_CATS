@@ -77,7 +77,6 @@ public class SolutionServiceImpl
 
 
         Map<String, String> map = new HashMap<>();
-        map.put("&task", "задача");
         map.put("&link", site + postfix + taskId);
         mailSender.send(MailTypes.USERS_NOTIFICATION_TASK, userId, map);
 
