@@ -339,7 +339,7 @@ class QuestionForm extends React.PureComponent {
               <RadioButton value="SINGLE_VARIANT">Один вариант ответа</RadioButton>
               <RadioButton value="MULTI_VARIANT">Несколько вариантов ответа</RadioButton>
               <RadioButton value="AUTOCHECK_TEXT">Короткий ответ</RadioButton>
-              <RadioButton value="MANUAL_CHECK_TEST">Развернутый ответ</RadioButton>
+              <RadioButton value="MANUAL_CHECK_TEXT">Развернутый ответ</RadioButton>
             </Group>
           </div>
           <div className="add-task-container"/>
