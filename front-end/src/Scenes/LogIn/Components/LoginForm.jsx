@@ -47,6 +47,14 @@ class LoginForm extends React.Component {
     });
   };
 
+  deleteError = () => {
+    if (document.querySelector('.parent-error-input')) {
+      const element = document.querySelector('.parent-error-input');
+      element.classList.add('hide');
+      console.log(element.classList);
+    }
+  };
+
   render() {
     const { form: { getFieldDecorator }, login } = this.props;
     const errorLogIn = !login ? <div/>
@@ -63,6 +71,7 @@ class LoginForm extends React.Component {
             <Input
               // onBlur={this.hideIncorrectData}
               ref={this.getUsername}
+              onChange={this.deleteError}
               type="text"
               prefix={<Icon type="user" style={{ color: 'rgba(0,0,0,.25)' }}/>}
               placeholder="Имя пользователя..."
@@ -76,6 +85,7 @@ class LoginForm extends React.Component {
             <Input
               ref={this.getPassword}
               // onBlur={this.hideIncorrectData}
+              onChange={this.deleteError}
               prefix={<Icon type="lock" style={{ color: 'rgba(0,0,0,.25)' }}/>}
               type="password"
               placeholder="Пароль..."

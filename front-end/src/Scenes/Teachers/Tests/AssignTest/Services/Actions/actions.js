@@ -4,7 +4,7 @@ import { history } from '../../../../../../Services/ConfigureStore';
 import API from '../../../../../../Services/API';
 
 export function createTest(data, url) {
-  return API.post(`tests${url}`, data, ['create_test', () => {
+  return API.post(`${url}`, data, ['create_test', () => {
     message.success('Тест успешно назначен');
     if (url !== '') {
       history.push('/mygroups');

@@ -48,7 +48,7 @@ class TableAllTasks extends React.PureComponent {
 
 
     const columns = [{
-      title: 'Дата сдачи',
+      title: 'Дата создания',
       dataIndex: 'day',
       key: 'dat',
       width: 70,
@@ -99,7 +99,7 @@ class TableAllTasks extends React.PureComponent {
     }];
 
     for (let i = 0; i < tasks.length; i += 1) {
-      const date = new Date(tasks[i].id.date);
+      const date = new Date(tasks[i].dateCreation);
       let tags = [];
       if (tasks[i].topics.length > 3) {
         for (let index = 0; index < 3; index += 1) {

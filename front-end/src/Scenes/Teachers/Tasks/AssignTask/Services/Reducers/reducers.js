@@ -22,29 +22,30 @@ const taskInformation = (state = initialState, action) => {
       };
     }
     case types.RECEIVE_TASK: {
+      console.log(action.payload, 89452);
       if (typeof action.payload === 'string') {
         if (state.students.groups.includes(action.payload)) {
           return state;
         }
-        return {
-          ...state,
-          receiver: action.payload,
-          type: action.typeData,
-        };
-      }
-      if (state.students.addedStudents.includes(action.payload)) {
-        return state;
       }
       return {
         ...state,
-        students: {
-          ...state.students,
-          addedStudents: [
-            ...state.students.addedStudents,
-            action.payload,
-          ],
-        },
+        receiver: action.payload,
+        type: action.typeData,
       };
+      // if (state.students.addedStudents.includes(action.payload)) {
+      //   return state;
+      // }
+      // return {
+      //   ...state,
+      //   students: {
+      //     ...state.students,
+      //     addedStudents: [
+      //       ...state.students.addedStudents,
+      //       action.payload,
+      //     ],
+      //   },
+      // };
     }
     case types.ERROR_ALL_TASKS_ASSIGN:
       return {

@@ -79,6 +79,8 @@ const testInformation = (state = initialState, action) => {
         if (state.students.groups.includes(action.payload)) {
           return state;
         }
+      }
+      if (typeof action.payload === 'string') {
         return {
           ...state,
           receiver: action.payload,

@@ -4,9 +4,11 @@ import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import TableGroupStudents from '../Components/TableGroupStudents';
 import './PageGroupStudentsList.scss';
-import { addStudent, assignedTasks, deleteStudent, fetchStudentsGroup } from '../Services/Actions/actions';
+import { addStudent, deleteStudent, fetchStudentsGroup } from '../Services/Actions/actions';
 import { receiveTest } from '../../../Tests/AssignTest/Services/Actions/actions';
-import { fetchAssignedTasks } from '../../../../Users/Tasks/AssignedTasks/Services/Actions/actions';
+// import { fetchAssignedTasks } fr
+// om '../../../../Users/Tasks/AssignedTasks/Services/Actions/actions';
+import { receiveTask } from '../../../Tasks/AssignTask/Services/Actions/actions';
 
 class PageGroupStudentsList extends React.PureComponent {
   static propTypes = {
@@ -17,8 +19,7 @@ class PageGroupStudentsList extends React.PureComponent {
     handleStudentAdd: PropTypes.func.isRequired,
     handleStudentDelete: PropTypes.func.isRequired,
     error: PropTypes.string.isRequired,
-    addStudentTest: PropTypes.func.isRequired,
-    getAssignedTasks: PropTypes.func.isRequired,
+    addStudentTask: PropTypes.func.isRequired,
   };
 
   render() {
@@ -28,7 +29,7 @@ class PageGroupStudentsList extends React.PureComponent {
       handleStudentAdd,
       handleStudentDelete,
       getGroup,
-      error, addStudentTest, getAssignedTasks, assignedTasks,
+      error, addStudentTask, assignedTasks,
     } = this.props;
     return (
       <TableGroupStudents
@@ -38,8 +39,7 @@ class PageGroupStudentsList extends React.PureComponent {
         handleStudentDelete={handleStudentDelete}
         getGroup={getGroup}
         error={error}
-        addStudentTest={addStudentTest}
-        getAssignedTasks={getAssignedTasks}
+        addStudentTask={addStudentTask}
         assignedTasks={assignedTasks}
       />
     );
@@ -47,7 +47,6 @@ class PageGroupStudentsList extends React.PureComponent {
 }
 
 function mapStateToProps(state, ownProps) {
-  console.log(ownProps.match, 35343);
   return {
     students: state.groupStudentsList.group,
     groupName: ownProps.match.params.groupName,
@@ -69,11 +68,8 @@ const mapDispatchToProps = dispatch => ({
   addStudentTest: (student) => {
     dispatch(receiveTest(student, 'STUDENT'));
   },
-  getAssignedTasks: (users) => {
-    for (let item = 0; item < users.length; item++) {
-      console.log(users[item].email);
-      dispatch(assignedTasks(users[item].email));
-    }
+  addStudentTask: (group) => {
+    dispatch(receiveTask(group, 'STUDENT'));
   },
 });
 
