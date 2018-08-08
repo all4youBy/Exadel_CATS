@@ -68,7 +68,6 @@ class TableGroupStudents extends React.Component {
       dataIndex: 'number',
       key: 'number',
       width: 50,
-      fixed: 'left',
       className: 'student-number',
     }, {
       title: 'Студент',
