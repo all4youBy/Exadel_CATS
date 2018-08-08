@@ -153,7 +153,7 @@ class Main extends React.Component {
                 <Route exact path="/assignedtests" component={PageAssignedTestList}/>
                 <Route exact path="/assignedtasks/:taskId" component={UserTaskPage}/>
                 <Route exact path="/profile/:email" component={Profile}/>
-                <Redirect to="/"/>
+                <Redirect to="/assignedtasks"/>
               </Switch>
             </div>
           </div>
