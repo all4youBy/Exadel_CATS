@@ -5,6 +5,7 @@ const initialState = {
   userType: 'guest',
   isAuth: false,
   isReady: true,
+  error: false,
 };
 
 const app = (state = initialState, action) => {
@@ -17,6 +18,12 @@ const app = (state = initialState, action) => {
         isReady: true,
       };
     } */
+    case types.PAGE_ERROR: {
+      return {
+        ...state,
+        error: action.payload,
+      };
+    }
     default:
       return state;
   }

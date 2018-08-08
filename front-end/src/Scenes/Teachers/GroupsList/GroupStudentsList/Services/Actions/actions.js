@@ -16,6 +16,13 @@ export function fetchStudentsGroup(groupName) {
     'students_by_group',
     'Не удалось загрузить список студентов'));
 }
+
+export function getTasksForGroup(groupName) {
+  return (API.get(`tests/group-tests/${groupName}`,
+    'tasks_info_for_group',
+    'Не удалось загрузить информацию о тестах'));
+}
+
 export function assignedTasks(userId) {
   return (API.get(
     `task/users-tasks/${userId}`,
@@ -26,5 +33,11 @@ export function assignedTasks(userId) {
 export function getUser(student) {
   return {
     type: types.GET_USER, payload: student,
+  };
+}
+export function listStudents(data) {
+  return {
+    type: types.UP_STUDENTS_BY_GROUP,
+    payload: data,
   };
 }

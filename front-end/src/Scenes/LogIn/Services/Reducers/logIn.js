@@ -1,5 +1,11 @@
 import requestLoginInformation from '../../../../Services/loginService';
-import { GET_USER_DATA, LOG_IN, RECEIVE_LOGINDATA, ERROR_LOGINDATA } from '../Actions/types';
+import {
+  GET_USER_DATA,
+  LOG_IN,
+  RECEIVE_LOGINDATA,
+  ERROR_LOGINDATA,
+  GET_ERROR_FALSE,
+} from '../Actions/types';
 
 const initialState = {
   user: requestLoginInformation() || { role: 'GUEST' },
@@ -13,6 +19,11 @@ function logIn(state = initialState, action) {
         ...state,
         username: action.payload.username,
         password: action.payload.password,
+      };
+    case GET_ERROR_FALSE:
+      return {
+        ...state,
+        error: false,
       };
     case RECEIVE_LOGINDATA:
       return { ...state, data: action.payload, error: false };

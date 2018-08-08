@@ -8,7 +8,8 @@ import java.util.stream.Collectors;
 public enum MailTypes {
     SEND_LOGIN_AND_PASS("Text_for_send_log_and_pass.txt", "Subject_for_send_log_and_pass.txt"),
     VERIFICATION_TEST("Text_for_notification_verification_test.txt", "Subject_for_notification_verification_test.txt"),
-    USERS_NOTIFICATION_TASK("Text_for_users_notification.txt", "Subject_for_users_notification.txt");
+    USERS_NOTIFICATION_TASK("Text_for_users_notification_task.txt", "Subject_for_users_notification.txt"),
+    USERS_NOTIFICATION_TEST("Text_for_users_notification_test.txt", "Subject_for_users_notification.txt");
 
     private final static String PATH_TO_FILE_WITH_TEXT = "static/email_sender/text_for_email/";
     private final static String PATH_TO_FILE_WITH_SUBJECT = "static/email_sender/subject_for_email/";

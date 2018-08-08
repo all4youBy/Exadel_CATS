@@ -5,7 +5,7 @@ import 'antd/dist/antd.css';
 import './LoginForm.scss';
 import { Form, Icon, Input, Button } from 'antd';
 import { Link } from 'react-router-dom';
-import { logIn, logInData } from '../Services/Actions/actions';
+import { logIn, logInData, getErrorFalse } from '../Services/Actions/actions';
 
 const FormItem = Form.Item;
 
@@ -15,6 +15,7 @@ class LoginForm extends React.Component {
     onLogIn: PropTypes.func.isRequired,
     sendLogInData: PropTypes.func.isRequired,
     login: PropTypes.bool.isRequired,
+    errorFalse: PropTypes.func.isRequired,
   };
 
   constructor(props) {
@@ -38,11 +39,12 @@ class LoginForm extends React.Component {
     e.preventDefault();
     const { form, onLogIn, sendLogInData } = this.props;
 
-    form.validateFields((err, values) => {
+    form.validateFields((err) => {
       if (!err) {
+        const { errorFalse } = this.props;
         onLogIn(this.username.props.value, this.password.props.value);
         sendLogInData('login', this.username.props.value, this.password.props.value);
-        console.log('Received values of form: ', values);
+        errorFalse();
       }
     });
   };
@@ -51,17 +53,24 @@ class LoginForm extends React.Component {
     if (document.querySelector('.parent-error-input')) {
       const element = document.querySelector('.parent-error-input');
       element.classList.add('hide');
-      console.log(element.classList);
     }
   };
 
   render() {
     const { form: { getFieldDecorator }, login } = this.props;
-    const errorLogIn = !login ? <div/>
-      : (
+    let errorLogIn = null;
+    if (!login) {
+      errorLogIn = <div/>;
+    } else {
+      const element = document.getElementsByClassName('hide');
+      errorLogIn = (
         <div className="parent-error-input">
           <div className="error-input">Пароль или почта введены неправильно!</div>
         </div>);
+      if (element && element.length && element[0].classList && element[0].classList.length === 2) {
+        element[0].classList.remove('hide');
+      }
+    }
     return (
       <Form onSubmit={this.handleSubmit} className="login-form">
         <FormItem className="form-item">
@@ -114,6 +123,9 @@ function mapDispatch(dispatch) {
   return {
     onLogIn: (username, password) => {
       dispatch(logIn(username, password));
+    },
+    errorFalse: (username, password) => {
+      dispatch(getErrorFalse(username, password));
     },
     sendLogInData: (url, user, key) => {
       const data = {

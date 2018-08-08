@@ -43,6 +43,7 @@ class UserTaskPage extends React.PureComponent {
 }
 
 function mapStateToProps(state, ownProps) {
+  console.log(ownProps.match.params.email, 878);
   return {
     files: state.passTask.files,
     error: state.passTask.error,

@@ -4,12 +4,13 @@ import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import TableGroupStudents from '../Components/TableGroupStudents';
 import './PageGroupStudentsList.scss';
-import { addStudent, deleteStudent, fetchStudentsGroup, getUser } from '../Services/Actions/actions';
+import { addStudent, deleteStudent, fetchStudentsGroup, getUser, listStudents } from '../Services/Actions/actions';
 import { receiveTest } from '../../../Tests/AssignTest/Services/Actions/actions';
 // import { fetchAssignedTasks } fr
 // om '../../../../Users/Tasks/AssignedTasks/Services/Actions/actions';
 import { receiveTask } from '../../../Tasks/AssignTask/Services/Actions/actions';
 import fetchPassedTasks from '../../../../Users/Tasks/PassedTasks/Services/Actions/actions';
+import { listGroup } from '../../Groups/Services/Actions/actions';
 
 class PageGroupStudentsList extends React.PureComponent {
   static propTypes = {
@@ -22,6 +23,7 @@ class PageGroupStudentsList extends React.PureComponent {
     error: PropTypes.string.isRequired,
     addStudentTask: PropTypes.func.isRequired,
     getUserInformation: PropTypes.func.isRequired,
+    upDate: PropTypes.func.isRequired,
   };
 
   render() {
@@ -31,7 +33,7 @@ class PageGroupStudentsList extends React.PureComponent {
       handleStudentAdd,
       handleStudentDelete,
       getGroup,
-      error, addStudentTask, assignedTasks, getUserInformation,
+      error, addStudentTask, assignedTasks, getUserInformation, upDate,
     } = this.props;
     return (
       <TableGroupStudents
@@ -44,6 +46,7 @@ class PageGroupStudentsList extends React.PureComponent {
         error={error}
         addStudentTask={addStudentTask}
         assignedTasks={assignedTasks}
+        upDate={upDate}
       />
     );
   }
@@ -76,6 +79,10 @@ const mapDispatchToProps = dispatch => ({
   },
   getUserInformation: (userId) => {
     dispatch(getUser(userId));
+  },
+  upDate: (students, student) => {
+    const newList = students.filter(el => el.email !== student);
+    dispatch(listStudents(newList));
   },
 });
 

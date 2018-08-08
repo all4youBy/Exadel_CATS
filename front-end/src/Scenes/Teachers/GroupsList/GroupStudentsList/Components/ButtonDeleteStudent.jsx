@@ -9,20 +9,20 @@ class ButtonDeleteGroup extends React.Component {
     onStudentDelete: PropTypes.func.isRequired,
     student: PropTypes.string.isRequired,
     upDate: PropTypes.func.isRequired,
-    groups: PropTypes.arrayOf(PropTypes.string).isRequired,
+    students: PropTypes.arrayOf(PropTypes.string).isRequired,
     groupName: PropTypes.string.isRequired,
   };
 
   handleStudentDelete = (e) => {
-    const { onStudentDelete, student, upDate, groups, groupName } = this.props;
+    const { onStudentDelete, student, upDate, students, groupName } = this.props;
     console.log(student);
     const object = {
       group: groupName,
       userId: student,
     };
-    console.log(object);
+    console.log(students);
     onStudentDelete(object);
-    // upDate(groups, data);
+    upDate(students, student);
     e.preventDefault();
   };
 

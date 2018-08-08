@@ -2,7 +2,7 @@ import { Input, Select, Form } from 'antd';
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { getInstitutions, getPrimarySkills } from '../Services/Actions/actions';
+import { getInstitutions, getPrimarySkills, getFaculties } from '../Services/Actions/actions';
 
 import {
   formItemLayout,
@@ -31,8 +31,9 @@ class StudentInputs extends React.Component {
   };
 
   componentDidMount() {
-    const { userData, form, institutions, getSkills, getUniversities } = this.props;
+    const { userData, form, institutions, getSkills, getUniversities, getFacults } = this.props;
     const { setFieldsValue } = form;
+    getFacults();
     getUniversities();
     getSkills();
     if (userData !== {}) {
@@ -216,6 +217,7 @@ StudentInputs.propTypes = {
   primarySkills: PropTypes.arrayOf(PropTypes.string).isRequired,
   getSkills: PropTypes.func.isRequired,
   getUniversities: PropTypes.func.isRequired,
+  getFacults: PropTypes.func.isRequired,
 };
 
 StudentInputs.defaultProps = {
@@ -224,7 +226,7 @@ StudentInputs.defaultProps = {
 
 const mapStateToProps = state => ({
   primarySkills: state.primarySkills,
-  // faculties: state.faculties,
+  faculties: state.faculties,
   institutions: state.institutions,
 });
 
@@ -234,6 +236,9 @@ const mapDispatchToProps = dispatch => ({
   },
   getUniversities: () => {
     dispatch(getInstitutions());
+  },
+  getFacults: () => {
+    dispatch(getFaculties());
   },
 });
 

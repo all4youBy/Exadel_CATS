@@ -1,9 +1,16 @@
-import { LOADING } from './types';
+import { LOADING, PAGE_ERROR } from './types';
 
 export function isLoading(bool) {
   return {
     type: LOADING,
     loading: bool,
+  };
+}
+
+export function getError(bool) {
+  return {
+    type: PAGE_ERROR,
+    payload: bool,
   };
 }
 
