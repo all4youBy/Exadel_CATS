@@ -1,6 +1,6 @@
 import React from 'react';
 import './ViewUserTask.scss';
-import { Tag, message } from 'antd';
+import { message } from 'antd';
 import PropTypes from 'prop-types';
 import Loading from '../../../../../Components/Loading';
 
@@ -23,10 +23,13 @@ class ViewUserTask extends React.Component {
 
   render() {
     const { taskInfo, error } = this.props;
-    let tags = [];
-    if (taskInfo && taskInfo.topicIds) {
-      tags = taskInfo.topicIds.map(element => <Tag color="blue">{element}</Tag>);
-    }
+    const tags = [];
+    // if (taskInfo && taskInfo.topicIds) {
+    //   tags = taskInfo.topicIds.map((element) => {
+    //     console.log(element, 89345);
+    //     return (<Tag color="blue"/>);
+    //   });
+    // }
     if (error) {
       message.error(error);
     }
