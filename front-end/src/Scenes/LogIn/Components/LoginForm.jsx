@@ -53,8 +53,6 @@ class LoginForm extends React.Component {
     if (document.querySelector('.parent-error-input')) {
       const element = document.querySelector('.parent-error-input');
       element.classList.add('hide');
-
-      console.log(element.classList);
     }
   };
 
@@ -69,7 +67,6 @@ class LoginForm extends React.Component {
         <div className="parent-error-input">
           <div className="error-input">Пароль или почта введены неправильно!</div>
         </div>);
-      console.log(element, 444);
       if (element && element.length && element[0].classList && element[0].classList.length === 2) {
         element[0].classList.remove('hide');
       }

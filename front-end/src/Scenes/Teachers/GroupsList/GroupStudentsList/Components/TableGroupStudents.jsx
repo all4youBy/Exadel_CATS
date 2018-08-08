@@ -51,6 +51,8 @@ class TableGroupStudents extends React.Component {
     }
   }
 
+  compareLastName = (a, b) => (a.lastName.localeCompare(b.lastName));
+
   render() {
     const {
       students, handleStudentDelete, error, addStudentTest,
@@ -134,6 +136,9 @@ class TableGroupStudents extends React.Component {
     }
     const data = [];
     if (students) {
+      const group = students;
+      group.sort(this.compareLastName);
+      console.log(group, 784);
       for (let i = 0; i < students.length; i += 1) {
         if (!load) {
           this.setState(() => ({
