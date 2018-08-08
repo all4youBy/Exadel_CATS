@@ -187,14 +187,24 @@ public class TestController {
         return getResponse(assignedToGroup,testService::getAssignedItemsToGroup);
     }
 
-    @GetMapping(value = "/assigned-tests-group-finished",produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping(value = "/assigned-tests-group-finished/{assignedToGroup}",produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> getAssignedTestsToGroupFinished(@PathVariable String assignedToGroup){
         return getResponse(assignedToGroup,testService::getAssignedItemsToGroupFinished);
     }
 
-    @GetMapping(value = "/assigned-tests-group-unfinished",produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping(value = "/assigned-tests-group-unfinished/{assignedToGroup}",produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> getAssignedTestsToGroupUnfinished(@PathVariable String assignedToGroup){
         return getResponse(assignedToGroup,testService::getAssignedItemsToGroupUnfinished);
+    }
+
+    @GetMapping(value = "/assigned-tests-with-topics-finished/{assignedTo}",produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> getAssignedTestsWithTopicsFinished(@PathVariable String assignedTo){
+        return getResponse(assignedTo,testService::getAssignedItemsWithTopicsFinished);
+    }
+
+    @GetMapping(value = "/assigned-tests-with-topics-unfinished/{assignedTo}")
+    public ResponseEntity<?> getAssignedTestsWithTopicsUnfinished(@PathVariable String assignedTo){
+        return getResponse(assignedTo,testService::getAssignedItemsWithTopicsUnfinished);
     }
 
     @DeleteMapping
@@ -202,6 +212,7 @@ public class TestController {
     public void deleteTest(@RequestBody Test test){
         testService.deleteItem(test);
     }
+
     private boolean validateUser(User user, String group){
         return user.getGroups().contains(group);
     }

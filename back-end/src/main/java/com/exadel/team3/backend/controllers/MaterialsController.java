@@ -24,12 +24,12 @@ public class MaterialsController {
     private ModelMapper modelMapper;
 
     @GetMapping(value = "/by-topics-ids",produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<?> getItemsByTopicsIds(@RequestParam(value = "topicsIds") List<ObjectId> topicsIds){
+    public ResponseEntity<?> getMaterialsByTopicsIds(@RequestParam(value = "topicsIds") List<ObjectId> topicsIds){
         return ResponseEntity.ok().body(paperService.getItemsByTopicIds(topicsIds));
     }
 
     @GetMapping(value = "/by-author/{author}",produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<?> getItemsByAuthor(@PathVariable String author){
+    public ResponseEntity<?> getMaterialsByAuthor(@PathVariable String author){
         return ResponseEntity.ok().body(paperService.getItemsByAuthor(author));
     }
 
@@ -42,9 +42,22 @@ public class MaterialsController {
     public ResponseEntity<?> addMaterials(@RequestBody PaperDTO paperDTO){
         Paper paper = modelMapper.map(paperDTO,Paper.class);
         paperService.addItem(paper);
-
         return paper == null?
                 ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Can't add new material."):
                 ResponseEntity.ok().body("Material added.");
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<?> getMaterialById(@PathVariable String id){
+        Paper paper = paperService.getItem(new ObjectId(id));
+
+        return paper == null?
+                ResponseEntity.status(HttpStatus.NO_CONTENT).body(String.format("Can't find material with id %s",id)):
+                ResponseEntity.ok().body(modelMapper.map(paper,PaperDTO.class));
+    }
+
+    @GetMapping("/by-ids")
+    public ResponseEntity<?> getMaterialsByIds(@RequestParam(value = "ids") List<ObjectId> ids){
+        return ResponseEntity.ok().body(paperService.getItems(ids));
     }
 }
