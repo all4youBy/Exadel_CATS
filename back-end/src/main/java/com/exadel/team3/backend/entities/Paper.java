@@ -19,7 +19,7 @@ public class Paper implements Taggable {
     @Id
     @JsonSerialize(using = ToStringSerializer.class)
     @Setter(AccessLevel.NONE)
-    private ObjectId id;
+    private String id;
 
     @NonNull
     private String title;

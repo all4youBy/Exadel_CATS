@@ -6,10 +6,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 
 @Controller
-@RequestMapping("/cats")
 public class UIController {
 
-    @GetMapping(value = "/**")
+    @GetMapping("/")
     public String getHtml(){
         return "redirect:/index.html";
     }

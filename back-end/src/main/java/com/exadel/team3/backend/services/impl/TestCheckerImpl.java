@@ -141,7 +141,7 @@ class TestCheckerImpl implements TestChecker {
                 if (StringUtils.isEmpty(answer)) return TestItemStatus.ANSWERED_WRONG;
                 if (correctAnswer.get().startsWith("/") && correctAnswer.get().endsWith("/")) {
                     return answer.matches(
-                            correctAnswer.get().substring(1, correctAnswer.get().length() - 2)
+                            correctAnswer.get().substring(1, correctAnswer.get().length() - 1)
                     )
                             ? TestItemStatus.ANSWERED_RIGHT
                             : TestItemStatus.ANSWERED_WRONG;

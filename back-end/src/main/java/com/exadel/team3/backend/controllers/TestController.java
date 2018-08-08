@@ -59,6 +59,7 @@ public class TestController {
     @TestGenerationAccess
     public ResponseEntity<?> getTestForUser(@RequestBody TestGenerationRequest request){
 
+        System.out.println(request.getStart().minusHours(3));
        Test test =  testService.generateTestForUser(request.getUserId(),
                                         request.getTitle(),
                                         request.getStart(),
@@ -143,7 +144,17 @@ public class TestController {
         }
         Test test = testService.getItem(testId);
 
-        return test.getAssignedBy() == null?
+        return test.getAssignedBy() != null?
+                ResponseEntity.ok().body(new JSONAnswerDTO(test.getMark().toString())):
+                ResponseEntity.ok().body(new JSONAnswerDTO("Test submit."));
+
+    }
+
+    @PostMapping(value = "/submit",produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> submitTest(@RequestBody List<TestItemDTO> answers){
+
+        Test test = testService.submitTest(answers);
+        return test.getMark() != null?
                 ResponseEntity.ok().body(new JSONAnswerDTO(test.getMark().toString())):
                 ResponseEntity.ok().body(new JSONAnswerDTO("Test submit."));
     }

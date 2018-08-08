@@ -104,10 +104,10 @@ public class UserController {
     }
 
     @PutMapping(value = "/groups",produces = MediaType.APPLICATION_JSON_VALUE)
-    @AdminAccess
+    @AdminAndTeacherAccess
     public ResponseEntity<?> renameGroup(@RequestBody RenameGroupRequest request,Principal principal){
         userService.renameGroup(request.getUsersId(),principal.getName(),request.getOldGroup(),request.getNewGroup());
-        return ResponseEntity.ok(String.format("Group %s renamed to %s",request.getOldGroup(),request.getNewGroup()));
+        return ResponseEntity.ok(new JSONAnswerDTO(String.format("Group %s renamed to %s",request.getOldGroup(),request.getNewGroup())));
     }
 
     @DeleteMapping(value = "/groups", produces = MediaType.APPLICATION_JSON_VALUE)
