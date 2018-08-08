@@ -2,7 +2,6 @@
   margin: 10px;
   display: flex;
   flex-direction: column;
-  align-items: center;
   .group-name-input {
     text-align: center;
     width: 95%;
@@ -17,6 +16,7 @@
   }
 
   .tags-container-create-group {
+    align-items: center;
     display: flex;
     flex-direction: row;
     width: 95%;
@@ -27,6 +27,7 @@
     }
   }
   .student-list-container {
+    align-items: flex-start;
     display: flex;
     flex-direction: row;
     width: 95%;
@@ -40,11 +41,21 @@
     background-color: #04233d;
     color: #fff;
     border-color: #04233d;
+    align-items: center;
   }
   .student-list {
+    align-items: center;
     width: 45%
   }
   .current-group-list {
+    align-items: center;
     width: 45%
   }
+}
+.input-group-name {
+text-align: left;
+  height: 20px;
+  width: 95%;
+  margin-bottom: 15px;
+
 }

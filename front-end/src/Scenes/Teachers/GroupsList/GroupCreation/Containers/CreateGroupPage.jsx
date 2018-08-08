@@ -1,3 +1,4 @@
+/* eslint-disable spaced-comment */
 import React from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
@@ -77,14 +78,24 @@ class CreateGroupPage extends React.PureComponent {
 
     return (
       <div className="create-group-container">
+        <div className="header">Создание группы</div>
         <TextArea
-          className="group-name-input"
+          name="nameTest"
+          type="text"
+          className="input-group-name"
           placeholder="Название группы"
           autosize
           onBlur={this.handleSetName}
         />
+        {/*<TextArea*/}
+        {/*className="group-name-input"*/}
+        {/*placeholder="Название группы"*/}
+        {/*autosize*/}
+        {/*onBlur={this.handleSetName}*/}
+        {/*/>*/}
         <div className="student-list-container ">
           <StudentsList
+            className="current-students-list"
             students={data}
             addStudent={addStudent}
             getStudentsData={getStudentsData}

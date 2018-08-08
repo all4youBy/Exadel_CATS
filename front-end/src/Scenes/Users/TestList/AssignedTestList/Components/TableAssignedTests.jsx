@@ -123,7 +123,9 @@ class TableAssignedTests extends React.PureComponent {
       container = <Loading/>;
     }
     return (
-      container
+      <div><div className="header-for-table"><span className="header">Назначенные тесты</span></div>
+        {container}
+      </div>
     );
   }
 }

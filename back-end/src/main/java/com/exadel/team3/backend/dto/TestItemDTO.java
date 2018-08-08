@@ -10,16 +10,17 @@ import com.exadel.team3.backend.entities.TestItemStatus;
 
 @Data
 @AllArgsConstructor
+@NoArgsConstructor
 public class TestItemDTO {
 
     @JsonSerialize(using = ToStringSerializer.class)
-    private final ObjectId testId;
+    private ObjectId testId;
     @JsonSerialize(using = ToStringSerializer.class)
-    private final ObjectId questionId;
+    private ObjectId questionId;
 
-    private final String answer;
+    private String answer;
 
-    private final TestItemStatus status;
+    private TestItemStatus status;
 
     private String questionText;
 

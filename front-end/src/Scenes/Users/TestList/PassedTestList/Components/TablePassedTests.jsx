@@ -87,14 +87,18 @@ class TablePassedTests extends React.PureComponent {
         });
       }
     }
+
     let container = null;
     if (tests) {
       if (tests.length) {
         container = (
-          <Table
-            columns={columns}
-            dataSource={data}
-          />);
+          <div>
+            <div className="header-for-table"><span className="header">Пройденные тесты</span></div>
+            <Table
+              columns={columns}
+              dataSource={data}
+            />
+          </div>);
       } else {
         container = (<div className="empty-list">Список пуст</div>);
       }

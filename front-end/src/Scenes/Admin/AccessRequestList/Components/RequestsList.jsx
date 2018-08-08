@@ -5,18 +5,26 @@ import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { dataUsers, getUsers, upDataListUsers } from '../Services/Actions/actions';
 import Loading from '../../../../Components/Loading';
+import { fetchQuestionsToCheck } from '../../../Teachers/Tests/ListCheckTests/Services/Actions/actions';
 
 class RequestsList extends React.PureComponent {
   static propTypes = {
     upDateUser: PropTypes.func.isRequired,
     upDate: PropTypes.func.isRequired,
     emptyList: PropTypes.bool.isRequired,
+    user: PropTypes.string.isRequired,
+    getQuestions: PropTypes.func.isRequired,
   };
 
   state = {
     users: [],
     getListUsers: false,
   };
+
+  componentDidMount() {
+    const { getQuestions, user } = this.props;
+    getQuestions(user);
+  }
 
   onClickConfirm = (e, idEmail) => {
     const { users } = this.state;
@@ -105,6 +113,7 @@ function mapState(state) {
   return {
     users: state.requestsUsers.users,
     emptyList: state.requestsUsers.emptyList,
+    user: state.logInInformation.user.email,
   };
 }
 
@@ -119,6 +128,9 @@ function mapDispatch(dispatch) {
     upDate: (users, idEmail) => {
       const newList = users.filter(el => el.email !== idEmail);
       dispatch(dataUsers(newList));
+    },
+    getQuestions: (email) => {
+      dispatch(fetchQuestionsToCheck(email));
     },
   };
 }
