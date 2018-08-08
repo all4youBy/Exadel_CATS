@@ -92,14 +92,6 @@ export const TEACHER_GENERAL_MENU_DATA = [{
     id: '8',
     text: 'Все материалы',
     link: '/materials',
-  }, {
-    id: '9',
-    text: 'Мои материалы',
-    link: '/materials',
-  }, {
-    id: '10',
-    text: 'Добавить материал',
-    link: '/',
   }],
 }];
 

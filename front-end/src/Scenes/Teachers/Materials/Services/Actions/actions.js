@@ -1,13 +1,11 @@
-import * as types from './types';
+import API from '../../../../../Services/API';
 
-export function addStudent(student) {
-  return {
-    type: types.ADD_STUDENT, payload: student,
-  };
+export function getTopicsMaterials() {
+  return (API.get('topics', 'topics_materials', 'Не удалось загрузить список задач'));
 }
 
-export function deleteStudent(number) {
-  return {
-    type: types.DELETE_STUDENT, payload: number,
-  };
+export function getMaterialInfo(id) {
+  console.log(id, 8989);
+  const link = 'materials';
+  return (API.get(link, 'materials', 'Не удалось загрузить список задач'));
 }
