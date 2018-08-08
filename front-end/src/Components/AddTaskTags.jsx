@@ -12,9 +12,10 @@ export default class EditableTagGroup extends React.Component {
 
   render() {
     const { tags, deleteTag } = this.props;
-    const tagList = (tags || []).map((item, i) => (
-      <Tag color="blue" key={item.text} closable afterClose={() => deleteTag(item.text)}>{tags[i].text}</Tag>
-    ));
+    const tagList = (tags || []).map((item, i) => {
+      console.log(item);
+      return <Tag color="blue" key={item.text} closable afterClose={() => deleteTag(item.text)}>{tags[i].text}</Tag>;
+    });
     return (
       <div style={{ marginLeft: '50px' }}>
         {tagList}

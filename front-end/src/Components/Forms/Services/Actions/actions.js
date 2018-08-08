@@ -9,5 +9,5 @@ export function getInstitutions() {
 }
 
 export function getFaculties() {
-  return API.get('faculties', 'FACULTIES', 'Не удалось загрузить факультеты');
+  return API.get('info/universities-faculties', 'FACULTIES', 'Не удалось загрузить факультеты');
 }

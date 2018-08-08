@@ -4,6 +4,14 @@ import { getUserData } from '../Scenes/LogIn/Services/Actions/actions';
 
 const urlServer = 'https://exadelcats.herokuapp.com/';
 
+function responseParse(response) {
+  try {
+    return response.ok ? response.json() : response.json().then(text => Promise.reject(text));
+  } catch (e) {
+    return Promise.reject(e);
+  }
+}
+
 const API = {
   getTokenFromStore(state) {
     const token = state.logInInformation.user;
@@ -58,11 +66,7 @@ const API = {
         method: 'POST',
         body: JSON.stringify(data),
       })
-        .then(response => (
-          response.status === 200
-            ? response.json()
-            : Promise.reject(response.json())
-        ))
+        .then(responseParse)
         .then(items => dispatch(getData(receiveAction, items)))
         .catch(() => dispatch(errorProject(receiveAction, errorMessage)));
     };
@@ -76,11 +80,7 @@ const API = {
         method: 'POST',
         body: data,
       })
-        .then(response => (
-          response.status === 200
-            ? response.json()
-            : Promise.reject(response.json())
-        ))
+        .then(responseParse)
         .then(items => dispatch(getData(receiveAction, items)))
         .catch(() => dispatch(errorProject(receiveAction, errorMessage)));
     };
@@ -94,11 +94,7 @@ const API = {
         method: 'DELETE',
         body: JSON.stringify(data),
       })
-        .then(response => (
-          response.status === 200
-            ? response.json()
-            : Promise.reject(response.json())
-        ))
+        .then(responseParse)
         .then(items => dispatch(getData(receiveAction, items)))
         .catch(() => dispatch(errorProject(receiveAction, errorMessage)));
     };
@@ -111,18 +107,7 @@ const API = {
       API.sendRequest(token, url, {
         method: 'GET',
       })
-        .then((response) => {
-          if (!response.ok) {
-            throw Error(response.statusText);
-          }
-          // dispatch(isLoading(false));
-          return response;
-        })
-        .then(response => (
-          response.status === 200
-            ? response.json()
-            : Promise.reject(response.json())
-        ))
+        .then(responseParse)
         .then(items => dispatch(getData(receiveAction, items)))
         .catch(() => dispatch(errorProject(receiveAction, errorMessage)));
     };
@@ -136,11 +121,7 @@ const API = {
         method: 'PUT',
         body: JSON.stringify(data),
       })
-        .then(response => (
-          response.status === 200
-            ? response.json()
-            : Promise.reject(response.json())
-        ))
+        .then(responseParse)
         .then(items => dispatch(getData(receiveAction, items)))
         .catch(() => dispatch(errorProject(receiveAction, errorMessage)));
     };
@@ -156,7 +137,8 @@ const API = {
         },
         body: JSON.stringify(data),
       })
-        .then(response => response.text())
+        .then(responseParse)
+        .then(items => dispatch(getData(receiveAction, items)))
         .catch(() => dispatch(errorProject(receiveAction, errorMessage)));
     };
   },

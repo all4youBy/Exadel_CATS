@@ -37,7 +37,7 @@ export default class MultipleAnswersQuestion extends React.PureComponent {
     const { text, variants } = this.props;
     const options = variants.map((item, i) => ({ label: item.text, value: i }));
     return (
-      <Card className="multiple-answers-question-card" onBlur={this.handleOnBlur}>
+      <Card className="multiple-answers-question-card" /* onBlur={this.handleOnBlur} */>
         <p className="question-text">
           {text}
         </p>

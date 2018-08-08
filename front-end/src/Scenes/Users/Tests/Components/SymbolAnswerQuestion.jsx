@@ -32,7 +32,7 @@ export default class SymbolAnswersQuestion extends React.PureComponent {
   render() {
     const { text } = this.props;
     return (
-      <Card className="symbol-answer-question-card" onBlur={this.handleOnBlur}>
+      <Card className="symbol-answer-question-card" /* onBlur={this.handleOnBlur} */>
         <p className="question-text">{text}</p>
         <Input className="input-answer" placeholder="Введите ответ" onBlur={this.onChange}/>
       </Card>
