@@ -1,4 +1,4 @@
-.list-users-request{
+.list-users-request {
   .header {
     line-height: 50px;
     text-align: center;
@@ -6,7 +6,7 @@
     font-size: 17px;
     font-weight: 600;
   }
-  .empty-list{
+  .empty-list {
     line-height: 50px;
     text-align: center;
     border-color: #222222;
@@ -21,7 +21,7 @@
   .user {
     flex: auto;
   }
-  .avatar{
+  .avatar {
     margin: 0 0 0 10px;
   }
 
@@ -35,5 +35,11 @@
 
   .list-users {
     margin-bottom: 10px;
+  }
+  .mark-activity {
+    color: #73ac38;
+  }
+  .name-activity {
+    font-style: italic;
   }
 }
