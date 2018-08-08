@@ -62,6 +62,9 @@ public class TaskController {
     @PreAuthorize("hasAnyRole('ADMIN','STUDENT')")
     public ResponseEntity<?> deleteSolution(@PathVariable(value = "id") String id){
         Solution solution = solutionService.getItem(new ObjectId(id));
+        if (solution == null) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new JSONAnswerDTO("Can't find task"));
+        }
         solutionService.updateItem(solutionService.deleteFiles(solution));
         return ResponseEntity.status(HttpStatus.OK).body(new JSONAnswerDTO("Solution deleted"));
     }
@@ -69,6 +72,9 @@ public class TaskController {
     @PostMapping("/add-solution/{id}")
     public ResponseEntity<?> addFilesInSolution(@RequestParam MultipartFile file, @PathVariable(value = "id") String id) {
         Solution solution = solutionService.getItem(new ObjectId(id));
+        if (solution == null) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new JSONAnswerDTO("Can't find task"));
+        }
         solution = solutionService.storeFile(solution, file);
         solutionService.updateItem(solution);
         return ResponseEntity.status(HttpStatus.OK).body(new JSONAnswerDTO("Solution added"));
@@ -77,6 +83,9 @@ public class TaskController {
     @PostMapping(value = "/compile-solution/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> addFilesInSolution(@PathVariable(value = "id") String id) {
         Solution solution = solutionService.getItem(new ObjectId(id));
+        if (solution == null) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new JSONAnswerDTO("Can't find task"));
+        }
         solution = solutionService.submit(solution);
         return new ResponseEntity<>(solution, HttpStatus.OK);
     }
@@ -100,17 +109,22 @@ public class TaskController {
 
     @GetMapping("/tasks")
     @PreAuthorize("hasAnyRole('ADMIN','TEACHER')")
-    public List<TaskForTeachersDTO> getTasks() {
+    public ResponseEntity<?> getTasks() {
         List<Task> tasks = taskService.getItems();
-        return taskDTOMapper.convertToTaskForTeachersDTO(tasks);
+        if (tasks == null) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new JSONAnswerDTO("Can't find task"));
+        }
+        return ResponseEntity.ok().body(taskDTOMapper.convertToTaskForTeachersDTO(tasks));
     }
 
     @GetMapping("/tasks/{teachersId}")
     @PreAuthorize("hasAnyRole('ADMIN','TEACHER')")
-    public List<SolutionForTeachersTDO> getUsersTasks(@PathVariable(value = "teachersId") String teachersId) {
+    public ResponseEntity<?> getUsersTasks(@PathVariable(value = "teachersId") String teachersId) {
         List<Solution> solutions = solutionService.getAssignedItemsByAssigner(teachersId);
-
-        return solutionDTOMapper.convertToSolutionForTeachersTDO(solutions);
+        if (solutions == null) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new JSONAnswerDTO("Can't find task"));
+        }
+        return ResponseEntity.ok().body(solutionDTOMapper.convertToSolutionForTeachersTDO(solutions));
     }
 
     @PostMapping("/assign-task-for-user")
@@ -131,37 +145,59 @@ public class TaskController {
 
     @GetMapping("/users-finished-tasks/{userId}")
     //TODO Максим напишет аннотацию. Доступ имеет админ, учитель и только один ученик
-    public List<SolutionDTO> getUsersFinishedSolutions(@PathVariable(value = "userId") String userId) {
-        return solutionDTOMapper.convertToDTO(solutionService.getAssignedItemsFinished(userId));
+    public ResponseEntity<?> getUsersFinishedSolutions(@PathVariable(value = "userId") String userId) {
+        List<Solution> solutions = solutionService.getAssignedItemsFinished(userId);
+        if (solutions == null) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new JSONAnswerDTO("Can't find task"));
+        }
+        return ResponseEntity.ok().body(solutionDTOMapper.convertToDTO(solutions));
     }
 
     @GetMapping("/users-unfinished-tasks/{userId}")
     //TODO Максим напишет аннотацию. Доступ имеет админ, учитель и только один ученик
-    public List<SolutionDTO> getUsersUnfinishedSolutions(@PathVariable(value = "userId") String userId) {
-        return solutionDTOMapper.convertToDTO(solutionService.getAssignedItemsUnfinished(userId));
+    public ResponseEntity<?> getUsersUnfinishedSolutions(@PathVariable(value = "userId") String userId) {
+        List<Solution> solutions = solutionService.getAssignedItemsUnfinished(userId);
+        if (solutions == null) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new JSONAnswerDTO("Can't find task"));
+        }
+        return ResponseEntity.ok().body(solutionDTOMapper.convertToDTO(solutions));
     }
 
     @GetMapping("/users-tasks/{userId}")
     //TODO Максим напишет аннотацию. Доступ имеет админ, учитель и только один ученик
-    public List<SolutionDTO> getUsersSolutions(@PathVariable(value = "userId") String userId) {
-        return solutionDTOMapper.convertToDTO(solutionService.getAssignedItems(userId));
+    public ResponseEntity<?> getUsersSolutions(@PathVariable(value = "userId") String userId) {
+        List<Solution> solutions = solutionService.getAssignedItems(userId);
+        if (solutions == null) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new JSONAnswerDTO("Can't find task"));
+        }
+        return ResponseEntity.ok().body(solutionDTOMapper.convertToDTO(solutions));
     }
 
     @GetMapping("/testing-sets/{taskId}")
     @PreAuthorize("hasAnyRole('ADMIN','TEACHER')")
-    public List<TaskTestingSet> getTaskTestingSets(@PathVariable(value = "taskId") String taskId) {
-        return taskService.getItem(new ObjectId(taskId)).getTestingSets();
+    public ResponseEntity<?> getTaskTestingSets(@PathVariable(value = "taskId") String taskId) {
+        Task task = taskService.getItem(new ObjectId(taskId));
+        if (task == null) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new JSONAnswerDTO("Can't find task"));
+        }
+        return ResponseEntity.ok().body(task.getTestingSets());
     }
 
     @GetMapping("/users-task/{usersId}/{taskId}")
     //TODO Максим напишет аннотацию. Доступ имеет админ, учитель и только один ученик
-    public TaskDTO getUsersSolution(@PathVariable(value = "taskId") String taskId, @PathVariable(value = "usersId") String usersId) {
-        Solution solution = solutionService.getAssignedItems(usersId).stream().filter(
-                o1 -> o1.getTaskId().equals(new ObjectId(taskId)))
-                .findFirst().get();
+    public ResponseEntity<?> getUsersSolution(@PathVariable(value = "taskId") String taskId, @PathVariable(value = "usersId") String usersId) {
+        Solution solution;
+        try {
+            solution = solutionService.getAssignedItems(usersId).stream().filter(
+                    o1 -> o1.getTaskId().equals(new ObjectId(taskId)))
+                    .findFirst().get();
+        } catch (NullPointerException ex) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new JSONAnswerDTO("Can't find solution"));
+        }
+
         Task task = taskService.getItem(new ObjectId(taskId));
 
-        return new TaskDTO(solution, task.getTitle(), task.getText(), topicDTOMapper.transformInToList(task.getTopicIds()));
+        return ResponseEntity.ok().body(new TaskDTO(solution, task.getTitle(), task.getText(), topicDTOMapper.transformInToList(task.getTopicIds())));
     }
 
     @PutMapping("/add-testing-set/{taskId}")
