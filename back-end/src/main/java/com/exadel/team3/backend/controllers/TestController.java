@@ -30,6 +30,7 @@ import org.springframework.web.bind.annotation.*;
 import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.List;
+import java.util.function.Function;
 import java.util.logging.Logger;
 
 @RestController
@@ -43,15 +44,7 @@ public class TestController {
     private UserService userService;
 
     @Autowired
-    private QuestionService questionService;
-
-    @Autowired
-    private ModelMapper mapper;
-
-    @Autowired
     private TestDTOMapper testDTOMapper;
-
-    private static Logger log = Logger.getLogger(TestController.class.getName());
 
     @GetMapping("/{testId}")
     public ResponseEntity<?> getTest(@PathVariable(value = "testId") String testId){
@@ -60,9 +53,6 @@ public class TestController {
         return test.getDeadline().isBefore(LocalDateTime.now())?
                 ResponseEntity.status(HttpStatus.REQUEST_TIMEOUT).body(new JSONAnswerDTO("Can't get test,time is out.")):
                 ResponseEntity.ok().body(testDTOMapper.convertToDTO(test));
-
-
-//        return ResponseEntity.ok().body(testDTOMapper.convertToDTO(test));
     }
 
     @PostMapping(produces = MediaType.APPLICATION_JSON_VALUE)
@@ -89,8 +79,6 @@ public class TestController {
         Test test = testService.generateTestForUser(request.getUserId(),request.getTopicId());
         if(test == null)
            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(HttpStatus.BAD_REQUEST);
-//        String id = mapper.map(test.getId(),String.class);
-
         return new ResponseEntity<>(new ObjectIdDTO(test.getId()),HttpStatus.OK);
     }
 
@@ -120,13 +108,7 @@ public class TestController {
 
     @GetMapping("/user-tests/{userId}")
     public ResponseEntity<?> getTestsAssignedToUser(@PathVariable(value = "userId") String userId){
-/*
-        List<Test> userTests = testService.getAssignedItems(userId);
-        if(userTests == null)
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new JSONAnswerDTO("Can't get list of tests, user:" + userId));
 
-        List<AssignableDTO> testPostDTO = userTests.stream().map(this::convertToTestPostDTO).collect(Collectors.toList());
-*/
         List<AssignableDTO> testDTOs = testService.getAssignedItemsWithTopics(userId);
         return new ResponseEntity<>(testDTOs, HttpStatus.OK);
     }
@@ -186,6 +168,35 @@ public class TestController {
         return ResponseEntity.ok(HttpStatus.OK);
     }
 
+    @GetMapping(value = "/assigned-tests/{assignedTo}",produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> getAssignedTests(@PathVariable String assignedTo){
+        return getResponse(assignedTo,testService::getAssignedItems);
+    }
+    @GetMapping(value = "/assigned-tests-finished/{assignedTo}",produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> getAssignedTestsFinished(@PathVariable String assignedTo){
+        return getResponse(assignedTo,testService::getAssignedItemsFinished);
+    }
+
+    @GetMapping("/assigned-tests-unfinished/{assignedTo}")
+    public ResponseEntity<?> getAssignedTestsUnfinished(@PathVariable String assignedTo){
+        return getResponse(assignedTo,testService::getAssignedItemsUnfinished);
+    }
+
+    @GetMapping(value = "/assigned-tests-group/{assignedToGroup}",produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> getAssignedTestsToGroup(@PathVariable String assignedToGroup){
+        return getResponse(assignedToGroup,testService::getAssignedItemsToGroup);
+    }
+
+    @GetMapping(value = "/assigned-tests-group-finished",produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> getAssignedTestsToGroupFinished(@PathVariable String assignedToGroup){
+        return getResponse(assignedToGroup,testService::getAssignedItemsToGroupFinished);
+    }
+
+    @GetMapping(value = "/assigned-tests-group-unfinished",produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> getAssignedTestsToGroupUnfinished(@PathVariable String assignedToGroup){
+        return getResponse(assignedToGroup,testService::getAssignedItemsToGroupUnfinished);
+    }
+
     @DeleteMapping
     @AdminAccess
     public void deleteTest(@RequestBody Test test){
@@ -195,10 +206,11 @@ public class TestController {
         return user.getGroups().contains(group);
     }
 
-/*
-    private AssignableDTO convertToTestPostDTO(Test test){
-        return mapper.map(test,AssignableDTO.class);
+    private <T,R> ResponseEntity<?> getResponse(T condition,Function<T,List<R>> resolver){
+        List<R> items = resolver.apply(condition);
+
+        return items == null? ResponseEntity.status(HttpStatus.NO_CONTENT).body(new JSONAnswerDTO(String.format("Can't find items assigned to %s",condition))):
+                ResponseEntity.ok().body(items);
     }
-*/
 }
 

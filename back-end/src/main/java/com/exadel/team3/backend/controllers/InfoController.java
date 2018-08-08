@@ -1,16 +1,16 @@
 package com.exadel.team3.backend.controllers;
 
+import com.exadel.team3.backend.dto.mappers.UniversitiesFacultiesDTOMapper;
 import com.exadel.team3.backend.services.TaxonomyService;
-import com.google.common.base.Charsets;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.nio.charset.Charset;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/info")
@@ -29,9 +29,9 @@ public class InfoController {
         return taxonomyService.getByKey("skills");
     }
 
-    @GetMapping(value = "/universities/{university}/faculties",produces = MediaType.APPLICATION_JSON_VALUE)
-    public List<String> getFaculties(@PathVariable("university") String university){
-        return taxonomyService.getItem(university).getSubitems();
+    @GetMapping(value = "/universities-faculties",produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> getFaculties(){
+        return ResponseEntity.ok().body(taxonomyService.getItemsByKey("institutions").stream().map(UniversitiesFacultiesDTOMapper::convert).collect(Collectors.toList()));
     }
 
 }

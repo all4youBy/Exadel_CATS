@@ -69,39 +69,6 @@ public class UserController {
         return getResponse(assignedTo,solutionService::getAssignedItemsUnfinished);
     }
 
-    @GetMapping(value = "/assigned-tests/{assignedTo}",produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<?> getAssignedTests(@PathVariable String assignedTo){
-        return getResponse(assignedTo,testService::getAssignedItems);
-    }
-    @GetMapping(value = "/assigned-tests-finished/{assignedTo}",produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<?> getAssignedTestsFinished(@PathVariable String assignedTo){
-        return getResponse(assignedTo,testService::getAssignedItemsFinished);
-    }
-
-    @GetMapping("/assigned-tests-unfinished/{assignedTo}")
-    public ResponseEntity<?> getAssignedTestsUnfinished(@PathVariable String assignedTo){
-        return getResponse(assignedTo,testService::getAssignedItemsUnfinished);
-    }
-
-    @GetMapping(value = "/assigned-tests-group/{assignedToGroup}",produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<?> getAssignedTestsToGroup(@PathVariable String assignedToGroup){
-        return getResponse(assignedToGroup,testService::getAssignedItemsToGroup);
-    }
-
-    @GetMapping(value = "/assigned-tests-group-finished",produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<?> getAssignedTestsToGroupFinished(@PathVariable String assignedToGroup){
-        return getResponse(assignedToGroup,testService::getAssignedItemsToGroupFinished);
-    }
-
-    @GetMapping(value = "/assigned-tests-group-unfinished",produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<?> getAssignedTestsToGroupUnfinished(@PathVariable String assignedToGroup){
-        return getResponse(assignedToGroup,testService::getAssignedItemsToGroupUnfinished);
-    }
-
-//    @GetMapping("/assigned-tests-")
-//    public ResponseEntity<?> getAssignedItemsWithTopics(String assignedTo){
-//        return getResponse(assignedTo,testService::getAssignedItems)
-//    }
 
     @GetMapping("/groups/{email}")
     public ResponseEntity<?> getUserGroups(@PathVariable String email){

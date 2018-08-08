@@ -84,7 +84,10 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter{
                         "/*.html",
                         "**/*.html",
                         "**/*.css",
-                        "**/*.js"
+                        "**/*.js",
+                        "/info/universities",
+                        "/info/skills",
+                        "/info/universities-faculties"
                 )
                 .and()
                 .ignoring()
