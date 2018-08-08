@@ -14,7 +14,6 @@ import PageFooter from '../../Components/GlobalFooter';
 import AllTask from '../../Scenes/Teachers/Tasks/AllTask';
 import PagePassedTasks from '../../Scenes/Users/Tasks/PassedTasks';
 import MyGroups from '../../Scenes/Teachers/GroupsList/Groups';
-import Materials from '../../Scenes/Teachers/Materials';
 import RegistrationPage from '../../Scenes/Registration';
 import AccessRequestList from '../../Scenes/Admin/AccessRequestList';
 
@@ -37,6 +36,7 @@ import Profile from '../../Scenes/Users/Profile';
 import ActivityPage from '../../Scenes/Admin/Activity/Containers/ActivityPage';
 // import PageNotFound from '../../Components/PageNotFound';
 import TasksAndTestsUser from '../../Scenes/Teachers/GroupsList/GroupStudentsList/Components/TasksAndTestsUser';
+import Materials from '../../Scenes/Users/Materials';
 
 
 class Main extends React.Component {
@@ -68,16 +68,6 @@ class Main extends React.Component {
         key: 'addtask',
         url: '/addtask',
         component: AddTaskPage,
-      },
-      {
-        key: 'teachersmaterials',
-        url: '/teachersmaterials',
-        component: Materials,
-      },
-      {
-        key: 'materials',
-        url: '/materials',
-        component: Materials,
       },
       {
         key: 'checktest',
@@ -156,6 +146,7 @@ class Main extends React.Component {
                 <Route exact path="/assignedtests" component={PageAssignedTestList}/>
                 <Route exact path="/assignedtasks/:taskId" component={UserTaskPage}/>
                 <Route exact path="/profile/:email" component={Profile}/>
+                <Route exact path="/materials" component={Materials}/>
                 <Redirect to="/"/>
               </Switch>
             </div>
@@ -169,7 +160,6 @@ class Main extends React.Component {
             </div>
             <div className="switch-div">
               <Switch>
-                <Route exact path="/profile/:email" component={Profile}/>
                 <Route exact path="/creategroup" component={CreateGroupPage}/>
                 <Route exact path="/studentinformation/:student/:lastname/:firstname" component={TasksAndTestsUser}/>
                 <Route exact path="/checktests" component={PageListCheckTests}/>

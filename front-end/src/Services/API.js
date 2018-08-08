@@ -157,6 +157,7 @@ const API = {
         body: JSON.stringify(data),
       })
         .then(response => response.text())
+        .then(items => dispatch(getData(receiveAction, items)))
         .catch(() => dispatch(errorProject(receiveAction, errorMessage)));
     };
   },
