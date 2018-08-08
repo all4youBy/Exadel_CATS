@@ -147,7 +147,6 @@ class Main extends React.Component {
                 <Route exact path="/assignedtasks/:taskId" component={UserTaskPage}/>
                 <Route exact path="/profile/:email" component={Profile}/>
                 <Route exact path="/materials" component={Materials}/>
-                <Redirect to="/"/>
                 <Redirect to="/assignedtasks"/>
               </Switch>
             </div>
