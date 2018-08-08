@@ -141,12 +141,6 @@ public class TaskController {
         return solutionDTOMapper.convertToDTO(solutionService.getAssignedItemsUnfinished(userId));
     }
 
-    @GetMapping("/groups-tasks/{groupsId}")
-    //TODO Максим напишет аннотацию. Доступ имеет админ, учитель и только один ученик
-    public List<SolutionDTO> getGroupsSolutions(@PathVariable(value = "groupsId") String groupsId) {
-        return solutionDTOMapper.convertToDTO(solutionService.getAssignedItemsToGroup(groupsId));
-    }
-
     @GetMapping("/users-tasks/{userId}")
     //TODO Максим напишет аннотацию. Доступ имеет админ, учитель и только один ученик
     public List<SolutionDTO> getUsersSolutions(@PathVariable(value = "userId") String userId) {
