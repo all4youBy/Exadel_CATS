@@ -17,4 +17,6 @@ public class ActivityDTO {
     private String lastName;
 
     private String text;
+
+    private Integer mark;
 }

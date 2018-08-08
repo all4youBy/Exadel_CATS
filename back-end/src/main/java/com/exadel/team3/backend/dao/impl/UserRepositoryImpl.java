@@ -109,7 +109,9 @@ public class UserRepositoryImpl implements UserRepositoryQueries, ActivityQuerie
                         null,
                         null,
                         user.getRegistrationDate(),
-                        null)
+                        null,
+                        null
+                    )
                 )
                 .collect(Collectors.toList());
     }

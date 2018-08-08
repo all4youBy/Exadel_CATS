@@ -5,8 +5,6 @@ import java.time.LocalDateTime;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 
-import com.exadel.team3.backend.dto.ActivityType;
-
 @Data
 @AllArgsConstructor
 public class ActivityProjection {
@@ -18,4 +16,5 @@ public class ActivityProjection {
     private final String title;
     private final LocalDateTime start;
     private final LocalDateTime deadline;
+    private final Integer mark;
 }
