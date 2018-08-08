@@ -1,5 +1,6 @@
 package com.exadel.team3.backend.controllers.requests;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
 import lombok.NonNull;
 import org.bson.types.ObjectId;
@@ -14,9 +15,13 @@ public class TestForGroupRequest {
     private String group;
     @NonNull
     private String title;
+
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm")
     private LocalDateTime start;
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm")
     private LocalDateTime deadline;
-    private Collection<ObjectId> topicsId;
+
+    private Collection<ObjectId> topicIds;
     private int questionsCount;
     @NonNull
     private String assignedBy;
