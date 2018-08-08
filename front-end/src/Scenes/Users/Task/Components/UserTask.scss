@@ -24,21 +24,17 @@
   .task-text-border {
     border: 1px solid rgb(217, 217, 217);
     border-radius: 4px;
-    margin-top: 30px;
     width: 100%;
-    height: 200px;
     text-align: center;
     align-items: center;
   }
   .task-text {
     text-align: left;
     padding: 15px;
+    word-wrap: break-word;
   }
   .tags {
     margin-top: 10px;
-  }
-  .task-text-border:hover {
-    overflow-y: scroll;
   }
   .button-load-file {
     margin-top: 10px;

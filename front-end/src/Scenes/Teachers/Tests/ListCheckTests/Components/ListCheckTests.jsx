@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 import React from 'react';
 import { List, Button } from 'antd';
 import './ListCheckTests.scss';
@@ -12,21 +13,22 @@ class ListCheckTests extends React.Component {
   };
 
   handleSubmitCheck = (item, answer) => {
-    const { submitManualCheck, delItem } = this.props;
+    const { submitManualCheck, delItem, questionList } = this.props;
     const data = {
       status: answer,
       testId: item.testId,
       questionId: item.questionId,
       answer: item.answer,
     };
-    console.log(data);
+    localStorage.setItem('checkTests', `${questionList.length - 1}`);
+    document.getElementById('badge-test').classList.add('hide');
+    document.getElementById('badge-answer').classList.add('hide');
     submitManualCheck(data);
     delItem(item);
   };
 
   render() {
     const { questionList } = this.props;
-    console.log(questionList);
     let list;
     if (!questionList) {
       list = <Loading/>;

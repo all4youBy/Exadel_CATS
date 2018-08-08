@@ -1,24 +1,21 @@
-import { RECEIVE_GETUSERS, ERROR_GETUSERS, RECEIVE_UPDATAUSERS } from '../Actions/types';
+import { RECEIVE_ACTIVITY, ERROR_ACTIVITY } from '../Actions/types';
 
 const initialState = {
-  users: [],
-  emptyList: true,
+  activity: null,
+  error: '',
 };
 
-function requestsUsers(state = initialState, action) {
+function activityPage(state = initialState, action) {
   switch (action.type) {
-    case RECEIVE_GETUSERS: {
-      return { ...state, users: action.payload, emptyList: false };
+    case RECEIVE_ACTIVITY: {
+      return { ...state, activity: action.payload };
     }
-    case ERROR_GETUSERS: {
-      return { ...state, users: [], emptyList: false };
-    }
-    case RECEIVE_UPDATAUSERS: {
-      return { ...state, emptyList: action.payload };
+    case ERROR_ACTIVITY: {
+      return { ...state, error: true };
     }
     default:
       return state;
   }
 }
 
-export default requestsUsers;
+export default activityPage;

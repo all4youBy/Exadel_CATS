@@ -17,8 +17,10 @@ class TrainingTestPage extends React.PureComponent {
   };
 
   handleRequestTest = () => {
-    const { topic: topicId, getTrainingTest,
-      userType: { logInInformation: { user: { email } } } } = this.props;
+    const {
+      topic: topicId, getTrainingTest,
+      userType: { logInInformation: { user: { email } } },
+    } = this.props;
     const data = {
       topicId,
       email,
@@ -30,14 +32,17 @@ class TrainingTestPage extends React.PureComponent {
   render() {
     const { getTopics, topics, addTag } = this.props;
     return (
-      <div className="training-test-body">
-        <SectionTree addTag={addTag} getTopics={getTopics} topics={topics}/>
-        <Button
-          className="button-table-with-border"
-          type="primary"
-          onClick={this.handleRequestTest}
-        >Запросить тест
-        </Button>
+      <div>
+        <div className="header">Прохождение пробного теста</div>
+        <div className="training-test-body">
+          <SectionTree addTag={addTag} getTopics={getTopics} topics={topics}/>
+          <Button
+            className="button-table-with-border"
+            type="primary"
+            onClick={this.handleRequestTest}
+          >Запросить тест
+          </Button>
+        </div>
       </div>
     );
   }

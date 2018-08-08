@@ -1,12 +1,13 @@
 import * as types from '../Actions/types';
 
 const initialState = {
-  questionList: null,
+  questionList: (+JSON.parse(localStorage.getItem('checkTests')) > 0) ? JSON.parse(localStorage.getItem('checkTests')) : null,
 };
 
 const checkQuestions = (state = initialState, action) => {
   switch (action.type) {
     case types.RECEIVE_QUESTIONS_TO_CHECK: {
+      localStorage.setItem('checkTests', action.payload.length);
       return {
         ...state,
         questionList: [...action.payload],
