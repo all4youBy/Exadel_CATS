@@ -1,5 +1,5 @@
 /* eslint-disable import/no-cycle */
-import { LOG_IN, GET_USER_DATA } from './types';
+import { LOG_IN, GET_USER_DATA, GET_ERROR_FALSE } from './types';
 import API from '../../../../Services/API';
 
 export function logIn(name, key) {
@@ -13,6 +13,12 @@ export function getUserData(data) {
   return {
     type: GET_USER_DATA,
     payload: data,
+  };
+}
+
+export function getErrorFalse() {
+  return {
+    type: GET_ERROR_FALSE,
   };
 }
 

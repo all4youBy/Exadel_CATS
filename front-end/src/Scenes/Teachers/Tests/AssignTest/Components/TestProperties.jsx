@@ -88,11 +88,17 @@ class TestProperties extends React.Component {
       if (this.validateTest(test) && tagsTest && tagsTest.length !== 0) {
         switch (typeof receiverInfo) {
           case 'object': {
-            test.email = receiverInfo.email;
-            test.topics = tagsTest;
-            test.start = getStart;
-            test.deadline = getDeadline;
-            handleCreateTest(test, 'tests');
+            const obj = {
+              assignedBy: teacher,
+              deadline: getDeadline,
+              email: receiverInfo.email,
+              questionsCount: +countQuestionsTest,
+              start: getStart,
+              title: nameTest,
+              topics: tagsTest,
+            };
+
+            handleCreateTest(obj, 'tests');
             break;
           }
           case 'string': {

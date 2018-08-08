@@ -64,9 +64,13 @@ class TablePassedTests extends React.PureComponent {
     if (tests && tests.length) {
       let deadline = null;
       const tags = [];
-      tests.forEach((element) => {
-        for (let index = 0; index < 3; index += 1) {
-          tags[index] = <Tag color="blue">{element.topics[index]}</Tag>;
+      tests.forEach((element, i) => {
+        for (let index = 0; index < element.topics.length; index += 1) {
+          if (tags[i]) {
+            tags[i].push(<Tag color="blue">{element.topics[index]}</Tag>);
+          } else {
+            tags[i] = [<Tag color="blue">{element.topics[index]}</Tag>];
+          }
         }
       });
       for (let i = 0; i < tests.length; i += 1) {
@@ -75,10 +79,10 @@ class TablePassedTests extends React.PureComponent {
         data.push({
           key: tests[i].testId,
           name: tests[i].title,
-          theme: tags,
+          theme: tags[i],
           author: `Автор ${i}`,
           date: deadline,
-          result: tests[i].mark,
+          result: tests[i].mark ? tests[i].mark : '---',
           description: 'success',
         });
       }
