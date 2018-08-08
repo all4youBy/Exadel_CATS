@@ -47,19 +47,19 @@ class GeneralMenu extends React.PureComponent {
         );
       }
       const onClickBadgeTests = () => {
-        document.getElementById('badge-test').classList.add('hide');
       };
       const onClickBadgeAnswer = () => {
+        document.getElementById('badge-test').classList.add('hide');
         document.getElementById('badge-answer').classList.add('hide');
+        localStorage.setItem('checkTests', '0');
       };
       const subsections = (element.subsections.map((item) => {
-        if ((item.text === 'Проверить тесты' && history.location.pathname !== '/checktests') /*&& JSON.parse(localStorage.getItem('checkTests'))*/) {
-          localStorage.setItem('checkTests', '0');
+        if ((item.text === 'Проверить тесты' && history.location.pathname !== '/checktests') && JSON.parse(localStorage.getItem('checkTests'))) {
           return (
             <Menu.Item
               onClick={() => onClickBadgeAnswer()}
               key={item.id}
-            ><Badge id="badge-answer" className="badge-answer" count={1}/*{JSON.parse(localStorage.getItem('checkTests'))}*//><Link
+            ><Badge id="badge-answer" className="badge-answer" count={JSON.parse(localStorage.getItem('checkTests'))}/><Link
               to={item.link}
             >{item.text}</Link></Menu.Item>);
         }
@@ -68,13 +68,12 @@ class GeneralMenu extends React.PureComponent {
             <Link to={item.link}>{item.text}</Link>
           </Menu.Item>);
       }));
-
-      const title = (/*JSON.parse(localStorage.getItem('checkTests'))*/ userType !== 'STUDENT' && element.text === 'Тесты' && history.location.pathname !== '/checktests') ? (
+      const title = (JSON.parse(localStorage.getItem('checkTests')) && userType !== 'STUDENT' && element.text === 'Тесты' && history.location.pathname !== '/checktests') ? (
         <div role="button" onClick={() => onClickBadgeTests()}>
           <span><Icon type={element.type}/><Badge
             id="badge-test"
             className="badge-test"
-            count={1}
+            count={JSON.parse(localStorage.getItem('checkTests'))}
           /><span>{element.text}</span></span>
         </div>
       ) : <span><Icon type={element.type}/><span>{element.text}</span></span>;

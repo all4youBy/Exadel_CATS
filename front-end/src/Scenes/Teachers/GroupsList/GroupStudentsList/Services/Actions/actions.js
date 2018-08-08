@@ -23,3 +23,8 @@ export function assignedTasks(userId) {
     'Не удалось загрузить список задач',
   ));
 }
+export function getUser(student) {
+  return {
+    type: types.GET_USER, payload: student,
+  };
+}

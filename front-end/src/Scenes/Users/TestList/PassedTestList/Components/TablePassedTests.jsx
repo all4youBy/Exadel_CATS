@@ -84,7 +84,7 @@ function TablePassedTests() {
 
   return (
     <div>
-      <div className="header-for-table"><span className="header">Назначенные тесты</span></div>
+      <div className="header-for-table"><span className="header">Пройденные тесты</span></div>
       <Table
         columns={columns}
         expandedRowRender={record => (

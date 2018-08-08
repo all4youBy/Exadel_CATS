@@ -33,6 +33,7 @@ class TableGroupsList extends React.PureComponent {
     onEdit: PropTypes.func.isRequired,
     user: PropTypes.string.isRequired,
     getGroup: PropTypes.func.isRequired,
+    getQuestions: PropTypes.func.isRequired,
   };
 
   state = {
@@ -40,6 +41,12 @@ class TableGroupsList extends React.PureComponent {
     getListUsers: false,
     inputFilter: '',
   };
+
+
+  componentDidMount() {
+    const { getQuestions, user } = this.props;
+    getQuestions(user);
+  }
 
   static getDerivedStateFromProps(nextProps, nextState) {
     if ((nextProps.groups !== nextState.groups && nextProps.emptyList && !nextState.getListUsers)) {
@@ -219,8 +226,8 @@ const mapDispatchToProps = dispatch => ({
     dispatch(renameGroup({ oldGroup: last, newGroup: next, usersId: [id] }));
     dispatch(renameNameGroup({ lastName: last, nextName: next }));
   },
-  getTasks: () => {
-    dispatch(getTasksForGroup());
+  getQuestions: (email) => {
+    dispatch(fetchQuestionsToCheck(email));
   },
 });
 

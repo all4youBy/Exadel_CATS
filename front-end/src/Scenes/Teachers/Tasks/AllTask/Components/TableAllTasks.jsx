@@ -140,7 +140,7 @@ class TableAllTasks extends React.PureComponent {
         dataSource={data}
       />) : <Loading/>;
     return (
-      <div>
+      <div><div className="header-for-table"><span className="header-tasks">Список задач</span></div>
         {content}
       </div>
     );
