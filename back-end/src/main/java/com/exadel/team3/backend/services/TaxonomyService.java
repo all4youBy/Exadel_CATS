@@ -6,4 +6,5 @@ import java.util.List;
 
 public interface TaxonomyService extends CrudService<TaxonomyItem, String> {
     List<String> getByKey(String key);
+    List<TaxonomyItem> getItemsByKey(String key);
 }
