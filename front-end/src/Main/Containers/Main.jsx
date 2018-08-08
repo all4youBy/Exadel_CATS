@@ -193,7 +193,7 @@ class Main extends React.Component {
             <div className="switch-div">
               <Switch>
                 <Route exact path="/groups/:groupName" component={PageGroupStudentsList}/>
-                <Route exact path="/studentinformation/:student" component={TasksAndTestsUser}/>
+                <Route exact path="/studentinformation/:student/:lastname/:firstname" component={TasksAndTestsUser}/>
                 <Route exact path="/accessrequestlist" component={AccessRequestList}/>
                 <Route exact path="/addquestion" component={AddQuestion}/>
                 <Route exact path="/allgroups" component={AllGroups}/>

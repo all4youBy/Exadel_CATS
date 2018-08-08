@@ -78,7 +78,6 @@ class TableGroupStudents extends React.Component {
       fixed: 'left',
       render(text, record) {
         const getUserTestsAndTask = (email) => {
-          getUserInformation(email);
         };
 
         return (
@@ -86,7 +85,7 @@ class TableGroupStudents extends React.Component {
             <Link
               onClick={() => getUserTestsAndTask(record.email)}
               className="link-name-student"
-              to={`/studentinformation/${record.email}`}
+              to={`/studentinformation/${record.email}/${record.lastName}/${record.firstName}`}
             >{record.lastName} {record.firstName}
             </Link>
           </div>

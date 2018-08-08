@@ -3,19 +3,21 @@ import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
 import 'antd/dist/antd.css';
 import './TasksAndTestsUser.scss';
-import { Table, Tag, Badge } from 'antd';
+import { Table, Tag } from 'antd';
 import PropTypes from 'prop-types';
 import Loading from '../../../../../Components/Loading';
 import fetchPassedTasks from '../../../../Users/Tasks/PassedTasks/Services/Actions/actions';
-import { fetchUserAssignedTests } from '../../../../Users/TestList/AssignedTestList/Services/Actions/actions';
+import fetchPassedTests from '../../../../Users/TestList/PassedTestList/Services/Actions/actions';
 
 class TasksAndTestsUser extends React.PureComponent {
   static propTypes = {
     getPassedTasks: PropTypes.func.isRequired,
-    getAssignedTests: PropTypes.func.isRequired,
+    getPassedTests: PropTypes.func.isRequired,
     tasks: PropTypes.arrayOf.isRequired,
     error: PropTypes.string.isRequired,
     email: PropTypes.string.isRequired,
+    lastName: PropTypes.string.isRequired,
+    firstName: PropTypes.string.isRequired,
     tests: PropTypes.arrayOf.isRequired,
   };
 
@@ -29,13 +31,13 @@ class TasksAndTestsUser extends React.PureComponent {
   };
 
   componentDidMount() {
-    const { getPassedTasks, email, getAssignedTests } = this.props;
+    const { getPassedTasks, email, getPassedTests } = this.props;
     getPassedTasks(email);
-    getAssignedTests(email);
+    getPassedTests(email);
   }
 
   render() {
-    const { tasks, error, tests } = this.props;
+    const { tasks, error, tests, lastName, firstName } = this.props;
     const { bordered, loading, pagination, size, title, showHeader } = this.state;
 
 
@@ -52,28 +54,7 @@ class TasksAndTestsUser extends React.PureComponent {
       return `${dd}.${mm}.${yy}`;
     }
 
-    const data2 = [];
-    if (tests && tests.length) {
-      let deadline = null;
-      const tags = [];
-      tests.forEach((element) => {
-        for (let index = 0; index < 3; index += 1) {
-          tags[index] = <Tag color="blue">{element.topics[index]}</Tag>;
-        }
-      });
-      for (let i = 0; i < 10; i += 1) {
-        const date = new Date(tests[i].deadline);
-        deadline = formatDate(date);
-        data2.push({
-          key: tests[i].testId,
-          name: tests[i].title,
-          theme: tags,
-          countQuestions: `${i}`,
-          time: deadline,
-        });
-      }
-    }
-    const columns2 = [{
+    const columnsTests = [{
       title: 'Название',
       dataIndex: 'name',
       key: 'name',
@@ -99,32 +80,53 @@ class TasksAndTestsUser extends React.PureComponent {
       className: 'column-break-point',
     },
     ];
-    let container2 = null;
+
+    const dataTests = [];
+    if (tests && tests.length) {
+      let deadline = null;
+      const tags = [];
+      tests.forEach((element) => {
+        for (let index = 0; index < 3; index += 1) {
+          tags[index] = <Tag color="blue">{element.topics[index]}</Tag>;
+        }
+      });
+      for (let i = 0; i < tests.length; i += 1) {
+        const date = new Date(tests[i].deadline);
+        deadline = formatDate(date);
+        dataTests.push({
+          key: tests[i].testId,
+          name: tests[i].title,
+          theme: tags,
+          author: `Автор ${i}`,
+          date: deadline,
+          result: tests[i].mark,
+          description: 'success',
+        });
+      }
+    }
+
+    let containerTests = null;
     if (tests) {
       if (tests.length) {
-        container2 = (
-          <Table
-            columns={columns2}
-            expandedRowRender={record => (
-              <span className="questions-result">
-                <Badge status={record.description}/><p className="badge-question-result">1 Вопрос</p>
-                <Badge status={record.description}/><p className="badge-question-result">2 Вопрос</p>
-              </span>
-            )}
-            dataSource={data2}
-          />);
+        containerTests = (
+          <div>
+            <Table
+              columns={columnsTests}
+              dataSource={dataTests}
+            />
+          </div>);
       } else {
-        container2 = (<div className="empty-list">Список пуст</div>);
+        containerTests = (<div className="empty-list">Список пуст</div>);
       }
     } else {
-      container2 = <Loading/>;
+      containerTests = <Loading/>;
     }
 
     if (error) {
       return <div/>;
     }
 
-    const columns = [{
+    const columnsTasks = [{
       title: 'Название',
       dataIndex: 'name',
       key: 'name',
@@ -162,21 +164,8 @@ class TasksAndTestsUser extends React.PureComponent {
     },
     ];
 
-    function formatDate1(date) {
-      let dd = date.getDate();
-      if (dd < 10) dd = `0${dd}`;
-
-      let mm = date.getMonth() + 1;
-      if (mm < 10) mm = `0${mm}`;
-
-      let yy = date.getFullYear() % 100;
-      if (yy < 10) yy = `0${yy}`;
-
-      return `${dd}.${mm}.${yy}`;
-    }
-
     const tags = [];
-    const data = [];
+    const dataTasks = [];
     if (tasks) {
       tasks.forEach((element) => {
         element.topics.forEach((item, index) => {
@@ -187,20 +176,20 @@ class TasksAndTestsUser extends React.PureComponent {
         const task = tasks[i];
         const deadline = new Date(tasks[i].solution.deadline);
         const resultMark = !task.solution.mark ? '---' : task.solution.mark;
-        data.push({
+        dataTasks.push({
           key: `${i}`,
           name: task.title,
           theme: tags,
           author: task.solution.assignedBy,
-          date: formatDate1(deadline),
+          date: formatDate(deadline),
           result: resultMark,
         });
       }
     }
-    let container = null;
+    let containerTasks = null;
     if (tasks) {
       if (tasks.length) {
-        container = (
+        containerTasks = (
           <Table
             {...{
               bordered,
@@ -210,21 +199,22 @@ class TasksAndTestsUser extends React.PureComponent {
               title,
               showHeader,
             }}
-            columns={columns}
-            dataSource={data}
+            columns={columnsTasks}
+            dataSource={dataTasks}
             rowClassName={() => 'abc'}
           />);
       } else {
-        container = (<div className="empty-list">Список пуст</div>);
+        containerTasks = (<div className="empty-list">Список пуст</div>);
       }
     } else {
-      container = <Loading/>;
+      containerTasks = <Loading/>;
     }
+    console.log(lastName);
     return (
       <div>
-        <div className="header-for-table"><span className="header">Пройденные тесты и задачи</span></div>
-        {container}
-        {container2}
+        <div className="header-for-table"><span className="header">Пройденные тесты и задачи<br/><span className="user-information">{lastName} {firstName}</span></span></div>
+        {containerTests}
+        {containerTasks}
       </div>
     );
   }
@@ -233,9 +223,11 @@ class TasksAndTestsUser extends React.PureComponent {
 function mapStateToProps(state, ownProps) {
   return {
     tasks: state.userPassedTasks.tasks,
-    tests: state.userAssignedTests.tests,
+    tests: state.userPassedTests.tests,
     error: state.userPassedTasks.error,
     email: ownProps.match.params.student,
+    lastName: ownProps.match.params.lastname,
+    firstName: ownProps.match.params.firstname,
   };
 }
 
@@ -243,8 +235,8 @@ const mapDispatchToProps = dispatch => ({
   getPassedTasks: (userId) => {
     dispatch(fetchPassedTasks(userId));
   },
-  getAssignedTests: (userId) => {
-    dispatch(fetchUserAssignedTests(userId));
+  getPassedTests: (userId) => {
+    dispatch(fetchPassedTests(userId));
   },
 });
 
