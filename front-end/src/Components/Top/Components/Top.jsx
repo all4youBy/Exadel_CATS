@@ -3,7 +3,7 @@ import { Carousel } from 'antd';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import TemplateTop from './TemplateTop';
-import { addStudentTopByActivity, addStudentTopByTask, addStudentTopBySum } from '../Services/actions/actions';
+import { addStudentTopByActivity, addStudentTopByTests, addStudentTopBySum } from '../Services/actions/actions';
 import './Top.scss';
 
 class Top extends React.Component {
@@ -15,21 +15,21 @@ class Top extends React.Component {
   }
 
   render() {
-    const { topBySum, topByTask, topByActivity } = this.props;
+    const { topBySum, topByTests, topByActivity } = this.props;
 
     return (
       <Carousel autoplay effect="fade" className="top-general">
         <TemplateTop
-          nameTop="По количеству набранных баллов"
+          nameTop="По баллам задач"
           nameTheFirstColumn="Пользователь"
           nameTheSecondColumn="Баллы"
           listUsers={topBySum}
         />
         <TemplateTop
-          nameTop="По итогам задачи"
+          nameTop="По баллам тестов"
           nameTheFirstColumn="Пользователь"
           nameTheSecondColumn="Баллы"
-          listUsers={topByTask}
+          listUsers={topByTests}
         />
         <TemplateTop
           nameTop="По активности"
@@ -44,7 +44,7 @@ class Top extends React.Component {
 
 Top.propTypes = {
   topBySum: PropTypes.arrayOf(PropTypes.shape()).isRequired,
-  topByTask: PropTypes.arrayOf(PropTypes.shape()).isRequired,
+  topByTests: PropTypes.arrayOf(PropTypes.shape()).isRequired,
   topByActivity: PropTypes.arrayOf(PropTypes.shape()).isRequired,
   addTopTask: PropTypes.func.isRequired,
   addTopSum: PropTypes.func.isRequired,
@@ -53,19 +53,19 @@ Top.propTypes = {
 
 const mapStateToProps = state => ({
   topBySum: state.top.topBySum,
-  topByTask: state.top.topByTask,
+  topByTests: state.top.topByTests,
   topByActivity: state.top.topByActivity,
 });
 
 const mapDispatchToProps = dispatch => ({
-  addTopTask: (student) => {
-    dispatch(addStudentTopByTask(student));
+  addTopTask: () => {
+    dispatch(addStudentTopByTests());
   },
-  addTopSum: (student) => {
-    dispatch(addStudentTopBySum(student));
+  addTopSum: () => {
+    dispatch(addStudentTopBySum());
   },
-  addTopActivity: (student) => {
-    dispatch(addStudentTopByActivity(student));
+  addTopActivity: () => {
+    dispatch(addStudentTopByActivity());
   },
 });
 

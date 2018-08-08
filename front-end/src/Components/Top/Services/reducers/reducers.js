@@ -2,7 +2,7 @@ import * as types from '../actions/types';
 
 const initialState = {
   topBySum: [],
-  topByTask: [],
+  topByTests: [],
   topByActivity: [],
 };
 
@@ -11,19 +11,20 @@ const topReducer = (state = initialState, action) => {
     case types.RECEIVE_STUDENT_TOP_BY_SUM: {
       return {
         ...state,
-        topBySum: action.payload,
+        topBySum: (action.payload || []).slice(0, 5),
       };
     }
-    case types.RECEIVE_STUDENT_TOP_BY_TASK: {
+    case types.RECEIVE_STUDENT_TOP_BY_TESTS: {
+      console.log(action.payload);
       return {
         ...state,
-        topByTask: action.payload,
+        topByTests: (action.payload || []).slice(0, 5),
       };
     }
     case types.RECEIVE_STUDENT_TOP_BY_ACTIVITY: {
       return {
         ...state,
-        topByActivity: action.payload,
+        topByActivity: (action.payload || []).slice(0, 5),
       };
     }
     default: {

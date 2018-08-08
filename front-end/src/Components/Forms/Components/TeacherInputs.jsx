@@ -7,7 +7,7 @@ import {
   createPrimarySkillOptions,
   createInsitutionOptions,
 } from '../parametrs';
-import { getInstitutions, getPrimarySkills } from '../Services/Actions/actions';
+import { getInstitutions, getPrimarySkills, getFaculties } from '../Services/Actions/actions';
 
 const { Item: FormItem } = Form;
 
@@ -28,8 +28,9 @@ class TeacherInputs extends React.Component {
   };
 
   componentDidMount() {
-    const { userData, form, institutions, getSkills, getUniversities } = this.props;
+    const { userData, form, institutions, getSkills, getUniversities, getFacults } = this.props;
     const { setFieldsValue } = form;
+    getFacults();
     getUniversities();
     getSkills();
     const { stateInstitutions } = this.state;
@@ -37,14 +38,7 @@ class TeacherInputs extends React.Component {
       const institutionsNames = stateInstitutions.map(element => element.name);
       const indexOfEqual = institutionsNames.indexOf(userData.institution);
       const idInstitution = indexOfEqual !== -1 ? stateInstitutions[indexOfEqual].id : null;
-      this.setState({
-        oldUser: {
-          stateInstitutions: institutions,
-          job: userData.job,
-          primarySkill: userData.primarySkill,
-          yearTermination: userData.yearTermination,
-        },
-      });
+
       setFieldsValue({
         institutionTeacher: idInstitution,
       });
@@ -56,18 +50,25 @@ class TeacherInputs extends React.Component {
       setFieldsValue({
         primarySkillTeacher: userData.primarySkill,
       });
+
+      this.setState({
+        oldUser: {
+          stateInstitutions: institutions,
+          job: userData.job,
+          primarySkill: userData.primarySkill,
+        },
+      });
     }
   }
 
 
   static getDerivedStateFromProps(nextProps, prevState) {
-    if (Object.keys(nextProps.userData).length
-      || !isEqualsArrays(nextProps.institutions, prevState.stateInstitutions)) {
-      const institutionsNames = nextProps.institutions.map(element => element.name);
-      const indexOfEqual = institutionsNames.indexOf(nextProps.userData.institution);
-      const idInstitution = indexOfEqual !== -1 ? nextProps.institutions[indexOfEqual].id : null;
+    if (Object.keys(nextProps.userData).length) {
       if (!isEqualValues(prevState.oldUser, nextProps.userData)
-        || idInstitution !== prevState.selectedInstitutionTeacher) {
+          || !isEqualsArrays(nextProps.institutions, prevState.stateInstitutions)) {
+        const institutionsNames = nextProps.institutions.map(element => element.name);
+        const indexOfEqual = institutionsNames.indexOf(nextProps.userData.institution);
+        const idInstitution = indexOfEqual !== -1 ? nextProps.institutions[indexOfEqual].id : null;
         nextProps.form.setFieldsValue({
           institutionTeacher: idInstitution,
         });
@@ -188,6 +189,7 @@ TeacherInputs.propTypes = {
   primarySkills: PropTypes.arrayOf(PropTypes.string).isRequired,
   getSkills: PropTypes.func.isRequired,
   getUniversities: PropTypes.func.isRequired,
+  getFacults: PropTypes.func.isRequired,
 };
 
 TeacherInputs.defaultProps = {
@@ -196,7 +198,7 @@ TeacherInputs.defaultProps = {
 
 const mapStateToProps = state => ({
   primarySkills: state.primarySkills,
-  // faculties: state.faculties,
+  faculties: state.faculties,
   institutions: state.institutions,
 });
 
@@ -206,6 +208,9 @@ const mapDispatchToProps = dispatch => ({
   },
   getUniversities: () => {
     dispatch(getInstitutions());
+  },
+  getFacults: () => {
+    dispatch(getFaculties());
   },
 });
 
