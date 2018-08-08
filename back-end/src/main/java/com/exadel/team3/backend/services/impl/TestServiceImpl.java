@@ -6,6 +6,8 @@ import java.util.*;
 import java.util.function.BiFunction;
 import java.util.stream.Collectors;
 
+import com.exadel.team3.backend.services.mail.mail_sender.MailSender;
+import com.exadel.team3.backend.services.mail.mail_types.MailTypes;
 import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -40,6 +42,17 @@ public class TestServiceImpl
     private TestItemPicker testItemGenerator;
     @Autowired
     private TestChecker testChecker;
+    @Autowired
+    private MailSender mailSender;
+
+
+    @Value("${site}")
+    private String site;
+    @Value("${page.test}")
+    private String postfixForUser;
+    @Value("${page.checkTests}")
+    private String postfixForTeacher;
+
 
     @Value("${cats.test.defaultDuration:60}")
     private long defaultTestDuration;
@@ -120,7 +133,14 @@ public class TestServiceImpl
         ));
         newTest.setAssignedBy(assignedBy);
 
-        return addItem(newTest);
+        newTest = addItem(newTest);
+        if (newTest.getAssignedBy() != null) {
+            Map<String, String> replaceMap = new HashMap<>();
+            replaceMap.put("&link", site + postfixForUser + newTest.getId());
+            mailSender.send(MailTypes.USERS_NOTIFICATION_TEST, userId, replaceMap);
+        }
+
+        return newTest;
     }
 
     @Override
@@ -176,6 +196,13 @@ public class TestServiceImpl
         Test updatedTestObj = updatedTest.get();
         updatedTestObj.setDeadline(LocalDateTime.now());
         updatedTestObj.setMark(testChecker.checkTest(updatedTestObj));
+
+        if (updatedTestObj.getMark() == null) {
+            Map<String, String> replaceMap = new HashMap<>();
+            replaceMap.put("&link", site + postfixForTeacher);
+            mailSender.send(MailTypes.USERS_NOTIFICATION_TEST, updatedTestObj.getAssignedBy(), replaceMap);
+        }
+
         return testRepository.save(updatedTestObj);
     }
 
