@@ -31,7 +31,6 @@ export default class SingleAnswerQuestion extends React.PureComponent {
     this.setState({
       value: e.target.value,
     });
-    console.log(answer);
   };
 
   handleOnBlur = () => {
@@ -44,7 +43,7 @@ export default class SingleAnswerQuestion extends React.PureComponent {
     const options = variants.map((item, i) => ({ label: item.text, value: i }));
     const { value } = this.state;
     return (
-      <Card className="single-answer-question-card" onBlur={this.handleOnBlur}>
+      <Card className="single-answer-question-card" /* onBlur={this.handleOnBlur} */>
         <p className="question-text" dangerouslySetInnerHTML={{ __html: text }}/>
         <Group
           options={options}

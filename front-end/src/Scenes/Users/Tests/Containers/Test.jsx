@@ -31,8 +31,9 @@ class Test extends React.PureComponent {
   }
 
   handleSubmitTest = () => {
-    const { testId, submitTest } = this.props;
-    submitTest(testId);
+    const { submitTest } = this.props;
+    const { answers } = this.state;
+    submitTest(answers);
   };
 
   render() {

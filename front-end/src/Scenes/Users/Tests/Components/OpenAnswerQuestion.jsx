@@ -34,7 +34,7 @@ export default class OpenAnswersQuestion extends React.PureComponent {
   render() {
     const { text } = this.props;
     return (
-      <Card className="open-answer-question-card" onBlur={this.handleOnBlur}>
+      <Card className="open-answer-question-card" /* onBlur={this.handleOnBlur} */>
         <p className="question-text">{text}</p>
         <TextArea className="text-area-answer" placeholder="Введите ответ" autosize={{ minRows: 5 }} onBlur={this.onChange}/>
       </Card>

@@ -14,8 +14,12 @@ const initialState = {
 const facultiesReducer = (state = initialState, action) => {
   switch (action.type) {
     case types.RECEIVE_FACULTIES: {
-      state[action.id] = action.payload;
-      return state;
+      const facultiesWithId = {};
+      action.payload.map((element, index) => {
+        facultiesWithId[index] = element.faculties;
+        return facultiesWithId[index];
+      });
+      return facultiesWithId;
     }
 
     default: {

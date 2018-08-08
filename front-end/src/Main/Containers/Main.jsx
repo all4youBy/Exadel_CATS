@@ -14,7 +14,6 @@ import PageFooter from '../../Components/GlobalFooter';
 import AllTask from '../../Scenes/Teachers/Tasks/AllTask';
 import PagePassedTasks from '../../Scenes/Users/Tasks/PassedTasks';
 import MyGroups from '../../Scenes/Teachers/GroupsList/Groups';
-import Materials from '../../Scenes/Teachers/Materials';
 import RegistrationPage from '../../Scenes/Registration';
 import AccessRequestList from '../../Scenes/Admin/AccessRequestList';
 
@@ -37,6 +36,7 @@ import Profile from '../../Scenes/Users/Profile';
 import ActivityPage from '../../Scenes/Admin/Activity/Containers/ActivityPage';
 // import PageNotFound from '../../Components/PageNotFound';
 import TasksAndTestsUser from '../../Scenes/Teachers/GroupsList/GroupStudentsList/Components/TasksAndTestsUser';
+import Materials from '../../Scenes/Users/Materials';
 
 
 class Main extends React.Component {
@@ -44,6 +44,7 @@ class Main extends React.Component {
     userType: PropTypes.shape().isRequired,
     user: PropTypes.objectOf(PropTypes.any).isRequired,
     email: PropTypes.string,
+    check: PropTypes.number.isRequired,
   };
 
   renderCommonRoutes() {
@@ -67,16 +68,6 @@ class Main extends React.Component {
         key: 'addtask',
         url: '/addtask',
         component: AddTaskPage,
-      },
-      {
-        key: 'teachersmaterials',
-        url: '/teachersmaterials',
-        component: Materials,
-      },
-      {
-        key: 'materials',
-        url: '/materials',
-        component: Materials,
       },
       {
         key: 'checktest',
@@ -129,7 +120,7 @@ class Main extends React.Component {
 
   renderSwitch() {
     const { userType: { logInInformation: { user: { role } } } } = this.props;
-    const { email } = this.props;
+    const { email, check } = this.props;
     switch (role) {
       case 'STUDENT':
         return (
@@ -138,6 +129,7 @@ class Main extends React.Component {
               <GeneralMenu
                 userType={role}
                 email={email}
+                check={check}
               />
             </div>
             <div className="switch-div">
@@ -154,7 +146,9 @@ class Main extends React.Component {
                 <Route exact path="/assignedtests" component={PageAssignedTestList}/>
                 <Route exact path="/assignedtasks/:taskId" component={UserTaskPage}/>
                 <Route exact path="/profile/:email" component={Profile}/>
+                <Route exact path="/materials" component={Materials}/>
                 <Redirect to="/"/>
+                <Redirect to="/assignedtasks"/>
               </Switch>
             </div>
           </div>
@@ -163,12 +157,12 @@ class Main extends React.Component {
         return (
           <div className="main-body-container">
             <div className="general-menu">
-              <GeneralMenu userType={role}/>
+              <GeneralMenu userType={role} email={email} check={check}/>
             </div>
             <div className="switch-div">
               <Switch>
-                <Route exact path="/profile/:email" component={Profile}/>
                 <Route exact path="/creategroup" component={CreateGroupPage}/>
+                <Route exact path="/studentinformation/:student/:lastname/:firstname" component={TasksAndTestsUser}/>
                 <Route exact path="/checktests" component={PageListCheckTests}/>
                 <Route exact path="/loading" component={Loading}/>
                 <Route exact path="/groups/:groupName" component={PageGroupStudentsList}/>
@@ -190,7 +184,7 @@ class Main extends React.Component {
         return (
           <div className="main-body-container">
             <div className="general-menu">
-              <GeneralMenu userType={role} email={email}/>
+              <GeneralMenu userType={role} email={email} check={check}/>
             </div>
             <div className="switch-div">
               <Switch>
@@ -255,6 +249,7 @@ function mapStateToProps(state) {
     userType: state,
     user: state.logInInformation.user,
     email: state.logInInformation.user.email,
+    check: state.checkQuestions.questionList,
   };
 }
 

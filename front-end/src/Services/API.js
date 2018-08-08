@@ -156,7 +156,12 @@ const API = {
         },
         body: JSON.stringify(data),
       })
-        .then(response => response.text())
+        .then(response => (
+          response.status === 200
+            ? response.json()
+            : Promise.reject(response.json())
+        ))
+        .then(items => dispatch(getData(receiveAction, items)))
         .catch(() => dispatch(errorProject(receiveAction, errorMessage)));
     };
   },
