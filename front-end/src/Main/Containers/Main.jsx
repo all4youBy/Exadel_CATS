@@ -36,6 +36,7 @@ import AllQuestionsPage from '../../Scenes/Teachers/Questions/AllQuestions/Conta
 import Profile from '../../Scenes/Users/Profile';
 import ActivityPage from '../../Scenes/Admin/Activity/Containers/ActivityPage';
 // import PageNotFound from '../../Components/PageNotFound';
+import TasksAndTestsUser from '../../Scenes/Teachers/GroupsList/GroupStudentsList/Components/TasksAndTestsUser';
 
 
 class Main extends React.Component {
@@ -130,7 +131,7 @@ class Main extends React.Component {
     const { userType: { logInInformation: { user: { role } } } } = this.props;
     const { email } = this.props;
     switch (role) {
-      case 'STUDENT': {
+      case 'STUDENT':
         return (
           <div className="main-body-container">
             <div className="general-menu">
@@ -158,7 +159,6 @@ class Main extends React.Component {
             </div>
           </div>
         );
-      }
       case 'TEACHER':
         return (
           <div className="main-body-container">
@@ -167,6 +167,7 @@ class Main extends React.Component {
             </div>
             <div className="switch-div">
               <Switch>
+                <Route exact path="/profile/:email" component={Profile}/>
                 <Route exact path="/creategroup" component={CreateGroupPage}/>
                 <Route exact path="/checktests" component={PageListCheckTests}/>
                 <Route exact path="/loading" component={Loading}/>
@@ -189,11 +190,12 @@ class Main extends React.Component {
         return (
           <div className="main-body-container">
             <div className="general-menu">
-              <GeneralMenu userType={role}/>
+              <GeneralMenu userType={role} email={email}/>
             </div>
             <div className="switch-div">
               <Switch>
                 <Route exact path="/groups/:groupName" component={PageGroupStudentsList}/>
+                <Route exact path="/studentinformation/:student/:lastname/:firstname" component={TasksAndTestsUser}/>
                 <Route exact path="/accessrequestlist" component={AccessRequestList}/>
                 <Route exact path="/addquestion" component={AddQuestion}/>
                 <Route exact path="/allgroups" component={AllGroups}/>

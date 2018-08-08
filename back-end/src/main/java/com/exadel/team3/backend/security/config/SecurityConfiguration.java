@@ -24,7 +24,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 
 @Configuration
 @EnableWebSecurity
-@EnableGlobalMethodSecurity(prePostEnabled = true)
+@EnableGlobalMethodSecurity(prePostEnabled = true,jsr250Enabled = true)
 public class SecurityConfiguration extends WebSecurityConfigurerAdapter{
 
     @Autowired
@@ -84,7 +84,10 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter{
                         "/*.html",
                         "**/*.html",
                         "**/*.css",
-                        "**/*.js"
+                        "**/*.js",
+                        "/info/universities",
+                        "/info/skills",
+                        "/info/universities-faculties"
                 )
                 .and()
                 .ignoring()

@@ -107,11 +107,13 @@ class TableAllGroupsList extends React.PureComponent {
     ];
 
     const data = [];
-    for (let i = groups.length - 1; i >= 0; i -= 1) {
-      data.push({
-        key: i,
-        name: groups[i],
-      });
+    if (groups) {
+      for (let i = groups.length - 1; i >= 0; i -= 1) {
+        data.push({
+          key: i,
+          name: groups[i],
+        });
+      }
     }
     const newData = data.filter(elem => elem.name
       .toLowerCase().indexOf(inputFilter.toLowerCase()) !== -1);

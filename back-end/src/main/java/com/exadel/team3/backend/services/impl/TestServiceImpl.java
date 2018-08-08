@@ -273,6 +273,7 @@ public class TestServiceImpl
 
             if (updatedItem.isPresent()) {
                 updatedItem.get().setStatus(checkedItem.getStatus());
+                updatedTestObj.setDeadline(LocalDateTime.now());
                 updatedTestObj.setMark(testChecker.checkTest(updatedTestObj));
                 return testRepository.save(updatedTestObj);
             } else {

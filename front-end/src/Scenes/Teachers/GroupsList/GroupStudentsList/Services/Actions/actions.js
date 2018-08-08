@@ -8,7 +8,7 @@ export function addStudent(student) {
 }
 
 export function deleteStudent(student) {
-  return (API.deleteRequest('users', student, 'delete_student', 'Не удалось удалить студента'));
+  return (API.put('users/groups/delete-user-from-group', student, 'delete_student'));
 }
 
 export function fetchStudentsGroup(groupName) {
@@ -29,4 +29,9 @@ export function assignedTasks(userId) {
     'assigned_tasks',
     'Не удалось загрузить список задач',
   ));
+}
+export function getUser(student) {
+  return {
+    type: types.GET_USER, payload: student,
+  };
 }

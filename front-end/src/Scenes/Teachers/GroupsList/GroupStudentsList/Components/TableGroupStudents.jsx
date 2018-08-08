@@ -1,9 +1,11 @@
-/* eslint-disable spaced-comment,no-unused-vars,no-plusplus */
+/* eslint-disable spaced-comment,no-unused-vars,no-plusplus,react/jsx-indent,indent */
 import React from 'react';
 import 'antd/dist/antd.css';
+import { Link } from 'react-router-dom';
 import './TableGroupStudents.scss';
 import { message, Radio, Table } from 'antd';
 import PropTypes from 'prop-types';
+import ButtonAssignTest from '../../../../../Components/ButtonAssignTest';
 import ButtonDeleteStudent from './ButtonDeleteStudent';
 // import ButtonAddStudent from './ButtonAddStudent';
 import Loading from '../../../../../Components/Loading';
@@ -23,6 +25,7 @@ class TableGroupStudents extends React.Component {
     error: PropTypes.string.isRequired,
     addStudentTest: PropTypes.func.isRequired,
     addStudentTask: PropTypes.func.isRequired,
+    getUserInformation: PropTypes.func.isRequired,
   };
 
   state = {
@@ -50,7 +53,7 @@ class TableGroupStudents extends React.Component {
   render() {
     const {
       students, handleStudentDelete, error, addStudentTest,
-      groupName, addStudentTask,
+      groupName, addStudentTask, getUserInformation,
     } = this.props;
     const {
       bordered, loading, pagination, size, title,
@@ -72,9 +75,21 @@ class TableGroupStudents extends React.Component {
       dataIndex: 'name',
       key: 'name',
       width: 800,
-      render: (text, record) => (
-        <div>{record.lastName} {record.firstName}</div>
-      ),
+      render(text, record) {
+        const getUserTestsAndTask = (email) => {
+        };
+
+        return (
+          <div>
+            <Link
+              onClick={() => getUserTestsAndTask(record.email)}
+              className="link-name-student"
+              to={`/studentinformation/${record.email}/${record.lastName}/${record.firstName}`}
+            >{record.lastName} {record.firstName}
+            </Link>
+          </div>
+        );
+      },
     }, {
       title: '',
       key: 'buttons',
@@ -135,7 +150,6 @@ class TableGroupStudents extends React.Component {
     let container = null;
     if (students) {
       if (students.length) {
-        console.log(columns, 79);
         container = (
           <Table
             {...{

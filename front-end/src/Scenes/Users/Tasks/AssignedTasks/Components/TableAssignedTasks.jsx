@@ -146,7 +146,7 @@ class TableAssignedTasks extends React.PureComponent {
       container = <Loading/>;
     }
     return (
-      <div>
+      <div><div className="header-for-table"><span className="header">Назначенные задачи</span></div>
         {container}
       </div>
     );

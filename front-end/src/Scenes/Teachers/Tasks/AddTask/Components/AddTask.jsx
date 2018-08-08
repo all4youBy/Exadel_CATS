@@ -132,7 +132,9 @@ class AddTask extends React.PureComponent {
 
     return (
       <div className="add-task-container">
+        <div className="header">Добавдение задачи</div>
         <TextArea
+          type="text"
           className="input-task-name"
           placeholder="Название задачи"
           autosize
@@ -141,7 +143,7 @@ class AddTask extends React.PureComponent {
         />
         <TextArea
           className="input-task-desc"
-          placeholder="Описание задачи"
+          placeholder="Описание условия задачи"
           name="textTask"
           autosize={{ minRows: 7 }}
           onBlur={this.setField}

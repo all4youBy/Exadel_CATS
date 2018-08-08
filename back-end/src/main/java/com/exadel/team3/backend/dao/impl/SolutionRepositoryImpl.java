@@ -133,7 +133,8 @@ public class SolutionRepositoryImpl
                                 "assignedBy",
                                 "task.text",
                                 "start",
-                                "deadline"
+                                "deadline",
+                                "mark"
                         )
                 ),
                 getEntityClass().getSimpleName().toLowerCase() + "s",

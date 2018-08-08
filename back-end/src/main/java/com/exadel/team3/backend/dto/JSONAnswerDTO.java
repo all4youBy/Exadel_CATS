@@ -5,7 +5,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 @AllArgsConstructor
-public class StringAnswerDTO {
+public class JSONAnswerDTO {
 
     @Setter
     @Getter
