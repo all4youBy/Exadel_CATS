@@ -5,6 +5,7 @@ import PropTypes from 'prop-types';
 import InformationUser from '../Components/InformationUser';
 import { getUser } from '../Services/actions/actions';
 import Top from '../../../../Components/Top';
+import Loading from '../../../../Components/Loading';
 
 class Profile extends React.Component {
   componentDidMount() {
@@ -14,6 +15,7 @@ class Profile extends React.Component {
 
   render() {
     const { user, email } = this.props;
+
     const userToProps = {
       email,
       firstName: user.firstName,
@@ -25,16 +27,27 @@ class Profile extends React.Component {
       yearTermination: user.affiliation ? Number(user.affiliation.graduationYear) : null,
       primarySkill: user.affiliation ? user.affiliation.primarySkill : '',
     };
+
+    const profileDataJSX = email === user.email
+      ? (
+        <div>
+          <InformationUser userData={userToProps}/>
+          <div className="right-top">
+            <Top/>
+          </div>
+        </div>
+      )
+      : (
+        <Loading/>
+      );
+
     return (
       <div className="profile">
         <div className="left-top">
           <div className="top-page" align="center">
             <p className="label-top">{user.firstName} {user.lastName} | {user.email}</p>
           </div>
-          <InformationUser userData={userToProps}/>
-          <div className="right-top">
-            <Top/>
-          </div>
+          {profileDataJSX}
         </div>
       </div>
     );

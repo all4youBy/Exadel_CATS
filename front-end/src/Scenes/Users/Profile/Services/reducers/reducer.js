@@ -1,6 +1,4 @@
 import * as types from '../actions/types';
-import { getUser } from '../actions/actions';
-
 
 const initialState = {};
 
@@ -11,7 +9,6 @@ const profileInformationReducer = (state = initialState, action) => {
     }
 
     case types.RECEIVE_EDIT_USER: {
-      getUser(action.payload.email);
       return state;
     }
 

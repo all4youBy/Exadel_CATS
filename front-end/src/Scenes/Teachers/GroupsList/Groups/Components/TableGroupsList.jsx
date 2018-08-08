@@ -19,7 +19,7 @@ import {
 import Loading from '../../../../../Components/Loading';
 import { receiveTest } from '../../../Tests/AssignTest/Services/Actions/actions';
 import { receiveTask } from '../../../Tasks/AssignTask/Services/Actions/actions';
-import InputSearch from '../../AllGroups/Components/InputSearch';
+import InputSearch from './InputSearch';
 
 class TableGroupsList extends React.PureComponent {
   static propTypes = {
