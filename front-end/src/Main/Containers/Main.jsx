@@ -34,6 +34,7 @@ import TaskProperties from '../../Scenes/Teachers/Tasks/AssignTask/Components/Ta
 import ViewTaskPage from '../../Scenes/Teachers/Tasks/ViewTask/Containers/ViewTaskPage';
 import AllQuestionsPage from '../../Scenes/Teachers/Questions/AllQuestions/Containers/AllQuestionsPage';
 import Profile from '../../Scenes/Users/Profile';
+import ActivityPage from '../../Scenes/Admin/Activity/Containers/ActivityPage';
 
 
 class Main extends React.Component {
@@ -116,6 +117,11 @@ class Main extends React.Component {
         url: '/questions',
         component: AllQuestionsPage,
       },
+      {
+        key: '/checktests',
+        url: '/checktests',
+        component: PageListCheckTests,
+      },
     ];
   }
 
@@ -159,6 +165,7 @@ class Main extends React.Component {
             </div>
             <div className="switch-div">
               <Switch>
+                <Route exact path="/profile/:email" component={Profile}/>
                 <Route exact path="/creategroup" component={CreateGroupPage}/>
                 <Route exact path="/checktests" component={PageListCheckTests}/>
                 <Route exact path="/loading" component={Loading}/>
@@ -189,6 +196,7 @@ class Main extends React.Component {
                 <Route exact path="/accessrequestlist" component={AccessRequestList}/>
                 <Route exact path="/addquestion" component={AddQuestion}/>
                 <Route exact path="/allgroups" component={AllGroups}/>
+                <Route exact path="/activity" component={ActivityPage}/>
                 {this.renderCommonRoutes().map(item => (
                   <Route
                     key={item.key}

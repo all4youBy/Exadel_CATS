@@ -14,7 +14,7 @@ class ButtonAssignTest extends React.Component {
 
   handleAddGroup = () => {
     const { groupName, addGroup, addStudent } = this.props;
-    console.log(groupName);
+    localStorage.setItem('userStatusForAssign', JSON.stringify(groupName));
     history.push(`/assigntest/${groupName}`);
     // addGroup(groupName);
   };

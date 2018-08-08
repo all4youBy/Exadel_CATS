@@ -3,14 +3,8 @@ import './TableAssignedTests.scss';
 import { Table, Tag } from 'antd';
 import PropTypes from 'prop-types';
 import ButtonPassTest from './ButtonPassTest';
-// import requestLoginInformation from '../../../../../Services/loginService';
 import Loading from '../../../../../Components/Loading';
 import requestLoginInformation from '../../../../../Services/loginService';
-
-let tags = ['aaaa', 'ssss', 'ffff'];
-
-tags = tags.map(element => <Tag color="blue">{element}</Tag>);
-
 
 class TableAssignedTests extends React.PureComponent {
   static propTypes = {
@@ -19,7 +13,6 @@ class TableAssignedTests extends React.PureComponent {
     handleStudentAdd: PropTypes.func.isRequired,
     handleStudentDelete: PropTypes.func.isRequired,
     groupName: PropTypes.string.isRequired,
-    error: PropTypes.bool.isRequired,
     tests: PropTypes.arrayOf.isRequired,
   };
 
@@ -54,9 +47,15 @@ class TableAssignedTests extends React.PureComponent {
     }
 
     const data = [];
-    let deadline = null;
     if (tests && tests.length) {
-      for (let i = 0; i < 10; i += 1) {
+      let deadline = null;
+      const tags = [];
+      tests.forEach((element) => {
+        for (let index = 0; index < 3; index += 1) {
+          tags[index] = <Tag color="blue">{element.topics[index]}</Tag>;
+        }
+      });
+      for (let i = 0; i < tests.length; i += 1) {
         const date = new Date(tests[i].deadline);
         deadline = formatDate(date);
         data.push({
@@ -120,9 +119,7 @@ class TableAssignedTests extends React.PureComponent {
       container = <Loading/>;
     }
     return (
-      <div>
-        {container}
-      </div>
+      container
     );
   }
 }

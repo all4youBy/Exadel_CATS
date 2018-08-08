@@ -15,6 +15,11 @@ class GlobalHeader extends React.PureComponent {
     user: PropTypes.objectOf(PropTypes.any).isRequired,
   };
 
+  onClickProfile() {
+    const { history, user } = this.props;
+    history.push(`./profile/${user.email}`);
+  }
+
   onClickLogOut() {
     localStorage.clear();
     const { history } = this.props;
@@ -26,7 +31,14 @@ class GlobalHeader extends React.PureComponent {
     const logOut = !(userType === 'GUEST' || userType === undefined) ? (
       <div className="username">
         <div className="username"><Icon type="user" className="user"/>
-          <span className="name-username">{user.firstName} {user.lastName}</span>
+          <span className="name-username">
+            <Link
+              to={`./profile/${user.email}`}
+              className="button-exit"
+            >
+              {user.firstName} {user.lastName}
+            </Link>
+          </span>
         </div>
         <div className="exit-block">
           <Link

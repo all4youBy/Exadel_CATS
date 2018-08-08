@@ -8,13 +8,12 @@ import { history } from '../Services/ConfigureStore';
 class ButtonAssignTask extends React.Component {
   static propTypes = {
     groupName: PropTypes.string.isRequired,
-    addGroup: PropTypes.func.isRequired,
   };
 
   handleAddGroup = () => {
-    const { groupName, addGroup } = this.props;
+    const { groupName } = this.props;
+    localStorage.setItem('userStatusForAssign', JSON.stringify(groupName));
     history.push(`/assigntask/${groupName}`);
-    addGroup(groupName);
   };
 
   render() {

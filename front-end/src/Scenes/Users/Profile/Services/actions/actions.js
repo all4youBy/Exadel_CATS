@@ -1,4 +1,6 @@
+import { message } from 'antd';
 import * as types from './types';
+import { history } from '../../../../../Services/ConfigureStore';
 import API from '../../../../../Services/API';
 
 export function errorEditingUser(user) {
@@ -28,11 +30,20 @@ export function editUserWithoutPassword(user) {
       primarySkill: user.primarySkill || '',
       specialization: '',
     },
-  }, 'EDIT_USER', 'Не получилось изменить информацию'));
+  }, ['EDIT_USER', () => {
+    message.success('Данные успешно изменены');
+    history.push(`./profile/${user.email}`);
+  }, () => {
+    message.error('Не удалось изменить данные');
+  }]));
 }
 
 export function editPassword(user) {
-  return (API.put('users/change-password', user, 'CHANGE_PASSWORD', 'Не удалось изменить пароль'));
+  return (API.put('users/change-password', user, ['CHANGE_PASSWORD', () => {
+    message.success('Ваши пароль изменен');
+  }, () => {
+    message.error('Не удалось изменить пароль');
+  }]));
 }
 
 export function getUser(email) {

@@ -109,6 +109,7 @@ public class TaskController {
     @PreAuthorize("hasAnyRole('ADMIN','TEACHER')")
     public List<SolutionForTeachersTDO> getUsersTasks(@PathVariable(value = "teachersId") String teachersId) {
         List<Solution> solutions = solutionService.getAssignedItemsByAssigner(teachersId);
+
         return solutionDTOMapper.convertToSolutionForTeachersTDO(solutions);
     }
 

@@ -144,8 +144,8 @@ public abstract class AssignableServiceImpl<T extends Assignable>
     public List<UserRatingDTO> getTopRatingBySum() {
         return getTopRating(
                 () ->
-                ((AssignableRepositoryAggregation)getRepository())
-                        .collectRatingBySum(topRatingListSize)
+                        ((AssignableRepositoryAggregation)getRepository())
+                                .collectRatingBySum(topRatingListSize)
         );
     }
 
@@ -153,8 +153,8 @@ public abstract class AssignableServiceImpl<T extends Assignable>
     public List<UserRatingDTO> getTopRatingByAverage() {
         return getTopRating(
                 () ->
-                ((AssignableRepositoryAggregation)getRepository())
-                        .collectRatingByAverage(topRatingListSize)
+                        ((AssignableRepositoryAggregation)getRepository())
+                                .collectRatingByAverage(topRatingListSize)
         );
     }
 
@@ -185,15 +185,15 @@ public abstract class AssignableServiceImpl<T extends Assignable>
                 .stream()
                 .filter(
                         projection ->
-                        !StringUtils.isEmpty(projection.getFirstName()) && !StringUtils.isEmpty(projection.getLastName())
+                                !StringUtils.isEmpty(projection.getFirstName()) && !StringUtils.isEmpty(projection.getLastName())
                 )
                 .map(
-                    projection ->
-                    new UserRatingDTO(
-                            projection.getFirstName(),
-                            projection.getLastName(),
-                            projection.getRating()
-                    )
+                        projection ->
+                                new UserRatingDTO(
+                                        projection.getFirstName(),
+                                        projection.getLastName(),
+                                        projection.getRating()
+                                )
                 )
                 .collect(Collectors.toList());
     }

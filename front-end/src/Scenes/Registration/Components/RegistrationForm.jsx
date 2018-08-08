@@ -1,13 +1,9 @@
 import React from 'react';
-import { Form, Input, Switch, Button, message } from 'antd';
+import { Form, Input, Switch, Button } from 'antd';
 import { connect } from 'react-redux';
 import './RegistrationForm.scss';
 import PropTypes from 'prop-types';
 import { reqRegistrateStudent, reqRegistrateTeacher } from '../Services/Actions/actions';
-import { history } from '../../../Services/ConfigureStore';
-// import {
-// getPrimarySkills, getFaculties, getInstitutions }
-// from '../../../Components/Forms/Services/Actions/actions';
 import { StudentInputs, TeacherInputs, formItemLayout, tailFormItemLayout } from '../../../Components/Forms';
 
 const { Item: FormItem } = Form;
@@ -25,12 +21,6 @@ class RegistrationForm extends React.Component {
     primarySkill: '',
     yearTermination: 0,
   };
-
-  componentDidMount() {
-    // getPrimarySkills();
-    // getFaculties();
-    // getInstitutions();
-  }
 
   setTextField = (event) => {
     const field = event.target.name;
@@ -109,8 +99,6 @@ class RegistrationForm extends React.Component {
       form.validateFieldsAndScroll((err) => {
         if (!err) {
           switchRegistration();
-          message.success('Вам пришел на почту пароль! Регистрация выполнена успешна');
-          setTimeout(history.push.bind(null, '/login'), 5000);
         }
       });
     };

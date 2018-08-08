@@ -30,6 +30,7 @@ import allGroups from '../Scenes/Teachers/GroupsList/AllGroups/Services/Reducers
 import viewTask from '../Scenes/Teachers/Tasks/ViewTask/Services/Reducers/reducers';
 import allQuestions from '../Scenes/Teachers/Questions/AllQuestions/Services/Reducers/reducers';
 import userPassedTasks from '../Scenes/Users/Tasks/PassedTasks/Services/Reducers/reducers';
+import userPassedTests from '../Scenes/Users/TestList/PassedTestList/Services/Reducers/reducers';
 
 
 const reducers = combineReducers({
@@ -57,6 +58,7 @@ const reducers = combineReducers({
   completeTest,
   userAssignedTasks,
   userAssignedTests,
+  userPassedTests,
   trainingTest,
   myGroups,
   viewTask,

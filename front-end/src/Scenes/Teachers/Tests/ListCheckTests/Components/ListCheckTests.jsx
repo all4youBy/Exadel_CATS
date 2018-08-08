@@ -72,7 +72,7 @@ class ListCheckTests extends React.Component {
           )}
         />);
     } else {
-      list = <p>Нет ответов на проверку.</p>;
+      list = <p className="empty-check-list">Нет ответов на проверку.</p>;
     }
     return list;
   }
