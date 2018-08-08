@@ -1,6 +1,6 @@
 package com.exadel.team3.backend.controllers;
 
-import com.exadel.team3.backend.dto.StringAnswerDTO;
+import com.exadel.team3.backend.dto.JSONAnswerDTO;
 import com.exadel.team3.backend.dto.TopicDTO;
 import com.exadel.team3.backend.dto.mappers.TopicDTOMapper;
 import com.exadel.team3.backend.entities.Topic;
@@ -63,9 +63,9 @@ public class TopicController {
         Topic top = topicService.addItem(topic);
 
         if(top == null)
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new StringAnswerDTO("Can't add topic."));
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new JSONAnswerDTO("Can't add topic."));
 
-        return ResponseEntity.status(HttpStatus.OK).body(new StringAnswerDTO("Topic created."));
+        return ResponseEntity.status(HttpStatus.OK).body(new JSONAnswerDTO("Topic created."));
     }
 
     @GetMapping("/{topicId}")

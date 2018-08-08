@@ -1,17 +1,16 @@
 package com.exadel.team3.backend.controllers;
 
 import com.exadel.team3.backend.controllers.requests.*;
-import com.exadel.team3.backend.dto.StringAnswerDTO;
-import com.exadel.team3.backend.entities.Solution;
-import com.exadel.team3.backend.entities.User;
-import com.exadel.team3.backend.entities.UserRole;
+import com.exadel.team3.backend.dto.JSONAnswerDTO;
+import com.exadel.team3.backend.entities.*;
 import com.exadel.team3.backend.security.SecurityUtils;
 import com.exadel.team3.backend.security.annotations.AdminAccess;
 import com.exadel.team3.backend.security.annotations.AdminAndTeacherAccess;
 import com.exadel.team3.backend.security.annotations.UserAccess;
+
 import com.exadel.team3.backend.services.SolutionService;
+import com.exadel.team3.backend.services.TestService;
 import com.exadel.team3.backend.services.UserService;
-import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -22,7 +21,7 @@ import org.springframework.web.bind.annotation.*;
 import java.security.Principal;
 import java.util.Collection;
 import java.util.List;
-
+import java.util.function.Function;
 @RestController
 @RequestMapping("/users")
 public class UserController {
@@ -37,7 +36,7 @@ public class UserController {
     private SecurityUtils securityUtils;
 
     @Autowired
-    private ModelMapper mapper;
+    private TestService testService;
 
     @GetMapping(value = "/find-by-group")
     @AdminAndTeacherAccess
@@ -49,25 +48,29 @@ public class UserController {
     @AdminAndTeacherAccess
     public ResponseEntity<?> getGroups(){
         List<String> groups = userService.getGroups();
-
         return groups == null?
-                ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new StringAnswerDTO("Can't get groups.")):
+                ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new JSONAnswerDTO("Can't get groups.")):
                 ResponseEntity.ok().body(groups);
     }
 
-    @GetMapping("/assigned-items/{assignedTo}")
+    @GetMapping(value = "/assigned-solutions/{assignedTo}",produces = MediaType.APPLICATION_JSON_VALUE)
     @PreAuthorize("hasRole('ADMIN') or #assignedTo==authentication.name")
-    public ResponseEntity<?> getAssignedItems(@PathVariable String assignedTo,
-                                              @RequestParam(value = "assigned_by",required = false) String assignedBy){
-        List<Solution> solutions = solutionService.getAssignedItems(assignedTo);
-
-        return solutions == null?
-                ResponseEntity.status(HttpStatus.NOT_FOUND).body(new StringAnswerDTO(String.format("Can't find items assigned to%s",assignedTo)))
-                :ResponseEntity.ok().body(solutions);
-
+    public ResponseEntity<?> getAssignedSolutions(@PathVariable String assignedTo){
+        return getResponse(assignedTo,solutionService::getAssignedItems);
     }
 
-    @GetMapping("groups/{email}")
+    @GetMapping(value = "/assigned-solutions-finished/{assignedTo}",produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> getAssignedSolutionsFinished(@PathVariable String assignedTo){
+        return getResponse(assignedTo, solutionService::getAssignedItemsFinished);
+    }
+
+    @GetMapping(value = "/assigned-solutions-unfinished/{assignedTo}",produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> getAssignedSolutionsUnfinished(@PathVariable String assignedTo){
+        return getResponse(assignedTo,solutionService::getAssignedItemsUnfinished);
+    }
+
+
+    @GetMapping("/groups/{email}")
     public ResponseEntity<?> getUserGroups(@PathVariable String email){
         User user = userService.getItem(email);
         Collection<String> groups = user.getGroups();
@@ -76,7 +79,7 @@ public class UserController {
 
 
     @PutMapping(value = "/change-password",produces = MediaType.APPLICATION_JSON_VALUE)
-    @PreAuthorize("hasRole('ADMIN') or request.email==authentication.name")
+    @PreAuthorize("hasRole('ADMIN') or #request.email==authentication.name")
     public ResponseEntity<?> changeUserPassword(@RequestBody ChangePasswordRequest request){
         User user = userService.getItem(request.getEmail());
 
@@ -85,9 +88,9 @@ public class UserController {
             userService.updateItem(user);
         }
         else
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(new StringAnswerDTO("Old password doesn't match."));
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(new JSONAnswerDTO("Old password doesn't match."));
 
-        return ResponseEntity.ok().body(new StringAnswerDTO("Password changed."));
+        return ResponseEntity.ok().body(new JSONAnswerDTO("Password changed."));
     }
 
     @GetMapping("/institutions")
@@ -96,7 +99,7 @@ public class UserController {
         List<String> institutions = userService.getInstitutions();
 
         return institutions == null?
-                ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new StringAnswerDTO("Can't get institutions.")):
+                ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new JSONAnswerDTO("Can't get institutions.")):
                 ResponseEntity.ok().body(institutions);
     }
 
@@ -108,7 +111,7 @@ public class UserController {
     }
 
     @DeleteMapping(value = "/groups", produces = MediaType.APPLICATION_JSON_VALUE)
-    @AdminAccess
+    @AdminAndTeacherAccess
     public ResponseEntity<?> deleteGroup(@RequestBody RemoveGroupRequest request,Principal principal){
         userService.removeGroup(request.getUserId(),principal.getName(),request.getGroup());
         return ResponseEntity.ok(String.format("Group %s removed.",request.getGroup()));
@@ -129,6 +132,7 @@ public class UserController {
     @GetMapping("/teachers")
     @AdminAccess
     public List<User> getAllTeachers(){
+
         return userService.getByRole(UserRole.TEACHER);
     }
 
@@ -138,10 +142,11 @@ public class UserController {
     }
 
     @GetMapping("/{email}")
-    @UserAccess
+    @PreAuthorize("hasRole('ADMIN') or #email==authentication.name")
     public User getUser(@PathVariable(value = "email") String email){
         return userService.getItem(email);
     }
+
 
     @PutMapping(
             value = "/update-rights",
@@ -151,11 +156,11 @@ public class UserController {
     public ResponseEntity<?> updateUserRights(@RequestBody UpdateUserRightsRequest request){
         User user = userService.getItem(request.getEmail());
         if(user == null)
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new StringAnswerDTO("Can't find user with email:"+request.getEmail()));
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new JSONAnswerDTO("Can't find user with email:"+request.getEmail()));
 
         user.setRole(request.getUserRole());
         userService.updateItem(user);
-        return ResponseEntity.ok().body(new StringAnswerDTO("User rights increased to:"+request.getUserRole()));
+        return ResponseEntity.ok().body(new JSONAnswerDTO("User rights increased to:"+request.getUserRole()));
     }
 
     @GetMapping("/confirm-users")
@@ -165,12 +170,32 @@ public class UserController {
     }
 
     @PutMapping(produces = MediaType.APPLICATION_JSON_VALUE)
-//    @PreAuthorize("hasRole('ADMIN') or #u.email")
-    public ResponseEntity<?> updateUser(@RequestBody UserUpdateRequest u){
+    @UserAccess
+    public ResponseEntity<?> updateUser(@RequestBody UserUpdateRequest request){
+        User user = userService.getItem(request.getEmail());
+        user.setFirstName(request.getFirstName());
+        user.setLastName(request.getLastName());
+        if(request.getUserAffiliation() !=null)
+             user.setAffiliation(request.getUserAffiliation());
+        userService.updateItem(user);
 
-        User user = mapper.map(u,User.class);
-//        userService.updateItem(user);
         return ResponseEntity.ok(user);
+    }
+
+    @PutMapping("/groups/delete-user-from-group")
+    @AdminAndTeacherAccess
+    public ResponseEntity<?> deleteUserFromGroup(@RequestBody DeleteUserFromGroupRequest request) {
+        User user = userService.getItem(request.getUserId());
+
+        if(user == null)
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new JSONAnswerDTO(String.format("Can't find user %s",request.getUserId())));
+
+        if (user.getGroups().remove(request.getGroup())) {
+            userService.updateItem(user);
+            return ResponseEntity.ok().body(new JSONAnswerDTO(String.format("User %s successfully deleted from %s", request.getUserId(), request.getGroup())));
+        }
+
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new JSONAnswerDTO(String.format("User wasn't deleted from group %s. Check group name and try again.",request.getGroup())));
     }
 
     @DeleteMapping
@@ -186,5 +211,11 @@ public class UserController {
         return ResponseEntity.ok(HttpStatus.OK);
     }
 
+    private <T,R> ResponseEntity<?> getResponse(T condition,Function<T,List<R>> resolver){
+        List<R> items = resolver.apply(condition);
+
+        return items == null? ResponseEntity.status(HttpStatus.NO_CONTENT).body(new JSONAnswerDTO(String.format("Can't find items assigned to %s",condition))):
+                ResponseEntity.ok().body(items);
+    }
 
 }

@@ -5,9 +5,11 @@ import { Link } from 'react-router-dom';
 import { Table, Tag } from 'antd';
 import ButtonEditTask from './ButtonEditTask';
 import Loading from '../../../../../Components/Loading';
+import SearchTasks from './SearchTasks';
+import './SearchTasks.scss';
 import requestLoginInformation from '../../../../../Services/loginService';
 
-class TableAllTasks extends React.PureComponent {
+class TableAllTasks extends React.Component {
   static propTypes = {
     tasks: PropTypes.arrayOf(PropTypes.object).isRequired,
     error: PropTypes.string.isRequired,
@@ -21,6 +23,8 @@ class TableAllTasks extends React.PureComponent {
     size: 'middle',
     title: undefined,
     showHeader: true,
+    nameSearch: '',
+    tagsSearch: [],
   };
 
   componentDidMount() {
@@ -28,8 +32,35 @@ class TableAllTasks extends React.PureComponent {
     getTasks();
   }
 
+  inputNameForFilter = value => this.setState({
+    nameSearch: value,
+  });
+
+  inputFiltersSearch = value => this.setState(prev => (prev.tagsSearch.indexOf(value) === -1
+    ? { tagsSearch: [...prev.tagsSearch, value] }
+    : {}));
+
+  deleteElementFiltersSearch = (event) => {
+    const text = event.target.closest('.ant-tag, .ant-tag a, .ant-tag a:hover').innerText;
+    this.setState((prevState) => {
+      const arrayTags = prevState.tagsSearch;
+      arrayTags.splice(arrayTags.indexOf(text), 1);
+      return {
+        tagsSearch: arrayTags,
+      };
+    });
+  };
+
+
   render() {
-    const { bordered, loading, pagination, size, title, showHeader } = this.state;
+    const { bordered,
+      loading,
+      pagination,
+      size,
+      title,
+      showHeader,
+      nameSearch,
+      tagsSearch } = this.state;
     const { tasks } = this.props;
     const data = [];
     const arrMonth = [
@@ -80,7 +111,8 @@ class TableAllTasks extends React.PureComponent {
       key: 'theme',
       width: 800,
       className: 'column-break-point',
-    }, {
+    },
+    {
       title: ' ',
       dataIndex: 'button',
       key: 'button',
@@ -103,10 +135,26 @@ class TableAllTasks extends React.PureComponent {
       let tags = [];
       if (tasks[i].topics.length > 3) {
         for (let index = 0; index < 3; index += 1) {
-          tags[index] = <Tag color="blue">{tasks[i].topics[index]}</Tag>;
+          tags[index] = (
+            <Tag
+              color="blue"
+              onClick={(event) => {
+                this.inputFiltersSearch(event.target.innerHTML);
+              }}
+            >{tasks[i].topics[index]}
+            </Tag>
+          );
         }
       } else {
-        tags = tasks[i].topics.map(element => (<Tag color="blue">{element}</Tag>));
+        tags = tasks[i].topics.map(element => (
+          <Tag
+            color="blue"
+            onClick={(event) => {
+              this.inputFiltersSearch(event.target.innerHTML);
+            }}
+          >{element}
+          </Tag>
+        ));
       }
 
       data.push({
@@ -123,9 +171,28 @@ class TableAllTasks extends React.PureComponent {
       });
     }
 
-    data.sort((a, b) => (
+    const newData = data.filter((element, index) => (
+      (element.author.toLowerCase().indexOf(nameSearch.toLowerCase()) !== -1
+      || element.taskName.toLowerCase().indexOf(nameSearch.toLowerCase()) !== -1)
+      && tasks[index].topics.length !== 0
+      && tagsSearch.every(tag => tasks[index].topics.includes(tag))
+    ));
+    newData.sort((a, b) => (
       b.formDate - a.formDate
     ));
+
+    const filteredTags = tagsSearch.map((element) => {
+      console.log(element);
+      return (
+        <Tag onClick={this.deleteElementFiltersSearch}>{element}</Tag>
+      );
+    });
+
+    columns[2].title = filteredTags;
+    columns[3].title = (
+      <div>
+        <SearchTasks className="search-tasks" fillDataFilterFields={this.inputNameForFilter}/>
+      </div>);
     const content = tasks.length ? (
       <Table
         {...{
@@ -137,7 +204,7 @@ class TableAllTasks extends React.PureComponent {
           showHeader,
         }}
         columns={columns}
-        dataSource={data}
+        dataSource={newData}
       />) : <Loading/>;
     return (
       <div><div className="header-for-table"><span className="header-tasks">Список задач</span></div>

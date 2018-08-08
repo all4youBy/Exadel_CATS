@@ -1,6 +1,6 @@
 import React from 'react';
 import './SearchTasks.scss';
-import { Input, Icon } from 'antd';
+import { Input } from 'antd';
 import PropTypes from 'prop-types';
 
 class SearchTasks extends React.Component {
@@ -10,9 +10,7 @@ class SearchTasks extends React.Component {
     return (
       <Input
         className="search-tasks"
-        disabled=""
-        placeholder="Введите название группы"
-        prefix={<Icon type="search" style={{ color: 'rgba(0,0,0,.25)' }}/>}
+        placeholder="Введите имя автора или название"
         onChange={
           (event) => {
             fillDataFilterFields(event.target.value);

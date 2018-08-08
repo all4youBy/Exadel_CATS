@@ -1,7 +1,7 @@
 package com.exadel.team3.backend.controllers;
 
 import com.exadel.team3.backend.controllers.requests.AddQuestionRequest;
-import com.exadel.team3.backend.dto.StringAnswerDTO;
+import com.exadel.team3.backend.dto.JSONAnswerDTO;
 import com.exadel.team3.backend.entities.Question;
 import com.exadel.team3.backend.entities.QuestionStatus;
 import com.exadel.team3.backend.security.annotations.AdminAccess;
@@ -10,7 +10,6 @@ import com.exadel.team3.backend.services.QuestionService;
 import org.bson.types.ObjectId;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.mongodb.core.aggregation.ArithmeticOperators;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -38,9 +37,9 @@ public class QuestionController {
         Question q = questionService.addItem(quest);
 
         if(q == null)
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new StringAnswerDTO("Can't add question"));
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new JSONAnswerDTO("Can't add question"));
 
-        return ResponseEntity.status(HttpStatus.CREATED).body(new StringAnswerDTO("Question added"));
+        return ResponseEntity.status(HttpStatus.CREATED).body(new JSONAnswerDTO("Question added"));
     }
 
     @PutMapping(value = "/complain",produces = MediaType.APPLICATION_JSON_VALUE)
@@ -51,9 +50,14 @@ public class QuestionController {
         question = questionService.complain(question);
 
         if(question.getStatus().equals(QuestionStatus.DISPUTED))
-            return ResponseEntity.ok().body(new StringAnswerDTO("Confirm on question accepted"));
+            return ResponseEntity.ok().body(new JSONAnswerDTO("Confirm on question accepted"));
 
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new StringAnswerDTO("Confirm on question doesn't accepted"));
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new JSONAnswerDTO("Confirm on question doesn't accepted"));
+    }
+
+    @GetMapping("/get-by-author/{authorId}")
+    public List<Question> getQuestionsByAuthor(@PathVariable String authorId){
+        return questionService.getItemsByAuthor(authorId);
     }
 
     @GetMapping

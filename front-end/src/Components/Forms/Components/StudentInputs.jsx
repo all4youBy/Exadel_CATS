@@ -1,6 +1,9 @@
 import { Input, Select, Form } from 'antd';
 import React from 'react';
 import PropTypes from 'prop-types';
+import { connect } from 'react-redux';
+import { getInstitutions, getPrimarySkills } from '../Services/Actions/actions';
+
 import {
   formItemLayout,
   createInsitutionOptions,
@@ -16,15 +19,22 @@ function isEqualValues(obj1, obj2) {
   return Object.keys(obj1).every(key => obj2[key] === obj1[key]);
 }
 
-export default class StudentInputs extends React.Component {
+function isEqualsArrays(arr1, arr2) {
+  return arr1.every((element, i) => element === arr2[i]);
+}
+
+class StudentInputs extends React.Component {
   state = {
     idInstitution: -1,
     oldUser: {},
+    stateInstitutions: [],
   };
 
   componentDidMount() {
-    const { userData, form, institutions } = this.props;
+    const { userData, form, institutions, getSkills, getUniversities } = this.props;
     const { setFieldsValue } = form;
+    getUniversities();
+    getSkills();
     if (userData !== {}) {
       const institutionsNames = institutions.map(element => element.name);
       const indexOfEqual = institutionsNames.indexOf(userData.institution);
@@ -58,7 +68,8 @@ export default class StudentInputs extends React.Component {
 
   static getDerivedStateFromProps(nextProps, prevState) {
     if (Object.keys(nextProps.userData).length) {
-      if (!isEqualValues(prevState.oldUser, nextProps.userData)) {
+      if (!isEqualValues(prevState.oldUser, nextProps.userData)
+        || !isEqualsArrays(nextProps.institutions, prevState.stateInstitutions)) {
         const institutionsNames = nextProps.institutions.map(element => element.name);
         const indexOfEqual = institutionsNames.indexOf(nextProps.userData.institution);
         const idInstitution = indexOfEqual !== -1 ? nextProps.institutions[indexOfEqual].id : null;
@@ -80,6 +91,7 @@ export default class StudentInputs extends React.Component {
         });
 
         return {
+          stateInstitutions: nextProps.institutions,
           idInstitution: prevState.idInstitution,
           oldUser: {
             faculty: nextProps.userData.faculty,
@@ -131,7 +143,6 @@ export default class StudentInputs extends React.Component {
             ],
           })(
             <Select
-              placeholder="Выберите учебное заведение"
               onChange={setIdInstitution}
             >
               {createInsitutionOptions(institutions)}
@@ -148,7 +159,6 @@ export default class StudentInputs extends React.Component {
             ],
           })(
             <Select
-              placeholder="Выберите ваш факультет"
               onChange={value => setSelectField(value, 'faculty')}
             >
               {facultiesOptions}
@@ -186,7 +196,6 @@ export default class StudentInputs extends React.Component {
           })(
             <Select
               onChange={value => setSelectField(value, 'primarySkill')}
-              placeholder="Выберите ваш primary skill"
             >
               {createPrimarySkillOptions(primarySkills)}
             </Select>,
@@ -205,8 +214,27 @@ StudentInputs.propTypes = {
   institutions: PropTypes.arrayOf(PropTypes.shape()).isRequired,
   faculties: PropTypes.shape().isRequired,
   primarySkills: PropTypes.arrayOf(PropTypes.string).isRequired,
+  getSkills: PropTypes.func.isRequired,
+  getUniversities: PropTypes.func.isRequired,
 };
 
 StudentInputs.defaultProps = {
   userData: {},
 };
+
+const mapStateToProps = state => ({
+  primarySkills: state.primarySkills,
+  // faculties: state.faculties,
+  institutions: state.institutions,
+});
+
+const mapDispatchToProps = dispatch => ({
+  getSkills: () => {
+    dispatch(getPrimarySkills());
+  },
+  getUniversities: () => {
+    dispatch(getInstitutions());
+  },
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(StudentInputs);

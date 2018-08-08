@@ -3,9 +3,11 @@ package com.exadel.team3.backend.dao.impl;
 import java.time.LocalDateTime;
 import java.util.Collection;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.annotation.Id;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.aggregation.*;
@@ -17,13 +19,10 @@ import org.springframework.util.CollectionUtils;
 import static org.springframework.data.mongodb.core.aggregation.Aggregation.*;
 import static org.springframework.data.mongodb.core.aggregation.LookupOperation.*;
 
-import com.exadel.team3.backend.dao.projections.RatingProjection;
-import com.exadel.team3.backend.dao.projections.TestItemProjection;
 import com.exadel.team3.backend.dao.AssignableRepositoryAggregation;
 import com.exadel.team3.backend.entities.Test;
 import com.exadel.team3.backend.dao.TestRepositoryAggregation;
-import com.exadel.team3.backend.dao.projections.AssignableProjection;
-import com.exadel.team3.backend.dao.projections.ActivityProjection;
+import com.exadel.team3.backend.dao.projections.*;
 
 @Repository
 public class TestRepositoryImpl
@@ -138,6 +137,55 @@ public class TestRepositoryImpl
     }
 
     @Override
+    public List<ObjectId> findLastUsedQuestionIds(LocalDateTime since) {
+        AggregationResults<ObjectIdProjectionImpl> results = mongoTemplate.aggregate(
+                newAggregation(
+                        match(Criteria.where("deadline").gt(since).and("mark").ne(null)),
+                        unwind("items"),
+                        group("items.questionId")
+                ),
+                "tests",
+                ObjectIdProjectionImpl.class
+        );
+        return results.getMappedResults().stream().map(ObjectIdProjection::getId).collect(Collectors.toList());
+    }
+
+    @Override
+    public List<QuestionAssessmentProjection> findQuestionUsage(@NonNull Collection<ObjectId> questionIds) {
+        AggregationResults<QuestionAssessmentProjection> results =
+                mongoTemplate.aggregate(
+                        newAggregation(
+                                getMatchOperation(),
+                                unwind("items"),
+                                match(Criteria.where("items.questionId").in(questionIds)),
+                                newLookup()
+                                    .from("questions")
+                                    .localField("items.questionId")
+                                    .foreignField("_id")
+                                    .as("question"),
+                                unwind("question"),
+                                group("items.questionId")
+                                        .first("question.complexity")
+                                        .as("complexity")
+                                        .sum(ConditionalOperators
+                                                .when(Criteria.where("items.status").is("ANSWERED_RIGHT"))
+                                                .then(1)
+                                                .otherwise(0))
+                                        .as("right")
+                                        .sum(ConditionalOperators
+                                                .when(Criteria.where("items.status").is("ANSWERED_WRONG"))
+                                                .then(1)
+                                                .otherwise(0))
+                                        .as("wrong")
+                                        .count().as("total")
+                        ),
+                        "tests",
+                        QuestionAssessmentProjection.class
+                );
+        return results.getMappedResults();
+    }
+
+    @Override
     public List<ActivityProjection> findRecentActivities(
             @NonNull LocalDateTime after,
             @NonNull LocalDateTime now) {
@@ -174,10 +222,20 @@ public class TestRepositoryImpl
                                 "assignedBy",
                                 "title",
                                 "start",
-                                "deadline"
+                                "deadline",
+                                "mark"
                         )
                 ),
                 getEntityClass().getSimpleName().toLowerCase() + "s",
                 ActivityProjection.class
-        ).getMappedResults();    }
+        ).getMappedResults();
+    }
+    private class ObjectIdProjectionImpl implements ObjectIdProjection {
+        @Id
+        private ObjectId id;
+        @Override
+        public ObjectId getId() {
+            return id;
+        }
+    }
 }
