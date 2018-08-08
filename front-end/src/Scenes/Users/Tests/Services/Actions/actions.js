@@ -3,7 +3,11 @@ import API from '../../../../../Services/API';
 import { history } from '../../../../../Services/ConfigureStore';
 
 export function fetchTestData(testId) {
-  return (API.get(`tests/${testId}`, 'test_Data', 'Не удалось загрузить данные теста'));
+  return (API.get(`tests/${testId}`, ['test_Data', () => {
+  }, () => {
+    message.error('Ошибка.');
+    history.push('/');
+  }], 'Не удалось загрузить данные теста'));
 }
 
 export function postTestAnswer(data) {
