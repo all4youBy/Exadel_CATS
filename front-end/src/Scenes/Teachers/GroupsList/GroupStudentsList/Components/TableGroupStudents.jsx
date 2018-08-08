@@ -26,6 +26,7 @@ class TableGroupStudents extends React.Component {
     addStudentTest: PropTypes.func.isRequired,
     addStudentTask: PropTypes.func.isRequired,
     getUserInformation: PropTypes.func.isRequired,
+    upDate: PropTypes.func.isRequired,
   };
 
   state = {
@@ -53,7 +54,7 @@ class TableGroupStudents extends React.Component {
   render() {
     const {
       students, handleStudentDelete, error, addStudentTest,
-      groupName, addStudentTask, getUserInformation,
+      groupName, addStudentTask, getUserInformation, upDate,
     } = this.props;
     const {
       bordered, loading, pagination, size, title,
@@ -113,7 +114,9 @@ class TableGroupStudents extends React.Component {
               <ButtonDeleteStudent
                 onStudentDelete={handleStudentDelete}
                 groupName={groupName}
+                upDate={upDate}
                 student={record.email}
+                students={students}
               />
             </div>
           </div>
@@ -170,9 +173,7 @@ class TableGroupStudents extends React.Component {
     }
     return (
       <div className="student-row">
-        <div>
-          <div className="group-name-list"><span>{groupName}</span></div>
-        </div>
+          <div className="group-name-list"><span className="group-name">{groupName}</span></div>
         {container}
         {/*<ButtonAddStudent onStudentAdd={handleStudentAdd}/>*/}
       </div>

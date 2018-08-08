@@ -51,6 +51,8 @@ const groupStudentsList = (state = initialState, action) => {
     }
     case types.RECEIVE_STUDENTS_BY_GROUP:
       return { ...state, group: action.payload };
+    case types.UP_STUDENTS_BY_GROUP:
+      return { ...state, group: action.payload };
     default:
       return state;
 

@@ -35,3 +35,9 @@ export function getUser(student) {
     type: types.GET_USER, payload: student,
   };
 }
+export function listStudents(data) {
+  return {
+    type: types.UP_STUDENTS_BY_GROUP,
+    payload: data,
+  };
+}

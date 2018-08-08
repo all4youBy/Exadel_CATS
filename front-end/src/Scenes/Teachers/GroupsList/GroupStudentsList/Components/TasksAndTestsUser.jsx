@@ -232,7 +232,7 @@ class TasksAndTestsUser extends React.PureComponent {
     }
     return (
       <div>
-        <div className="header-for-table">
+        <div className="header-for-table-user">
           <span className="header-tests-and-tasks">Пройденные тесты и задачи<br/>
             <span
               className="user-information"
