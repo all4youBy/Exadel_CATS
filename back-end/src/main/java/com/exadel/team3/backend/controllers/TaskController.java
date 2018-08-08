@@ -50,7 +50,7 @@ public class TaskController {
         if (t == null) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new JSONAnswerDTO("Can't add task"));
         }
-        return ResponseEntity.status(HttpStatus.CREATED).body(new JSONAnswerDTO("Task added"));
+        return ResponseEntity.status(HttpStatus.OK).body(new JSONAnswerDTO("Task added"));
     }
 
     @GetMapping("/{taskId}")

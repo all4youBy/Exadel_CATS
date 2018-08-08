@@ -165,7 +165,7 @@ public class SolutionServiceImpl
         Thread thread = new CompileRunThread(solutionChecker, solution);
         thread.start();
         try {
-            thread.join();
+            thread.join(60000);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
