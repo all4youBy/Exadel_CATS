@@ -11,20 +11,17 @@ import {
 class PageAssignedTestList extends React.PureComponent {
   static propTypes = {
     tests: PropTypes.arrayOf.isRequired,
-    error: PropTypes.string.isRequired,
     getAssignedTests: PropTypes.func.isRequired,
   };
 
   render() {
     const {
       tests,
-      error,
       getAssignedTests,
     } = this.props;
     return (
       <TableAssignedTests
         tests={tests}
-        error={error}
         getAssignedTests={getAssignedTests}
       />
     );
@@ -34,10 +31,8 @@ class PageAssignedTestList extends React.PureComponent {
 function mapStateToProps(state) {
   return {
     tests: state.userAssignedTests.tests,
-    error: state.userAssignedTests.error,
   };
 }
-
 
 const mapDispatchToProps = dispatch => ({
   getAssignedTests: (userId) => {

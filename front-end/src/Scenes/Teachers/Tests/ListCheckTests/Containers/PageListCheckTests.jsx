@@ -1,6 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
+import './PageListCheckTests.scss';
 import ListCheckTests from '../Components/ListCheckTests';
 import { fetchQuestionsToCheck, putManualCheck, deleteItem } from '../Services/Actions/actions';
 
@@ -21,7 +22,7 @@ class PageListCheckTests extends React.PureComponent {
   render() {
     const { questionList, submitManualCheck, delItem } = this.props;
     return (
-      <div>
+      <div className="check-answers">
         <ListCheckTests
           questionList={questionList}
           submitManualCheck={submitManualCheck}

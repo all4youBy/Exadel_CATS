@@ -1,45 +1,41 @@
 /* eslint-disable react/jsx-no-undef */
 import React from 'react';
 import PropTypes from 'prop-types';
-import { connect } from 'react-redux';
 import Timer from '../../../../Components/Timer';
 import Loading from '../../../../Components/Loading';
 import './TestNameAndThemes.scss';
 
 class TestNameAndThemes extends React.PureComponent {
   render() {
-    const { deadline } = this.props;
-    const timer = deadline
+    const { testData } = this.props;
+    const timer = testData
       ? (
         <Timer
-          endDate={deadline}
+          endDate={testData.deadline}
         />
       )
       : (
         <Loading/>
       );
-    return (
+    const nameAndThemes = testData ? (
       <div className="test-title-border">
         <div className="test-title">
-          <div className="text-test-title">Название теста</div>
-          <div>Количество вопросов: 4</div>
+          <div className="text-test-title">{testData.title}</div>
+          <div>Количество вопросов: {(testData.questions || []).length}</div>
           <div>Оставшееся время:
             {timer}
           </div>
         </div>
       </div>
+    ) : <Loading/>;
+    return (
+      nameAndThemes
     );
   }
 }
 
-function mapStateToProps(state) {
-  return {
-    deadline: state.completeTest.data.deadline,
-  };
-}
-
 TestNameAndThemes.propTypes = {
-  deadline: PropTypes.string.isRequired,
+  testData: PropTypes.shape().isRequired,
 };
 
-export default connect(mapStateToProps, {})(TestNameAndThemes);
+export default TestNameAndThemes;
