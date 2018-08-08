@@ -4,6 +4,7 @@ const initialState = {
   group: null,
   assignedTasks: [],
   groupName: '',
+  tasks: [],
 };
 
 const groupStudentsList = (state = initialState, action) => {
@@ -13,7 +14,6 @@ const groupStudentsList = (state = initialState, action) => {
         ...state,
         groupName: action.payload,
       };
-
     case types.RECEIVE_ASSIGNED_TASKS: {
       const tasks = [...state.assignedTasks];
       tasks.push(action.payload);
@@ -22,7 +22,11 @@ const groupStudentsList = (state = initialState, action) => {
         assignedTasks: tasks,
       };
     }
-
+    case types.RECEIVE_TASKS_INFO_FOR_GROUP:
+      return {
+        ...state,
+        tasks: action.payload,
+      };
     case types.ADD_STUDENT: {
       const lastNumber = state.group.length ? +state.group[state.group.length - 1].number + 1 : 1;
       const lastKey = state.group.length ? +state.group[state.group.length - 1].key + 1 : 1;

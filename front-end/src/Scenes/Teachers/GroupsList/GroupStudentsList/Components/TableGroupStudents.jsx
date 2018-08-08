@@ -79,31 +79,6 @@ class TableGroupStudents extends React.Component {
         <div>{record.lastName} {record.firstName}</div>
       ),
     }, {
-      title: 'Тест2',
-      dataIndex: 'test',
-      key: 'test2',
-      /* width должна отсутствовать в последней колонке скрола */
-    }, {
-      title: 'Личные задачи',
-      dataIndex: 'countTasks',
-      key: 'countTasks',
-      width: 70,
-      fixed: 'right',
-      render: (text, record) => (
-        <Link to={`/groupstudentslist/personaltasks/${record.key}`}>{record.countTasks}</Link>
-      ),
-    }, {
-      title: 'Личные тесты',
-      dataIndex: 'countTests',
-      key: 'countTests',
-      width: 70,
-      fixed: 'right',
-      render(text, record) {
-        return (
-          <Link to={`/groupstudentslist/personaltests/${record.key}`}>{text}</Link>
-        );
-      },
-    }, {
       title: '',
       key: 'buttons',
       width: 100,
@@ -178,7 +153,6 @@ class TableGroupStudents extends React.Component {
             dataSource={data}
             columns={columns}
             className="student-row"
-            scroll={{ x: 1300 }}
           />);
       } else {
         container = (<div className="empty-list">Список пуст</div>);
@@ -190,10 +164,6 @@ class TableGroupStudents extends React.Component {
       <div className="student-row">
         <div>
           <div className="group-name-list"><span>{groupName}</span></div>
-          <Group className="radio-buttons" onChange={this.onChangeAnswer}>
-            <Radio value="TASKS">Задачи</Radio>
-            <Radio value="TESTS">Тесты</Radio>
-          </Group>
         </div>
         {container}
         {/*<ButtonAddStudent onStudentAdd={handleStudentAdd}/>*/}

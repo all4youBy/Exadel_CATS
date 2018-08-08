@@ -35,6 +35,7 @@ import ViewTaskPage from '../../Scenes/Teachers/Tasks/ViewTask/Containers/ViewTa
 import AllQuestionsPage from '../../Scenes/Teachers/Questions/AllQuestions/Containers/AllQuestionsPage';
 import Profile from '../../Scenes/Users/Profile';
 import ActivityPage from '../../Scenes/Admin/Activity/Containers/ActivityPage';
+// import PageNotFound from '../../Components/PageNotFound';
 
 
 class Main extends React.Component {
@@ -129,7 +130,7 @@ class Main extends React.Component {
     const { userType: { logInInformation: { user: { role } } } } = this.props;
     const { email } = this.props;
     switch (role) {
-      case 'STUDENT':
+      case 'STUDENT': {
         return (
           <div className="main-body-container">
             <div className="general-menu">
@@ -157,6 +158,7 @@ class Main extends React.Component {
             </div>
           </div>
         );
+      }
       case 'TEACHER':
         return (
           <div className="main-body-container">

@@ -20,6 +20,7 @@ import Loading from '../../../../../Components/Loading';
 import { receiveTest } from '../../../Tests/AssignTest/Services/Actions/actions';
 import { receiveTask } from '../../../Tasks/AssignTask/Services/Actions/actions';
 import InputSearch from '../../AllGroups/Components/InputSearch';
+import { getError } from '../../../../../Main/Services/Actions/actions';
 
 class TableGroupsList extends React.PureComponent {
   static propTypes = {
@@ -32,6 +33,7 @@ class TableGroupsList extends React.PureComponent {
     onEdit: PropTypes.func.isRequired,
     user: PropTypes.string.isRequired,
     getGroup: PropTypes.func.isRequired,
+    pageError: PropTypes.func.isRequired,
   };
 
   state = {
@@ -61,8 +63,9 @@ class TableGroupsList extends React.PureComponent {
     const { groups, inputFilter } = this.state;
     const {
       handleGroupDelete, upDate, addGroupTask,
-      addGroupTest, groupEdit, onGroupEdit, onEdit, user, getGroup,
+      addGroupTest, groupEdit, onGroupEdit, onEdit, user, getGroup, pageError,
     } = this.props;
+    pageError(false);
     const columns = [{
       title: ' ',
       dataIndex: 'name',
@@ -220,6 +223,9 @@ const mapDispatchToProps = dispatch => ({
   },
   getTasks: () => {
     dispatch(getTasksForGroup());
+  },
+  pageError: () => {
+    dispatch(getError());
   },
 });
 
