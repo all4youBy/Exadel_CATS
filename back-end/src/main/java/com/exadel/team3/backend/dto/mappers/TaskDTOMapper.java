@@ -9,6 +9,8 @@ import com.exadel.team3.backend.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -29,7 +31,7 @@ public class TaskDTOMapper {
             User user = userService.getItem(task.getAuthor());
             TaskForTeachersDTO taskForTeachersDTO = new TaskForTeachersDTO(task.getId(), task.getTitle(),
                     topicDTOMapper.transformInToList(task.getTopicIds()),
-                    task.getAuthor(), user.getFirstName(), user.getLastName(), task.getId().getDate().toString());
+                    task.getAuthor(), user.getFirstName(), user.getLastName(), LocalDateTime.ofInstant(task.getId().getDate().toInstant(), ZoneId.systemDefault()));
             tasksForUserDTO.add(taskForTeachersDTO);
         }
 
