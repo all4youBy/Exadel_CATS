@@ -153,6 +153,37 @@ class Main extends React.Component {
             </div>
           </div>
         );
+      case 'TEACHER_UNCONFIRMED':
+        return (
+          <div className="main-body-container">
+            <div className="general-menu">
+              <GeneralMenu
+                userType={role}
+                email={email}
+                check={check}
+              />
+            </div>
+            <div className="switch-div">
+              <Switch>
+                <Route exact path="/assignedtasks" component={PageAssignedTasks}/>
+                <Route exact path="/assignedtests/:userId" component={PageAssignedTestList}/>
+                <Route exact path="/passedtestlist" component={PagePassedTestList}/>
+                <Route exact path="/passedtasks" component={PagePassedTasks}/>
+                <Route exact path="/test/:id" component={Test}/>
+                <Route exact path="/task" component={UserTaskPage}/>
+                <Route exact path="/task/:id" component={UserTaskPage}/>
+                <Route exact path="/usersmaterials" component={Materials}/>
+                <Route exact path="/trainingtest" component={TrainingTestPage}/>
+                <Route exact path="/assignedtests" component={PageAssignedTestList}/>
+                <Route exact path="/assignedtasks/:taskId" component={UserTaskPage}/>
+                <Route exact path="/profile/:email" component={Profile}/>
+                <Route exact path="/materials" component={Materials}/>
+                <Redirect to="/"/>
+                <Redirect to="/assignedtasks"/>
+              </Switch>
+            </div>
+          </div>
+        );
       case 'TEACHER':
         return (
           <div className="main-body-container">

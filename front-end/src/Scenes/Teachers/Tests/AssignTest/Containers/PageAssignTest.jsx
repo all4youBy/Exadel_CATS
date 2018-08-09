@@ -12,6 +12,7 @@ import {
   fetchUsersFromGroup,
   fetchTopics,
   groupsListForTest,
+  clearStateTest,
 } from '../Services/Actions/actions';
 
 
@@ -34,6 +35,7 @@ class PageAssignTest extends React.PureComponent {
     teacher: PropTypes.string.isRequired,
     type: PropTypes.string.isRequired,
     receiver: PropTypes.string.isRequired,
+    clearState: PropTypes.func.isRequired,
   };
 
   render() {
@@ -41,6 +43,7 @@ class PageAssignTest extends React.PureComponent {
       handleAddTestTag, handleDeleteTestTag, handleCreateTest, data,
       addStudent, delStudent, getStudentsData, students, error, receiver,
       getUsersFromGroup, groupName, getTopics, topics, teacher, type, tags,
+      clearState,
     } = this.props;
     return (
       <div>
@@ -62,6 +65,7 @@ class PageAssignTest extends React.PureComponent {
           teacher={teacher}
           type={type}
           tags={tags}
+          clearState={clearState}
         />
       </div>
     );
@@ -114,6 +118,9 @@ const mapDispatchToProps = dispatch => ({
   },
   getTopics: () => {
     dispatch(fetchTopics());
+  },
+  clearState: () => {
+    dispatch(clearStateTest());
   },
 });
 

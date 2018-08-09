@@ -1,6 +1,7 @@
 import { message } from 'antd';
 import API from '../../../../../Services/API';
 import { history } from '../../../../../Services/ConfigureStore';
+import { CLEAR_RESPONSE_ADD_FILE } from './types';
 
 // import { history } from '../../../../../Services/ConfigureStore';
 
@@ -28,4 +29,10 @@ export function postAddSolution(data, id) {
 
 export function deleteTaskSolution(id) {
   return (API.deleteRequest(`task/delete-solution/${id}`, {}, 'delete_task_solution', 'Не удалось удалить файлы'));
+}
+
+export function clearResponseAddFile() {
+  return {
+    type: CLEAR_RESPONSE_ADD_FILE,
+  };
 }

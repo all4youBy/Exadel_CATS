@@ -10,7 +10,7 @@ class SearchTasks extends React.Component {
     return (
       <Input
         className="search-tasks"
-        placeholder="Введите имя автора или название"
+        placeholder="Введите автора или название"
         onChange={
           (event) => {
             fillDataFilterFields(event.target.value);

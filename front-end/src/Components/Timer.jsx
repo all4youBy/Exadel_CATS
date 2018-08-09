@@ -53,6 +53,7 @@ export default class Timer extends React.Component {
           className="input-timer"
           prefix={<Icon type="clock-circle" className="color-circle"/>}
           value={`${hours} : ${minutes} : ${seconds}`}
+          disabled="true"
         />
       </div>
     );

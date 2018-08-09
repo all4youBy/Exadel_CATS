@@ -17,6 +17,7 @@ class TestProperties extends React.Component {
     getTopics: PropTypes.func.isRequired,
     topics: PropTypes.arrayOf(PropTypes.any).isRequired,
     teacher: PropTypes.string.isRequired,
+    clearState: PropTypes.func.isRequired,
   };
 
   state = {
@@ -63,7 +64,7 @@ class TestProperties extends React.Component {
   render() {
     const {
       handleAddTestTag, handleDeleteTestTag, tags, handleCreateTest,
-      topics, getTopics, teacher,
+      topics, getTopics, teacher, clearState,
     } = this.props;
     const {
       nameTest, countQuestionsTest, getStart, getDeadline, error,
@@ -97,17 +98,18 @@ class TestProperties extends React.Component {
               title: nameTest,
               topics: tagsTest,
             };
-
             handleCreateTest(obj, 'tests');
+            clearState();
             break;
           }
           case 'string': {
             test.group = receiverInfo;
-            test.topicsId = tagsTest;
+            test.topicIds = tagsTest;
             test.start = new Date(getStart);
             test.deadline = new Date(getDeadline);
             this.setState(() => ({ error: false }));
             handleCreateTest(test, 'tests/for-group');
+            clearState();
             break;
           }
           default: {

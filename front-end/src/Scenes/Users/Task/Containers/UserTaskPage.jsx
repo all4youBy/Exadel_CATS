@@ -6,6 +6,7 @@ import UserTask from '../Components/UserTask';
 import {
   postUploadFiles, fetchTaskInformation,
   postAddSolution, deleteTaskSolution,
+  clearResponseAddFile,
 } from '../Services/Actions/actions';
 
 class UserTaskPage extends React.PureComponent {
@@ -18,12 +19,15 @@ class UserTaskPage extends React.PureComponent {
     getAddSolution: PropTypes.func.isRequired,
     response: PropTypes.string.isRequired,
     deleteSolution: PropTypes.func.isRequired,
+    responseAddFile: PropTypes.bool.isRequired,
+    clearResponse: PropTypes.func.isRequired,
   };
 
   render() {
     const {
       uploadFiles, error, taskId, getTaskInformation, taskInfo,
-      getAddSolution, response, deleteSolution,
+      getAddSolution, response, deleteSolution, responseAddFile,
+      clearResponse,
     } = this.props;
     return (
       <div className="task">
@@ -36,6 +40,8 @@ class UserTaskPage extends React.PureComponent {
           getAddSolution={getAddSolution}
           response={response}
           deleteSolution={deleteSolution}
+          responseAddFile={responseAddFile}
+          clearResponse={clearResponse}
         />
       </div>
     );
@@ -43,13 +49,13 @@ class UserTaskPage extends React.PureComponent {
 }
 
 function mapStateToProps(state, ownProps) {
-  console.log(ownProps.match.params.email, 878);
   return {
     files: state.passTask.files,
     error: state.passTask.error,
     taskId: ownProps.match.params.taskId,
     taskInfo: state.passTask.taskInfo,
     response: state.passTask.response,
+    responseAddFile: state.passTask.responseAddFile,
   };
 }
 
@@ -65,6 +71,9 @@ const mapDispatchToProps = dispatch => ({
   },
   deleteSolution: (id) => {
     dispatch(deleteTaskSolution(id));
+  },
+  clearResponse: (id) => {
+    dispatch(clearResponseAddFile(id));
   },
 });
 

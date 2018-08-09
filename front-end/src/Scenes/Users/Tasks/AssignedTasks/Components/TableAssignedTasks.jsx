@@ -1,7 +1,7 @@
 import React from 'react';
 import { Table, Tag } from 'antd';
 import PropTypes from 'prop-types';
-import { Link } from 'react-router-dom';
+// import { Link } from 'react-router-dom';
 import ButtonPassTask from './ButtonPassTask';
 import requestLoginInformation from '../../../../../Services/loginService';
 import Loading from '../../../../../Components/Loading';
@@ -37,11 +37,11 @@ class TableAssignedTasks extends React.PureComponent {
       key: 'name',
       width: 450,
       className: 'column-break-point',
-      render(text) {
-        return (
-          <Link to="/groupstudentslist">{text}</Link>
-        );
-      },
+      // render(text) {
+      //   return (
+      //     <Link to="/groupstudentslist">{text}</Link>
+      //   );
+      // },
     }, {
       title: 'Тема',
       dataIndex: 'theme',

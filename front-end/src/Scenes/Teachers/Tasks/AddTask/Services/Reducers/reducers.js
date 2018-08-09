@@ -20,6 +20,7 @@ const addTask = (state = initialState, action) => {
       return {
         ...state,
         tags: [],
+        testSet: [],
       };
     }
     case types.ERROR_ADD_TASK: {

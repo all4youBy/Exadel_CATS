@@ -32,6 +32,12 @@ const testInformation = (state = initialState, action) => {
         ],
       };
     }
+    case types.CLEAR_STATE_TEST: {
+      return {
+        ...state,
+        tags: [],
+      };
+    }
     case types.RECEIVE_TOPICS_ASSIGN_TEST: {
       return {
         ...state,

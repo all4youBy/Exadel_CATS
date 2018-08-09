@@ -31,7 +31,6 @@ import viewTask from '../Scenes/Teachers/Tasks/ViewTask/Services/Reducers/reduce
 import allQuestions from '../Scenes/Teachers/Questions/AllQuestions/Services/Reducers/reducers';
 import userPassedTasks from '../Scenes/Users/Tasks/PassedTasks/Services/Reducers/reducers';
 import userPassedTests from '../Scenes/Users/TestList/PassedTestList/Services/Reducers/reducers';
-import materials from '../Scenes/Users/Materials/Services/Reducers/reducers';
 import activityPage from '../Scenes/Admin/Activity/Services/Reducers/reducers';
 import materials from '../Scenes/Teachers/Materials/Services/Reducers/reducers';
 
@@ -70,7 +69,6 @@ const reducers = combineReducers({
   checkQuestions,
   materials,
   activityPage,
-  materials,
 });
 
 export default reducers;

@@ -45,7 +45,6 @@ class QuestionForm extends React.PureComponent {
     answerInputsTrue: [],
     type: '',
     error: false,
-    add: false,
   };
 
   onChangeTrainingTest = (e) => {
@@ -201,10 +200,8 @@ class QuestionForm extends React.PureComponent {
       answerInputsTrue,
       type,
       error,
-      add,
     } = this.state;
     const errorInput = error ? <div className="error-input">Введите все данные!</div> : <div/>;
-    const addQuestion = add ? <div>Вопрос добавлен!</div> : <div/>;
     const onClickAddQuestion = () => {
       if (tags.length) {
         const tagsArray = [];
@@ -346,7 +343,6 @@ class QuestionForm extends React.PureComponent {
         </div>
         {elem}
         <div className="error-input-parent">{errorInput}</div>
-        {addQuestion}
         <FormItem className="add-question">
           <Button
             onClick={onClickAddQuestion}
@@ -378,7 +374,6 @@ const mapDispatchToProps = dispatch => ({
     dispatch(deleteQuestionTag(tag));
   },
   addQuestion: (url, data) => {
-    console.log(data, url, 897);
     dispatch(dataQuestion(url, data));
   },
   getTopics: () => {

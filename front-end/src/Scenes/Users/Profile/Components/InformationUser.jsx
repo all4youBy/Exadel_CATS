@@ -215,7 +215,6 @@ class InformationUser extends React.Component {
       <Form
         onSubmit={
         (event) => {
-          console.log(userData, 12312312);
           handleSubmit(event);
         }
         }

@@ -6,10 +6,17 @@ const initialState = {
   taskInfo: {},
   responseTaskSolution: '',
   response: '',
+  responseAddFile: true,
 };
 
 const passTask = (state = initialState, action) => {
   switch (action.type) {
+    case types.CLEAR_RESPONSE_ADD_FILE: {
+      return {
+        ...state,
+        responseAddFile: true,
+      };
+    }
     case types.RECEIVE_POST_ADD_TASK_SOLUTION: {
       return {
         ...state,
@@ -23,9 +30,10 @@ const passTask = (state = initialState, action) => {
       };
     }
     case types.RECEIVE_POST_UPLOAD_FILES: {
+      const text = action.payload.text ? !action.payload.text : true;
       return {
         ...state,
-        files: [...state.files, ...action.payload],
+        responseAddFile: text,
       };
     }
     case types.ERROR_USER_TASK_INFORMATION: {

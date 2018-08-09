@@ -50,6 +50,7 @@ const groupStudentsList = (state = initialState, action) => {
       return newState;
     }
     case types.RECEIVE_STUDENTS_BY_GROUP:
+      console.log(action.payload, 555);
       return { ...state, group: action.payload };
     case types.UP_STUDENTS_BY_GROUP:
       return { ...state, group: action.payload };
