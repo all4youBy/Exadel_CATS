@@ -5,7 +5,11 @@ import { history } from '../../../../../Services/ConfigureStore';
 import { CLEAR_RESPONSE_ADD_FILE } from './types';
 
 export function postUploadFiles(data, id) {
-  return (API.postUploadFiles(`task/add-solution/${id}`, data, 'post_upload_files'));
+  return (API.postUploadFiles(`task/add-solution/${id}`, data, ['post_upload_files', () => {
+    message.success('Файл загружен');
+  }, () => {
+    message.error('Не удалось загрузить файл');
+  }]));
 }
 
 export function fetchTaskInformation(usersLogin, taskId) {

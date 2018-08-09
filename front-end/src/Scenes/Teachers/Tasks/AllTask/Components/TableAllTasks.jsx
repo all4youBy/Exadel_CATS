@@ -79,18 +79,11 @@ class TableAllTasks extends React.Component {
 
 
     const columns = [{
-      title: 'Дата создания',
+      title: '',
       dataIndex: 'day',
       key: 'dat',
-      width: 70,
+      width: 10,
       className: 'column-break-point',
-      render: (text, record) => (
-        <div className="all-tasks-time">
-          <div className="all-tasks-date-day">{record.day}</div>
-          <div className="all-tasks-date-month">{record.month}</div>
-          <div className="all-tasks-date-year">{record.year}</div>
-        </div>
-      ),
     }, {
       title: 'Название',
       dataIndex: 'taskName',

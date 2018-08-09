@@ -163,7 +163,7 @@ class UserTask extends React.Component {
             className="upload-button"
             type="primary"
             onClick={this.handleAddSolution}
-            disabled={fileList.length === 0 || responseAddFile}
+            disabled={fileList.length === 0}
             loading={uploading}
           >
             {uploading ? 'Загрузить' : 'Загрузить'}
