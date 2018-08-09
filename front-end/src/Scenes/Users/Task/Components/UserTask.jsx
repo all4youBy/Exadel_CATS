@@ -1,14 +1,10 @@
 /* eslint-disable react/no-did-update-set-state */
 import React from 'react';
 import './UserTask.scss';
-import { Upload, Button, Icon, Tag, message } from 'antd';
+import { Upload, Button, Icon, Tag } from 'antd';
 import PropTypes from 'prop-types';
-import { history } from '../../../../Services/ConfigureStore';
 import requestLoginInformation from '../../../../Services/loginService';
 import Loading from '../../../../Components/Loading';
-
-// import { history } from '../../../../Services/ConfigureStore';
-
 
 class UserTask extends React.Component {
   static propTypes = {
@@ -34,14 +30,14 @@ class UserTask extends React.Component {
     getTaskInformation(requestLoginInformation().email, taskId);
   }
 
-  componentDidUpdate() {
-    const { response } = this.props;
-    if (response.solution) {
-      this.setState(({ uploading: true }));
-      message.success(`Решение добавлено. Ваша отметка: ${response.solution.mark}`);
-      history.push('/assignedtasks');
-    }
-  }
+  // componentDidUpdate() {
+  //   const { response } = this.props;
+  //   // if (response.solution) {
+  //   //   this.setState(({ uploading: true }));
+  //   //   message.success(`Решение добавлено. Ваша отметка: ${response.solution.mark}`);
+  //   //   history.push('/assignedtasks');
+  //   // }
+  // }
 
   handleUpload = () => {
     const { uploadFiles, taskInfo, clearResponse, responseAddFile } = this.props;

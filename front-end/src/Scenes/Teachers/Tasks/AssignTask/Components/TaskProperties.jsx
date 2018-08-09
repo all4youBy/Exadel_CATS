@@ -6,6 +6,7 @@ import './TaskProperties.scss';
 import {
   createTask, fetchTasksAssign,
 } from '../Services/Actions/actions';
+import InputSearch from './InputTaskProperties';
 // import Loading from '../../../../../Components/Loading';
 
 const { Option } = Select;
@@ -29,6 +30,7 @@ class TaskProperties extends React.Component {
       getDeadline: '',
       error: false,
       taskInfo: '',
+      inputedFilter: '',
     };
   }
 
@@ -44,7 +46,6 @@ class TaskProperties extends React.Component {
     }));
   };
 
-
   setSelectTask = (index) => {
     const { tasks } = this.props;
     const obj = {
@@ -57,6 +58,10 @@ class TaskProperties extends React.Component {
     });
   };
 
+  getText = (index) => {
+    console.log(index);
+  }
+
   setField = (event) => {
     const { name } = event.target;
     const { value } = event.target;
@@ -64,6 +69,10 @@ class TaskProperties extends React.Component {
       [name]: value,
     });
   };
+
+  filterList = value => this.setState({
+    inputedFilter: value,
+  });
 
   validateTask = (task) => {
     if (task.deadline !== '' && task.start !== '') {
@@ -77,8 +86,9 @@ class TaskProperties extends React.Component {
       handleCreateTask, teacher, tasks,
     } = this.props;
     const {
-      nameTest, getStart, getDeadline, error, taskInfo,
+      nameTest, getStart, getDeadline, error, taskInfo, inputedFilter,
     } = this.state;
+    console.log(inputedFilter);
     const receiverInfo = JSON.parse(localStorage.getItem('userStatusForAssign'));
     const handleSubmit = () => {
       const task = {
@@ -118,31 +128,37 @@ class TaskProperties extends React.Component {
     const children = [];
     if (tasks.length && !children.length) {
       let task = null;
-      for (let i = 0; i < tasks.length; i += 1) {
-        task = tasks[i];
+      const newTasks = tasks.filter(oneTask => (oneTask.firstName
+        .toLowerCase() + oneTask.lastName.toLowerCase())
+        .indexOf(inputedFilter.toLowerCase()) !== -1 || oneTask.title.toLowerCase()
+        .indexOf(inputedFilter.toLowerCase()) !== -1);
+      for (let i = 0; i < newTasks.length; i += 1) {
+        task = newTasks[i];
         children.push(
           <Option
             key={i}
             value={i}
           >
-            {task.title} <i>автор: {task.firstName} {task.lastName}</i>
+            {task.title} <i> автор: {task.firstName} {task.lastName} </i>
           </Option>,
         );
       }
     }
     const errorInput = error ? <div className="error-input">Введите все данные!</div> : <div/>;
     const name = typeof receiverInfo === 'string' ? receiverInfo : receiverInfo.name;
+
     return (
       <div className="test-properties-content">
         <div className="header">Назначение задачи</div>
         <div>Назначается: {name}</div>
         <div className="name-form-item">
           <div className="tasks-list-select">
+            <InputSearch filterList={this.filterList}/>
             <Select
-              showSearch="true"
               style={{ width: '100%' }}
               defaultValue="Выберите задачу"
               onChange={this.setSelectTask}
+              onInputKeyDown={this.getText}
             >
               {children}
             </Select>

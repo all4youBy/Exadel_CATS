@@ -15,7 +15,6 @@ const topReducer = (state = initialState, action) => {
       };
     }
     case types.RECEIVE_STUDENT_TOP_BY_TESTS: {
-      console.log(action.payload);
       return {
         ...state,
         topByTests: (action.payload || []).slice(0, 5),

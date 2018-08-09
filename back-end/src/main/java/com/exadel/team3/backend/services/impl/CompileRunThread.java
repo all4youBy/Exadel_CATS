@@ -16,8 +16,9 @@ public class CompileRunThread extends Thread {
     public void run() {
         solutionChecker.check(solution);
         int mark = solutionChecker.check(solution);
-        if (mark > solution.getMark()) {
+        if (solution.getMark() == null || mark > solution.getMark()) {
             solution.setMark(mark);
         }
+
     }
 }

@@ -4,10 +4,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.time.Duration;
 import java.time.LocalDateTime;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 import com.exadel.team3.backend.dao.*;
@@ -124,7 +121,9 @@ public class SolutionServiceImpl
                         solution.getFiles().add(filename);
                         solution.setFiles(solution.getFiles().stream().distinct().collect(Collectors.toList()));
                     } else {
-                        solution.setFiles(Collections.singletonList(filename));
+                        List<String> list = new ArrayList<>();
+                        list.add(filename);
+                        solution.setFiles(list);
                     }
                 }
                 return solution;
@@ -161,16 +160,15 @@ public class SolutionServiceImpl
         if (solution.getDeadline().isBefore(LocalDateTime.now())) {
             throw new ServiceException("The solution is pass the deadline");
         }
-
         Thread thread = new CompileRunThread(solutionChecker, solution);
         thread.start();
         try {
-            thread.join();
+            thread.join(120000);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-
-        return updateItem(solution);
+        solution = updateItem(solution);
+        return solution;
     }
 
     @Override

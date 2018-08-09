@@ -108,23 +108,21 @@ class TableAssignedTasks extends React.PureComponent {
 
     const data = [];
     if (tasks) {
-      for (let i = 0; i < tasks.length; i += 1) {
-        if (tasks[i].solution.mark === null) {
-          tasks[i].solution.mark = '-----';
-        }
+      tasks.forEach((task, i) => {
+        const mark = task.solution.mark === null ? '-----' : task.solution.mark;
         const deadline = new Date(tasks[i].solution.deadline);
         data.push({
           key: `${i}`,
-          name: tasks[i].title,
+          name: task.title,
           theme: tags[i],
-          mark: tasks[i].solution.mark,
-          author: tasks[i].solution.assignedBy,
+          mark,
+          author: task.solution.assignedBy,
           date: formatDate(deadline),
           result: `${i}`,
           comment: 'Комметарий',
-          taskId: tasks[i].solution.taskId,
+          taskId: task.solution.taskId,
         });
-      }
+      });
     }
     let container = null;
     if (tasks) {
