@@ -13,5 +13,10 @@ export function reqRegistrateStudent(user) {
 
 
 export function reqRegistrateTeacher(user) {
-  return API.registratePost('registrated_teacher', user, 'Регистрация не произошла');
+  return API.registratePost(['registrated_teacher', () => {
+    message.success('Вам пришел на почту пароль! Регистрация выполнена успешнo');
+    history.push('/login');
+  }, () => {
+    message.error('Регистрация не произошла');
+  }], user, 'Регистрация не произошла');
 }

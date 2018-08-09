@@ -109,7 +109,7 @@ class TeacherInputs extends React.Component {
     };
 
     const setJob = (event) => {
-      setTextField(event, 'inputtedJob');
+      setTextField(event, 'job');
       const targetValue = event.target.value;
       this.setState(prevState => ({
         inputtedJob: prevState.inputtedJob.replace(
