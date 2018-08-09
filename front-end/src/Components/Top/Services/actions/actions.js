@@ -9,5 +9,5 @@ export function addStudentTopByActivity() {
 }
 
 export function addStudentTopByTests() {
-  return (API.get('statistic/tests', 'RECEIVE_STUDENT_TOP_BY_TESTS', 'Не удалсь получить топ по активности'));
+  return (API.get('statistic/tests', 'STUDENT_TOP_BY_TESTS', 'Не удалсь получить топ по активности'));
 }

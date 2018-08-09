@@ -20,7 +20,7 @@ class Profile extends React.Component {
       email,
       firstName: user.firstName,
       secondName: user.lastName,
-      job: user.job || '',
+      job: user.affiliation ? user.affiliation.placeOfWork : '',
       teacher: user.role === 'TEACHER',
       faculty: user.affiliation ? user.affiliation.faculty : '',
       institution: user.affiliation ? user.affiliation.institution : '',

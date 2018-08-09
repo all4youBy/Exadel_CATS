@@ -14,7 +14,7 @@ import Loading from '../../../../../Components/Loading';
 import { receiveTest } from '../../../Tests/AssignTest/Services/Actions/actions';
 import { receiveTask } from '../../../Tasks/AssignTask/Services/Actions/actions';
 import { getNameGroup } from '../../Groups/Services/Actions/actions';
-import InputSearch from './InputSearch';
+import InputSearch from '../../Groups/Components/InputSearch';
 
 class TableAllGroupsList extends React.PureComponent {
   static propTypes = {
@@ -44,7 +44,6 @@ class TableAllGroupsList extends React.PureComponent {
   }
 
   filterList = (value) => {
-    console.log(value);
     this.setState({
       inputFilter: value,
     });

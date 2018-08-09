@@ -33,12 +33,6 @@ export const USER_GENERAL_MENU_DATA = [{
     text: 'Пробные тесты',
     link: '/trainingtest',
   }],
-}, {
-  key: '7',
-  type: 'folder',
-  text: 'Материалы',
-  subsections: [],
-  link: '/materials',
 }];
 
 export const TEACHER_GENERAL_MENU_DATA = [{
@@ -76,30 +70,9 @@ export const TEACHER_GENERAL_MENU_DATA = [{
     text: 'Проверить тесты',
     link: '/checktests',
   }, {
-    id: '6',
-    text: 'Все вопросы',
-    link: '/questions',
-  }, {
     id: '7',
     text: 'Добавить вопрос',
     link: '/addquestion',
-  }],
-}, {
-  key: 'sub4',
-  type: 'folder',
-  text: 'Материалы',
-  subsections: [{
-    id: '8',
-    text: 'Все материалы',
-    link: '',
-  }, {
-    id: '9',
-    text: 'Мои материалы',
-    link: '',
-  }, {
-    id: '10',
-    text: 'Добавить материал',
-    link: '/',
   }],
 }];
 
@@ -149,33 +122,10 @@ export const ADMIN_GENERAL_MENU_DATA = [{
       text: 'Проверить тесты',
       link: '/checktests',
     }, {
-      id: '8',
-      text: 'Все вопросы',
-      link: '/questions',
-    }, {
       id: '9',
       text: 'Добавить вопрос',
       link: '/addquestion',
     }],
-}, {
-  key: '10',
-  type: 'folder',
-  text: 'Материалы',
-  subsections: [],
-  link: '/materials',
-}, {
-  key: 'sub4',
-  type: 'area-chart',
-  text: 'Статистика',
-  subsections: [{
-    id: '11',
-    text: 'Задачи',
-    link: '/',
-  }, {
-    id: '12',
-    text: 'Тесты',
-    link: '/',
-  }],
 }, {
   key: '13',
   type: 'clock-circle-o',
