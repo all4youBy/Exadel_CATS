@@ -20,6 +20,12 @@ export function addTestTag(tag) {
   };
 }
 
+export function clearStateTest() {
+  return {
+    type: types.CLEAR_STATE_TEST,
+  };
+}
+
 export function deleteTestTag(tag) {
   return {
     type: types.DELETE_ASSIGN_TEST_TAG,

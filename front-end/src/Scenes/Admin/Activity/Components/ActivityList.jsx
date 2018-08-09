@@ -56,7 +56,7 @@ class ActivityList extends React.PureComponent {
             <List
               className="list-users"
               pagination={{
-                pageSize: 5,
+                pageSize: 10,
               }}
               itemLayout="horizontal"
               dataSource={activity}

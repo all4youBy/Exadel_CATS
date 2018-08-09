@@ -20,7 +20,6 @@ class GeneralMenu extends React.PureComponent {
   render() {
     let data;
     const { userType, email, check } = this.props;
-    console.log(check);
     switch (userType) {
       case 'STUDENT': {
         data = types.USER_GENERAL_MENU_DATA;

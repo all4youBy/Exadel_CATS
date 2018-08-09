@@ -3,11 +3,9 @@ import './TableAllTasks.scss';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 import { Table, Tag } from 'antd';
-import ButtonEditTask from './ButtonEditTask';
 import Loading from '../../../../../Components/Loading';
 import SearchTasks from './SearchTasks';
 import './SearchTasks.scss';
-import requestLoginInformation from '../../../../../Services/loginService';
 
 class TableAllTasks extends React.Component {
   static propTypes = {
@@ -53,29 +51,31 @@ class TableAllTasks extends React.Component {
 
 
   render() {
-    const { bordered,
+    const {
+      bordered,
       loading,
       pagination,
       size,
       title,
       showHeader,
       nameSearch,
-      tagsSearch } = this.state;
+      tagsSearch,
+    } = this.state;
     const { tasks } = this.props;
     const data = [];
-    const arrMonth = [
-      'Январь',
-      'Февраль',
-      'Март',
-      'Апрель',
-      'Май',
-      'Июнь',
-      'Июль',
-      'Август',
-      'Сентябрь',
-      'Ноябрь',
-      'Декабрь',
-    ];
+    // const arrMonth = [
+    //   'Январь',
+    //   'Февраль',
+    //   'Март',
+    //   'Апрель',
+    //   'Май',
+    //   'Июнь',
+    //   'Июль',
+    //   'Август',
+    //   'Сентябрь',
+    //   'Ноябрь',
+    //   'Декабрь',
+    // ];
 
 
     const columns = [{
@@ -111,27 +111,18 @@ class TableAllTasks extends React.Component {
       key: 'theme',
       width: 800,
       className: 'column-break-point',
-    },
-    {
+    }, {
       title: ' ',
       dataIndex: 'button',
       key: 'button',
-      width: 100,
+      width: 200,
       className: 'column-break-point',
-      render: (text) => {
-        if (requestLoginInformation().email === text) {
-          return (
-            <div className="all-tasks-group-button">
-              <div className="parent-button-edit-task"><ButtonEditTask/></div>
-            </div>
-          );
-        }
-        return <div/>;
-      },
+      render: () => (<div/>),
     }];
 
     for (let i = 0; i < tasks.length; i += 1) {
-      const date = new Date(tasks[i].dateCreation);
+      const date = tasks[i].dateCreation;
+      console.log(date, 74342);
       let tags = [];
       if (tasks[i].topics.length > 3) {
         for (let index = 0; index < 3; index += 1) {
@@ -162,9 +153,9 @@ class TableAllTasks extends React.Component {
         author: `${tasks[i].firstName} ${tasks[i].lastName}`,
         theme: tags,
         taskName: tasks[i].title,
-        day: date.getDate(),
-        month: arrMonth[date.getMonth()],
-        year: date.getFullYear(),
+        // day: date.getDate(),
+        // month: arrMonth[date.getMonth()],
+        // year: date.getFullYear(),
         button: tasks[i].email,
         formDate: date,
         id: tasks[i].id,
@@ -173,7 +164,7 @@ class TableAllTasks extends React.Component {
 
     const newData = data.filter((element, index) => (
       (element.author.toLowerCase().indexOf(nameSearch.toLowerCase()) !== -1
-      || element.taskName.toLowerCase().indexOf(nameSearch.toLowerCase()) !== -1)
+        || element.taskName.toLowerCase().indexOf(nameSearch.toLowerCase()) !== -1)
       && tasks[index].topics.length !== 0
       && tagsSearch.every(tag => tasks[index].topics.includes(tag))
     ));
@@ -181,12 +172,9 @@ class TableAllTasks extends React.Component {
       b.formDate - a.formDate
     ));
 
-    const filteredTags = tagsSearch.map((element) => {
-      console.log(element);
-      return (
-        <Tag onClick={this.deleteElementFiltersSearch}>{element}</Tag>
-      );
-    });
+    const filteredTags = tagsSearch.map(element => (
+      <Tag onClick={this.deleteElementFiltersSearch}>{element}</Tag>
+    ));
 
     columns[2].title = filteredTags;
     columns[3].title = (
@@ -207,7 +195,8 @@ class TableAllTasks extends React.Component {
         dataSource={newData}
       />) : <Loading/>;
     return (
-      <div><div className="header-for-table"><span className="header-tasks">Список задач</span></div>
+      <div>
+        <div className="header-for-table"><span className="header-tasks">Список задач</span></div>
         {content}
       </div>
     );

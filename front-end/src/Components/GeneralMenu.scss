@@ -1,6 +1,8 @@
 .menu-link {
   color: rgba(0, 0, 0, 0.65);
-  text-decoration: none;
+  text-decoration: none !important;
+  text-align: center;
+  height: 100%;
 }
 .badge-test {
   margin-left: 40px;

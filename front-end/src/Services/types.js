@@ -67,10 +67,10 @@ export const TEACHER_GENERAL_MENU_DATA = [{
   text: 'Тесты',
   subsections: [{
     id: '5',
-    text: 'Проверить тесты',
+    text: 'Проверить вопросы',
     link: '/checktests',
   }, {
-    id: '7',
+    id: '6',
     text: 'Добавить вопрос',
     link: '/addquestion',
   }],
@@ -119,15 +119,15 @@ export const ADMIN_GENERAL_MENU_DATA = [{
   subsections: [
     {
       id: '7',
-      text: 'Проверить тесты',
+      text: 'Проверить вопросы',
       link: '/checktests',
     }, {
-      id: '9',
+      id: '8',
       text: 'Добавить вопрос',
       link: '/addquestion',
     }],
 }, {
-  key: '13',
+  key: '9',
   type: 'clock-circle-o',
   text: 'Активность',
   subsections: [],

@@ -129,7 +129,6 @@ class AddTask extends React.PureComponent {
       }
     };
     const errorInput = error ? <div className="error-input">Введите все данные!</div> : <div/>;
-
     return (
       <div className="add-task-container">
         <div className="header">Добавдение задачи</div>

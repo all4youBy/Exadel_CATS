@@ -16,6 +16,8 @@ class UserTask extends React.Component {
     getAddSolution: PropTypes.func.isRequired,
     response: PropTypes.string.isRequired,
     deleteSolution: PropTypes.func.isRequired,
+    responseAddFile: PropTypes.bool.isRequired,
+    clearResponse: PropTypes.func.isRequired,
   };
 
   state = {
@@ -38,11 +40,13 @@ class UserTask extends React.Component {
   // }
 
   handleUpload = () => {
-    const { uploadFiles, taskInfo } = this.props;
+    const { uploadFiles, taskInfo, clearResponse, responseAddFile } = this.props;
     const { fileList } = this.state;
     const formData = new FormData();
     if (fileList.length !== 0) {
       formData.append('file', fileList[fileList.length - 1]);
+      clearResponse();
+      console.log(responseAddFile, 893);
       uploadFiles(formData, taskInfo.solution.id);
     }
   };
@@ -64,6 +68,7 @@ class UserTask extends React.Component {
 
   render() {
     let { uploading } = this.state;
+    const { responseAddFile, clearResponse } = this.props;
     const { fileList: files } = this.state;
     const props = {
       action: '//jsonplaceholder.typicode.com/posts/',
@@ -131,6 +136,7 @@ class UserTask extends React.Component {
     if (response) {
       uploading = false;
     }
+    console.log(fileList.length === 0 || responseAddFile, 896);
     let container = taskInfo.solution ? (
       <div>
         <div className="task-title">
@@ -147,6 +153,7 @@ class UserTask extends React.Component {
             <Button
               className="button-load-file"
               onBlur={this.handleUpload}
+              onclick={clearResponse}
             >
               <Icon type="upload"/> Выбрать файл
             </Button>
@@ -156,7 +163,7 @@ class UserTask extends React.Component {
             className="upload-button"
             type="primary"
             onClick={this.handleAddSolution}
-            disabled={fileList.length === 0}
+            disabled={fileList.length === 0 || responseAddFile}
             loading={uploading}
           >
             {uploading ? 'Загрузить' : 'Загрузить'}
